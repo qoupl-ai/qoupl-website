@@ -70,13 +70,13 @@ export default function Testimonials() {
 
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             What Our{" "}
-            <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-[#662D91] bg-clip-text text-transparent">
               Beta Users
             </span>{" "}
             Say
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real couples from our exclusive beta program. See how qoupl brought them together during testing.
+            Real college student couples from our exclusive beta program. See how qoupl brought them together during testing.
           </p>
         </motion.div>
 
@@ -105,7 +105,7 @@ export default function Testimonials() {
 
                 {/* Gradient Overlays */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-[#662D91]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 {/* Content */}
                 <div className="absolute inset-0 p-6 flex flex-col justify-between">
@@ -154,7 +154,7 @@ export default function Testimonials() {
                     </p>
 
                     {/* Divider */}
-                    <div className="w-16 h-1 bg-gradient-to-r from-primary to-purple-600 rounded-full" />
+                    <div className="w-16 h-1 bg-[#662D91] rounded-full" />
 
                     {/* Author Info */}
                     <div>

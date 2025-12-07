@@ -20,12 +20,12 @@ const faqs = [
         a: "Yes! qoupl will be free to use. You'll be able to create a profile, browse matches, and send messages. We'll also offer premium features for users who want enhanced functionality like unlimited likes, advanced filters, and more."
       },
       {
-        q: "What age do I need to be to use qoupl?",
-        a: "You must be between 18 to 25 years old to use qoupl. Our platform is exclusively designed for young adults in this age group. During account creation, you will be required to verify your age using government-issued ID documents (Driving License, PAN Card, Aadhaar Card, or Passport). This verification is mandatory to ensure all users meet our age requirements."
+        q: "Who can use qoupl?",
+        a: "qoupl is exclusively for college students aged 18 to 25 years. You must be a current college student enrolled in a recognized college or university. During account creation, you will be required to verify your college student status using a valid college/university ID card. We only accept college ID cards for verification - no other identification documents are accepted. This verification is mandatory to ensure all users are current college students within the eligible age range."
       },
       {
         q: "How does qoupl verify profiles?",
-        a: "We offer photo verification where users can verify their identity by taking a real-time selfie. Verified profiles get a blue checkmark badge. We also use AI and human moderation to detect and remove fake profiles."
+        a: "We require mandatory college ID verification where users must upload a valid college/university ID card to verify their student status. We also offer photo verification where users can verify their identity by taking a real-time selfie. Verified profiles get a blue checkmark badge. We use AI and human moderation to detect and remove fake profiles and ensure all users are legitimate college students."
       }
     ]
   },
@@ -221,7 +221,7 @@ export default function FAQ() {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
             Frequently Asked{" "}
-            <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-[#662D91] bg-clip-text text-transparent">
               Questions
             </span>
           </h1>
@@ -252,7 +252,7 @@ export default function FAQ() {
           ))}
         </div>
 
-        <div className="mt-16 text-center bg-gradient-to-r from-primary/10 to-purple-500/10 p-8 rounded-lg border border-primary/20">
+        <div className="mt-16 text-center bg-[#662D91]/10 p-8 rounded-lg border border-primary/20">
           <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
           <p className="text-muted-foreground mb-6">
             Our support team is here to help you 24/7

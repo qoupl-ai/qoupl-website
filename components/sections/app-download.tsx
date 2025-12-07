@@ -12,7 +12,7 @@ export default function AppDownload() {
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/5 to-background" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-[#662D91]/5 to-background" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
@@ -35,13 +35,13 @@ export default function AppDownload() {
             </motion.div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 qoupl
               </span>{" "}
               is Launching Soon
             </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Be among the first to experience the future of dating! Join our waitlist
+              Be among the first college students to experience the future of dating! Join our waitlist
               today and get exclusive early access when we launch on iOS and Android.
             </p>
 
@@ -74,7 +74,7 @@ export default function AppDownload() {
               onClick={() => setIsWaitlistModalOpen(true)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg hover:shadow-xl transition-all font-semibold text-lg"
+              className="flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#662D91] text-white shadow-lg hover:shadow-xl transition-all font-semibold text-lg"
             >
               <Bell className="h-5 w-5" />
               Join the Waitlist
@@ -100,7 +100,7 @@ export default function AppDownload() {
                 whileInView={{ scale: 1, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, type: "spring" }}
-                className="relative z-10 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-2xl shadow-2xl p-8 border-2 border-primary/30 backdrop-blur-sm"
+                className="relative z-10 bg-[#662D91]/20 rounded-2xl shadow-2xl p-8 border-2 border-primary/30 backdrop-blur-sm"
               >
                 <div className="text-center mb-6">
                   <motion.div

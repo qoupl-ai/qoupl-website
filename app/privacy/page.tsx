@@ -22,7 +22,7 @@ export default function PrivacyPolicy() {
           Back to Home
         </Link>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-[#662D91] bg-clip-text text-transparent">
           Privacy Policy
         </h1>
         <p className="text-muted-foreground mb-8">
@@ -62,9 +62,9 @@ export default function PrivacyPolicy() {
               <li>Location data (with your permission)</li>
               <li>Profile photos</li>
               <li>Bio and personal interests</li>
-              <li>Educational and professional information</li>
+              <li>Educational information (college/university name and enrollment status)</li>
               <li>Social media account information (if you choose to link)</li>
-              <li>Government-issued ID documents (for age verification purposes only - Driving License, PAN Card, Aadhaar Card, or Passport)</li>
+              <li>College ID card (mandatory for verification - we only accept valid college/university ID cards)</li>
             </ul>
 
             <h3 className="text-xl font-semibold mb-3 mt-6">
@@ -183,31 +183,38 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">8. Age Restrictions & Verification</h2>
+            <h2 className="text-2xl font-bold mb-4">8. Age Restrictions & College Student Verification</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              Our service is exclusively for individuals aged 18 to 25 years. We do not
-              knowingly collect information from minors (under 18) or individuals outside
-              this age range. If we discover that someone outside the eligible age range
-              has provided us with personal information, we will delete it immediately.
+              Our service is exclusively for college students aged 18 to 25 years. We do not
+              knowingly collect information from minors (under 18), individuals outside
+              this age range, or non-college students. All users must verify their college student status
+              using a valid college/university ID card. We do not accept any other form of identification.
+              If we discover that someone outside the eligible criteria has provided us with personal information, 
+              we will delete it immediately.
             </p>
             <h3 className="text-xl font-semibold mb-3 mt-6">
-              Age Verification Process
+              College Student Verification Process
             </h3>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              During account creation, all users will be required to verify their age using
-              government-issued identification documents, including:
+              During account creation, all users will be required to verify their college student status using
+              their valid college/university ID card. We only accept college ID cards for verification. 
+              No other identification documents (such as Driving License, PAN Card, Aadhaar Card, or Passport) 
+              will be accepted.
+            </p>
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              Your college ID card must:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-              <li>Driving License</li>
-              <li>PAN Card</li>
-              <li>Aadhaar Card</li>
-              <li>Passport</li>
+              <li>Be issued by a recognized college or university</li>
+              <li>Be currently valid (not expired)</li>
+              <li>Clearly show your name, photo, and college/university name</li>
+              <li>Confirm you are currently enrolled as a student</li>
             </ul>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              These documents are used solely for age verification purposes and are handled
+              Your college ID card is used solely for verification purposes and is handled
               with the highest security standards. We do not store full copies of your ID
-              documents after verification is complete. Only the verification status and
-              your date of birth are retained.
+              card after verification is complete. Only the verification status, your date of birth,
+              and college/university name are retained.
             </p>
           </section>
 

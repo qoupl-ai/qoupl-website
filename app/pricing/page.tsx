@@ -45,7 +45,7 @@ export default function Pricing() {
     <div className="min-h-screen bg-background">
       <Navbar />
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20 py-20">
+      <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10 py-20">
         <div className="container mx-auto px-4">
           <Link
             href="/"
@@ -73,19 +73,19 @@ export default function Pricing() {
 
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
               Affordable{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 Pricing
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-              Pay only for what you use. No hidden fees, no surprises.
+              Affordable pricing designed for college students. Pay only for what you use. No hidden fees, no surprises.
             </p>
           </motion.div>
         </div>
 
         {/* Decorative elements */}
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#662D91]/10 rounded-full blur-3xl" />
       </section>
 
       {/* Platform Fee Section */}
@@ -98,11 +98,11 @@ export default function Pricing() {
             transition={{ duration: 0.7 }}
             className="relative mb-20"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-3xl blur-xl" />
+            <div className="absolute inset-0 bg-[#662D91]/20 rounded-3xl blur-xl" />
 
             <div className="relative bg-card/50 backdrop-blur-sm border border-primary/20 rounded-3xl p-8 md:p-12">
               <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple-600 mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#662D91] mb-6">
                   <Zap className="h-8 w-8 text-white" />
                 </div>
 
@@ -111,7 +111,7 @@ export default function Pricing() {
                 </h2>
 
                 <div className="flex items-baseline justify-center gap-2 mb-4">
-                  <span className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                  <span className="text-6xl md:text-7xl font-bold bg-[#662D91] bg-clip-text text-transparent">
                     ₹10
                   </span>
                   <span className="text-2xl text-muted-foreground">/month</span>
@@ -175,7 +175,7 @@ export default function Pricing() {
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
                 Message{" "}
-                <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                <span className="bg-[#662D91] bg-clip-text text-transparent">
                   Bundles
                 </span>
               </h2>
@@ -202,7 +202,7 @@ export default function Pricing() {
                   >
                     {bundle.popular && (
                       <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                        <span className="px-4 py-1 bg-gradient-to-r from-primary to-purple-600 text-white text-sm font-bold rounded-full shadow-lg">
+                        <span className="px-4 py-1 bg-[#662D91] text-white text-sm font-bold rounded-full shadow-lg">
                           Popular
                         </span>
                       </div>
@@ -210,8 +210,8 @@ export default function Pricing() {
 
                     <div className={`absolute inset-0 bg-gradient-to-br ${
                       messageBundle === bundle.messages
-                        ? 'from-primary/30 to-purple-600/30'
-                        : 'from-primary/10 to-purple-600/10'
+                        ? 'from-[#662D91]/30 to-[#662D91]/30'
+                        : 'from-primary/10 to-[#662D91]/10'
                     } rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
                     <div className={`relative h-full bg-card border-2 ${
@@ -222,14 +222,14 @@ export default function Pricing() {
                       bundle.popular ? 'py-8' : ''
                     }`}>
                       <div className="text-center">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 mb-4">
+                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#662D91] mb-4">
                           <MessageSquare className="h-6 w-6 text-white" />
                         </div>
 
                         <h3 className="text-3xl font-bold mb-2">{bundle.messages}</h3>
                         <p className="text-muted-foreground mb-4">Messages</p>
 
-                        <div className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent mb-1">
+                        <div className="text-2xl font-bold bg-[#662D91] bg-clip-text text-transparent mb-1">
                           ₹{bundlePrice.total.toFixed(2)}
                         </div>
                         <p className="text-sm text-muted-foreground">
@@ -249,7 +249,7 @@ export default function Pricing() {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-3xl blur-xl" />
+              <div className="absolute inset-0 bg-[#662D91]/20 rounded-3xl blur-xl" />
 
               <div className="relative bg-card/50 backdrop-blur-sm border border-primary/20 rounded-3xl p-8 md:p-12">
                 <div className="text-center mb-8">
@@ -263,7 +263,7 @@ export default function Pricing() {
                   <div className="mb-8">
                     <div className="flex items-center justify-between mb-4">
                       <label className="text-lg font-semibold">Number of Messages</label>
-                      <span className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                      <span className="text-3xl font-bold bg-[#662D91] bg-clip-text text-transparent">
                         {messageBundle}
                       </span>
                     </div>
@@ -275,7 +275,7 @@ export default function Pricing() {
                       step="5"
                       value={messageBundle}
                       onChange={(e) => setMessageBundle(parseInt(e.target.value))}
-                      className="w-full h-3 bg-gradient-to-r from-primary/20 to-purple-600/20 rounded-full appearance-none cursor-pointer slider"
+                      className="w-full h-3 bg-gradient-to-r from-primary/20 to-[#662D91]/20 rounded-full appearance-none cursor-pointer slider"
                       style={{
                         background: `linear-gradient(to right,
                           hsl(var(--primary)) 0%,
@@ -292,7 +292,7 @@ export default function Pricing() {
                   </div>
 
                   {/* Price Breakdown */}
-                  <div className="bg-gradient-to-br from-primary/5 to-purple-600/5 rounded-2xl p-6 mb-6">
+                  <div className="bg-[#662D91]/5 rounded-2xl p-6 mb-6">
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Base Price ({messageBundle} × ₹10)</span>
@@ -304,7 +304,7 @@ export default function Pricing() {
                       </div>
                       <div className="border-t border-border pt-3 flex justify-between items-center">
                         <span className="text-lg font-bold">Total Amount</span>
-                        <span className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                        <span className="text-3xl font-bold bg-[#662D91] bg-clip-text text-transparent">
                           ₹{price.total.toFixed(2)}
                         </span>
                       </div>
@@ -314,7 +314,7 @@ export default function Pricing() {
                   <motion.button
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="w-full py-4 bg-[#662D91] text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Purchase {messageBundle} Messages
                   </motion.button>
@@ -365,7 +365,7 @@ export default function Pricing() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/5 to-purple-500/5">
+      <section className="py-20 bg-gradient-to-br from-[#662D91]/5 to-[#662D91]/5">
         <div className="container mx-auto px-4 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -375,7 +375,7 @@ export default function Pricing() {
           >
             <h2 className="text-4xl font-bold mb-4">
               Frequently Asked{" "}
-              <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 Questions
               </span>
             </h2>
@@ -418,7 +418,7 @@ export default function Pricing() {
             <p className="text-muted-foreground mb-4">Still have questions?</p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-bold hover:shadow-lg transition-all duration-300 hover:scale-105"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#662D91] text-white rounded-full font-bold hover:shadow-lg transition-all duration-300 hover:scale-105"
             >
               Contact Support
             </Link>

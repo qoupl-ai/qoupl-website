@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Heart } from "lucide-react";
 import Image from "next/image";
@@ -35,9 +35,6 @@ const menImages = [
 // Combined array: 10 women + 6 men = 16 images
 const carouselImages = [...womenImages, ...menImages];
 
-// All images for infinite carousel (16 images)
-const allUserImages = [...womenImages, ...menImages];
-
 // Modern 2025 Floating Cards with Magnetic Effect
 function ModernFloatingCards() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,6 +42,18 @@ function ModernFloatingCards() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [particlePositions, setParticlePositions] = useState<Array<{ initialX: number; initialY: number; animateX: number[]; animateY: number[]; duration: number; delay: number }>>([]);
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Generate particle positions only on client side to avoid hydration mismatch
   useEffect(() => {
@@ -68,11 +77,22 @@ function ModernFloatingCards() {
     setParticlePositions(positions);
   }, []);
 
-  // Mouse tracking for magnetic effect
+  // Mouse tracking for magnetic effect - only on desktop
   useEffect(() => {
+    if (isMobile) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
+
+        // Check if container is in viewport
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+        if (!isInViewport) {
+          // Reset position when out of viewport
+          setMousePosition({ x: 0, y: 0 });
+          return;
+        }
+
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         setMousePosition({
@@ -82,9 +102,24 @@ function ModernFloatingCards() {
       }
     };
 
+    const handleScroll = () => {
+      // Reset mouse position on scroll to prevent stuck cards
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+        if (!isInViewport) {
+          setMousePosition({ x: 0, y: 0 });
+        }
+      }
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isMobile]);
 
   // Auto-rotate cards
   useEffect(() => {
@@ -114,18 +149,18 @@ function ModernFloatingCards() {
         const rotation = baseRotation + timeOffset;
 
         // Calculate position in 3D space (circular orbit)
-        const radius = 180;
+        const radius = isMobile ? 120 : 180; // Smaller radius on mobile
         const x = Math.cos((rotation * Math.PI) / 180) * radius;
         const z = Math.sin((rotation * Math.PI) / 180) * radius;
-        const y = Math.sin(index * 0.8) * 40; // Vertical wave
+        const y = isMobile ? 0 : Math.sin(index * 0.8) * 40; // No vertical wave on mobile
 
-        // Magnetic effect - cards slightly follow mouse
-        const magneticX = mousePosition.x * 15;
-        const magneticY = mousePosition.y * 15;
+        // Magnetic effect - cards slightly follow mouse (disabled on mobile)
+        const magneticX = isMobile ? 0 : mousePosition.x * 15;
+        const magneticY = isMobile ? 0 : mousePosition.y * 15;
 
         // Scale based on Z position (closer = larger)
         const depth = (z + radius) / (2 * radius);
-        const scale = 0.7 + depth * 0.3;
+        const scale = isMobile ? 0.6 + depth * 0.2 : 0.7 + depth * 0.3; // Smaller cards on mobile
 
         return (
           <motion.div
@@ -272,89 +307,6 @@ function ModernFloatingCards() {
   );
 }
 
-// Infinite Circular Carousel Component
-function InfiniteCircularCarousel() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const [centerIndex, setCenterIndex] = useState(0);
-  
-  // Duplicate images for seamless infinite loop (3 sets for smooth transition)
-  const duplicatedImages = [...allUserImages, ...allUserImages, ...allUserImages];
-  
-  // Calculate the distance to move (one set of images)
-  const imageWidth = 48; // w-12 = 48px (reduced from 64px)
-  const gap = 8; // gap-2 = 8px (reduced from 16px)
-  const setWidth = allUserImages.length * (imageWidth + gap);
-  const itemWidth = imageWidth + gap;
-
-  // Track center position
-  useEffect(() => {
-    const unsubscribe = x.on("change", (latest) => {
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        const centerX = containerWidth / 2;
-        
-        // Calculate which image is at center
-        // Account for the negative x value (carousel moves left)
-        const relativeX = Math.abs(latest) % setWidth;
-        const imagePosition = centerX - relativeX;
-        const imageIndex = Math.round(imagePosition / itemWidth) % allUserImages.length;
-        
-        // Ensure positive index
-        const positiveIndex = imageIndex < 0 ? allUserImages.length + imageIndex : imageIndex;
-        setCenterIndex(positiveIndex);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [x, setWidth, itemWidth]);
-
-  return (
-    <div ref={containerRef} className="relative w-full overflow-hidden py-2">
-      <motion.div
-        className="flex gap-2"
-        style={{ x }}
-        animate={{
-          x: [0, -setWidth],
-        }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: 40,
-            ease: "linear",
-          },
-        }}
-      >
-        {duplicatedImages.map((img, index) => {
-          const imageIndex = index % allUserImages.length;
-          const isNearCenter = imageIndex === centerIndex;
-          
-          return (
-            <motion.div
-              key={`carousel-${index}`}
-              className={`flex-shrink-0 w-12 h-12 rounded-full overflow-hidden relative shadow-md transition-all duration-300 ${
-                isNearCenter ? 'scale-110' : ''
-              }`}
-              style={{
-                border: isNearCenter ? '3px solid #662D91' : '2px solid hsl(var(--background))',
-                boxShadow: isNearCenter ? '0 0 0 2px rgba(102, 45, 145, 0.2)' : undefined,
-              }}
-            >
-              <Image
-                src={img}
-                alt={`User ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="48px"
-              />
-            </motion.div>
-          );
-        })}
-      </motion.div>
-    </div>
-  );
-}
 
 export default function AnimatedHero() {
   const [showThemeToggle, setShowThemeToggle] = useState(true);
@@ -376,7 +328,7 @@ export default function AnimatedHero() {
 
   return (
     <section
-      className="relative min-h-screen w-full flex flex-col overflow-hidden bg-white dark:bg-[#171717] pb-32 md:pb-36 lg:pb-24"
+      className="relative min-h-screen w-full flex flex-col overflow-hidden bg-white dark:bg-[#171717]"
     >
       {/* Theme Toggle - Fixed in top right, hides when navbar appears */}
       <motion.div
@@ -397,8 +349,8 @@ export default function AnimatedHero() {
       </motion.div>
 
       {/* Main Content - Split Layout with Better Alignment */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex-1 flex items-center min-h-0">
-        <div className="grid lg:grid-cols-2 gap-6 md:gap-8 lg:gap-16 xl:gap-20 items-start lg:items-center w-full py-6 md:py-8 lg:py-12 mb-20 md:mb-24 lg:mb-0">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 relative z-10 w-full flex-1 flex items-center min-h-0">
+        <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center w-full py-6 md:py-8 lg:py-12">
           {/* Left: Brand & CTA - Energetic & Fun Design */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -494,20 +446,6 @@ export default function AnimatedHero() {
           </motion.div>
         </div>
       </div>
-
-      {/* Infinite Circular Carousel - Full Width at Bottom */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
-        className="w-full absolute bottom-0 left-0 right-0 pb-4 md:pb-6 z-10"
-      >
-        <InfiniteCircularCarousel />
-        {/* Text below carousel */}
-        <p className="text-center mt-1 text-xs md:text-sm text-muted-foreground">
-          <span className="font-bold text-foreground">10,000+ people</span> already on the waitlist
-        </p>
-      </motion.div>
 
       {/* Waitlist Modal */}
       <WaitlistModal

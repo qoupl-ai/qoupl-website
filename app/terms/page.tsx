@@ -22,7 +22,7 @@ export default function TermsOfService() {
           Back to Home
         </Link>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-[#662D91] bg-clip-text text-transparent">
           Terms of Service
         </h1>
         <p className="text-muted-foreground mb-8">
@@ -48,22 +48,24 @@ export default function TermsOfService() {
               To use qoupl, you must:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+              <li>Be a current college student enrolled in a recognized college or university</li>
               <li>Be between 18 to 25 years of age (both inclusive)</li>
               <li>Be legally capable of entering into binding contracts under Indian law</li>
               <li>Not be prohibited from using the Service under applicable laws</li>
               <li>Not have been previously banned or suspended from the Service</li>
               <li>Create only one account (multiple accounts are prohibited)</li>
               <li>Provide accurate and truthful information</li>
-              <li>Complete mandatory age verification using government-issued ID documents</li>
+              <li>Complete mandatory college student verification using a valid college/university ID card</li>
             </ul>
             <h3 className="text-xl font-semibold mb-3 mt-6">
-              Age Verification Requirement
+              College Student Verification Requirement
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              During account creation, you will be required to verify your age by uploading
-              a government-issued identification document such as a Driving License, PAN Card,
-              Aadhaar Card, or Passport. This verification is mandatory and ensures our platform
-              remains safe and age-appropriate. Violation of age requirements will result in
+              During account creation, you will be required to verify your college student status by uploading
+              a valid college/university ID card. We only accept college ID cards for verification - no other 
+              identification documents (such as Driving License, PAN Card, Aadhaar Card, or Passport) will be accepted.
+              This verification is mandatory and ensures our platform remains exclusive to college students and age-appropriate.
+              Violation of eligibility requirements (including non-college students or age outside 18-25) will result in
               immediate account termination and permanent ban from the Service.
             </p>
           </section>

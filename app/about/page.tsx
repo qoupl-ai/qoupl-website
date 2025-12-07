@@ -15,25 +15,25 @@ const values = [
     icon: Heart,
     title: "Authenticity First",
     description: "We believe in real connections built on honesty and genuine interactions.",
-    color: "from-pink-500 to-rose-500"
+    color: "bg-[#662D91]"
   },
   {
     icon: Shield,
     title: "Safety & Trust",
     description: "Your safety is our priority. We create a secure environment for finding love.",
-    color: "from-purple-500 to-indigo-500"
+    color: "bg-[#662D91]"
   },
   {
     icon: Sparkles,
     title: "Innovation",
     description: "Leveraging AI and technology to make dating smarter and more meaningful.",
-    color: "from-violet-500 to-purple-500"
+    color: "bg-[#662D91]"
   },
   {
     icon: Users,
-    title: "Inclusive Community",
-    description: "Everyone deserves love. We welcome all backgrounds, identities, and preferences.",
-    color: "from-blue-500 to-cyan-500"
+    title: "College Community",
+    description: "A dedicated space for college students to connect with peers who understand their journey.",
+    color: "bg-[#662D91]"
   }
 ];
 
@@ -64,7 +64,7 @@ export default function AboutUs() {
       {/* Hero Section - Modern Bento Grid Design */}
       <section ref={heroRef} className="relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24">
         {/* Modern gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#FFF5F7] via-purple-50/50 to-pink-50/30 dark:from-[#0F0A1A] dark:via-purple-950/30 dark:to-pink-950/20" />
+        <div className="absolute inset-0 bg-[#662D91]/5 dark:bg-[#662D91]/10" />
         
         {/* Animated mesh gradient */}
         <motion.div
@@ -100,7 +100,7 @@ export default function AboutUs() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-purple-600/10 text-primary backdrop-blur-sm border border-primary/20"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#662D91]/10 text-primary backdrop-blur-sm border border-primary/20"
               >
                 <Sparkles className="h-4 w-4" />
                 <span className="text-sm font-semibold">Our Story</span>
@@ -108,16 +108,16 @@ export default function AboutUs() {
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
                 Building the{" "}
-                <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                <span className="bg-[#662D91] bg-clip-text text-transparent">
                   Future
                 </span>{" "}
                 of Love
               </h1>
               
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                qoupl is revolutionizing how people connect. Through advanced AI matching 
-                and a commitment to authentic relationships, we're creating a platform 
-                where meaningful connections happen naturally.
+                qoupl is the exclusive dating app for college students aged 18-25. Through advanced AI matching 
+                and a commitment to authentic relationships, we're creating a safe, age-appropriate platform 
+                where college students can find meaningful connections with their peers.
               </p>
 
               <motion.div
@@ -178,7 +178,7 @@ export default function AboutUs() {
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                     sizes="(max-width: 768px) 30vw, 20vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#662D91]/20 to-transparent" />
                 </motion.div>
 
                 {/* Medium card - Middle right */}
@@ -196,7 +196,7 @@ export default function AboutUs() {
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                     sizes="(max-width: 768px) 30vw, 20vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-pink-600/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#662D91]/20 to-transparent" />
                 </motion.div>
 
                 {/* Wide card - Bottom left */}
@@ -248,7 +248,7 @@ export default function AboutUs() {
                         >
                           <Heart className="h-12 w-12 text-primary fill-primary mx-auto mb-2" />
                         </motion.div>
-                        <div className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                        <div className="text-4xl font-bold bg-[#662D91] bg-clip-text text-transparent">
                           10,000+
                         </div>
                         <div className="text-sm font-semibold text-muted-foreground">
@@ -279,9 +279,9 @@ export default function AboutUs() {
               transition={{ duration: 0.7 }}
               className="relative group"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500" />
+              <div className="absolute inset-0 bg-[#662D91]/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500" />
               <div className="relative h-full bg-card border border-primary/20 rounded-3xl p-8 md:p-10 backdrop-blur-sm hover:border-primary/40 transition-all duration-300">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-purple-600/20 text-primary mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-[#662D91]/20 text-primary mb-6">
                   <Target className="h-5 w-5" />
                   <span className="font-semibold">Our Mission</span>
                 </div>
@@ -292,14 +292,14 @@ export default function AboutUs() {
 
                 <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
                   <p>
-                    At qoupl, we believe that everyone deserves to find love and meaningful
+                    At qoupl, we believe that college students deserve a dedicated space to find love and meaningful
                     connections. Our mission is to leverage cutting-edge AI technology to
-                    match compatible people while maintaining the authenticity and magic of
+                    match compatible college students while maintaining the authenticity and magic of
                     human connection.
                   </p>
                   <p>
                     We're committed to creating a safe, inclusive, and trustworthy platform
-                    where people can be themselves and find their perfect match.
+                    exclusively for college students aged 18-25, where they can be themselves and find their perfect match.
                   </p>
                 </div>
 
@@ -318,9 +318,9 @@ export default function AboutUs() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="relative group"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500" />
-              <div className="relative h-full bg-card border border-purple-600/20 rounded-3xl p-8 md:p-10 backdrop-blur-sm hover:border-purple-600/40 transition-all duration-300">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-600/20 text-purple-600 mb-6">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#662D91]/20 to-[#662D91]/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500" />
+              <div className="relative h-full bg-card border border-[#662D91]/20 rounded-3xl p-8 md:p-10 backdrop-blur-sm hover:border-[#662D91]/40 transition-all duration-300">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#662D91]/20 to-[#662D91]/20 text-[#662D91] mb-6">
                   <Eye className="h-5 w-5" />
                   <span className="font-semibold">Our Vision</span>
                 </div>
@@ -331,14 +331,13 @@ export default function AboutUs() {
 
                 <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
                   <p>
-                    We envision a world where finding love is accessible, safe, and enjoyable
-                    for everyone, regardless of their background or location. Through
-                    continuous innovation and user-centric design, we're building the
-                    world's most trusted dating platform.
+                    We envision a world where college students can find love in a safe, age-appropriate environment
+                    designed specifically for their needs. Through continuous innovation and user-centric design, 
+                    we're building the most trusted dating platform exclusively for college students.
                   </p>
                   <p>
                     Our vision extends beyond just matching—we want to foster lasting
-                    relationships that enrich lives and create countless success stories.
+                    relationships among college students that enrich their lives and create countless success stories.
                   </p>
                 </div>
 
@@ -377,7 +376,7 @@ export default function AboutUs() {
 
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Our Core{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 Values
               </span>
             </h2>
@@ -399,7 +398,7 @@ export default function AboutUs() {
                   className="group relative"
                 >
                   {/* Glow effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${value.color} rounded-3xl blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+                  <div className={`absolute inset-0 ${value.color} rounded-3xl blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
 
                   {/* Card */}
                   <motion.div
@@ -408,10 +407,10 @@ export default function AboutUs() {
                     className="relative h-full p-8 md:p-10 rounded-3xl bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all duration-300 overflow-hidden"
                   >
                     {/* Background gradient */}
-                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${value.color} opacity-5 group-hover:opacity-10 transition-opacity duration-300 rounded-full blur-2xl`} />
+                    <div className={`absolute top-0 right-0 w-32 h-32 ${value.color} opacity-5 group-hover:opacity-10 transition-opacity duration-300 rounded-full blur-2xl`} />
 
                     <div className="relative">
-                      <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
+                      <div className={`w-20 h-20 rounded-2xl ${value.color} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
                         <Icon className="h-10 w-10 text-white" />
                       </div>
 
@@ -439,7 +438,7 @@ export default function AboutUs() {
       {/* Timeline Section - Enhanced */}
       <section className="py-32 relative overflow-hidden">
         {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20" />
+        <div className="absolute inset-0 bg-[#662D91]/5 dark:bg-[#662D91]/10" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(168,85,247,0.1),transparent_70%)]" />
 
         <div className="container mx-auto px-4 max-w-5xl relative">
@@ -461,7 +460,7 @@ export default function AboutUs() {
 
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               From Idea to{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 Reality
               </span>
             </h2>
@@ -472,7 +471,7 @@ export default function AboutUs() {
 
           <div className="relative">
             {/* Timeline line - enhanced gradient */}
-            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-purple-500 to-pink-500 opacity-30 rounded-full" />
+            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-[#662D91] to-[#662D91] opacity-30 rounded-full" />
 
             {timeline.map((item, index) => (
               <motion.div
@@ -493,7 +492,7 @@ export default function AboutUs() {
                   transition={{ delay: index * 0.15 + 0.3, duration: 0.5, type: "spring" }}
                   className="absolute left-8 md:left-1/2 z-10"
                 >
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-purple-600 border-4 border-background transform -translate-x-1/2 shadow-lg" />
+                  <div className="w-6 h-6 rounded-full bg-[#662D91] border-4 border-background transform -translate-x-1/2 shadow-lg" />
                   <div className="absolute inset-0 w-6 h-6 rounded-full bg-primary blur-lg opacity-50 transform -translate-x-1/2" />
                 </motion.div>
 
@@ -505,12 +504,12 @@ export default function AboutUs() {
                     className="group relative"
                   >
                     {/* Glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-[#662D91]/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                     {/* Card */}
                     <div className="relative bg-card/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-primary/20 hover:border-primary/50 transition-all duration-300 shadow-lg overflow-hidden">
                       {/* Year badge */}
-                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary to-purple-600 text-white font-bold text-sm mb-4 shadow-lg">
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#662D91] text-white font-bold text-sm mb-4 shadow-lg">
                         <TrendingUp className="h-4 w-4" />
                         {item.year}
                       </div>
@@ -524,7 +523,7 @@ export default function AboutUs() {
                       </p>
 
                       {/* Decorative gradient */}
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/10 to-purple-600/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#662D91]/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
                   </motion.div>
                 </div>
@@ -558,7 +557,7 @@ export default function AboutUs() {
 
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Why Choose{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 qoupl?
               </span>
             </h2>
@@ -570,37 +569,37 @@ export default function AboutUs() {
                 title: "AI-Powered Matching",
                 description: "Our advanced algorithm learns your preferences and suggests highly compatible matches.",
                 icon: Sparkles,
-                color: "from-purple-500 to-indigo-500"
+                color: "bg-[#662D91]"
               },
               {
                 title: "Verified Profiles",
                 description: "Photo verification and ID checks ensure you're talking to real people.",
                 icon: Shield,
-                color: "from-blue-500 to-cyan-500"
+                color: "bg-[#662D91]"
               },
               {
                 title: "Safe & Secure",
                 description: "End-to-end encryption and 24/7 moderation keep your data and conversations private.",
                 icon: Shield,
-                color: "from-green-500 to-emerald-500"
+                color: "bg-[#662D91]"
               },
               {
-                title: "Inclusive Platform",
-                description: "Everyone is welcome. We celebrate diversity and promote inclusivity.",
+                title: "College-Exclusive Platform",
+                description: "Exclusively for college students aged 18-25. Connect with peers who share your academic journey.",
                 icon: Users,
-                color: "from-pink-500 to-rose-500"
+                color: "bg-[#662D91]"
               },
               {
                 title: "Smart Features",
                 description: "Smart conversation starters, messaging tools, and date planning features make connecting easy.",
                 icon: Zap,
-                color: "from-orange-500 to-amber-500"
+                color: "bg-[#662D91]"
               },
               {
                 title: "Love Stories",
                 description: "Join thousands of couples who found love through qoupl.",
                 icon: Heart,
-                color: "from-red-500 to-pink-500"
+                color: "bg-[#662D91]"
               }
             ].map((feature, index) => {
               const Icon = feature.icon;
@@ -615,11 +614,11 @@ export default function AboutUs() {
                   className="group relative"
                 >
                   {/* Glow effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+                  <div className={`absolute inset-0 ${feature.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
 
                   {/* Card */}
                   <div className="relative h-full bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 hover:border-primary/50 transition-all duration-300">
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <div className={`w-14 h-14 rounded-xl ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                       <Icon className="h-7 w-7 text-white" />
                     </div>
 
@@ -641,7 +640,7 @@ export default function AboutUs() {
       {/* CTA Section - Enhanced */}
       <section className="py-32 relative overflow-hidden">
         {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-600 to-pink-600" />
+        <div className="absolute inset-0 bg-[#662D91]" />
         <motion.div
           animate={{
             backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
@@ -708,7 +707,7 @@ export default function AboutUs() {
             </h2>
 
             <p className="text-xl md:text-2xl text-white/90 mb-12 leading-relaxed max-w-2xl mx-auto">
-              Be part of the next generation of dating and find meaningful connections
+              Join the exclusive dating platform for college students and find meaningful connections with your peers
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

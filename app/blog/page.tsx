@@ -18,7 +18,7 @@ const blogPosts = [
     date: "November 15, 2025",
     readTime: "5 min read",
     image: "/images/men/indian-student-goes-first-lesson.jpg",
-    gradient: "from-purple-500 to-indigo-500"
+    gradient: "bg-[#662D91]"
   },
   {
     id: 2,
@@ -28,7 +28,7 @@ const blogPosts = [
     date: "November 10, 2025",
     readTime: "7 min read",
     image: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
-    gradient: "from-pink-500 to-rose-500"
+    gradient: "bg-[#662D91]"
   },
   {
     id: 3,
@@ -48,7 +48,7 @@ const blogPosts = [
     date: "November 1, 2025",
     readTime: "8 min read",
     image: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
-    gradient: "from-violet-500 to-purple-500"
+    gradient: "bg-[#662D91]"
   },
   {
     id: 5,
@@ -86,7 +86,7 @@ export default function Blog() {
     <div className="min-h-screen bg-background">
       <Navbar />
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20 py-20">
+      <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10 py-20">
         <div className="container mx-auto px-4">
           <Link
             href="/"
@@ -114,19 +114,19 @@ export default function Blog() {
 
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
               qoupl{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 Blog
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-              Discover insights on modern dating, relationships, and technology
+              Discover insights on dating for college students, relationships, and technology
             </p>
           </motion.div>
         </div>
 
         {/* Decorative elements */}
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#662D91]/10 rounded-full blur-3xl" />
       </section>
 
       {/* Category Filter */}
@@ -246,7 +246,7 @@ export default function Blog() {
 
       {/* Newsletter Section */}
       <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-[#662D91]/10 to-[#662D91]/10" />
 
         <div className="container mx-auto px-4 max-w-4xl relative">
           <motion.div
@@ -255,7 +255,7 @@ export default function Blog() {
             viewport={{ once: true }}
             className="bg-card/50 backdrop-blur-sm border border-primary/20 rounded-3xl p-8 md:p-12 text-center"
           >
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple-600 mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#662D91] mb-6">
               <Heart className="h-8 w-8 text-white" />
             </div>
 
@@ -272,7 +272,7 @@ export default function Blog() {
                 placeholder="Enter your email"
                 className="flex-1 px-6 py-4 rounded-full border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
-              <button className="px-8 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-bold hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <button className="px-8 py-4 bg-[#662D91] text-white rounded-full font-bold hover:shadow-lg transition-all duration-300 hover:scale-105">
                 Subscribe
               </button>
             </div>

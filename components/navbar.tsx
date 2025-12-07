@@ -89,14 +89,14 @@ export default function Navbar() {
                   href={link.href}
                   className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? "text-[#662D91] dark:text-[#c084fc]"
+                      ? "text-[#662D91]"
                       : "text-foreground/70 hover:text-foreground"
                   }`}
                 >
                   {link.label}
                   {isActive && (
                     <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#662D91] dark:bg-[#c084fc] rounded-full"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#662D91] rounded-full"
                       layoutId="navbar-indicator"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
@@ -145,7 +145,7 @@ export default function Navbar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive
-                      ? "text-[#662D91] dark:text-[#c084fc] bg-[#662D91]/10 dark:bg-[#662D91]/20"
+                      ? "text-[#662D91] bg-[#662D91]/10"
                       : "text-foreground/70 hover:text-foreground hover:bg-white/5 dark:hover:bg-white/5"
                   }`}
                 >

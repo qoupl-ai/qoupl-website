@@ -1,0 +1,26 @@
+{
+  "name": "qoupl - Find Your Perfect Match",
+  "short_name": "qoupl",
+  "description": "The next generation dating app that helps you find genuine connections",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#662D91",
+  "theme_color": "#662D91",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["social", "lifestyle"],
+  "lang": "en-US",
+  "dir": "ltr"
+}

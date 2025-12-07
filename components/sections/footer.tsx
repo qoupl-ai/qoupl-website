@@ -23,7 +23,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              The next generation dating app. Find your perfect match with
+              The exclusive dating app for college students. Find your perfect match with
               qoupl.
             </p>
             <div className="flex gap-4">

@@ -29,10 +29,10 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     setIsSubmitting(true);
     setError(null);
 
-    // Age validation for 18-25 years only
+    // Age validation for 18-25 years only and college student requirement
     const age = parseInt(formData.age);
     if (age < 18 || age > 25) {
-      setError('Sorry! qoupl is only available for individuals aged 18 to 25 years.');
+      setError('Sorry! qoupl is exclusively for college students aged 18 to 25 years. You must be a current college student to join.');
       setIsSubmitting(false);
       return;
     }
@@ -93,8 +93,8 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 4rem)' }}>
-              {/* Gradient Header */}
-              <div className="relative bg-gradient-to-br from-[#a855f7] to-[#ec4899] p-5 sm:p-8 text-white rounded-t-2xl sm:rounded-t-3xl">
+              {/* Header */}
+              <div className="relative bg-[#662D91] p-5 sm:p-8 text-white rounded-t-2xl sm:rounded-t-3xl">
                 {/* Close Button */}
                 <button
                   onClick={onClose}
@@ -126,7 +126,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                 >
                   <h2 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2 mt-5 sm:mt-8">Find Your Match</h2>
                   <p className="text-white/90 text-xs sm:text-sm">
-                    Join thousands finding love through qoupl
+                    Join thousands of college students finding love through qoupl
                   </p>
                 </motion.div>
 
@@ -159,7 +159,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           required
                           value={formData.name}
                           onChange={handleChange}
-                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#662D91] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           placeholder="Enter your full name"
                         />
                       </div>
@@ -178,7 +178,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           required
                           value={formData.email}
                           onChange={handleChange}
-                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#662D91] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           placeholder="your@email.com"
                         />
                       </div>
@@ -197,7 +197,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           required
                           value={formData.phone}
                           onChange={handleChange}
-                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#662D91] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           placeholder="+91 98765 43210"
                         />
                       </div>
@@ -215,7 +215,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           required
                           value={formData.gender}
                           onChange={handleChange}
-                          className="w-full px-2 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full px-2 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#662D91] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                         >
                           <option value="">Select</option>
                           <option value="male">Male</option>
@@ -227,7 +227,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       {/* Age */}
                       <div>
                         <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
-                          Age * (18-25)
+                          Age * (18-25, College Students Only)
                         </label>
                         <input
                           type="number"
@@ -237,7 +237,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           max="25"
                           value={formData.age}
                           onChange={handleChange}
-                          className="w-full px-2 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full px-2 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#662D91] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           placeholder="21"
                         />
                       </div>
@@ -255,7 +255,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           required
                           value={formData.lookingFor}
                           onChange={handleChange}
-                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#662D91] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                         >
                           <option value="">Select preference</option>
                           <option value="male">Male</option>
@@ -269,7 +269,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-3 sm:py-6 text-base sm:text-lg font-semibold bg-gradient-to-r from-[#a855f7] to-[#ec4899] hover:from-[#9333ea] hover:to-[#db2777] text-white rounded-lg sm:rounded-xl shadow-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full py-3 sm:py-6 text-base sm:text-lg font-semibold bg-[#662D91] hover:bg-[#662D91]/90 text-white rounded-lg sm:rounded-xl shadow-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
                         <span className="flex items-center gap-2">
@@ -294,12 +294,12 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
                     {/* Privacy Note */}
                     <p className="text-xs text-center text-gray-500 dark:text-gray-400">
-                      By joining, you agree to our{" "}
-                      <a href="/terms" className="text-[#a855f7] hover:underline">
+                      qoupl is exclusively for college students aged 18-25. By joining, you agree to our{" "}
+                      <a href="/terms" className="text-[#662D91] hover:underline">
                         Terms
                       </a>{" "}
                       and{" "}
-                      <a href="/privacy" className="text-[#a855f7] hover:underline">
+                      <a href="/privacy" className="text-[#662D91] hover:underline">
                         Privacy Policy
                       </a>
                     </p>
@@ -316,7 +316,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       initial={{ scale: 0, rotate: -180 }}
                       animate={{ scale: 1, rotate: 0 }}
                       transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-                      className="mb-6 inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-[#a855f7] to-[#ec4899] rounded-full relative"
+                      className="mb-6 inline-flex items-center justify-center w-24 h-24 bg-[#662D91] rounded-full relative"
                     >
                       {/* Pulsing ring effect */}
                       <motion.div
@@ -329,7 +329,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           repeat: Infinity,
                           ease: "easeInOut",
                         }}
-                        className="absolute inset-0 bg-gradient-to-br from-[#a855f7] to-[#ec4899] rounded-full"
+                        className="absolute inset-0 bg-[#662D91] rounded-full"
                       />
                       <motion.div
                         animate={{
@@ -370,7 +370,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
-                      className="bg-gradient-to-r from-[#a855f7]/10 to-[#ec4899]/10 rounded-2xl p-6 mb-4"
+                      className="bg-[#662D91]/10 rounded-2xl p-6 mb-4"
                     >
                       <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                         We're thrilled to have you on board! You'll be among the first to know when qoupl launches.
@@ -410,7 +410,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           }}
                           className="absolute left-1/2 top-1/4"
                         >
-                          <Sparkles className="h-4 w-4 text-[#a855f7]" />
+                          <Sparkles className="h-4 w-4 text-[#662D91]" />
                         </motion.div>
                       ))}
                     </div>

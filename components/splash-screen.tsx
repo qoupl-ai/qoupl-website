@@ -58,8 +58,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(168, 85, 247, 0.03) 1px, transparent 1px)
+              linear-gradient(rgba(102, 45, 145, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(102, 45, 145, 0.03) 1px, transparent 1px)
             `,
             backgroundSize: '60px 60px',
           }}
@@ -70,8 +70,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(236, 72, 153, 0.02) 40px, rgba(236, 72, 153, 0.02) 80px),
-              repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(168, 85, 247, 0.02) 40px, rgba(168, 85, 247, 0.02) 80px)
+              repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(102, 45, 145, 0.02) 40px, rgba(102, 45, 145, 0.02) 80px),
+              repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(102, 45, 145, 0.02) 40px, rgba(102, 45, 145, 0.02) 80px)
             `,
           }}
         />
@@ -90,7 +90,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         }}
         className="absolute top-20 left-20 w-96 h-96 rounded-full opacity-20 blur-3xl"
         style={{
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(102, 45, 145, 0.3) 0%, transparent 70%)',
         }}
       />
 
@@ -106,7 +106,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         }}
         className="absolute bottom-20 right-20 w-80 h-80 rounded-full opacity-20 blur-3xl"
         style={{
-          background: 'radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(102, 45, 145, 0.3) 0%, transparent 70%)',
         }}
       />
 
@@ -171,7 +171,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         <div
           className="w-[700px] h-[400px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(102, 45, 145, 0.15) 0%, transparent 70%)',
           }}
         />
       </motion.div>

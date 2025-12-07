@@ -9,7 +9,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-white dark:from-purple-950/20 dark:via-pink-950/20 dark:to-background" />
+      <div className="absolute inset-0 bg-[#662D91]/5 dark:bg-[#662D91]/10" />
 
       {/* Background Images - Subtle */}
       <div className="absolute inset-0 opacity-10 dark:opacity-5">
@@ -55,7 +55,7 @@ export default function Hero() {
               className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
             >
               Find Your Perfect{" "}
-              <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              <span className="text-[#662D91]">
                 Match
               </span>
             </motion.h1>
@@ -66,9 +66,9 @@ export default function Hero() {
               transition={{ delay: 0.5 }}
               className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
             >
-              The next generation dating app that helps you connect with people
+              The exclusive dating app for college students that helps you connect with peers
               who truly matter. Built with love, designed for meaningful
-              connections.
+              connections among college students.
             </motion.p>
 
             <motion.div

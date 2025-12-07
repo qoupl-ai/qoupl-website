@@ -28,21 +28,21 @@ export default function Contact() {
       title: "Email Us",
       details: "support@qoupl.ai",
       link: "mailto:support@qoupl.ai",
-      color: "from-blue-500 to-cyan-500"
+      color: "bg-[#662D91]"
     },
     {
       icon: Phone,
       title: "Call Us",
       details: "+91 9103732229",
       link: "tel:+919103732229",
-      color: "from-purple-500 to-indigo-500"
+      color: "bg-[#662D91]"
     },
     {
       icon: MapPin,
       title: "Location",
       details: "B-98, Sector-2, Noida, UP 201301",
       link: null,
-      color: "from-pink-500 to-rose-500"
+      color: "bg-[#662D91]"
     }
   ];
 
@@ -50,7 +50,7 @@ export default function Contact() {
     <div className="min-h-screen bg-background">
       <Navbar />
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20 py-20">
+      <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10 py-20">
         <div className="container mx-auto px-4">
           <Link
             href="/"
@@ -78,19 +78,19 @@ export default function Contact() {
 
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
               Get in{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 Touch
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-              Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+              Have questions about qoupl? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
             </p>
           </motion.div>
         </div>
 
         {/* Decorative elements */}
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#662D91]/10 rounded-full blur-3xl" />
       </section>
 
       {/* Contact Info Cards */}
@@ -110,11 +110,11 @@ export default function Contact() {
                   className="group relative"
                 >
                   {/* Glow effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${info.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+                  <div className={`absolute inset-0 ${info.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
 
                   {/* Card */}
                   <div className="relative h-full bg-card/50 backdrop-blur-sm border border-border rounded-2xl p-8 text-center hover:border-primary/50 transition-all duration-300">
-                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br ${info.color} mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-xl ${info.color} mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                       <Icon className="h-8 w-8 text-white" />
                     </div>
 
@@ -146,7 +146,7 @@ export default function Contact() {
               transition={{ duration: 0.7 }}
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-purple-600/10 rounded-3xl blur-xl" />
+              <div className="absolute inset-0 bg-[#662D91]/10 rounded-3xl blur-xl" />
 
               <form
                 onSubmit={handleSubmit}
@@ -219,7 +219,7 @@ export default function Contact() {
                     type="submit"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-[#662D91] text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <Send className="h-5 w-5" />
                     Send Message
@@ -246,7 +246,7 @@ export default function Contact() {
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-[#662D91] flex items-center justify-center">
                       <Clock className="h-6 w-6 text-white" />
                     </div>
                   </div>
@@ -260,7 +260,7 @@ export default function Contact() {
 
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-[#662D91] flex items-center justify-center">
                       <Heart className="h-6 w-6 text-white" />
                     </div>
                   </div>
@@ -274,7 +274,7 @@ export default function Contact() {
 
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-600 to-rose-600 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-[#662D91] flex items-center justify-center">
                       <MessageSquare className="h-6 w-6 text-white" />
                     </div>
                   </div>
@@ -288,7 +288,7 @@ export default function Contact() {
               </div>
 
               {/* FAQ Link */}
-              <div className="bg-gradient-to-br from-primary/5 to-purple-600/5 rounded-2xl p-6 border border-primary/20">
+              <div className="bg-[#662D91]/5 rounded-2xl p-6 border border-primary/20">
                 <h3 className="font-bold mb-2">Looking for quick answers?</h3>
                 <p className="text-muted-foreground mb-4">
                   Check out our FAQ page for instant answers to common questions.

@@ -17,21 +17,21 @@ const features = [
       "Learning preferences",
     ],
     image: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
-    color: "from-pink-500 to-rose-500",
+    color: "bg-[#662D91]",
   },
   {
     icon: Shield,
     title: "Safe & Verified",
     description:
-      "Multi-layered verification system with 24/7 AI moderation, photo verification, and encrypted messaging to keep you safe while finding love.",
+      "Multi-layered verification system with mandatory college ID verification, 24/7 AI moderation, photo verification, and encrypted messaging to keep college students safe while finding love.",
     highlights: [
-      "Photo & ID verification",
+      "College ID verification",
+      "Photo verification",
       "24/7 AI moderation",
       "Encrypted messaging",
-      "Background checks",
     ],
     image: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
-    color: "from-purple-500 to-indigo-500",
+    color: "bg-[#662D91]",
   },
   {
     icon: Zap,
@@ -45,7 +45,7 @@ const features = [
       "Instant notifications",
     ],
     image: "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
-    color: "from-violet-500 to-purple-500",
+    color: "bg-[#662D91]",
   },
 ];
 
@@ -77,7 +77,7 @@ export default function ProductFeatures() {
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             Why Choose{" "}
-            <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-[#662D91] bg-clip-text text-transparent">
               qoupl
             </span>
           </h2>
@@ -125,7 +125,7 @@ export default function ProductFeatures() {
 
                   {/* Animated Border Gradient */}
                   <motion.div
-                    className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}
+                    className={`absolute inset-0 ${feature.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}
                   />
 
                   {/* Content Container */}
@@ -144,7 +144,7 @@ export default function ProductFeatures() {
                       className="flex justify-end"
                     >
                       <motion.div
-                        className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} shadow-2xl flex items-center justify-center`}
+                        className={`w-14 h-14 rounded-2xl ${feature.color} shadow-2xl flex items-center justify-center`}
                         whileHover={{
                           scale: 1.15,
                           rotate: 8,
@@ -202,7 +202,7 @@ export default function ProductFeatures() {
                             className="flex items-center gap-2 group/item"
                           >
                             <motion.div
-                              className={`w-5 h-5 rounded-full bg-gradient-to-br ${feature.color} flex items-center justify-center flex-shrink-0 shadow-lg`}
+                              className={`w-5 h-5 rounded-full ${feature.color} flex items-center justify-center flex-shrink-0 shadow-lg`}
                               whileHover={{ scale: 1.2, rotate: 90 }}
                               transition={{ duration: 0.3 }}
                             >

@@ -33,7 +33,7 @@ export default function SafetySecurity() {
 
         <div className="flex items-center gap-3 mb-4">
           <Shield className="h-12 w-12 text-primary" />
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-bold bg-[#662D91] bg-clip-text text-transparent">
             Safety & Security
           </h1>
         </div>
@@ -46,8 +46,8 @@ export default function SafetySecurity() {
             <h2 className="text-xl font-bold mb-3">Our Commitment to You</h2>
             <p className="text-muted-foreground leading-relaxed">
               At qoupl, we're committed to creating a safe environment for
-              everyone. We use advanced technology, human moderation, and
-              continuous safety improvements to protect our community. However,
+              college students. We use advanced technology, human moderation, and
+              continuous safety improvements to protect our exclusive college student community. However,
               your safety also depends on how you use the platform.
             </p>
           </section>
@@ -350,7 +350,7 @@ export default function SafetySecurity() {
             </ul>
           </section>
 
-          <section className="bg-gradient-to-r from-primary/10 to-purple-500/10 p-8 rounded-lg border border-primary/20">
+          <section className="bg-[#662D91]/10 p-8 rounded-lg border border-primary/20">
             <h2 className="text-2xl font-bold mb-4">Remember</h2>
             <ul className="space-y-3 text-muted-foreground">
               <li className="flex items-start gap-3">

@@ -78,7 +78,7 @@ export default function Gallery() {
           ease: "easeInOut",
           delay: 1,
         }}
-        className="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
+        className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#662D91]/20 rounded-full blur-3xl"
       />
 
       <div className="container mx-auto px-4 relative z-10">
@@ -103,12 +103,12 @@ export default function Gallery() {
 
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             Real{" "}
-            <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-[#662D91] bg-clip-text text-transparent">
               Connections
             </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Join thousands of couples who found their perfect match through qoupl
+            Join thousands of college student couples who found their perfect match through qoupl
           </p>
         </motion.div>
 
@@ -286,7 +286,7 @@ export default function Gallery() {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/30 to-purple-600/30 backdrop-blur-md border border-white/30"
+                            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#662D91]/30 to-[#662D91]/30 backdrop-blur-md border border-white/30"
                           >
                             <span className="text-sm font-semibold">Beta Success Story</span>
                           </motion.div>

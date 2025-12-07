@@ -12,25 +12,25 @@ const values = [
     icon: Heart,
     title: "Passion-Driven",
     description: "We're passionate about helping people find meaningful connections.",
-    color: "from-pink-500 to-rose-500"
+    color: "bg-[#662D91]"
   },
   {
     icon: Users,
     title: "Collaborative",
     description: "We believe in the power of teamwork and diverse perspectives.",
-    color: "from-purple-500 to-indigo-500"
+    color: "bg-[#662D91]"
   },
   {
     icon: Zap,
     title: "Innovation",
     description: "We're always pushing boundaries and exploring new possibilities.",
-    color: "from-orange-500 to-amber-500"
+    color: "bg-[#662D91]"
   },
   {
     icon: Code,
     title: "Excellence",
     description: "We're committed to delivering the highest quality in everything we do.",
-    color: "from-blue-500 to-cyan-500"
+    color: "bg-[#662D91]"
   }
 ];
 
@@ -41,7 +41,7 @@ export default function Careers() {
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[80vh] flex items-center">
         {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-purple-600/20 dark:from-purple-900/40 dark:via-pink-900/40 dark:to-purple-800/40" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#662D91]/20 via-[#662D91]/20 to-[#662D91]/20 dark:from-[#662D91]/40 dark:via-[#662D91]/40 dark:to-[#662D91]/40" />
 
         {/* Animated orbs */}
         <motion.div
@@ -67,7 +67,7 @@ export default function Careers() {
             ease: "easeInOut",
             delay: 1
           }}
-          className="absolute bottom-20 left-20 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl"
+          className="absolute bottom-20 left-20 w-96 h-96 bg-[#662D91]/30 rounded-full blur-3xl"
         />
 
         <div className="container mx-auto px-4 relative z-10">
@@ -97,13 +97,13 @@ export default function Careers() {
 
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
               Build the Future of{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 Dating
               </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-12">
-              Help us create meaningful connections that change lives
+              Help us create meaningful connections for college students that change lives
             </p>
           </motion.div>
         </div>
@@ -121,16 +121,16 @@ export default function Careers() {
             transition={{ duration: 0.7 }}
             className="relative"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-3xl blur-xl" />
+            <div className="absolute inset-0 bg-[#662D91]/20 rounded-3xl blur-xl" />
 
             <div className="relative bg-card/50 backdrop-blur-sm border border-primary/20 rounded-3xl p-12 md:p-16 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-purple-600 mb-8">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#662D91] mb-8">
                 <Sparkles className="h-10 w-10 text-white" />
               </div>
 
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
                 We're Building Something{" "}
-                <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                <span className="bg-[#662D91] bg-clip-text text-transparent">
                   Special
                 </span>
               </h2>
@@ -141,7 +141,7 @@ export default function Careers() {
                 we'd love to hear from you!
               </p>
 
-              <div className="bg-gradient-to-br from-primary/5 to-purple-600/5 rounded-2xl p-8 mb-8">
+              <div className="bg-[#662D91]/5 rounded-2xl p-8 mb-8">
                 <h3 className="text-2xl font-bold mb-4">Be in Touch</h3>
                 <p className="text-lg text-muted-foreground mb-6">
                   Send us your resume and a note about why you'd like to join qoupl.
@@ -151,7 +151,7 @@ export default function Careers() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <a
                     href="mailto:careers@qoupl.ai"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#662D91] text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                   >
                     <Mail className="h-5 w-5" />
                     careers@qoupl.ai
@@ -180,7 +180,7 @@ export default function Careers() {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               What We{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 Value
               </span>
             </h2>
@@ -203,11 +203,11 @@ export default function Careers() {
                   className="group relative"
                 >
                   {/* Glow effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${value.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+                  <div className={`absolute inset-0 ${value.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
 
                   {/* Card */}
                   <div className="relative h-full bg-card/50 backdrop-blur-sm border border-border rounded-2xl p-8 hover:border-primary/50 transition-all duration-300">
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <div className={`w-14 h-14 rounded-xl ${value.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                       <Icon className="h-7 w-7 text-white" />
                     </div>
 
@@ -228,7 +228,7 @@ export default function Careers() {
 
       {/* Why Join Us Section */}
       <section className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-[#662D91]/10 to-[#662D91]/10" />
 
         <div className="container mx-auto px-4 max-w-6xl relative">
           <motion.div
@@ -239,7 +239,7 @@ export default function Careers() {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Why Join{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 qoupl?
               </span>
             </h2>

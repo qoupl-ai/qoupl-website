@@ -17,42 +17,42 @@ const features = [
     title: "Smart Matching",
     description:
       "Our AI-powered algorithm finds compatible matches based on your interests, values, and preferences.",
-    color: "from-pink-500 to-rose-500",
+    color: "bg-[#662D91]",
   },
   {
     icon: Shield,
     title: "Safe & Secure",
     description:
-      "Your privacy is our priority. Advanced verification and safety features keep you protected.",
-    color: "from-purple-500 to-indigo-500",
+      "Your privacy is our priority. Mandatory college ID verification and safety features keep college students protected.",
+    color: "bg-[#662D91]",
   },
   {
     icon: Zap,
     title: "Instant Connections",
     description:
       "Connect with people instantly. No waiting, no games, just genuine conversations.",
-    color: "from-yellow-500 to-orange-500",
+    color: "bg-[#662D91]",
   },
   {
     icon: Users,
-    title: "Active Community",
+    title: "College Community",
     description:
-      "Join a vibrant community of genuine people looking for meaningful relationships.",
-    color: "from-blue-500 to-cyan-500",
+      "Join a vibrant community of college students looking for meaningful relationships with their peers.",
+    color: "bg-[#662D91]",
   },
   {
     icon: MessageCircle,
     title: "Rich Messaging",
     description:
       "Express yourself with photos, voice messages, video calls, and more.",
-    color: "from-green-500 to-emerald-500",
+    color: "bg-[#662D91]",
   },
   {
     icon: Sparkles,
     title: "Premium Experience",
     description:
       "Beautiful, intuitive interface designed for the best dating experience.",
-    color: "from-violet-500 to-purple-500",
+    color: "bg-[#662D91]",
   },
 ];
 
@@ -74,8 +74,8 @@ const item = {
 export default function Features() {
   return (
     <section className="py-20 md:py-32 relative overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-purple-50/30 to-background dark:via-purple-950/10" />
+      {/* Background */}
+      <div className="absolute inset-0 bg-[#662D91]/5 dark:bg-[#662D91]/5" />
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -87,14 +87,14 @@ export default function Features() {
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             Why Choose{" "}
-            <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            <span className="text-[#662D91]">
               qoupl
             </span>
             ?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Experience the future of dating with features designed to help you
-            find genuine connections.
+            Experience the future of dating for college students with features designed to help you
+            find genuine connections with your peers.
           </p>
         </motion.div>
 
@@ -112,7 +112,7 @@ export default function Features() {
                 <Card className="h-full border-2 hover:border-primary/50 transition-all duration-300 group hover:shadow-xl">
                   <CardContent className="p-6">
                     <div
-                      className={`w-12 h-12 rounded-lg bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                      className={`w-12 h-12 rounded-lg ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
                     >
                       <Icon className="h-6 w-6 text-white" />
                     </div>

@@ -22,7 +22,7 @@ export default function CommunityGuidelines() {
           Back to Home
         </Link>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-[#662D91] bg-clip-text text-transparent">
           Community Guidelines
         </h1>
         <p className="text-muted-foreground mb-8">
@@ -42,12 +42,13 @@ export default function CommunityGuidelines() {
           <div className="bg-primary/10 border-l-4 border-primary p-6 rounded-lg">
             <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
               <Shield className="h-5 w-5" />
-              Age Restriction (18-25 Years Only)
+              College Student Exclusivity (18-25 Years Only)
             </h3>
             <p className="text-muted-foreground">
-              qoupl is exclusively for individuals aged 18 to 25 years. All users must
-              verify their age during account creation using government-issued ID documents.
-              Users outside this age range are not permitted to use our platform.
+              qoupl is exclusively for college students aged 18 to 25 years. All users must
+              verify their college student status during account creation using a valid college/university ID card.
+              We only accept college ID cards for verification - no other identification documents are accepted.
+              Users who are not current college students or are outside this age range are not permitted to use our platform.
             </p>
           </div>
 
@@ -193,7 +194,7 @@ export default function CommunityGuidelines() {
               <li>Make you feel unsafe or uncomfortable</li>
               <li>Request money or financial information</li>
               <li>Send inappropriate or explicit content</li>
-              <li>Appear to be outside the 18-25 age range (under 18 or over 25)</li>
+              <li>Appear to be outside the 18-25 age range (under 18 or over 25) or not a current college student</li>
               <li>Use fake photos or impersonate others</li>
             </ul>
 
@@ -280,7 +281,7 @@ export default function CommunityGuidelines() {
             </div>
           </section>
 
-          <section className="bg-purple-50 dark:bg-purple-950/20 p-6 rounded-lg border-l-4 border-primary">
+          <section className="bg-[#662D91]/5 dark:bg-[#662D91]/20 p-6 rounded-lg border-l-4 border-primary">
             <h3 className="text-lg font-semibold mb-2">Thank You!</h3>
             <p className="text-sm text-muted-foreground">
               By following these guidelines, you help create a welcoming space for

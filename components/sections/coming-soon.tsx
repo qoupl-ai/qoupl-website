@@ -13,7 +13,7 @@ export default function ComingSoon() {
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/5 to-background" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-[#662D91]/5 to-background" />
 
       {/* Animated Gradient Orbs */}
       <motion.div
@@ -55,13 +55,13 @@ export default function ComingSoon() {
 
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
                 Get{" "}
-                <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                <span className="bg-[#662D91] bg-clip-text text-transparent">
                   Early Access
                 </span>
               </h2>
 
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Be among the first to experience qoupl. Join our waitlist
+                Be among the first college students to experience qoupl. Join our waitlist
                 and get notified when we launch on iOS and Android.
               </p>
 
@@ -70,7 +70,7 @@ export default function ComingSoon() {
                 <Button
                   size="lg"
                   onClick={() => setIsWaitlistModalOpen(true)}
-                  className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-gradient-to-r from-[#a855f7] to-[#ec4899] hover:from-[#9333ea] hover:to-[#db2777] text-white"
+                  className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-[#662D91] hover:from-[#9333ea] hover:to-[#db2777] text-white"
                 >
                   <Sparkles className="mr-2 h-5 w-5" />
                   Join Waitlist Now
@@ -138,7 +138,7 @@ export default function ComingSoon() {
                       <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-16 h-1 bg-gray-700 rounded-full" />
                     </div>
                     {/* Purple Glow Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-purple-600/30 rounded-[3rem] blur-3xl scale-110 -z-10" />
+                    <div className="absolute inset-0 bg-[#662D91]/30 rounded-[3rem] blur-3xl scale-110 -z-10" />
                     <Image
                       src="/qoupl/1.png"
                       alt="App Preview"

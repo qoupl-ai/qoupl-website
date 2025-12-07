@@ -14,7 +14,7 @@ const featureCategories = [
     id: "matching",
     title: "Smart Matching",
     icon: Sparkles,
-    color: "from-pink-500 to-rose-500",
+    color: "bg-[#662D91]",
     image: "/qoupl/3.png",
     coupleImage: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
     features: [
@@ -28,12 +28,12 @@ const featureCategories = [
     id: "safety",
     title: "Safety & Trust",
     icon: Shield,
-    color: "from-purple-500 to-indigo-500",
+    color: "bg-[#662D91]",
     image: "/qoupl/1.png",
     coupleImage: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
     features: [
       { icon: Camera, title: "Photo Verification", description: "Real-time selfie verification to confirm identity and get verified badge" },
-      { icon: Shield, title: "ID Verification", description: "Optional government ID verification for enhanced trust" },
+      { icon: Shield, title: "College ID Verification", description: "Mandatory college ID verification to ensure all users are current college students" },
       { icon: Lock, title: "End-to-End Encryption", description: "All messages encrypted to protect your privacy" },
       { icon: Bell, title: "24/7 AI Moderation", description: "Automated and human review of content for safety" },
     ]
@@ -42,7 +42,7 @@ const featureCategories = [
     id: "communication",
     title: "Rich Communication",
     icon: MessageCircle,
-    color: "from-violet-500 to-purple-500",
+    color: "bg-[#662D91]",
     image: "/qoupl/4.png",
     coupleImage: "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
     features: [
@@ -56,7 +56,7 @@ const featureCategories = [
     id: "experience",
     title: "Premium Experience",
     icon: Star,
-    color: "from-blue-500 to-cyan-500",
+    color: "bg-[#662D91]",
     image: "/qoupl/6.png",
     coupleImage: "/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg",
     features: [
@@ -81,7 +81,7 @@ export default function Features() {
       {/* Hero Section - Modern Split Design */}
       <section className="relative overflow-hidden pt-24 pb-12 md:pt-32 md:pb-16">
         {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#FFF5F7] via-purple-50/30 to-background dark:from-[#0F0A1A] dark:via-purple-950/20 dark:to-background" />
+        <div className="absolute inset-0 bg-[#662D91]/5 dark:bg-[#662D91]/10" />
         
         {/* Animated gradient mesh */}
         <motion.div
@@ -119,7 +119,7 @@ export default function Features() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-purple-600/10 text-primary mb-6 backdrop-blur-sm border border-primary/20"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#662D91]/10 text-primary mb-6 backdrop-blur-sm border border-primary/20"
               >
                 <Sparkles className="h-4 w-4" />
                 <span className="text-sm font-semibold">Everything You Need</span>
@@ -127,13 +127,13 @@ export default function Features() {
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight">
                 Features That{" "}
-                <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                <span className="bg-[#662D91] bg-clip-text text-transparent">
                   Make Dating Better
                 </span>
               </h1>
               
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-                Discover intelligent features designed to help you find meaningful connections 
+                Discover intelligent features designed exclusively for college students to find meaningful connections 
                 faster, safer, and more authentically than ever before.
               </p>
             </motion.div>
@@ -158,7 +158,7 @@ export default function Features() {
                     whileTap={{ scale: 0.95 }}
                     className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                       isActive
-                        ? `bg-gradient-to-r ${category.color} text-white shadow-lg`
+                        ? `${category.color} text-white shadow-lg`
                         : 'bg-card border-2 border-border hover:border-primary/50 text-muted-foreground hover:text-foreground'
                     }`}
                   >
@@ -193,7 +193,7 @@ export default function Features() {
                       {/* Phone Frame */}
                       <div className="relative aspect-[9/19] max-w-[320px] mx-auto">
                         {/* Glowing effect */}
-                        <div className={`absolute inset-0 bg-gradient-to-br ${activeCategory.color} rounded-[3rem] blur-3xl opacity-30`} />
+                        <div className={`absolute inset-0 ${activeCategory.color} rounded-[3rem] blur-3xl opacity-30`} />
                         
                         {/* Phone container */}
                         <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-[2.5rem] p-2 shadow-2xl border border-gray-700/50">
@@ -236,7 +236,7 @@ export default function Features() {
                           className="object-cover"
                           sizes="192px"
                         />
-                        <div className={`absolute inset-0 bg-gradient-to-t ${activeCategory.color} opacity-20`} />
+                        <div className={`absolute inset-0 ${activeCategory.color} opacity-20`} />
                       </motion.div>
                     </div>
                   </motion.div>
@@ -261,7 +261,7 @@ export default function Features() {
                         >
                           <div className="flex gap-4 p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg">
                             {/* Icon */}
-                            <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${activeCategory.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                            <div className={`w-14 h-14 rounded-xl ${activeCategory.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                               <Icon className="h-7 w-7 text-white" />
                             </div>
                             
@@ -277,7 +277,7 @@ export default function Features() {
 
                             {/* Check icon */}
                             <div className="flex-shrink-0">
-                              <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${activeCategory.color} flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
+                              <div className={`w-8 h-8 rounded-full ${activeCategory.color} flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
                                 <Check className="h-5 w-5 text-white" strokeWidth={3} />
                               </div>
                             </div>
@@ -294,7 +294,7 @@ export default function Features() {
       </section>
 
       {/* All Features Grid - Comprehensive */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-primary/5 via-purple-500/5 to-background">
+      <section className="py-16 md:py-24 bg-[#662D91]/5">
         <div className="container mx-auto px-4 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -304,12 +304,12 @@ export default function Features() {
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
               And Much{" "}
-              <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-[#662D91] bg-clip-text text-transparent">
                 More
               </span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Discover all the tools and features that make qoupl the best dating app
+              Discover all the tools and features that make qoupl the best dating app for college students
             </p>
           </motion.div>
 
@@ -356,7 +356,7 @@ export default function Features() {
       {/* CTA Section - Gradient */}
       <section className="py-20 md:py-32 relative overflow-hidden">
         {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-600 to-pink-600" />
+        <div className="absolute inset-0 bg-[#662D91]" />
         
         {/* Animated overlay */}
         <motion.div

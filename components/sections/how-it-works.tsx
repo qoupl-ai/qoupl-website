@@ -1,16 +1,15 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
-import { Sparkles } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
 
 const steps = [
   {
     step: "01",
     title: "Create Your Profile",
     description:
-      "Sign up in seconds and create a profile that showcases the real you. Add photos, interests, and what makes you unique.",
+      "Sign up in seconds as a college student and create a profile that showcases the real you. Verify with your college ID, add photos, interests, and what makes you unique.",
     image: "/qoupl/1.png",
   },
   {
@@ -43,265 +42,214 @@ const steps = [
   },
 ];
 
-function StepCard({ step, index }: { step: typeof steps[0]; index: number }) {
-  const ref = useRef(null);
+export default function HowItWorks() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const [currentStep, setCurrentStep] = useState(0);
+
   const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
+    target: containerRef,
+    offset: ["start start", "end end"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [30, -30]);
-  const isEven = index % 2 === 0;
-  const isLastStep = index === 4; // Step 5 (index 4)
+  // Calculate step with precise control - requires more scroll per step
+  const stepProgress = useTransform(scrollYProgress, (progress) => {
+    const totalSteps = steps.length;
+    // Each step gets equal portion of scroll (1/5 = 0.2)
+    // Require 50% progress into a step zone before transitioning
+    const stepSize = 1 / totalSteps;
+    const currentStepFloat = progress / stepSize;
+    const stepIndex = Math.floor(currentStepFloat);
+    
+    // Only advance to next step when we're 50% through the current step zone
+    // This requires more scrolling to change steps
+    const progressInStep = (progress % stepSize) / stepSize;
+    
+    if (progressInStep >= 0.5 && stepIndex < totalSteps - 1) {
+      return stepIndex + 1;
+    }
+    
+    return Math.min(stepIndex, totalSteps - 1);
+  });
+
+  // Smooth spring animation for step transitions - slower and more controlled
+  const smoothStep = useSpring(stepProgress, {
+    stiffness: 40, // Lower = slower, more controlled
+    damping: 35, // Higher damping = less bounce
+    mass: 1.2, // Higher mass = slower response
+  });
+
+  // Update current step based on scroll progress
+  useEffect(() => {
+    const unsubscribe = smoothStep.on("change", (latest) => {
+      const stepIndex = Math.round(latest);
+      const clampedIndex = Math.min(Math.max(stepIndex, 0), steps.length - 1);
+      setCurrentStep(clampedIndex);
+    });
+
+    return () => unsubscribe();
+  }, [smoothStep]);
+
+  // Get the current step data
+  const currentStepData = steps[currentStep];
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.4 }}
-      className={`flex flex-col lg:flex-row gap-8 lg:gap-12 items-center mb-24 lg:mb-32 max-w-6xl mx-auto ${
-        isEven ? "" : "lg:flex-row-reverse"
-      }`}
-    >
-      {/* Phone Mockup with Screenshot */}
-      <motion.div
-        style={{ y: isEven ? y : useTransform(y, (val) => -val) }}
-        className="relative w-full lg:w-auto flex-shrink-0"
-      >
-        {/* Phone Frame */}
-        <div className="relative mx-auto w-[300px] h-[600px]">
-          {/* Phone Shadow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-[3.5rem] blur-2xl scale-95" />
+    <section ref={containerRef} className="relative">
+      {/* Scroll height for animation */}
+      <div className="h-[700vh] relative">
+        {/* Sticky Container - Full height minus navbar */}
+        <div
+          ref={stickyRef}
+          className="sticky top-0 h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden"
+        >
+          {/* Background with parallax */}
+          <motion.div
+            style={{
+              opacity: useTransform(scrollYProgress, [0, 1], [0.3, 0.1]),
+            }}
+            className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background"
+          />
 
-          {/* Phone Border */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-[3rem] shadow-[0_20px_60px_rgba(0,0,0,0.3)] border border-gray-700/50">
-            {/* Screen Container */}
-            <div className="absolute inset-[3px] bg-black rounded-[2.85rem] overflow-hidden">
-              {/* Status Bar Background */}
-              <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/50 to-transparent z-20" />
+          <div className="container mx-auto px-4 relative z-10 w-full h-full flex flex-col pt-16 md:pt-20 pb-8 md:pb-12">
+            {/* Header - Always visible, fixed position */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12 md:mb-16 lg:mb-20 xl:mb-24 flex-shrink-0"
+            >
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold">
+                How{" "}
+                <span className="bg-gradient-to-r from-primary to-[#662D91] bg-clip-text text-transparent">
+                  qoupl
+                </span>{" "}
+                Works
+              </h2>
+            </motion.div>
 
-              {/* Notch with Camera */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[140px] h-[30px] bg-black rounded-b-3xl z-30 shadow-lg">
-                {/* Speaker */}
-                <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-14 h-1 bg-gray-800 rounded-full" />
-                {/* Camera */}
-                <div className="absolute top-[8px] left-[20px] w-3 h-3 bg-gray-900 rounded-full border border-gray-700">
-                  <div className="absolute inset-[2px] bg-blue-500/20 rounded-full" />
+            {/* Step Content - Flexible, centered with proper spacing */}
+            <div className="flex-1 flex items-center justify-center min-h-0 max-w-6xl mx-auto w-full overflow-visible">
+              <div className="w-full h-full flex items-center py-4">
+                <div className="grid md:grid-cols-2 gap-4 md:gap-4 lg:gap-4 xl:gap-6 items-center w-full">
+                  {/* Phone Preview - Left Side */}
+                  <motion.div
+                    key={`phone-${currentStep}`}
+                    initial={{ opacity: 0, scale: 0.9, x: -30 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, x: 30 }}
+                    transition={{
+                      duration: 0.8,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="relative mx-auto md:mx-0 flex justify-center md:justify-start"
+                  >
+                    <div className="relative w-[170px] sm:w-[190px] md:w-[210px] lg:w-[240px] xl:w-[260px] aspect-[9/19] mb-4">
+                      {/* Phone Frame */}
+                      <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden shadow-lg border-2 border-border/50 bg-gradient-to-br from-gray-900 to-gray-800">
+                        {/* Notch */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-b-2xl z-20">
+                          <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-12 h-0.5 bg-gray-800 rounded-full" />
+                        </div>
+
+                        {/* Screen */}
+                        <div className="absolute inset-[2px] bg-white dark:bg-gray-950 rounded-[2.3rem] overflow-hidden">
+                          <Image
+                            src={currentStepData.image}
+                            alt={currentStepData.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 640px) 170px, (max-width: 768px) 190px, (max-width: 1024px) 210px, (max-width: 1280px) 240px, 260px"
+                            priority
+                          />
+                        </div>
+
+                        {/* Screen Glare */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
+                      </div>
+
+                      {/* Step Badge */}
+                      <motion.div
+                        key={`badge-${currentStep}`}
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{
+                          delay: 0.2,
+                          type: "spring",
+                          stiffness: 200,
+                          damping: 20,
+                        }}
+                        className="absolute -top-3 -right-3 md:-top-4 md:-right-4 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-[#662D91] to-primary shadow-xl flex items-center justify-center z-10"
+                      >
+                        <span className="text-sm sm:text-base md:text-lg font-bold text-white">
+                          {currentStepData.step}
+                        </span>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+
+                  {/* Content - Right Side */}
+                  <motion.div
+                    key={`content-${currentStep}`}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    transition={{
+                      duration: 0.8,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="text-center md:text-left flex-shrink-0"
+                  >
+                    <motion.div
+                      key={`title-${currentStep}`}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1, duration: 0.6 }}
+                    >
+                      <div className="inline-block h-1 w-10 sm:w-12 md:w-16 bg-gradient-to-r from-[#662D91] to-primary rounded-full mb-3 md:mb-4" />
+                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2 md:mb-3">
+                        {currentStepData.title}
+                      </h3>
+                    </motion.div>
+
+                    <motion.p
+                      key={`desc-${currentStep}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2, duration: 0.6 }}
+                      className="text-muted-foreground text-sm sm:text-base md:text-lg leading-relaxed max-w-md"
+                    >
+                      {currentStepData.description}
+                    </motion.p>
+                  </motion.div>
                 </div>
               </div>
-
-              {/* Screen Content */}
-              <div className="absolute inset-0 bg-white dark:bg-gray-950">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                  transition={{ delay: 0.1, duration: 0.3 }}
-                  className="relative w-full h-full"
-                >
-                  <Image
-                    src={step.image}
-                    alt={step.title}
-                    fill
-                    className="object-cover"
-                    sizes="300px"
-                  />
-                </motion.div>
-              </div>
-
-              {/* Screen Glare Effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
             </div>
 
-            {/* Side Buttons */}
-            {/* Volume Buttons (Left) */}
-            <div className="absolute -left-[2px] top-[120px] w-[3px] h-[28px] bg-gray-800 rounded-l-sm" />
-            <div className="absolute -left-[2px] top-[160px] w-[3px] h-[28px] bg-gray-800 rounded-l-sm" />
-
-            {/* Power Button (Right) */}
-            <div className="absolute -right-[2px] top-[140px] w-[3px] h-[56px] bg-gray-800 rounded-r-sm" />
-          </div>
-
-          {/* Floating Step Number */}
-          <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            whileInView={{ scale: 1, rotate: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-            className={`absolute -top-6 ${
-              isEven ? "-right-6" : "-left-6"
-            } w-16 h-16 rounded-full bg-gradient-to-br from-primary to-purple-600 shadow-xl flex items-center justify-center z-20`}
-          >
-            <span className="text-2xl font-bold text-white">{step.step}</span>
-          </motion.div>
-
-          {/* Sparkle Effect */}
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 180, 360],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className={`absolute -bottom-4 ${
-              isEven ? "-left-4" : "-right-4"
-            } text-primary opacity-50`}
-          >
-            <Sparkles className="h-8 w-8" />
-          </motion.div>
-        </div>
-      </motion.div>
-
-      {/* Content */}
-      <motion.div
-        initial={{ opacity: 0, x: isEven ? -30 : 30 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ delay: 0.1, duration: 0.3 }}
-        className="flex-1 text-center lg:text-left max-w-lg"
-      >
-        <motion.div
-          initial={{ width: 0 }}
-          whileInView={{ width: "60px" }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ delay: 0.15, duration: 0.3 }}
-          className="h-1 bg-gradient-to-r from-primary to-purple-600 mb-6 mx-auto lg:mx-0"
-        />
-
-        <h3 className="text-3xl md:text-4xl font-bold mb-4">
-          {step.title}
-        </h3>
-
-        <p className="text-lg text-muted-foreground leading-relaxed mx-auto lg:mx-0">
-          {step.description}
-        </p>
-
-        {/* Feature Tags */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ delay: 0.2, duration: 0.3 }}
-          className="flex flex-wrap gap-2 mt-6 justify-center lg:justify-start"
-        >
-          <span className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
-            Easy
-          </span>
-          <span className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
-            Fast
-          </span>
-          <span className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
-            Secure
-          </span>
-        </motion.div>
-
-        {/* Get Started Button - Only on last step */}
-        {isLastStep && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.7, type: "spring" }}
-            className="mt-8"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 text-base font-semibold rounded-full bg-gradient-to-r from-primary to-purple-600 text-white shadow-2xl hover:shadow-primary/50 transition-shadow"
+            {/* Step Indicators - Bottom aligned, always visible */}
+            <motion.div
+              className="flex justify-center gap-2 mt-6 md:mt-8 flex-shrink-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
             >
-              Get Started Now
-            </motion.button>
-          </motion.div>
-        )}
-      </motion.div>
-
-      {/* Connecting Line (Desktop Only) */}
-      {index < steps.length - 1 && (
-        <div
-          className="hidden lg:block absolute left-1/2 -translate-x-1/2 bottom-[-4rem] w-0.5 h-16 bg-gradient-to-b from-primary/50 to-transparent"
-        />
-      )}
-    </motion.div>
-  );
-}
-
-export default function HowItWorks() {
-  return (
-    <section className="py-16 md:py-24 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
-
-      {/* Animated Background Circles */}
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute top-20 -left-32 w-64 h-64 bg-primary/20 rounded-full blur-3xl"
-      />
-      <motion.div
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-        className="absolute bottom-20 -right-32 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl"
-      />
-
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.3 }}
-          className="text-center mb-20"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ delay: 0.1, type: "spring" }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
-          >
-            <Sparkles className="h-4 w-4" />
-            <span className="text-sm font-medium">Simple Process</span>
-          </motion.div>
-
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            How{" "}
-            <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-              qoupl
-            </span>{" "}
-            Works
-          </h2>
-
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Your journey to finding true love starts here. Follow these simple
-            steps and let our AI-powered platform do the magic.
-          </p>
-        </motion.div>
-
-        {/* Steps */}
-        <div className="max-w-7xl mx-auto">
-          {steps.map((step, index) => (
-            <StepCard key={index} step={step} index={index} />
-          ))}
+              {steps.map((_, index) => (
+                <motion.div
+                  key={index}
+                  className="h-1.5 rounded-full transition-all duration-500"
+                  style={{
+                    width: index === currentStep ? 24 : 8,
+                    backgroundColor:
+                      index === currentStep
+                        ? "hsl(var(--primary))"
+                        : "hsl(var(--muted-foreground) / 0.3)",
+                  }}
+                  animate={{
+                    opacity: index === currentStep ? 1 : 0.4,
+                  }}
+                />
+              ))}
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
