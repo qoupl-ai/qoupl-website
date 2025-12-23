@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
+    # Weekly scan (Sunday 02:30 UTC)
     - cron: '30 2 * * 0'
 
 permissions:
@@ -37,8 +38,8 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
           queries: |
-            security-extended@latest
-            security-and-quality@latest
+            security-extended
+            security-and-quality
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
