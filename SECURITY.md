@@ -29,7 +29,7 @@ Instead, report vulnerabilities using **one of the following secure channels**:
 OR
 
 - **Email**: `security@yourcompany.com`  
-  (Replace with your official security contact)
+  (Use this address to report security issues)
 
 ### 🧾 What to Include
 Please provide as much detail as possible:
