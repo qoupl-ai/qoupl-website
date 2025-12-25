@@ -18,6 +18,7 @@
     "populate:content": "ts-node --project tsconfig.node.json scripts/populate-content-pages.ts",
     "ensure:pages": "ts-node --project tsconfig.node.json scripts/ensure-all-pages.ts",
     "cleanup:legacy": "ts-node --project tsconfig.node.json scripts/cleanup-legacy-code.ts",
+    "populate:legal": "ts-node --project tsconfig.node.json scripts/populate-legal-content.ts",
     "setup:all": "npm run setup:storage && npm run upload:images && npm run seed:content"
   },
   "dependencies": {
