@@ -15,6 +15,8 @@
     "migrate:legacy": "ts-node --project tsconfig.node.json scripts/migrate-legacy-to-sections.ts",
     "migrate:pages": "ts-node --project tsconfig.node.json scripts/migrate-all-pages-content.ts",
     "migrate:content-pages": "ts-node --project tsconfig.node.json scripts/migrate-all-content-pages.ts",
+    "populate:content": "ts-node --project tsconfig.node.json scripts/populate-content-pages.ts",
+    "ensure:pages": "ts-node --project tsconfig.node.json scripts/ensure-all-pages.ts",
     "cleanup:legacy": "ts-node --project tsconfig.node.json scripts/cleanup-legacy-code.ts",
     "setup:all": "npm run setup:storage && npm run upload:images && npm run seed:content"
   },

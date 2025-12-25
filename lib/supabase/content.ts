@@ -75,32 +75,48 @@ export async function getSiteConfig() {
 export async function getPageSections(pageSlug: string) {
   const supabase = await createClient()
 
-  // Get page ID
-  const { data: page, error: pageError } = await supabase
-    .from('pages')
-    .select('id')
-    .eq('slug', pageSlug)
-    .single()
+  try {
+    // Get page ID - don't filter by published here, let RLS handle it
+    const { data: page, error: pageError } = await supabase
+      .from('pages')
+      .select('id')
+      .eq('slug', pageSlug)
+      .maybeSingle()
 
-  if (pageError || !page) {
-    console.error(`Error fetching page ${pageSlug}:`, pageError?.message)
+    if (pageError) {
+      console.error(`[getPageSections] Error fetching page ${pageSlug}:`, pageError.message, pageError)
+      return []
+    }
+
+    if (!page) {
+      console.warn(`[getPageSections] Page not found: ${pageSlug}`)
+      return []
+    }
+
+    // Get sections for this page - RLS will filter by published automatically
+    const { data: sections, error: sectionsError } = await supabase
+      .from('sections')
+      .select('*')
+      .eq('page_id', page.id)
+      .order('order_index', { ascending: true })
+
+    if (sectionsError) {
+      console.error(`[getPageSections] Error fetching sections for ${pageSlug}:`, sectionsError.message, sectionsError)
+      return []
+    }
+
+    // Filter by published manually as a fallback (RLS should handle this, but just in case)
+    const publishedSections = (sections || []).filter(s => s.published === true)
+    
+    if (publishedSections.length === 0 && (sections || []).length > 0) {
+      console.warn(`[getPageSections] Found ${sections?.length || 0} sections for ${pageSlug}, but none are published`)
+    }
+
+    return publishedSections
+  } catch (error) {
+    console.error(`[getPageSections] Unexpected error for ${pageSlug}:`, error)
     return []
   }
-
-  // Get sections for this page
-  const { data: sections, error: sectionsError } = await supabase
-    .from('sections')
-    .select('*')
-    .eq('page_id', page.id)
-    .eq('published', true)
-    .order('order_index', { ascending: true })
-
-  if (sectionsError) {
-    console.error(`Error fetching sections for ${pageSlug}:`, sectionsError.message)
-    return []
-  }
-
-  return sections || []
 }
 
 export async function getSectionByType(pageSlug: string, componentType: string) {

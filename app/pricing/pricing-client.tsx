@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Check, MessageSquare, Zap, Heart, Info, Sparkles } from "lucide-react";
+import { Check, MessageSquare, Zap, Heart, Info, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -34,19 +34,10 @@ export default function PricingClient({ plans }: PricingClientProps) {
 
   const price = calculatePrice(messageBundle);
 
-  // Get features from first plan or use defaults
+  // Get features from first plan
   const features = plans.length > 0 && plans[0].features?.length > 0 
     ? plans[0].features 
-    : [
-        "AI-powered matching algorithm",
-        "Advanced profile customization",
-        "Photo verification",
-        "Smart conversation starters",
-        "Read receipts",
-        "Priority support",
-        "Ad-free experience",
-        "Enhanced privacy controls"
-      ];
+    : [];
 
   const messageBundles = [
     { messages: 5, popular: false },
@@ -60,13 +51,6 @@ export default function PricingClient({ plans }: PricingClientProps) {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20 py-20">
         <div className="container mx-auto px-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-primary hover:underline mb-8 backdrop-blur-sm bg-background/50 px-4 py-2 rounded-full"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Home
-          </Link>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -135,8 +119,9 @@ export default function PricingClient({ plans }: PricingClientProps) {
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto">
-                {features.map((feature, index) => (
+              {features.length > 0 && (
+                <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+                  {features.map((feature, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
@@ -150,8 +135,9 @@ export default function PricingClient({ plans }: PricingClientProps) {
                     </div>
                     <span className="text-muted-foreground">{feature}</span>
                   </motion.div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </motion.div>
 

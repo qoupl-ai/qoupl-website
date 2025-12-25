@@ -1,12 +1,8 @@
 "use client";
 
-import { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft, Mail, Phone, MapPin, Send, MessageSquare, Heart, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Send, MessageSquare, Heart, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/sections/footer";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -48,17 +44,9 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10 py-20">
         <div className="container mx-auto px-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-primary hover:underline mb-8 backdrop-blur-sm bg-background/50 px-4 py-2 rounded-full"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Home
-          </Link>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -306,8 +294,6 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

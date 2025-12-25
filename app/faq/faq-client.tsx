@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeft, Plus, Minus } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 import { useState } from "react";
 
 interface FAQItem {
@@ -46,35 +45,21 @@ function FAQItemComponent({ question, answer }: { question: string; answer: stri
 }
 
 export default function FAQClient({ faqs }: FAQClientProps) {
-  // Fallback FAQs if database is empty
-  const defaultFaqs: FAQCategory[] = [
-    {
-      category: "Getting Started",
-      questions: [
-        {
-          q: "How do I create an account on qoupl?",
-          a: "qoupl is launching soon! Join our waitlist to be among the first to know when we launch on iOS and Android. Once the app is available, you'll be able to sign up with your email or phone number, complete your profile with photos and information about yourself, and start matching. The entire process will take just a few minutes."
-        },
-        {
-          q: "Is qoupl really free to use?",
-          a: "Yes! qoupl will be free to use. You'll be able to create a profile, browse matches, and send messages. We'll also offer premium features for users who want enhanced functionality like unlimited likes, advanced filters, and more."
-        }
-      ]
-    }
-  ];
-
-  const displayFaqs = faqs.length > 0 ? faqs : defaultFaqs;
+  if (!faqs || faqs.length === 0) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-16 max-w-6xl">
+          <div className="text-center py-16">
+            <p className="text-muted-foreground">No FAQs available at this time.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16 max-w-6xl">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-primary hover:underline mb-8"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Home
-        </Link>
 
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
@@ -90,7 +75,7 @@ export default function FAQClient({ faqs }: FAQClientProps) {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {displayFaqs.map((category, categoryIndex) => (
+          {faqs.map((category, categoryIndex) => (
             <div key={categoryIndex} className="space-y-4">
               <div className="bg-primary/5 p-4 rounded-lg border-l-4 border-primary">
                 <h2 className="text-xl font-bold text-primary">

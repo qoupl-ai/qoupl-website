@@ -1,74 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeft, Heart, Users, Zap, Code, Rocket, Mail, Sparkles } from "lucide-react";
+import { Heart, Users, Zap, Code, Rocket, Mail, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 // Icon mapping
 const iconMap: Record<string, any> = {
   Heart, Users, Zap, Code, Rocket, Mail, Sparkles
 };
-
-// Fallback values
-const defaultValues = [
-  {
-    icon: Heart,
-    title: "Passion-Driven",
-    description: "We're passionate about helping people find meaningful connections.",
-    color: "bg-[#662D91]"
-  },
-  {
-    icon: Users,
-    title: "Collaborative",
-    description: "We believe in the power of teamwork and diverse perspectives.",
-    color: "bg-[#662D91]"
-  },
-  {
-    icon: Zap,
-    title: "Innovation",
-    description: "We're always pushing boundaries and exploring new possibilities.",
-    color: "bg-[#662D91]"
-  },
-  {
-    icon: Code,
-    title: "Excellence",
-    description: "We're committed to delivering the highest quality in everything we do.",
-    color: "bg-[#662D91]"
-  }
-];
-
-const defaultWhyJoin = [
-  {
-    title: "Make an Impact",
-    description: "Help millions of people find meaningful connections and lasting relationships.",
-    icon: "💜"
-  },
-  {
-    title: "Cutting-Edge Tech",
-    description: "Work with the latest AI and machine learning technologies in dating.",
-    icon: "🚀"
-  },
-  {
-    title: "Great Culture",
-    description: "Join a diverse, inclusive team that values your unique perspective.",
-    icon: "✨"
-  },
-  {
-    title: "Growth Opportunities",
-    description: "Grow your career with learning opportunities and new challenges.",
-    icon: "📈"
-  },
-  {
-    title: "Work-Life Balance",
-    description: "We believe in working smart and taking care of our team.",
-    icon: "⚖️"
-  },
-  {
-    title: "Innovation First",
-    description: "Bring your ideas to life and help shape the future of dating.",
-    icon: "💡"
-  }
-];
 
 interface CareersClientProps {
   data: {
@@ -86,13 +24,13 @@ export default function CareersClient({ data }: CareersClientProps) {
   const valuesSection = data.sections.find(s => s.type === 'values');
   const whyJoinSection = data.sections.find(s => s.type === 'why-join');
 
-  const heroTitle = heroSection?.content?.title || "Build the Future of Dating";
-  const heroSubtitle = heroSection?.content?.subtitle || "Help us create meaningful connections for college students that change lives";
-  const comingSoonTitle = comingSoonSection?.content?.title || "We're Building Something Special";
-  const comingSoonDescription = comingSoonSection?.content?.description || "We're currently in the development phase and will be posting job openings soon. If you're passionate about creating meaningful connections and want to be part of our journey, we'd love to hear from you!";
-  const comingSoonEmail = comingSoonSection?.content?.email || "careers@qoupl.ai";
-  const values = valuesSection?.content?.values || defaultValues;
-  const whyJoin = whyJoinSection?.content?.items || defaultWhyJoin;
+  const heroTitle = heroSection?.content?.title;
+  const heroSubtitle = heroSection?.content?.subtitle;
+  const comingSoonTitle = comingSoonSection?.content?.title;
+  const comingSoonDescription = comingSoonSection?.content?.description;
+  const comingSoonEmail = comingSoonSection?.content?.email;
+  const values = valuesSection?.content?.values || [];
+  const whyJoin = whyJoinSection?.content?.items || [];
 
   // Process values to include icon components
   const processedValues = values.map((item: any) => ({
@@ -133,13 +71,6 @@ export default function CareersClient({ data }: CareersClientProps) {
         />
 
         <div className="container mx-auto px-4 relative z-10">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-primary hover:underline mb-8 backdrop-blur-sm bg-background/50 px-4 py-2 rounded-full"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Home
-          </Link>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -157,19 +88,23 @@ export default function CareersClient({ data }: CareersClientProps) {
               <span className="text-sm font-semibold">Join Our Team</span>
             </motion.div>
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              {heroTitle.split(' ').map((word, i) => 
-                word === 'Dating' ? (
-                  <span key={i} className="bg-[#662D91] bg-clip-text text-transparent">{word} </span>
-                ) : (
-                  <span key={i}>{word} </span>
-                )
-              )}
-            </h1>
+            {heroTitle && (
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                {heroTitle.split(' ').map((word, i) => 
+                  word === 'Dating' ? (
+                    <span key={i} className="bg-[#662D91] bg-clip-text text-transparent">{word} </span>
+                  ) : (
+                    <span key={i}>{word} </span>
+                  )
+                )}
+              </h1>
+            )}
 
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-12">
-              {heroSubtitle}
-            </p>
+            {heroSubtitle && (
+              <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-12">
+                {heroSubtitle}
+              </p>
+            )}
           </motion.div>
         </div>
       </section>
@@ -193,19 +128,23 @@ export default function CareersClient({ data }: CareersClientProps) {
                 <Sparkles className="h-10 w-10 text-white" />
               </div>
 
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                {comingSoonTitle.split(' ').map((word, i) => 
-                  word === 'Special' ? (
-                    <span key={i} className="bg-[#662D91] bg-clip-text text-transparent">{word} </span>
-                  ) : (
-                    <span key={i}>{word} </span>
-                  )
-                )}
-              </h2>
+              {comingSoonTitle && (
+                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                  {comingSoonTitle.split(' ').map((word, i) => 
+                    word === 'Special' ? (
+                      <span key={i} className="bg-[#662D91] bg-clip-text text-transparent">{word} </span>
+                    ) : (
+                      <span key={i}>{word} </span>
+                    )
+                  )}
+                </h2>
+              )}
 
-              <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                {comingSoonDescription}
-              </p>
+              {comingSoonDescription && (
+                <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+                  {comingSoonDescription}
+                </p>
+              )}
 
               <div className="bg-[#662D91]/5 rounded-2xl p-8 mb-8">
                 <h3 className="text-2xl font-bold mb-4">Be in Touch</h3>
@@ -214,15 +153,17 @@ export default function CareersClient({ data }: CareersClientProps) {
                   We'll reach out when positions become available.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a
-                    href={`mailto:${comingSoonEmail}`}
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#662D91] text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                  >
-                    <Mail className="h-5 w-5" />
-                    {comingSoonEmail}
-                  </a>
-                </div>
+                {comingSoonEmail && (
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a
+                      href={`mailto:${comingSoonEmail}`}
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#662D91] text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                    >
+                      <Mail className="h-5 w-5" />
+                      {comingSoonEmail}
+                    </a>
+                  </div>
+                )}
               </div>
 
               <p className="text-sm text-muted-foreground">
@@ -255,8 +196,9 @@ export default function CareersClient({ data }: CareersClientProps) {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {processedValues.map((value, index) => {
+          {values.length > 0 && (
+            <div className="grid md:grid-cols-2 gap-6">
+              {processedValues.map((value, index) => {
               const Icon = value.icon;
               return (
                 <motion.div
@@ -286,7 +228,8 @@ export default function CareersClient({ data }: CareersClientProps) {
                 </motion.div>
               );
             })}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -309,8 +252,9 @@ export default function CareersClient({ data }: CareersClientProps) {
             </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {whyJoin.map((item, index) => (
+          {whyJoin.length > 0 && (
+            <div className="grid md:grid-cols-3 gap-8">
+              {whyJoin.map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
@@ -325,8 +269,9 @@ export default function CareersClient({ data }: CareersClientProps) {
                   {item.description}
                 </p>
               </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

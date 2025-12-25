@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Heart, Users, Zap, Shield, Sparkles, Target, Eye, TrendingUp, Globe, Rocket } from "lucide-react";
+import { Heart, Users, Zap, Shield, Sparkles, Target, Eye, TrendingUp, Globe, Rocket } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
@@ -12,41 +12,6 @@ import WaitlistModal from "@/components/waitlist-modal";
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Heart, Shield, Sparkles, Users, Zap, Target, Eye, TrendingUp, Globe, Rocket
 };
-
-// Fallback values with gradient colors
-const defaultValues = [
-  {
-    icon: Heart,
-    title: "Authenticity First",
-    description: "We believe in real connections built on honesty and genuine interactions.",
-    color: "from-pink-500 to-rose-500"
-  },
-  {
-    icon: Shield,
-    title: "Safety & Trust",
-    description: "Your safety is our priority. We create a secure environment for finding love.",
-    color: "from-purple-500 to-indigo-500"
-  },
-  {
-    icon: Sparkles,
-    title: "Innovation",
-    description: "Leveraging AI and technology to make dating smarter and more meaningful.",
-    color: "from-violet-500 to-purple-500"
-  },
-  {
-    icon: Users,
-    title: "Inclusive Community",
-    description: "Everyone deserves love. We welcome all backgrounds, identities, and preferences.",
-    color: "from-blue-500 to-cyan-500"
-  }
-];
-
-const defaultTimeline = [
-  { year: "2024", event: "qoupl Founded", description: "Started with a vision to revolutionize online dating in India" },
-  { year: "2024", event: "Platform Development", description: "Building the core platform with AI-powered matching technology" },
-  { year: "2025", event: "Beta Testing", description: "Preparing for beta launch with select users" },
-  { year: "2025", event: "Future Plans", description: "Expanding features and preparing for global launch" }
-];
 
 interface ValueItem {
   icon?: string;
@@ -82,8 +47,8 @@ export default function AboutClient({ data }: AboutClientProps) {
   const valuesSection = data.sections.find(s => s.type === 'values');
   const timelineSection = data.sections.find(s => s.type === 'timeline');
   
-  const values = valuesSection?.content?.values || defaultValues;
-  const timeline = timelineSection?.content?.timeline || defaultTimeline;
+  const values = valuesSection?.content?.values || [];
+  const timeline = timelineSection?.content?.timeline || [];
 
   // Process values to include icon components and ensure gradient colors
   type ProcessedValue = {
@@ -121,14 +86,6 @@ export default function AboutClient({ data }: AboutClientProps) {
         />
 
         <div className="container mx-auto px-4 relative z-10">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span className="font-medium">Back to Home</span>
-          </Link>
-
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
             <motion.div
@@ -426,8 +383,9 @@ export default function AboutClient({ data }: AboutClientProps) {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {processedValues.map((value, index) => {
+          {values.length > 0 && (
+            <div className="grid md:grid-cols-2 gap-8">
+              {processedValues.map((value, index) => {
               const Icon = value.icon;
               return (
                 <motion.div
@@ -472,7 +430,8 @@ export default function AboutClient({ data }: AboutClientProps) {
                 </motion.div>
               );
             })}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -512,9 +471,11 @@ export default function AboutClient({ data }: AboutClientProps) {
 
           <div className="relative">
             {/* Timeline line - enhanced gradient */}
-            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-purple-500 to-pink-500 opacity-30 rounded-full" />
+            {timeline.length > 0 && (
+              <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-purple-500 to-pink-500 opacity-30 rounded-full" />
+            )}
 
-            {timeline.map((item: TimelineItem, index: number) => (
+            {timeline.length > 0 && timeline.map((item: TimelineItem, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -80 : 80 }}

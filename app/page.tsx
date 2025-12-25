@@ -10,7 +10,6 @@ import { SectionsRenderer } from '@/lib/components/registry'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/sections/footer'
 import SplashScreenClient from '@/components/splash-screen-client'
-import HomepageFallback from '@/components/homepage-fallback'
 import { StructuredData, organizationSchema, websiteSchema, webApplicationSchema } from '@/components/structured-data'
 
 export default async function Home() {
@@ -32,8 +31,9 @@ export default async function Home() {
         {sections.length > 0 ? (
           <SectionsRenderer sections={sections} />
         ) : (
-          // Fallback: Render hardcoded sections if database is empty
-          <HomepageFallback />
+          <div className="container mx-auto px-4 py-32 text-center">
+            <p className="text-muted-foreground">No content available at this time.</p>
+          </div>
         )}
         
         <Footer />
