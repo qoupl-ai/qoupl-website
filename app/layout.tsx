@@ -181,7 +181,8 @@ export default function RootLayout({
       <body className={`${poppins.variable} ${dmSans.variable} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
-          enableSystem={false}
+          defaultTheme="dark"
+          enableSystem={true}
           disableTransitionOnChange
         >
           {children}

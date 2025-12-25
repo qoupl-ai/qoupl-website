@@ -3,6 +3,7 @@
 import { Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 import type { FooterContent, SocialLinks } from "@/lib/supabase/content";
 
 interface FooterClientProps {
@@ -100,9 +101,12 @@ export default function FooterClient({ footerContent, socialLinks }: FooterClien
             <p className="text-sm text-muted-foreground">
               © {currentYear} {footerContent.copyright.company}. All rights reserved.
             </p>
-            <p className="text-sm text-muted-foreground">
-              {footerContent.copyright.text}
-            </p>
+            <div className="flex flex-col items-center md:items-end gap-2">
+              <p className="text-sm text-muted-foreground">
+                {footerContent.copyright.text}
+              </p>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </div>

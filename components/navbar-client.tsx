@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ThemeToggle } from "./theme-toggle";
 import { motion, useScroll } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
@@ -104,10 +103,8 @@ export default function NavbarClient({ content }: NavbarClientProps) {
             })}
           </div>
 
-          {/* Right Side - Theme Toggle & Mobile Menu */}
+          {/* Right Side - Mobile Menu */}
           <div className="flex items-center gap-3">
-            <ThemeToggle />
-            
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

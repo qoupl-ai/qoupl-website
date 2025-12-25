@@ -6,7 +6,6 @@ import { Sparkles, Heart } from "lucide-react";
 import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { useState, useEffect, useRef } from "react";
-import { ThemeToggle } from "@/components/theme-toggle";
 import WaitlistModal from "@/components/waitlist-modal";
 
 // Fallback images if data not provided
@@ -328,7 +327,6 @@ interface AnimatedHeroProps {
 }
 
 export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
-  const [showThemeToggle, setShowThemeToggle] = useState(true);
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
 
   // Use data from props or fallback to defaults
@@ -360,42 +358,10 @@ export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
   // Combined array: women + men images
   const carouselImages = [...womenImages, ...menImages];
 
-  // Hide theme toggle on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setShowThemeToggle(false);
-      } else {
-        setShowThemeToggle(true);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <section
       className="relative min-h-screen w-full flex flex-col overflow-hidden bg-white dark:bg-[#171717]"
     >
-      {/* Theme Toggle - Fixed in top right, hides when navbar appears */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{
-          opacity: showThemeToggle ? 1 : 0,
-          scale: showThemeToggle ? 1 : 0,
-          y: showThemeToggle ? 0 : -20
-        }}
-        transition={{
-          delay: showThemeToggle ? 0.3 : 0,
-          type: "spring",
-          stiffness: 200
-        }}
-        className="fixed top-6 right-6 z-50"
-      >
-        <ThemeToggle />
-      </motion.div>
-
       {/* Main Content - Split Layout with Better Alignment */}
       <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 relative z-10 w-full flex-1 flex items-center min-h-0">
         <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center w-full py-6 md:py-8 lg:py-12">

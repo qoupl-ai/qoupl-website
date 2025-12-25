@@ -1,8 +1,10 @@
 "use client";
 
-import { Mail, Phone, MapPin, Send, MessageSquare, Heart, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Send, MessageSquare, Heart, Clock, ArrowLeft, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Link from "next/link";
+import { toast } from "sonner";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -11,11 +13,51 @@ export default function Contact() {
     subject: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      // Success
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      toast.success('Message sent successfully!');
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: ""
+        });
+      }, 3000);
+    } catch (err) {
+      setIsSubmitting(false);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to send message. Please try again.';
+      setError(errorMessage);
+      toast.error(errorMessage);
+    }
   };
 
   const contactInfo = [
@@ -142,6 +184,27 @@ export default function Contact() {
               >
                 <h2 className="text-3xl font-bold mb-6">Send us a Message</h2>
 
+                {error && (
+                  <div className="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                    <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                  </div>
+                )}
+
+                {isSubmitted ? (
+                  <div className="text-center py-8">
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500 mb-4"
+                    >
+                      <CheckCircle className="h-8 w-8 text-white" />
+                    </motion.div>
+                    <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
+                    <p className="text-muted-foreground">
+                      Thank you for contacting us. We'll get back to you soon.
+                    </p>
+                  </div>
+                ) : (
                 <div className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-semibold mb-2">
@@ -205,14 +268,29 @@ export default function Contact() {
 
                   <motion.button
                     type="submit"
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 bg-[#662D91] text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                    disabled={isSubmitting}
+                    whileHover={!isSubmitting ? { scale: 1.02, y: -2 } : {}}
+                    whileTap={!isSubmitting ? { scale: 0.98 } : {}}
+                    className="w-full py-4 bg-[#662D91] text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Send className="h-5 w-5" />
-                    Send Message
+                    {isSubmitting ? (
+                      <>
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
+                        />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-5 w-5" />
+                        Send Message
+                      </>
+                    )}
                   </motion.button>
                 </div>
+                )}
               </form>
             </motion.div>
 

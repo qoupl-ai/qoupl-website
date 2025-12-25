@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { MediaGrid } from '@/components/cms/media-grid'
+import { MediaUpload } from '@/components/cms/media-upload'
 import { getStorageUrl } from '@/lib/supabase/storage'
 
 export default async function MediaPage() {
@@ -10,7 +11,7 @@ export default async function MediaPage() {
   const { data: mediaFiles } = await supabase
     .from('media')
     .select('*')
-    .order('created_at', { ascending: false })
+    .order('uploaded_at', { ascending: false })
 
   // Add URLs to media files
   const mediaWithUrls = mediaFiles?.map(file => ({
@@ -38,6 +39,9 @@ export default async function MediaPage() {
           </p>
         </div>
       </div>
+
+      {/* Upload Section */}
+      <MediaUpload />
 
       {Object.entries(groupedMedia).map(([category, files]) => (
         <Card key={category}>
