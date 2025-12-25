@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { Sparkles, Heart, Bell } from "lucide-react";
 import { useState } from "react";
 import WaitlistModal from "@/components/waitlist-modal";
@@ -164,7 +165,7 @@ export default function AppDownload() {
                 className="absolute -left-8 top-12 w-32 h-56 rounded-3xl overflow-hidden shadow-xl border-4 border-gray-800 dark:border-gray-700 opacity-70"
               >
                 <Image
-                  src="/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg"
+                  src={getStorageUrl("couple-photos", "qoupl_couple_03.jpg")}
                   alt="qoupl preview"
                   fill
                   className="object-cover"
@@ -184,7 +185,7 @@ export default function AppDownload() {
                 className="absolute -right-8 bottom-12 w-32 h-56 rounded-3xl overflow-hidden shadow-xl border-4 border-gray-800 dark:border-gray-700 opacity-70"
               >
                 <Image
-                  src="/images/coupl/young-guy-with-packets-hugging-happy-lady-sitting-stone (1).jpg"
+                  src={getStorageUrl("couple-photos", "qoupl_couple_05.jpg")}
                   alt="qoupl preview"
                   fill
                   className="object-cover"

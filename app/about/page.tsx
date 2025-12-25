@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Heart, Users, Zap, Shield, Sparkles, Target, Eye, TrendingUp, Award, Globe, Rocket } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { useRef, useState } from "react";
 import WaitlistModal from "@/components/waitlist-modal";
 import Navbar from "@/components/navbar";
@@ -154,7 +155,7 @@ export default function AboutUs() {
                   className="col-span-4 row-span-2 relative rounded-3xl overflow-hidden shadow-xl group"
                 >
                   <Image
-                    src="/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg"
+                    src={getStorageUrl("couple-photos", "qoupl_couple_01.jpg")}
                     alt="Happy couple"
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -172,7 +173,7 @@ export default function AboutUs() {
                   className="col-span-2 row-span-1 relative rounded-2xl overflow-hidden shadow-lg group"
                 >
                   <Image
-                    src="/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg"
+                    src={getStorageUrl("couple-photos", "qoupl_couple_02.jpg")}
                     alt="Couple together"
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -190,7 +191,7 @@ export default function AboutUs() {
                   className="col-span-2 row-span-2 relative rounded-2xl overflow-hidden shadow-lg group"
                 >
                   <Image
-                    src="/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg"
+                    src={getStorageUrl("couple-photos", "qoupl_couple_03.jpg")}
                     alt="Smiling couple"
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -208,7 +209,7 @@ export default function AboutUs() {
                   className="col-span-4 row-span-1 relative rounded-2xl overflow-hidden shadow-lg group"
                 >
                   <Image
-                    src="/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg"
+                    src={getStorageUrl("couple-photos", "qoupl_couple_04.jpg")}
                     alt="Book loving couple"
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"

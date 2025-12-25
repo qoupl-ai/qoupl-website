@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { Heart, Shield, Zap, Check } from "lucide-react";
 
 const features = [
@@ -16,7 +17,7 @@ const features = [
       "Values-based matching",
       "Learning preferences",
     ],
-    image: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
+    image: getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
     color: "bg-[#662D91]",
   },
   {
@@ -30,7 +31,7 @@ const features = [
       "24/7 AI moderation",
       "Encrypted messaging",
     ],
-    image: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
+    image: getStorageUrl("couple-photos", "qoupl_couple_02.jpg"),
     color: "bg-[#662D91]",
   },
   {
@@ -44,7 +45,7 @@ const features = [
       "Meaningful connections",
       "Instant notifications",
     ],
-    image: "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
+    image: getStorageUrl("couple-photos", "qoupl_couple_04.jpg"),
     color: "bg-[#662D91]",
   },
 ];

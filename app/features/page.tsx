@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Heart, Shield, Zap, MessageCircle, Sparkles, Check, Lock, Eye, Star, Filter, Bell, Users, MapPin, Camera, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { useState } from "react";
 import WaitlistModal from "@/components/waitlist-modal";
 import Navbar from "@/components/navbar";
@@ -15,8 +16,8 @@ const featureCategories = [
     title: "Smart Matching",
     icon: Sparkles,
     color: "bg-[#662D91]",
-    image: "/qoupl/3.png",
-    coupleImage: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_03.png"),
+    coupleImage: getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
     features: [
       { icon: Sparkles, title: "AI-Powered Algorithm", description: "Advanced compatibility analysis based on personality, interests, and values" },
       { icon: Star, title: "Compatibility Score", description: "See how well you match with potential partners before connecting" },
@@ -29,8 +30,8 @@ const featureCategories = [
     title: "Safety & Trust",
     icon: Shield,
     color: "bg-[#662D91]",
-    image: "/qoupl/1.png",
-    coupleImage: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
+    coupleImage: getStorageUrl("couple-photos", "qoupl_couple_02.jpg"),
     features: [
       { icon: Camera, title: "Photo Verification", description: "Real-time selfie verification to confirm identity and get verified badge" },
       { icon: Shield, title: "College ID Verification", description: "Mandatory college ID verification to ensure all users are current college students" },
@@ -43,8 +44,8 @@ const featureCategories = [
     title: "Rich Communication",
     icon: MessageCircle,
     color: "bg-[#662D91]",
-    image: "/qoupl/4.png",
-    coupleImage: "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_04.png"),
+    coupleImage: getStorageUrl("couple-photos", "qoupl_couple_04.jpg"),
     features: [
       { icon: MessageCircle, title: "Smart Icebreakers", description: "AI-generated conversation starters tailored to each match" },
       { icon: Camera, title: "Photo & Video Sharing", description: "Share moments with your matches securely" },
@@ -57,8 +58,8 @@ const featureCategories = [
     title: "Premium Experience",
     icon: Star,
     color: "bg-[#662D91]",
-    image: "/qoupl/6.png",
-    coupleImage: "/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_06.png"),
+    coupleImage: getStorageUrl("couple-photos", "qoupl_couple_03.jpg"),
     features: [
       { icon: Eye, title: "See Who Likes You", description: "View all people who liked your profile instantly" },
       { icon: Zap, title: "Profile Boost", description: "Get more visibility by appearing at the top of search results" },

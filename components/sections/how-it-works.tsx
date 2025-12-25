@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 
 const steps = [
   {
@@ -10,35 +11,35 @@ const steps = [
     title: "Create Your Profile",
     description:
       "Sign up in seconds as a college student and create a profile that showcases the real you. Verify with your college ID, add photos, interests, and what makes you unique.",
-    image: "/qoupl/1.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
   },
   {
     step: "02",
     title: "Smart AI Matching",
     description:
       "Our advanced AI algorithm analyzes compatibility factors and suggests the most suitable matches for you.",
-    image: "/qoupl/3.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_03.png"),
   },
   {
     step: "03",
     title: "Start Conversations",
     description:
       "Break the ice with our conversation starters and build meaningful connections through authentic chats.",
-    image: "/qoupl/4.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_04.png"),
   },
   {
     step: "04",
     title: "Plan Your Date",
     description:
       "Use our date planning features to find the perfect spot and make your first meeting memorable.",
-    image: "/qoupl/6.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_06.png"),
   },
   {
     step: "05",
     title: "Find True Love",
     description:
       "Build lasting relationships with people who truly understand and complement you. Your perfect match awaits!",
-    image: "/qoupl/7.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_07.png"),
   },
 ];
 

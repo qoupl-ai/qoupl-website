@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Apple, Smartphone, Sparkles, Users } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 import WaitlistModal from "@/components/waitlist-modal";
 
 export default function ComingSoon() {
@@ -140,7 +141,7 @@ export default function ComingSoon() {
                     {/* Purple Glow Effect */}
                     <div className="absolute inset-0 bg-[#662D91]/30 rounded-[3rem] blur-3xl scale-110 -z-10" />
                     <Image
-                      src="/qoupl/1.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_01.png")}
                       alt="App Preview"
                       fill
                       className="object-cover"
@@ -164,7 +165,7 @@ export default function ComingSoon() {
                 >
                   <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <Image
-                      src="/qoupl/2.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_02.png")}
                       alt="App Feature"
                       fill
                       className="object-cover"
@@ -188,7 +189,7 @@ export default function ComingSoon() {
                 >
                   <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <Image
-                      src="/qoupl/3.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_03.png")}
                       alt="App Feature"
                       fill
                       className="object-cover"
@@ -212,7 +213,7 @@ export default function ComingSoon() {
                 >
                   <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <Image
-                      src="/qoupl/4.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_04.png")}
                       alt="App Feature"
                       fill
                       className="object-cover"
@@ -236,7 +237,7 @@ export default function ComingSoon() {
                 >
                   <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <Image
-                      src="/qoupl/5.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_05.png")}
                       alt="App Feature"
                       fill
                       className="object-cover"

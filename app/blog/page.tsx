@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, Clock, ArrowRight, Heart, Sparkles, Users, Shield 
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/sections/footer";
 
@@ -17,7 +18,7 @@ const blogPosts = [
     category: "Technology",
     date: "November 15, 2025",
     readTime: "5 min read",
-    image: "/images/men/indian-student-goes-first-lesson.jpg",
+    image: getStorageUrl("hero-images", "men/qoupl_men_04.jpg"),
     gradient: "bg-[#662D91]"
   },
   {
@@ -27,7 +28,7 @@ const blogPosts = [
     category: "Relationships",
     date: "November 10, 2025",
     readTime: "7 min read",
-    image: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
+    image: getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
     gradient: "bg-[#662D91]"
   },
   {
@@ -37,7 +38,7 @@ const blogPosts = [
     category: "Safety",
     date: "November 5, 2025",
     readTime: "6 min read",
-    image: "/images/men/medium-shot-man-with-paperwork.jpg",
+    image: getStorageUrl("hero-images", "men/qoupl_men_05.jpg"),
     gradient: "from-blue-500 to-cyan-500"
   },
   {
@@ -47,7 +48,7 @@ const blogPosts = [
     category: "Psychology",
     date: "November 1, 2025",
     readTime: "8 min read",
-    image: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
+    image: getStorageUrl("couple-photos", "qoupl_couple_02.jpg"),
     gradient: "bg-[#662D91]"
   },
   {
@@ -57,7 +58,7 @@ const blogPosts = [
     category: "Tips & Tricks",
     date: "October 28, 2025",
     readTime: "4 min read",
-    image: "/images/women/Gemini_Generated_Image_6cx31l6cx31l6cx3.png",
+    image: getStorageUrl("hero-images", "women/qoupl_women_04.png"),
     gradient: "from-orange-500 to-amber-500"
   },
   {
@@ -67,7 +68,7 @@ const blogPosts = [
     category: "Relationships",
     date: "October 25, 2025",
     readTime: "6 min read",
-    image: "/images/women/Gemini_Generated_Image_l957byl957byl957.png",
+    image: getStorageUrl("hero-images", "women/qoupl_women_08.png"),
     gradient: "from-green-500 to-emerald-500"
   }
 ];

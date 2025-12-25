@@ -4,32 +4,33 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Heart } from "lucide-react";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { useState, useEffect, useRef } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import WaitlistModal from "@/components/waitlist-modal";
 
 // All women images (10 images)
 const womenImages = [
-  "/images/women/rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg",
-  "/images/women/caique-nascimento-Ij24Uq1sMwM-unsplash.jpg",
-  "/images/women/Gemini_Generated_Image_1hrhq01hrhq01hrh.png",
-  "/images/women/Gemini_Generated_Image_34su0h34su0h34su.png",
-  "/images/women/Gemini_Generated_Image_6cx31l6cx31l6cx3.png",
-  "/images/women/Gemini_Generated_Image_civ506civ506civ5.png",
-  "/images/women/Gemini_Generated_Image_fe6txtfe6txtfe6t.png",
-  "/images/women/Gemini_Generated_Image_l957byl957byl957.png",
-  "/images/women/Gemini_Generated_Image_tyingytyingytyin.png",
-  "/images/women/Gemini_Generated_Image_v4k4z2v4k4z2v4k4.png",
+  getStorageUrl("hero-images", "women/qoupl_women_03.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_05.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_01.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_02.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_04.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_06.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_07.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_08.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_09.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_10.png"),
 ];
 
 // All men images (6 images)
 const menImages = [
-  "/images/men/amir-esrafili-eWa7clMsowo-unsplash.jpg",
-  "/images/men/arrul-lin-sYhUhse5uT8-unsplash.jpg",
-  "/images/men/dollar-gill-LmtUqlYRJO4-unsplash.jpg",
-  "/images/men/indian-student-goes-first-lesson.jpg",
-  "/images/men/medium-shot-man-with-paperwork.jpg",
-  "/images/men/mitchell-luo-ymo_yC_N_2o-unsplash.jpg",
+  getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_02.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_03.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_04.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_05.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_06.jpg"),
 ];
 
 // Combined array: 10 women + 6 men = 16 images

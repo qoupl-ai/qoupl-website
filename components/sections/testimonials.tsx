@@ -3,11 +3,12 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Heart, Quote, Star } from "lucide-react";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 
 const testimonials = [
   {
     name: "Arjun",
-    image: "/images/men/amir-esrafili-eWa7clMsowo-unsplash.jpg",
+    image: getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
     text: "We matched on qoupl during beta testing and instantly connected. Three months later, we're inseparable!",
     location: "Mumbai, Maharashtra",
     rating: 5,
@@ -15,7 +16,7 @@ const testimonials = [
   },
   {
     name: "Ananya",
-    image: "/images/women/rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg",
+    image: getStorageUrl("hero-images", "women/qoupl_women_03.png"),
     text: "Being part of the beta program was amazing! The matching algorithm really works and I can't wait for everyone to experience it.",
     location: "Bangalore, Karnataka",
     rating: 4,
@@ -23,7 +24,7 @@ const testimonials = [
   },
   {
     name: "Kavya",
-    image: "/images/women/caique-nascimento-Ij24Uq1sMwM-unsplash.jpg",
+    image: getStorageUrl("hero-images", "women/qoupl_women_05.png"),
     text: "Found my soulmate during the beta phase. qoupl changed my life forever and I'm excited for the public launch!",
     location: "Delhi, India",
     rating: 4,

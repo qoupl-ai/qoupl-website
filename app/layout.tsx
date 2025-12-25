@@ -159,21 +159,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/icon.svg', sizes: 'any' }
-    ],
-    apple: [
-      { url: '/apple-icon.svg', type: 'image/svg+xml' }
-    ],
-    other: [
-      {
-        rel: 'mask-icon',
-        url: '/icon.svg',
-      },
-    ],
-  },
   manifest: '/manifest.json',
   verification: {
     google: 'your-google-verification-code',

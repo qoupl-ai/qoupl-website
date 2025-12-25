@@ -4,34 +4,35 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 
 const galleryImages = [
   {
-    src: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
+    src: getStorageUrl('couple-photos', 'qoupl_couple_01.jpg'),
     alt: "Happy couple outdoors",
     title: "Sarah & Raj",
     story: "Met through qoupl, now planning their future together"
   },
   {
-    src: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
+    src: getStorageUrl('couple-photos', 'qoupl_couple_02.jpg'),
     alt: "Couple enjoying time together",
     title: "Priya & Arjun",
     story: "Found love in unexpected places"
   },
   {
-    src: "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
+    src: getStorageUrl('couple-photos', 'qoupl_couple_05.jpg'),
     alt: "Romantic moment",
     title: "Anjali & Vikram",
     story: "Book lovers united by their passion"
   },
   {
-    src: "/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg",
+    src: getStorageUrl('couple-photos', 'qoupl_couple_03.jpg'),
     alt: "Couple smiling",
     title: "Neha & Karan",
     story: "Perfect match from day one"
   },
   {
-    src: "/images/coupl/young-guy-with-packets-hugging-happy-lady-sitting-stone (1).jpg",
+    src: getStorageUrl('couple-photos', 'qoupl_couple_04.jpg'),
     alt: "Dating couple",
     title: "Maya & Rohan",
     story: "Adventure seekers finding love together"

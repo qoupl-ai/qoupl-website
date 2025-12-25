@@ -34,17 +34,18 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { createFAQ, updateFAQ } from '@/app/actions/faq-actions'
+import { createFeature, updateFeature } from '@/app/actions/feature-actions'
 
-const faqSchema = z.object({
-  question: z.string().min(5, 'Question must be at least 5 characters'),
-  answer: z.string().min(10, 'Answer must be at least 10 characters'),
+const featureSchema = z.object({
+  title: z.string().min(3, 'Title must be at least 3 characters'),
+  description: z.string().min(10, 'Description must be at least 10 characters'),
+  icon: z.string().min(1, 'Icon is required (emoji or icon name)'),
   category_id: z.string().uuid('Please select a category'),
   order_index: z.number().int().min(1, 'Order must be at least 1'),
   is_published: z.boolean(),
 })
 
-type FAQFormValues = z.infer<typeof faqSchema>
+type FeatureFormValues = z.infer<typeof featureSchema>
 
 interface Category {
   id: string
@@ -52,10 +53,11 @@ interface Category {
   slug: string
 }
 
-interface FAQ {
+interface Feature {
   id: string
-  question: string
-  answer: string
+  title: string
+  description: string
+  icon: string
   order_index: number
   is_published: boolean
   category: {
@@ -65,53 +67,55 @@ interface FAQ {
   }
 }
 
-interface FAQDialogProps {
+interface FeatureDialogProps {
   categories: Category[]
   mode: 'create' | 'edit'
-  faq?: FAQ
+  feature?: Feature
   children: React.ReactNode
 }
 
-export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
+export function FeatureDialog({ categories, mode, feature, children }: FeatureDialogProps) {
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
-  const form = useForm<FAQFormValues>({
-    resolver: zodResolver(faqSchema),
-    defaultValues: mode === 'edit' && faq
+  const form = useForm<FeatureFormValues>({
+    resolver: zodResolver(featureSchema),
+    defaultValues: mode === 'edit' && feature
       ? {
-          question: faq.question,
-          answer: faq.answer,
-          category_id: faq.category.id,
-          order_index: faq.order_index,
-          is_published: faq.is_published,
+          title: feature.title,
+          description: feature.description,
+          icon: feature.icon,
+          category_id: feature.category.id,
+          order_index: feature.order_index,
+          is_published: feature.is_published,
         }
       : {
-          question: '',
-          answer: '',
+          title: '',
+          description: '',
+          icon: '',
           category_id: '',
           order_index: 1,
           is_published: false,
         },
   })
 
-  function onSubmit(data: FAQFormValues) {
+  function onSubmit(data: FeatureFormValues) {
     startTransition(async () => {
       try {
         if (mode === 'create') {
-          await createFAQ(data)
-          toast.success('FAQ created successfully')
-        } else if (faq) {
-          await updateFAQ(faq.id, data)
-          toast.success('FAQ updated successfully')
+          await createFeature(data)
+          toast.success('Feature created successfully')
+        } else if (feature) {
+          await updateFeature(feature.id, data)
+          toast.success('Feature updated successfully')
         }
 
         setOpen(false)
         form.reset()
         router.refresh()
       } catch (error) {
-        toast.error(mode === 'create' ? 'Failed to create FAQ' : 'Failed to update FAQ')
+        toast.error(mode === 'create' ? 'Failed to create feature' : 'Failed to update feature')
       }
     })
   }
@@ -124,62 +128,84 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {mode === 'create' ? 'Create New FAQ' : 'Edit FAQ'}
+            {mode === 'create' ? 'Create New Feature' : 'Edit Feature'}
           </DialogTitle>
           <DialogDescription>
             {mode === 'create'
-              ? 'Add a new frequently asked question to your website'
-              : 'Update the FAQ details below'}
+              ? 'Add a new feature to showcase on your website'
+              : 'Update the feature details below'}
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="category_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="category_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Feature category
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="icon"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Icon</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
+                      <Input
+                        placeholder="💜 or heart"
+                        {...field}
+                      />
                     </FormControl>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Choose the category this FAQ belongs to
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormDescription>
+                      Emoji or icon name
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
-              name="question"
+              name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Question</FormLabel>
+                  <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="What is qoupl?"
+                      placeholder="Smart Matching Algorithm"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    The question users are asking
+                    Feature name or title
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -188,19 +214,19 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
 
             <FormField
               control={form.control}
-              name="answer"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Answer</FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="qoupl is a dating app that..."
-                      rows={6}
+                      placeholder="Our advanced algorithm finds compatible matches based on..."
+                      rows={4}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    The detailed answer to the question
+                    Brief description of the feature
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -273,8 +299,8 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                     ? 'Creating...'
                     : 'Updating...'
                   : mode === 'create'
-                  ? 'Create FAQ'
-                  : 'Update FAQ'}
+                  ? 'Create Feature'
+                  : 'Update Feature'}
               </Button>
             </DialogFooter>
           </form>
