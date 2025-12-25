@@ -3,11 +3,11 @@ import Navbar from '@/components/navbar'
 import Footer from '@/components/sections/footer'
 
 export const metadata: Metadata = {
-  title: 'Safety & Security - qoupl',
-  description: 'Safety and security guidelines for qoupl dating application',
+  title: 'Terms of Service - qoupl',
+  description: 'Terms of Service for qoupl dating application',
 }
 
-export default function SafetyLayout({ children }: { children: React.ReactNode }) {
+export default function TermsLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
@@ -16,3 +16,4 @@ export default function SafetyLayout({ children }: { children: React.ReactNode }
     </>
   )
 }
+

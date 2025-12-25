@@ -6,11 +6,14 @@
  * Run: ts-node --project tsconfig.node.json scripts/migrate-all-pages-content.ts
  */
 
-import { adminClient } from '../lib/supabase/admin'
 import * as dotenv from 'dotenv'
 import { join } from 'path'
 
+// Load environment variables BEFORE importing adminClient
 dotenv.config({ path: join(process.cwd(), '.env.local') })
+
+// Now import adminClient after env vars are loaded
+import { adminClient } from '../lib/supabase/admin'
 
 async function getPageId(slug: string): Promise<string | null> {
   const { data, error } = await adminClient

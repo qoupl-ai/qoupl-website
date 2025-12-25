@@ -14,6 +14,7 @@
     "migrate:content": "ts-node --project tsconfig.node.json scripts/migrate-content-to-supabase.ts",
     "migrate:legacy": "ts-node --project tsconfig.node.json scripts/migrate-legacy-to-sections.ts",
     "migrate:pages": "ts-node --project tsconfig.node.json scripts/migrate-all-pages-content.ts",
+    "migrate:content-pages": "ts-node --project tsconfig.node.json scripts/migrate-all-content-pages.ts",
     "cleanup:legacy": "ts-node --project tsconfig.node.json scripts/cleanup-legacy-code.ts",
     "setup:all": "npm run setup:storage && npm run upload:images && npm run seed:content"
   },
