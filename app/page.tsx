@@ -1,26 +1,21 @@
-"use client";
+/**
+ * Homepage - Server Component
+ * 
+ * Fetches sections from Supabase and renders dynamically.
+ * Splash screen remains client-side for animations.
+ */
 
-import { useState, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
-import AnimatedHero from "@/components/sections/animated-hero";
-import HowItWorks from "@/components/sections/how-it-works";
-import ProductFeatures from "@/components/sections/product-features";
-import Gallery from "@/components/sections/gallery";
-import Testimonials from "@/components/sections/testimonials";
-import AppDownload from "@/components/sections/app-download";
-import ComingSoon from "@/components/sections/coming-soon";
-import Footer from "@/components/sections/footer";
-import Navbar from "@/components/navbar";
-import SplashScreen from "@/components/splash-screen";
-import { StructuredData, organizationSchema, websiteSchema, webApplicationSchema } from "@/components/structured-data";
+import { getPageSections } from '@/lib/supabase/content'
+import { SectionsRenderer } from '@/lib/components/registry'
+import Navbar from '@/components/navbar'
+import Footer from '@/components/sections/footer'
+import SplashScreenClient from '@/components/splash-screen-client'
+import HomepageFallback from '@/components/homepage-fallback'
+import { StructuredData, organizationSchema, websiteSchema, webApplicationSchema } from '@/components/structured-data'
 
-export default function Home() {
-  const [showSplash, setShowSplash] = useState(true);
-
-  const handleSplashComplete = () => {
-    // Remove splash screen with fade animation
-    setShowSplash(false);
-  };
+export default async function Home() {
+  // Fetch sections for home page
+  const sections = await getPageSections('home')
 
   return (
     <div className="relative min-h-screen">
@@ -29,25 +24,23 @@ export default function Home() {
       <StructuredData data={websiteSchema} />
       <StructuredData data={webApplicationSchema} />
 
-      {/* Main content - Always rendered so hero animations can initialize */}
+      {/* Main content */}
       <div className="min-h-screen">
         <Navbar />
-        <AnimatedHero />
-        <HowItWorks />
-        <ProductFeatures />
-        <Gallery />
-        <Testimonials />
-        <AppDownload />
-        <ComingSoon />
+        
+        {/* Render sections dynamically from database */}
+        {sections.length > 0 ? (
+          <SectionsRenderer sections={sections} />
+        ) : (
+          // Fallback: Render hardcoded sections if database is empty
+          <HomepageFallback />
+        )}
+        
         <Footer />
       </div>
 
-      {/* Splash Screen - Overlays on top, fades out when complete */}
-      <AnimatePresence>
-        {showSplash && (
-          <SplashScreen key="splash" onComplete={handleSplashComplete} />
-        )}
-      </AnimatePresence>
+      {/* Splash Screen - Client component for animations */}
+      <SplashScreenClient />
     </div>
-  );
+  )
 }

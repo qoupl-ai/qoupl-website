@@ -9,8 +9,8 @@ import { useState, useEffect, useRef } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import WaitlistModal from "@/components/waitlist-modal";
 
-// All women images (10 images)
-const womenImages = [
+// Fallback images if data not provided
+const defaultWomenImages = [
   getStorageUrl("hero-images", "women/qoupl_women_03.png"),
   getStorageUrl("hero-images", "women/qoupl_women_05.png"),
   getStorageUrl("hero-images", "women/qoupl_women_01.png"),
@@ -23,8 +23,7 @@ const womenImages = [
   getStorageUrl("hero-images", "women/qoupl_women_10.png"),
 ];
 
-// All men images (6 images)
-const menImages = [
+const defaultMenImages = [
   getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
   getStorageUrl("hero-images", "men/qoupl_men_02.jpg"),
   getStorageUrl("hero-images", "men/qoupl_men_03.jpg"),
@@ -33,11 +32,12 @@ const menImages = [
   getStorageUrl("hero-images", "men/qoupl_men_06.jpg"),
 ];
 
-// Combined array: 10 women + 6 men = 16 images
-const carouselImages = [...womenImages, ...menImages];
-
 // Modern 2025 Floating Cards with Magnetic Effect
-function ModernFloatingCards() {
+interface ModernFloatingCardsProps {
+  carouselImages: string[];
+}
+
+function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeIndex, setActiveIndex] = useState(0);
@@ -129,7 +129,7 @@ function ModernFloatingCards() {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [carouselImages.length]);
 
   // Show 5 cards at a time in a floating formation
   const visibleCards = 5;
@@ -309,9 +309,56 @@ function ModernFloatingCards() {
 }
 
 
-export default function AnimatedHero() {
+interface AnimatedHeroProps {
+  data?: {
+    title?: string;
+    tagline?: string;
+    subtitle?: string;
+    cta?: {
+      text?: string;
+      buttonText?: string;
+      subtext?: string;
+      badge?: string;
+    };
+    images?: {
+      women?: string[];
+      men?: string[];
+    };
+  };
+}
+
+export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
   const [showThemeToggle, setShowThemeToggle] = useState(true);
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+
+  // Use data from props or fallback to defaults
+  const title = data?.title || 'qoupl';
+  const tagline = data?.tagline || 'Be couple with qoupl';
+  const subtitle = data?.subtitle || 'Find your vibe. Match your energy. Connect for real.';
+  const ctaText = data?.cta?.text || data?.cta?.buttonText || 'Join the Waitlist';
+  const ctaSubtext = data?.cta?.subtext || '⚡ Limited spots for early access';
+  const ctaBadge = data?.cta?.badge || 'Free';
+
+  // Process images from data or use defaults
+  const womenImages = data?.images?.women?.map(path => {
+    // If path includes bucket, use as is, otherwise construct URL
+    if (path.includes('/')) {
+      const [bucket, ...rest] = path.split('/');
+      return getStorageUrl(bucket, rest.join('/'));
+    }
+    return getStorageUrl("hero-images", path);
+  }) || defaultWomenImages;
+
+  const menImages = data?.images?.men?.map(path => {
+    if (path.includes('/')) {
+      const [bucket, ...rest] = path.split('/');
+      return getStorageUrl(bucket, rest.join('/'));
+    }
+    return getStorageUrl("hero-images", path);
+  }) || defaultMenImages;
+
+  // Combined array: women + men images
+  const carouselImages = [...womenImages, ...menImages];
 
   // Hide theme toggle on scroll
   useEffect(() => {
@@ -380,7 +427,7 @@ export default function AnimatedHero() {
                 transformStyle: "preserve-3d",
               }}
             >
-              qoupl
+              {title}
             </motion.h1>
 
             {/* Combined Taglines - Together, Small, Semi-Bold - Indented with Better Spacing */}
@@ -397,8 +444,17 @@ export default function AnimatedHero() {
                   fontWeight: 600,
                 }}
               >
-                Be <span className="text-[#662D91]">couple</span> with{" "}
-                <span className="text-[#662D91]">qoupl</span>
+                {tagline.split(' ').map((word, i) => {
+                  const lowerWord = word.toLowerCase();
+                  if (lowerWord.includes('qoupl') || lowerWord.includes('couple')) {
+                    return (
+                      <span key={i} className="text-[#662D91]">
+                        {word}{' '}
+                      </span>
+                    );
+                  }
+                  return <span key={i}>{word} </span>;
+                })}
               </p>
               <p
                 className="text-base md:text-lg font-semibold text-muted-foreground leading-relaxed"
@@ -407,7 +463,7 @@ export default function AnimatedHero() {
                   fontWeight: 600,
                 }}
               >
-                Find your vibe. Match your energy. Connect for real.
+                {subtitle}
               </p>
             </motion.div>
 
@@ -424,14 +480,18 @@ export default function AnimatedHero() {
                 className="group px-6 py-3 h-auto rounded-full bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <Sparkles className="mr-2 h-4 w-4" />
-                Join the Waitlist
-                <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">
-                  Free
-                </span>
+                {ctaText}
+                {ctaBadge && (
+                  <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">
+                    {ctaBadge}
+                  </span>
+                )}
               </Button>
-              <p className="text-xs text-muted-foreground text-center lg:text-left">
-                ⚡ Limited spots for early access
-              </p>
+              {ctaSubtext && (
+                <p className="text-xs text-muted-foreground text-center lg:text-left">
+                  {ctaSubtext}
+                </p>
+              )}
             </motion.div>
 
           </motion.div>
@@ -443,7 +503,7 @@ export default function AnimatedHero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex items-center justify-center lg:justify-end order-2 lg:order-2 w-full mt-4 md:mt-6 lg:mt-0 lg:-mt-16"
           >
-            <ModernFloatingCards />
+            <ModernFloatingCards carouselImages={carouselImages} />
           </motion.div>
         </div>
       </div>

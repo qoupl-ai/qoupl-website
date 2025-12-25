@@ -24,10 +24,8 @@ interface CMSNavProps {
 
 const navItems = [
   { href: '/add-content', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/add-content/blog', label: 'Blog Posts', icon: FileText },
-  { href: '/add-content/faqs', label: 'FAQs', icon: MessageSquare },
-  { href: '/add-content/features', label: 'Features', icon: Sparkles },
-  { href: '/add-content/pricing', label: 'Pricing', icon: DollarSign },
+  { href: '/add-content/pages', label: 'Pages', icon: FileText },
+  { href: '/add-content/global', label: 'Global Content', icon: Sparkles },
   { href: '/add-content/media', label: 'Media', icon: ImageIcon },
   { href: '/add-content/history', label: 'History', icon: History },
 ]

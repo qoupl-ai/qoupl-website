@@ -5,7 +5,8 @@ import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-const steps = [
+// Fallback steps
+const defaultSteps = [
   {
     step: "01",
     title: "Create Your Profile",
@@ -43,7 +44,37 @@ const steps = [
   },
 ];
 
-export default function HowItWorks() {
+interface HowItWorksProps {
+  data?: {
+    title?: string;
+    steps?: Array<{
+      step: string;
+      title: string;
+      description: string;
+      image?: string;
+    }>;
+  };
+}
+
+export default function HowItWorks({ data }: HowItWorksProps = {}) {
+  // Process steps from data or use defaults
+  const steps = data?.steps?.map(item => {
+    let imageUrl = item.image;
+    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+      if (imageUrl.includes('/')) {
+        const [bucket, ...rest] = imageUrl.split('/');
+        imageUrl = getStorageUrl(bucket, rest.join('/'));
+      } else {
+        imageUrl = getStorageUrl("app-screenshots", imageUrl);
+      }
+    }
+    return {
+      step: item.step,
+      title: item.title,
+      description: item.description,
+      image: imageUrl || getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
+    };
+  }) || defaultSteps;
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const [currentStep, setCurrentStep] = useState(0);

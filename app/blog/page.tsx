@@ -1,14 +1,11 @@
 "use client";
 
-import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Calendar, Clock, ArrowRight, Heart, Sparkles, Users, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/sections/footer";
 
 const blogPosts = [
   {
@@ -85,7 +82,6 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10 py-20">
         <div className="container mx-auto px-4">
@@ -282,7 +278,6 @@ export default function Blog() {
       </section>
 
       {/* Footer */}
-      <Footer />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { assertAdmin } from '@/lib/auth/assert-admin'
 
 interface FAQData {
   question: string
@@ -13,28 +13,10 @@ interface FAQData {
 }
 
 export async function createFAQ(data: FAQData) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Create FAQ
   const { error } = await supabase.from('faqs').insert({
@@ -53,28 +35,10 @@ export async function createFAQ(data: FAQData) {
 }
 
 export async function updateFAQ(id: string, data: FAQData) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Update FAQ
   const { error } = await supabase
@@ -97,28 +61,10 @@ export async function updateFAQ(id: string, data: FAQData) {
 }
 
 export async function deleteFAQ(id: string) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Delete FAQ
   const { error } = await supabase.from('faqs').delete().eq('id', id)

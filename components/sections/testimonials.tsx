@@ -5,7 +5,8 @@ import Image from "next/image";
 import { Heart, Quote, Star } from "lucide-react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-const testimonials = [
+// Fallback testimonials
+const defaultTestimonials = [
   {
     name: "Arjun",
     image: getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
@@ -32,7 +33,50 @@ const testimonials = [
   },
 ];
 
-export default function Testimonials() {
+interface TestimonialsProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    badge?: {
+      icon?: string;
+      text?: string;
+    };
+    testimonials?: Array<{
+      name: string;
+      image?: string;
+      text: string;
+      location?: string;
+      rating?: number;
+      date?: string;
+    }>;
+    stats?: {
+      text?: string;
+      icon?: string;
+    };
+  };
+}
+
+export default function Testimonials({ data }: TestimonialsProps = {}) {
+  // Process testimonials from data or use defaults
+  const testimonials = data?.testimonials?.map(item => {
+    let imageUrl = item.image;
+    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+      if (imageUrl.includes('/')) {
+        const [bucket, ...rest] = imageUrl.split('/');
+        imageUrl = getStorageUrl(bucket, rest.join('/'));
+      } else {
+        imageUrl = getStorageUrl("hero-images", imageUrl);
+      }
+    }
+    return {
+      name: item.name,
+      image: imageUrl || getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
+      text: item.text,
+      location: item.location || "",
+      rating: item.rating || 5,
+      date: item.date || "",
+    };
+  }) || defaultTestimonials;
   return (
     <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
       {/* Animated Background Blobs */}

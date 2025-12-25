@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { assertAdmin } from '@/lib/auth/assert-admin'
 
 interface PricingPlanData {
   name: string
@@ -16,28 +16,10 @@ interface PricingPlanData {
 }
 
 export async function createPricingPlan(data: PricingPlanData) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Create pricing plan
   const { error } = await supabase.from('pricing_plans').insert({
@@ -59,28 +41,10 @@ export async function createPricingPlan(data: PricingPlanData) {
 }
 
 export async function updatePricingPlan(id: string, data: PricingPlanData) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Update pricing plan
   const { error } = await supabase
@@ -106,28 +70,10 @@ export async function updatePricingPlan(id: string, data: PricingPlanData) {
 }
 
 export async function deletePricingPlan(id: string) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Delete pricing plan
   const { error } = await supabase.from('pricing_plans').delete().eq('id', id)

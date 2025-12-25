@@ -8,8 +8,36 @@ import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import WaitlistModal from "@/components/waitlist-modal";
 
-export default function ComingSoon() {
+interface ComingSoonProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    badge?: {
+      icon?: string;
+      text?: string;
+    };
+    cta?: {
+      text?: string;
+    };
+    platforms?: Array<{
+      name: string;
+      icon?: string;
+      coming?: boolean;
+    }>;
+    stats?: {
+      text?: string;
+      count?: string;
+    };
+    screenshots?: string[];
+  };
+}
+
+export default function ComingSoon({ data }: ComingSoonProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+
+  const title = data?.title || "Get Early Access";
+  const subtitle = data?.subtitle || "Join thousands of college students waiting for qoupl to launch. Be the first to experience the future of dating.";
+  const ctaText = data?.cta?.text || "Join the Waitlist";
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
@@ -55,16 +83,14 @@ export default function ComingSoon() {
               </motion.div>
 
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                Get{" "}
-                <span className="bg-[#662D91] bg-clip-text text-transparent">
-                  Early Access
-                </span>
+                {title}
               </h2>
 
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Be among the first college students to experience qoupl. Join our waitlist
-                and get notified when we launch on iOS and Android.
-              </p>
+              {subtitle && (
+                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                  {subtitle}
+                </p>
+              )}
 
               {/* Join Waitlist Button */}
               <div className="mb-8">
@@ -74,7 +100,7 @@ export default function ComingSoon() {
                   className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-[#662D91] hover:from-[#9333ea] hover:to-[#db2777] text-white"
                 >
                   <Sparkles className="mr-2 h-5 w-5" />
-                  Join Waitlist Now
+                  {ctaText}
                 </Button>
               </div>
 

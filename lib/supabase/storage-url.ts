@@ -4,9 +4,12 @@
  * Safe to import in client components
  */
 export function getStorageUrl(bucket: string, path: string): string {
-  // Hardcode the Supabase URL for client-side usage
-  // This is safe because it's a public URL
-  const supabaseUrl = 'https://agbuefpfkgknbboeeyqa.supabase.co'
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+
+  if (!supabaseUrl) {
+    console.error('NEXT_PUBLIC_SUPABASE_URL is not defined')
+    return ''
+  }
 
   return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`
 }

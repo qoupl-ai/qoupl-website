@@ -5,7 +5,16 @@ import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { Heart, Shield, Zap, Check } from "lucide-react";
 
-const features = [
+// Icon mapping
+const iconMap: Record<string, any> = {
+  Heart,
+  Shield,
+  Zap,
+  Check,
+};
+
+// Fallback features
+const defaultFeatures = [
   {
     icon: Heart,
     title: "Smart AI Matching",
@@ -50,7 +59,43 @@ const features = [
   },
 ];
 
-export default function ProductFeatures() {
+interface ProductFeaturesProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    features?: Array<{
+      icon?: string;
+      title: string;
+      description: string;
+      highlights?: string[];
+      image?: string;
+      color?: string;
+    }>;
+  };
+}
+
+export default function ProductFeatures({ data }: ProductFeaturesProps = {}) {
+  // Process features from data or use defaults
+  const features = data?.features?.map(item => {
+    const IconComponent = item.icon ? iconMap[item.icon] || Heart : Heart;
+    let imageUrl = item.image;
+    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+      if (imageUrl.includes('/')) {
+        const [bucket, ...rest] = imageUrl.split('/');
+        imageUrl = getStorageUrl(bucket, rest.join('/'));
+      } else {
+        imageUrl = getStorageUrl("couple-photos", imageUrl);
+      }
+    }
+    return {
+      icon: IconComponent,
+      title: item.title,
+      description: item.description,
+      highlights: item.highlights || [],
+      image: imageUrl || getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
+      color: item.color || "bg-[#662D91]",
+    };
+  }) || defaultFeatures;
   return (
     <section className="py-12 md:py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
       {/* Background Blob */}
@@ -77,14 +122,13 @@ export default function ProductFeatures() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            Why Choose{" "}
-            <span className="bg-[#662D91] bg-clip-text text-transparent">
-              qoupl
-            </span>
+            {data?.title || "Why Choose qoupl"}
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Advanced features designed to help you find meaningful connections
-          </p>
+          {data?.subtitle && (
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {data.subtitle}
+            </p>
+          )}
         </motion.div>
 
         {/* Features Grid */}

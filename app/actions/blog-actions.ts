@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { assertAdmin } from '@/lib/auth/assert-admin'
 
 interface BlogPostData {
   title: string
@@ -16,28 +16,10 @@ interface BlogPostData {
 }
 
 export async function createBlogPost(data: BlogPostData) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Create blog post
   const { error } = await supabase.from('blog_posts').insert({
@@ -60,28 +42,10 @@ export async function createBlogPost(data: BlogPostData) {
 }
 
 export async function updateBlogPost(id: string, data: BlogPostData) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Update blog post
   const { error } = await supabase
@@ -109,28 +73,10 @@ export async function updateBlogPost(id: string, data: BlogPostData) {
 }
 
 export async function deleteBlogPost(id: string) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Delete blog post
   const { error } = await supabase.from('blog_posts').delete().eq('id', id)

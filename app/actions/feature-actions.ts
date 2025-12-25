@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { assertAdmin } from '@/lib/auth/assert-admin'
 
 interface FeatureData {
   title: string
@@ -14,28 +14,10 @@ interface FeatureData {
 }
 
 export async function createFeature(data: FeatureData) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Create feature
   const { error } = await supabase.from('features').insert({
@@ -55,28 +37,10 @@ export async function createFeature(data: FeatureData) {
 }
 
 export async function updateFeature(id: string, data: FeatureData) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Update feature
   const { error } = await supabase
@@ -100,28 +64,10 @@ export async function updateFeature(id: string, data: FeatureData) {
 }
 
 export async function deleteFeature(id: string) {
+  // Assert admin access (throws if not authorized)
+  await assertAdmin()
+
   const supabase = await createClient()
-
-  // Check authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Verify admin access
-  const { data: adminUser } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .single()
-
-  if (!adminUser) {
-    throw new Error('Unauthorized')
-  }
 
   // Delete feature
   const { error } = await supabase.from('features').delete().eq('id', id)

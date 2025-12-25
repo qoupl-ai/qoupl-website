@@ -7,8 +7,48 @@ import { Sparkles, Heart, Bell } from "lucide-react";
 import { useState } from "react";
 import WaitlistModal from "@/components/waitlist-modal";
 
-export default function AppDownload() {
+interface AppDownloadProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    badge?: {
+      icon?: string;
+      text?: string;
+    };
+    benefits?: string[];
+    cta?: {
+      text?: string;
+      subtext?: string;
+    };
+    platforms?: Array<{
+      name: string;
+      icon?: string;
+      coming?: boolean;
+    }>;
+    stats?: {
+      text?: string;
+      count?: string;
+      suffix?: string;
+    };
+    images?: {
+      decorative?: string[];
+    };
+  };
+}
+
+export default function AppDownload({ data }: AppDownloadProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+
+  const title = data?.title || "qoupl is Launching Soon";
+  const subtitle = data?.subtitle || "Be among the first college students to experience the future of dating! Join our waitlist today and get exclusive early access when we launch on iOS and Android.";
+  const benefits = data?.benefits || [
+    "Get notified before official launch",
+    "Exclusive early access to the app",
+    "Special perks for early members",
+    "Help shape the future of qoupl"
+  ];
+  const ctaText = data?.cta?.text || "Join the Waitlist";
+  const ctaSubtext = data?.cta?.subtext || "Limited spots available for early access";
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
@@ -36,24 +76,15 @@ export default function AppDownload() {
             </motion.div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-              <span className="bg-[#662D91] bg-clip-text text-transparent">
-                qoupl
-              </span>{" "}
-              is Launching Soon
+              {title}
             </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Be among the first college students to experience the future of dating! Join our waitlist
-              today and get exclusive early access when we launch on iOS and Android.
+              {subtitle}
             </p>
 
             {/* Benefits List */}
             <div className="space-y-4 mb-8">
-              {[
-                "Get notified before official launch",
-                "Exclusive early access to the app",
-                "Special perks for early members",
-                "Help shape the future of qoupl"
-              ].map((benefit, index) => (
+              {benefits.map((benefit, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
@@ -78,12 +109,14 @@ export default function AppDownload() {
               className="flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#662D91] text-white shadow-lg hover:shadow-xl transition-all font-semibold text-lg"
             >
               <Bell className="h-5 w-5" />
-              Join the Waitlist
+              {ctaText}
             </motion.button>
 
-            <p className="mt-4 text-sm text-muted-foreground">
-              Limited spots available for early access
-            </p>
+            {ctaSubtext && (
+              <p className="mt-4 text-sm text-muted-foreground">
+                {ctaSubtext}
+              </p>
+            )}
           </motion.div>
 
           {/* Right Content - Coming Soon Visual */}

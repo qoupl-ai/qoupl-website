@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-const galleryImages = [
+// Fallback images
+const defaultGalleryImages = [
   {
     src: getStorageUrl('couple-photos', 'qoupl_couple_01.jpg'),
     alt: "Happy couple outdoors",
@@ -39,7 +40,47 @@ const galleryImages = [
   },
 ];
 
-export default function Gallery() {
+interface GalleryProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    badge?: {
+      icon?: string;
+      text?: string;
+    };
+    images?: Array<{
+      image: string;
+      alt?: string;
+      title?: string;
+      story?: string;
+    }>;
+    cta?: {
+      text?: string;
+      highlight?: string;
+    };
+  };
+}
+
+export default function Gallery({ data }: GalleryProps = {}) {
+  // Process images from data or use defaults
+  const galleryImages = data?.images?.map(item => {
+    let src = item.image;
+    // If path includes bucket, use as is, otherwise construct URL
+    if (!src.startsWith('http') && !src.startsWith('/')) {
+      if (src.includes('/')) {
+        const [bucket, ...rest] = src.split('/');
+        src = getStorageUrl(bucket, rest.join('/'));
+      } else {
+        src = getStorageUrl('couple-photos', src);
+      }
+    }
+    return {
+      src,
+      alt: item.alt || item.title || "Couple photo",
+      title: item.title || "",
+      story: item.story || ""
+    };
+  }) || defaultGalleryImages;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 

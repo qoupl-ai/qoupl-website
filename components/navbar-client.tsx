@@ -1,0 +1,160 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ThemeToggle } from "./theme-toggle";
+import { motion, useScroll } from "framer-motion";
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import type { NavbarContent } from "@/lib/supabase/content";
+
+interface NavbarClientProps {
+  content: NavbarContent;
+}
+
+export default function NavbarClient({ content }: NavbarClientProps) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { scrollY } = useScroll();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    return scrollY.on("change", (latest) => {
+      // Show navbar only after user starts scrolling
+      if (latest > 50) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    });
+  }, [scrollY]);
+
+  const navLinks = content.links;
+
+  return (
+    <motion.nav
+      initial={{ y: -100, opacity: 0 }}
+      animate={{
+        y: isVisible ? 0 : -100,
+        opacity: isVisible ? 1 : 0
+      }}
+      transition={{ duration: 0.3 }}
+      className="fixed top-0 left-0 right-0 z-50 glass-navbar"
+    >
+      {/* Liquid Glass Reflection Layers - Light Mode Only */}
+      <div 
+        className="absolute inset-0 pointer-events-none dark:hidden"
+        style={{
+          background: "linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 30%, transparent 70%)",
+        }}
+      />
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-60 dark:hidden"
+        style={{
+          background: "radial-gradient(ellipse at top, rgba(255, 255, 255, 0.1) 0%, transparent 70%)",
+        }}
+      />
+      
+      {/* Dark Mode Reflection - Subtle */}
+      <div 
+        className="absolute inset-0 pointer-events-none hidden dark:block"
+        style={{
+          background: "linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 50%)",
+        }}
+      />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="h-14 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center z-10">
+            <Image
+              src={content.logo.src}
+              alt={content.logo.alt}
+              width={content.logo.width}
+              height={content.logo.height}
+              className="h-8 w-auto"
+            />
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? "text-[#662D91]"
+                      : "text-foreground/70 hover:text-foreground"
+                  }`}
+                >
+                  {link.label}
+                  {isActive && (
+                    <motion.div
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#662D91] rounded-full"
+                      layoutId="navbar-indicator"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Right Side - Theme Toggle & Mobile Menu */}
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/5 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <motion.div
+          initial={false}
+          animate={{
+            height: isMobileMenuOpen ? "auto" : 0,
+            opacity: isMobileMenuOpen ? 1 : 0,
+          }}
+          transition={{ duration: 0.2 }}
+          className="md:hidden overflow-hidden"
+        >
+          <div className="py-4 space-y-2 border-t border-white/10 dark:border-white/5">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? "text-[#662D91] bg-[#662D91]/10"
+                      : "text-foreground/70 hover:text-foreground hover:bg-white/5 dark:hover:bg-white/5"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
+        </motion.div>
+      </div>
+    </motion.nav>
+  );
+}
+
