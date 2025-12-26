@@ -30,8 +30,16 @@ export default async function PagesPage() {
     <div>
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold">Pages</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 
+              className="text-3xl font-semibold mb-2"
+              style={{ color: '#ffffff' }}
+            >
+              Pages
+            </h1>
+            <p 
+              className="text-sm"
+              style={{ color: '#898989' }}
+            >
               Manage all website pages
             </p>
           </div>
@@ -40,19 +48,32 @@ export default async function PagesPage() {
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {pages?.map((page) => (
-            <Card key={page.id} className="hover:border-primary transition-colors">
+            <Card 
+              key={page.id} 
+              className="transition-all"
+              style={{ 
+                backgroundColor: '#212121',
+                borderColor: '#2a2a2a',
+              }}
+            >
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle 
+                      className="flex items-center gap-2 text-base"
+                      style={{ color: '#ffffff' }}
+                    >
                       {page.published ? (
-                        <Eye className="h-4 w-4 text-green-600" />
+                        <Eye className="h-4 w-4" style={{ color: '#898989' }} />
                       ) : (
-                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        <EyeOff className="h-4 w-4" style={{ color: '#898989' }} />
                       )}
                       {page.title}
                     </CardTitle>
-                    <CardDescription className="mt-1">
+                    <CardDescription 
+                      className="mt-1 text-xs"
+                      style={{ color: '#898989' }}
+                    >
                       /{page.slug}
                     </CardDescription>
                   </div>
@@ -60,19 +81,40 @@ export default async function PagesPage() {
               </CardHeader>
               <CardContent>
                 {page.description && (
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                  <p 
+                    className="text-sm mb-4 line-clamp-2"
+                    style={{ color: '#898989' }}
+                  >
                     {page.description}
                   </p>
                 )}
                 <div className="flex gap-2">
                   <Link href={`/add-content/pages/${page.slug}`} className="flex-1">
-                    <Button variant="outline" className="w-full" size="sm">
-                      <FileText className="mr-2 h-4 w-4" />
+                    <Button 
+                      variant="outline" 
+                      className="w-full h-9" 
+                      style={{ 
+                        backgroundColor: '#212121',
+                        borderColor: '#2a2a2a',
+                        color: '#898989',
+                        fontSize: '13px',
+                        fontWeight: '500'
+                      }}
+                    >
+                      <FileText className="mr-2 h-3.5 w-3.5" />
                       Edit
                     </Button>
                   </Link>
                   <Link href={`/${page.slug}`} target="_blank">
-                    <Button variant="ghost" size="sm">
+                    <Button 
+                      variant="ghost" 
+                      className="h-9 px-3"
+                      style={{ 
+                        color: '#898989',
+                        fontSize: '13px',
+                        fontWeight: '500'
+                      }}
+                    >
                       View
                     </Button>
                   </Link>
@@ -84,4 +126,3 @@ export default async function PagesPage() {
     </div>
   )
 }
-

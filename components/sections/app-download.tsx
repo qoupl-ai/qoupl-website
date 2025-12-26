@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { Sparkles, Heart, Bell } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import WaitlistModal from "@/components/waitlist-modal";
 
 interface AppDownloadProps {
@@ -38,6 +39,14 @@ interface AppDownloadProps {
 
 export default function AppDownload({ data }: AppDownloadProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const title = data?.title || "qoupl is Launching Soon";
   const subtitle = data?.subtitle || "Be among the first college students to experience the future of dating! Join our waitlist today and get exclusive early access when we launch on iOS and Android.";
@@ -160,7 +169,17 @@ export default function AppDownload({ data }: AppDownloadProps = {}) {
                 <div className="space-y-3 opacity-50">
                   <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-black/5 dark:bg-white/5 border border-border">
                     <div className="w-8 h-8 rounded-lg bg-black/10 dark:bg-white/10 flex items-center justify-center">
-                      <span className="text-xs">🍎</span>
+                      <div className="relative h-5 w-5 flex items-center justify-center">
+                        {mounted && (
+                          <Image
+                            src={isDark ? "/images/brand-logo/apple-dark.png" : "/images/brand-logo/apple.png"}
+                            alt="Apple logo"
+                            width={20}
+                            height={20}
+                            className="object-contain opacity-60"
+                          />
+                        )}
+                      </div>
                     </div>
                     <div className="text-left">
                       <div className="text-xs font-normal text-muted-foreground">Coming to</div>
@@ -169,7 +188,17 @@ export default function AppDownload({ data }: AppDownloadProps = {}) {
                   </div>
                   <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-black/5 dark:bg-white/5 border border-border">
                     <div className="w-8 h-8 rounded-lg bg-black/10 dark:bg-white/10 flex items-center justify-center">
-                      <span className="text-xs">📱</span>
+                      <div className="relative h-5 w-5 flex items-center justify-center">
+                        {mounted && (
+                          <Image
+                            src={isDark ? "/images/brand-logo/android-dark.png" : "/images/brand-logo/android.png"}
+                            alt="Android logo"
+                            width={20}
+                            height={20}
+                            className="object-contain opacity-60"
+                          />
+                        )}
+                      </div>
                     </div>
                     <div className="text-left">
                       <div className="text-xs font-normal text-muted-foreground">Coming to</div>

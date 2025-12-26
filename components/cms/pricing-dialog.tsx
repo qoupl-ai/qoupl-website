@@ -137,12 +137,32 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent 
+        className="max-w-2xl max-h-[90vh] overflow-y-auto"
+        style={{
+          backgroundColor: '#212121',
+          borderColor: '#2a2a2a',
+          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+        }}
+      >
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle
+            style={{ 
+              color: '#ffffff', 
+              fontWeight: '600', 
+              fontSize: '18px',
+              lineHeight: '1.4'
+            }}
+          >
             {mode === 'create' ? 'Create New Pricing Plan' : 'Edit Pricing Plan'}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription
+            style={{ 
+              color: '#898989', 
+              fontSize: '13px',
+              lineHeight: '1.5'
+            }}
+          >
             {mode === 'create'
               ? 'Add a new pricing plan to your website'
               : 'Update the pricing plan details below'}
@@ -391,10 +411,43 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
+                className="h-10 px-5"
+                style={{
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button 
+                type="submit" 
+                disabled={isPending}
+                className="h-10 px-5"
+                style={{
+                  background: isPending 
+                    ? 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)'
+                    : 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
+                  border: 'none',
+                  color: '#ffffff',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(168, 85, 247, 0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isPending) {
+                    e.currentTarget.style.transform = 'translateY(-1px)'
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(168, 85, 247, 0.4)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(168, 85, 247, 0.3)'
+                }}
+              >
                 {isPending
                   ? mode === 'create'
                     ? 'Creating...'

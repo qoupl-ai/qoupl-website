@@ -125,12 +125,32 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent 
+        className="max-w-2xl max-h-[90vh] overflow-y-auto"
+        style={{
+          backgroundColor: '#212121',
+          borderColor: '#2a2a2a',
+          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+        }}
+      >
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle
+            style={{ 
+              color: '#ffffff', 
+              fontWeight: '600', 
+              fontSize: '18px',
+              lineHeight: '1.4'
+            }}
+          >
             {mode === 'create' ? 'Create New Feature' : 'Edit Feature'}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription
+            style={{ 
+              color: '#898989', 
+              fontSize: '13px',
+              lineHeight: '1.5'
+            }}
+          >
             {mode === 'create'
               ? 'Add a new feature to showcase on your website'
               : 'Update the feature details below'}
@@ -290,10 +310,29 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
+                className="h-10 px-5"
+                style={{
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button 
+                type="submit" 
+                disabled={isPending}
+                className="h-10 px-5"
+                style={{
+                  backgroundColor: isPending ? '#171717' : '#212121',
+                  borderColor: '#2a2a2a',
+                  color: isPending ? '#5a5a5a' : '#898989',
+                  fontSize: '14px',
+                  fontWeight: '600'
+                }}
+              >
                 {isPending
                   ? mode === 'create'
                     ? 'Creating...'

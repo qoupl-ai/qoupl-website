@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, DM_Sans } from "next/font/google";
+import { Poppins, DM_Sans, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -13,6 +13,12 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
   variable: "--font-dm-sans",
+});
+
+const sourceCodePro = Source_Code_Pro({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-source-code-pro",
 });
 
 export const metadata: Metadata = {
@@ -178,7 +184,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} ${dmSans.variable} font-sans antialiased`} suppressHydrationWarning>
+      <body className={`${poppins.variable} ${dmSans.variable} ${sourceCodePro.variable} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

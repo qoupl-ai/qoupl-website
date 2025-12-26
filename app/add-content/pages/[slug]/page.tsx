@@ -20,10 +20,9 @@ interface PageProps {
 
 export default async function PageEditorPage({ params }: PageProps) {
   await assertAdmin()
-  const { slug } = await params
   const supabase = await createClient()
+  const { slug } = await params
 
-  // Get page
   const { data: page, error: pageError } = await supabase
     .from('pages')
     .select('*')
@@ -34,7 +33,6 @@ export default async function PageEditorPage({ params }: PageProps) {
     notFound()
   }
 
-  // Get sections for this page
   const { data: sections, error: sectionsError } = await supabase
     .from('sections')
     .select('*')
@@ -47,32 +45,60 @@ export default async function PageEditorPage({ params }: PageProps) {
 
   return (
     <div>
-        <div className="flex items-center gap-4 mb-8">
-          <Link href="/add-content/pages">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold">{page.title}</h1>
-            <p className="text-muted-foreground mt-1">
-              /{page.slug} • {sections?.length || 0} sections
-            </p>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Link href="/add-content/pages">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                style={{ color: '#898989' }}
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
+              </Button>
+            </Link>
+            <div>
+              <h1 
+                className="text-3xl font-semibold mb-2"
+                style={{ color: '#ffffff' }}
+              >
+                {page.title}
+              </h1>
+              <p 
+                className="text-sm"
+                style={{ color: '#898989' }}
+              >
+                /{page.slug}
+              </p>
+            </div>
           </div>
+          <SectionEditorButton pageId={page.id} />
         </div>
 
         <div className="space-y-4">
           {sections?.map((section) => (
-            <Card key={section.id} className="hover:border-primary transition-colors">
+            <Card 
+              key={section.id} 
+              className="transition-all"
+              style={{ 
+                backgroundColor: '#212121',
+                borderColor: '#2a2a2a',
+              }}
+            >
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <CardTitle className="flex items-center gap-2">
-                      <GripVertical className="h-4 w-4 text-muted-foreground" />
+                    <CardTitle 
+                      className="flex items-center gap-2 text-base"
+                      style={{ color: '#ffffff' }}
+                    >
+                      <GripVertical className="h-4 w-4" style={{ color: '#898989' }} />
                       {section.component_type}
                     </CardTitle>
-                    <CardDescription className="mt-1">
+                    <CardDescription 
+                      className="mt-1 text-xs"
+                      style={{ color: '#898989' }}
+                    >
                       Order: {section.order_index} •{' '}
                       {section.published ? 'Published' : 'Draft'}
                     </CardDescription>
@@ -84,7 +110,14 @@ export default async function PageEditorPage({ params }: PageProps) {
                 </div>
               </CardHeader>
               <CardContent>
-                <pre className="text-xs bg-muted p-4 rounded overflow-auto max-h-32">
+                <pre 
+                  className="text-xs p-4 rounded overflow-auto max-h-32"
+                  style={{ 
+                    backgroundColor: '#171717',
+                    color: '#898989',
+                    border: '1px solid #2a2a2a'
+                  }}
+                >
                   {JSON.stringify(section.content, null, 2)}
                 </pre>
               </CardContent>
@@ -92,9 +125,12 @@ export default async function PageEditorPage({ params }: PageProps) {
           ))}
 
           {(!sections || sections.length === 0) && (
-            <Card>
+            <Card style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
               <CardContent className="py-12 text-center">
-                <p className="text-muted-foreground mb-4">
+                <p 
+                  className="mb-4 text-sm"
+                  style={{ color: '#898989' }}
+                >
                   No sections yet. Create your first section.
                 </p>
                 <SectionEditorButton pageId={page.id} />
@@ -105,4 +141,3 @@ export default async function PageEditorPage({ params }: PageProps) {
     </div>
   )
 }
-

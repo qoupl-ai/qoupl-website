@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Copy, Check, ExternalLink } from 'lucide-react'
+import { Copy, Check, ExternalLink, File } from 'lucide-react'
 import { toast } from 'sonner'
 
 interface MediaFile {
@@ -48,10 +48,14 @@ export function MediaGrid({ media }: MediaGridProps) {
       {media.map((file) => (
         <div
           key={file.id}
-          className="group relative bg-card border rounded-lg overflow-hidden hover:border-primary/50 transition-all"
+          className="group relative border rounded-lg overflow-hidden transition-all"
+          style={{ 
+            backgroundColor: '#212121',
+            borderColor: '#2a2a2a'
+          }}
         >
           {/* Image Preview */}
-          <div className="aspect-square relative bg-muted">
+          <div className="aspect-square relative" style={{ backgroundColor: '#171717' }}>
             {file.file_type.startsWith('image/') ? (
               <Image
                 src={file.url}
@@ -61,8 +65,8 @@ export function MediaGrid({ media }: MediaGridProps) {
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl">
-                📄
+              <div className="w-full h-full flex items-center justify-center">
+                <File className="h-12 w-12" style={{ color: '#898989' }} />
               </div>
             )}
 
@@ -72,6 +76,11 @@ export function MediaGrid({ media }: MediaGridProps) {
                 variant="secondary"
                 size="icon"
                 onClick={() => window.open(file.url, '_blank')}
+                style={{ 
+                  backgroundColor: '#212121',
+                  color: '#898989'
+                }}
+                className="hover:text-white hover:bg-[#2a2a2a]"
               >
                 <ExternalLink className="h-4 w-4" />
               </Button>
@@ -79,9 +88,14 @@ export function MediaGrid({ media }: MediaGridProps) {
                 variant="secondary"
                 size="icon"
                 onClick={() => copyToClipboard(file.url, file.id)}
+                style={{ 
+                  backgroundColor: '#212121',
+                  color: '#898989'
+                }}
+                className="hover:text-white hover:bg-[#2a2a2a]"
               >
                 {copiedId === file.id ? (
-                  <Check className="h-4 w-4 text-green-500" />
+                  <Check className="h-4 w-4" />
                 ) : (
                   <Copy className="h-4 w-4" />
                 )}
@@ -92,21 +106,36 @@ export function MediaGrid({ media }: MediaGridProps) {
           {/* File Info */}
           <div className="p-3 space-y-2">
             <div className="flex items-start justify-between gap-2">
-              <p className="text-sm font-medium truncate" title={file.filename}>
+              <p className="text-sm font-semibold truncate" title={file.filename} style={{ color: '#ffffff', fontWeight: '600' }}>
                 {file.filename}
               </p>
-              <Badge variant="outline" className="text-xs shrink-0">
+              <Badge 
+                variant="outline" 
+                className="text-xs shrink-0"
+                style={{ 
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  backgroundColor: '#171717'
+                }}
+              >
                 {formatFileSize(file.file_size)}
               </Badge>
             </div>
 
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="text-xs">
+              <Badge 
+                variant="secondary" 
+                className="text-xs"
+                style={{ 
+                  backgroundColor: '#171717',
+                  color: '#898989'
+                }}
+              >
                 {file.bucket_name}
               </Badge>
             </div>
 
-            <p className="text-xs text-muted-foreground font-mono truncate">
+            <p className="text-xs font-mono truncate" style={{ color: '#898989' }}>
               {file.storage_path}
             </p>
           </div>

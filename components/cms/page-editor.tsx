@@ -82,10 +82,32 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent 
+        className="max-w-2xl"
+        style={{
+          backgroundColor: '#212121',
+          borderColor: '#2a2a2a',
+          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+        }}
+      >
         <DialogHeader>
-          <DialogTitle>{isEditing ? 'Edit Page' : 'Create Page'}</DialogTitle>
-          <DialogDescription>
+          <DialogTitle
+            style={{ 
+              color: '#ffffff', 
+              fontWeight: '600', 
+              fontSize: '18px',
+              lineHeight: '1.4'
+            }}
+          >
+            {isEditing ? 'Edit Page' : 'Create Page'}
+          </DialogTitle>
+          <DialogDescription
+            style={{ 
+              color: '#898989', 
+              fontSize: '13px',
+              lineHeight: '1.5'
+            }}
+          >
             {isEditing
               ? 'Update page information and settings.'
               : 'Create a new page for your website.'}
@@ -143,10 +165,33 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => onOpenChange(false)}
+              className="h-10 px-5"
+              style={{
+                backgroundColor: '#212121',
+                borderColor: '#2a2a2a',
+                color: '#898989',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button 
+              type="submit" 
+              disabled={loading}
+              className="h-10 px-5"
+              style={{
+                backgroundColor: loading ? '#171717' : '#212121',
+                borderColor: '#2a2a2a',
+                color: loading ? '#5a5a5a' : '#898989',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}
+            >
               {loading ? 'Saving...' : isEditing ? 'Update' : 'Create'}
             </Button>
           </DialogFooter>

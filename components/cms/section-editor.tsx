@@ -323,12 +323,32 @@ export default function SectionEditor({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent 
+        className="max-w-4xl max-h-[90vh] overflow-y-auto"
+        style={{
+          backgroundColor: '#212121',
+          borderColor: '#2a2a2a',
+          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+        }}
+      >
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle
+            style={{ 
+              color: '#ffffff', 
+              fontWeight: '600', 
+              fontSize: '18px',
+              lineHeight: '1.4'
+            }}
+          >
             {isEditing ? 'Edit Section' : 'Create Section'}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription
+            style={{ 
+              color: '#898989', 
+              fontSize: '13px',
+              lineHeight: '1.5'
+            }}
+          >
             {isEditing
               ? 'Update section content and settings.'
               : 'Create a new section for this page.'}
@@ -403,10 +423,29 @@ export default function SectionEditor({
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
+                className="h-10 px-5"
+                style={{
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button 
+                type="submit" 
+                disabled={form.formState.isSubmitting}
+                className="h-10 px-5"
+                style={{
+                  backgroundColor: form.formState.isSubmitting ? '#171717' : '#212121',
+                  borderColor: '#2a2a2a',
+                  color: form.formState.isSubmitting ? '#5a5a5a' : '#898989',
+                  fontSize: '14px',
+                  fontWeight: '600'
+                }}
+              >
                 {form.formState.isSubmitting
                   ? 'Saving...'
                   : isEditing

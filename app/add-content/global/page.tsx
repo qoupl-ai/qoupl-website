@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 import { assertAdmin } from '@/lib/auth/assert-admin'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Edit } from 'lucide-react'
+import { Edit, Link2, FileText, Smartphone, Mail, Settings } from 'lucide-react'
 import GlobalContentEditor from '@/components/cms/global-content-editor'
 
 export default async function GlobalContentPage() {
@@ -33,39 +33,47 @@ export default async function GlobalContentPage() {
       key: 'navbar',
       title: 'Navigation Bar',
       description: 'Edit navigation links and logo',
-      icon: '🔗',
+      icon: Link2,
     },
     {
       key: 'footer',
       title: 'Footer',
       description: 'Edit footer links, description, and copyright',
-      icon: '📄',
+      icon: FileText,
     },
     {
       key: 'social_links',
       title: 'Social Links',
       description: 'Edit social media links (LinkedIn, Instagram)',
-      icon: '📱',
+      icon: Smartphone,
     },
     {
       key: 'contact_info',
       title: 'Contact Information',
       description: 'Edit contact email, phone, and address',
-      icon: '📧',
+      icon: Mail,
     },
     {
       key: 'site_config',
       title: 'Site Configuration',
       description: 'Edit site-wide settings (tagline, waitlist count)',
-      icon: '⚙️',
+      icon: Settings,
     },
   ]
 
   return (
     <div>
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">Global Content</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 
+            className="text-2xl font-semibold mb-1.5"
+            style={{ color: '#ffffff', fontWeight: '600', fontSize: '20px', lineHeight: '1.3' }}
+          >
+            Global Content
+          </h1>
+          <p 
+            className="text-sm"
+            style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}
+          >
             Edit site-wide content that appears on all pages
           </p>
         </div>
@@ -74,22 +82,31 @@ export default async function GlobalContentPage() {
           {contentItems.map((item) => {
             const content = contentMap.get(item.key)
             return (
-              <Card key={item.key} className="hover:border-primary transition-colors">
+              <Card 
+                key={item.key} 
+                className="transition-all hover:border-[#2a2a2a]"
+                style={{ 
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a'
+                }}
+              >
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <span className="text-2xl">{item.icon}</span>
+                  <CardTitle className="flex items-center gap-2" style={{ color: '#ffffff' }}>
+                    <item.icon className="h-5 w-5" style={{ color: '#a855f7' }} />
                     {item.title}
                   </CardTitle>
-                  <CardDescription>{item.description}</CardDescription>
+                  <CardDescription style={{ color: '#898989' }}>
+                    {item.description}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
                     {content ? (
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm" style={{ color: '#898989' }}>
                         Last updated: {new Date(content.updated_at).toLocaleDateString()}
                       </p>
                     ) : (
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm" style={{ color: '#898989' }}>
                         Not configured yet
                       </p>
                     )}
@@ -98,7 +115,17 @@ export default async function GlobalContentPage() {
                       contentKey={item.key}
                       existingContent={content}
                     >
-                      <Button variant="outline" className="w-full" size="sm">
+                      <Button 
+                        variant="outline" 
+                        className="w-full h-10" 
+                        style={{ 
+                          backgroundColor: '#212121',
+                          borderColor: '#2a2a2a',
+                          color: '#898989',
+                          fontWeight: '600',
+                          fontSize: '14px'
+                        }}
+                      >
                         <Edit className="mr-2 h-4 w-4" />
                         {content ? 'Edit' : 'Create'}
                       </Button>
@@ -112,4 +139,3 @@ export default async function GlobalContentPage() {
     </div>
   )
 }
-

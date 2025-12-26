@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Apple, Smartphone, Sparkles, Users } from "lucide-react";
+import { Sparkles, Users } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
+import { useTheme } from "next-themes";
 import WaitlistModal from "@/components/waitlist-modal";
 
 interface ComingSoonProps {
@@ -34,6 +35,9 @@ interface ComingSoonProps {
 
 export default function ComingSoon({ data }: ComingSoonProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const { resolvedTheme } = useTheme();
+  // Default to light mode if theme not resolved yet
+  const isDark = resolvedTheme === 'dark';
 
   const title = data?.title || "Get Early Access";
   const subtitle = data?.subtitle || "Join thousands of college students waiting for qoupl to launch. Be the first to experience the future of dating.";
@@ -110,7 +114,16 @@ export default function ComingSoon({ data }: ComingSoonProps = {}) {
                   whileHover={{ scale: 1.05 }}
                   className="flex items-center gap-3 px-5 py-3 rounded-lg bg-black dark:bg-white text-white dark:text-black cursor-pointer shadow-lg"
                 >
-                  <Apple className="h-6 w-6" />
+                  <div className="relative h-6 w-6 flex items-center justify-center shrink-0">
+                    <Image
+                      src={isDark ? "/images/brand-logo/apple-dark.png" : "/images/brand-logo/apple.png"}
+                      alt="Apple logo"
+                      width={24}
+                      height={24}
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
                   <div className="text-left">
                     <div className="text-xs">Coming to</div>
                     <div className="font-semibold">App Store</div>
@@ -121,7 +134,16 @@ export default function ComingSoon({ data }: ComingSoonProps = {}) {
                   whileHover={{ scale: 1.05 }}
                   className="flex items-center gap-3 px-5 py-3 rounded-lg bg-black dark:bg-white text-white dark:text-black cursor-pointer shadow-lg"
                 >
-                  <Smartphone className="h-6 w-6" />
+                  <div className="relative h-6 w-6 flex items-center justify-center shrink-0">
+                    <Image
+                      src={isDark ? "/images/brand-logo/android-dark.png" : "/images/brand-logo/android.png"}
+                      alt="Android logo"
+                      width={24}
+                      height={24}
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
                   <div className="text-left">
                     <div className="text-xs">Coming to</div>
                     <div className="font-semibold">Google Play</div>

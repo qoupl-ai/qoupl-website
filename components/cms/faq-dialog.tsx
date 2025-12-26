@@ -121,12 +121,32 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent 
+        className="max-w-2xl max-h-[90vh] overflow-y-auto"
+        style={{
+          backgroundColor: '#212121',
+          borderColor: '#2a2a2a',
+          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+        }}
+      >
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle
+            style={{ 
+              color: '#ffffff', 
+              fontWeight: '600', 
+              fontSize: '18px',
+              lineHeight: '1.4'
+            }}
+          >
             {mode === 'create' ? 'Create New FAQ' : 'Edit FAQ'}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription
+            style={{ 
+              color: '#898989', 
+              fontSize: '13px',
+              lineHeight: '1.5'
+            }}
+          >
             {mode === 'create'
               ? 'Add a new frequently asked question to your website'
               : 'Update the FAQ details below'}
@@ -140,25 +160,38 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
               name="category_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    Category
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger
+                        style={{
+                          backgroundColor: '#171717',
+                          borderColor: '#2a2a2a',
+                          color: '#ffffff',
+                          fontSize: '13px'
+                        }}
+                      >
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
                       {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
+                        <SelectItem 
+                          key={category.id} 
+                          value={category.id}
+                          style={{ color: '#898989', fontSize: '13px' }}
+                        >
                           {category.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription>
+                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                     Choose the category this FAQ belongs to
                   </FormDescription>
                   <FormMessage />
@@ -171,14 +204,22 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
               name="question"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Question</FormLabel>
+                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    Question
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="What is qoupl?"
                       {...field}
+                      style={{
+                        backgroundColor: '#171717',
+                        borderColor: '#2a2a2a',
+                        color: '#ffffff',
+                        fontSize: '13px'
+                      }}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                     The question users are asking
                   </FormDescription>
                   <FormMessage />
@@ -191,15 +232,23 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
               name="answer"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Answer</FormLabel>
+                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    Answer
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="qoupl is a dating app that..."
                       rows={6}
                       {...field}
+                      style={{
+                        backgroundColor: '#171717',
+                        borderColor: '#2a2a2a',
+                        color: '#ffffff',
+                        fontSize: '13px'
+                      }}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                     The detailed answer to the question
                   </FormDescription>
                   <FormMessage />
@@ -213,15 +262,23 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                 name="order_index"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Order</FormLabel>
+                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                      Order
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min={1}
                         {...field}
+                        style={{
+                          backgroundColor: '#171717',
+                          borderColor: '#2a2a2a',
+                          color: '#ffffff',
+                          fontSize: '13px'
+                        }}
                       />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Display order within category
                     </FormDescription>
                     <FormMessage />
@@ -234,22 +291,35 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                 name="is_published"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                      Status
+                    </FormLabel>
                     <Select
                       onValueChange={(value) => field.onChange(value === 'true')}
                       defaultValue={field.value ? 'true' : 'false'}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger
+                          style={{
+                            backgroundColor: '#171717',
+                            borderColor: '#2a2a2a',
+                            color: '#ffffff',
+                            fontSize: '13px'
+                          }}
+                        >
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="true">Published</SelectItem>
-                        <SelectItem value="false">Draft</SelectItem>
+                      <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+                        <SelectItem value="true" style={{ color: '#898989', fontSize: '13px' }}>
+                          Published
+                        </SelectItem>
+                        <SelectItem value="false" style={{ color: '#898989', fontSize: '13px' }}>
+                          Draft
+                        </SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Publication status
                     </FormDescription>
                     <FormMessage />
@@ -264,10 +334,29 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
+                className="h-10 px-5"
+                style={{
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button 
+                type="submit" 
+                disabled={isPending}
+                className="h-10 px-5"
+                style={{
+                  backgroundColor: isPending ? '#171717' : '#212121',
+                  borderColor: '#2a2a2a',
+                  color: isPending ? '#5a5a5a' : '#898989',
+                  fontSize: '14px',
+                  fontWeight: '600'
+                }}
+              >
                 {isPending
                   ? mode === 'create'
                     ? 'Creating...'

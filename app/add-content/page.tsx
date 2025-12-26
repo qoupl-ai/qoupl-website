@@ -37,50 +37,52 @@ export default async function CMSDashboard() {
       count: blogCount || 0,
       icon: FileText,
       href: '/add-content/blog',
-      color: 'text-blue-600',
     },
     {
       title: 'FAQs',
       count: faqCount || 0,
       icon: MessageSquare,
       href: '/add-content/faqs',
-      color: 'text-green-600',
     },
     {
       title: 'Features',
       count: featureCount || 0,
       icon: Sparkles,
       href: '/add-content/features',
-      color: 'text-purple-600',
     },
     {
       title: 'Pricing Plans',
       count: pricingCount || 0,
       icon: DollarSign,
       href: '/add-content/pricing',
-      color: 'text-yellow-600',
     },
     {
       title: 'Media Files',
       count: mediaCount || 0,
       icon: ImageIcon,
       href: '/add-content/media',
-      color: 'text-pink-600',
     },
     {
       title: 'Waitlist Signups',
       count: waitlistCount || 0,
       icon: Users,
       href: '/add-content',
-      color: 'text-orange-600',
     },
   ]
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">CMS Dashboard</h1>
-        <p className="text-muted-foreground mt-2">
+        <h1 
+          className="text-3xl font-semibold mb-2"
+          style={{ color: '#ffffff' }}
+        >
+          CMS Dashboard
+        </h1>
+        <p 
+          className="text-sm"
+          style={{ color: '#898989' }}
+        >
           Manage all your website content from one place
         </p>
       </div>
@@ -91,16 +93,36 @@ export default async function CMSDashboard() {
           const Icon = stat.icon
           return (
             <Link key={stat.title} href={stat.href}>
-              <Card className="hover:border-primary transition-colors cursor-pointer">
+              <Card 
+                className="transition-all cursor-pointer hover:border-[#2a2a2a]"
+                style={{ 
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                }}
+              >
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">
+                  <CardTitle 
+                    className="text-sm font-medium"
+                    style={{ color: '#898989' }}
+                  >
                     {stat.title}
                   </CardTitle>
-                  <Icon className={`h-4 w-4 ${stat.color}`} />
+                  <Icon 
+                    className="h-5 w-5" 
+                    style={{ color: '#898989' }}
+                  />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stat.count}</div>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <div 
+                    className="text-2xl font-semibold"
+                    style={{ color: '#ffffff' }}
+                  >
+                    {stat.count}
+                  </div>
+                  <p 
+                    className="text-xs mt-1"
+                    style={{ color: '#898989' }}
+                  >
                     Total items
                   </p>
                 </CardContent>
@@ -111,10 +133,12 @@ export default async function CMSDashboard() {
       </div>
 
       {/* Recent Activity */}
-      <Card>
+      <Card style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>Latest content updates and changes</CardDescription>
+          <CardTitle style={{ color: '#ffffff' }}>Recent Activity</CardTitle>
+          <CardDescription style={{ color: '#898989' }}>
+            Latest content updates and changes
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {recentHistory && recentHistory.length > 0 ? (
@@ -122,29 +146,49 @@ export default async function CMSDashboard() {
               {recentHistory.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0"
+                  className="flex items-start justify-between pb-4 last:pb-0"
+                  style={{ borderBottom: '1px solid #2a2a2a' }}
                 >
                   <div>
-                    <p className="font-medium">
+                    <p 
+                      className="font-medium text-sm"
+                      style={{ color: '#ffffff' }}
+                    >
                       {item.action.charAt(0).toUpperCase() + item.action.slice(1)}{' '}
-                      <span className="text-muted-foreground">
+                      <span style={{ color: '#898989' }}>
                         {item.entity_type}
                       </span>
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p 
+                      className="text-xs mt-1"
+                      style={{ color: '#898989' }}
+                    >
                       {new Date(item.performed_at).toLocaleString()}
                     </p>
                   </div>
                 </div>
               ))}
               <Link href="/add-content/history">
-                <Button variant="outline" className="w-full">
+                <Button 
+                  variant="outline" 
+                  className="w-full h-10"
+                  style={{ 
+                    backgroundColor: '#212121',
+                    borderColor: '#2a2a2a',
+                    color: '#898989',
+                    fontSize: '14px',
+                    fontWeight: '500'
+                  }}
+                >
                   View All History
                 </Button>
               </Link>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">
+            <p 
+              className="text-sm"
+              style={{ color: '#898989' }}
+            >
               No recent activity to display
             </p>
           )}
@@ -152,33 +196,75 @@ export default async function CMSDashboard() {
       </Card>
 
       {/* Quick Actions */}
-      <Card>
+      <Card style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Common tasks and operations</CardDescription>
+          <CardTitle style={{ color: '#ffffff' }}>Quick Actions</CardTitle>
+          <CardDescription style={{ color: '#898989' }}>
+            Common tasks and operations
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-2 sm:grid-cols-2">
             <Link href="/add-content/blog">
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start h-10"
+                style={{ 
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              >
                 <FileText className="mr-2 h-4 w-4" />
                 Create Blog Post
               </Button>
             </Link>
             <Link href="/add-content/faqs">
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start h-10"
+                style={{ 
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              >
                 <MessageSquare className="mr-2 h-4 w-4" />
                 Add FAQ
               </Button>
             </Link>
             <Link href="/add-content/features">
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start h-10"
+                style={{ 
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              >
                 <Sparkles className="mr-2 h-4 w-4" />
                 Add Feature
               </Button>
             </Link>
             <Link href="/add-content/media">
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start h-10"
+                style={{ 
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              >
                 <ImageIcon className="mr-2 h-4 w-4" />
                 Upload Media
               </Button>

@@ -103,10 +103,24 @@ export function MediaUpload() {
   }
 
   return (
-    <div className="space-y-4 p-6 border rounded-lg bg-card">
+    <div 
+      className="space-y-4 p-6 border rounded-lg"
+      style={{ 
+        backgroundColor: '#212121',
+        borderColor: '#2a2a2a'
+      }}
+    >
       <div>
-        <h3 className="text-lg font-semibold mb-2">Upload New Media</h3>
-        <p className="text-sm text-muted-foreground">
+        <h3 
+          className="text-lg font-semibold mb-2"
+          style={{ color: '#ffffff', fontWeight: '600' }}
+        >
+          Upload New Media
+        </h3>
+        <p 
+          className="text-sm"
+          style={{ color: '#898989' }}
+        >
           Upload images to Supabase Storage
         </p>
       </div>
@@ -114,12 +128,20 @@ export function MediaUpload() {
       <div className="space-y-4">
         {/* File Input */}
         <div>
-          <Label htmlFor="file">File</Label>
+          <Label htmlFor="file" style={{ color: '#898989' }}>File</Label>
           <div className="mt-2">
             {selectedFile ? (
-              <div className="flex items-center gap-2 p-3 border rounded-lg bg-muted">
-                <span className="flex-1 text-sm truncate">{selectedFile.name}</span>
-                <span className="text-xs text-muted-foreground">
+              <div 
+                className="flex items-center gap-2 p-3 border rounded-lg"
+                style={{ 
+                  backgroundColor: '#171717',
+                  borderColor: '#2a2a2a'
+                }}
+              >
+                <span className="flex-1 text-sm truncate" style={{ color: '#ffffff' }}>
+                  {selectedFile.name}
+                </span>
+                <span className="text-xs" style={{ color: '#898989' }}>
                   {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                 </span>
                 <Button
@@ -130,6 +152,8 @@ export function MediaUpload() {
                     setSelectedFile(null)
                     if (fileInputRef.current) fileInputRef.current.value = ''
                   }}
+                  style={{ color: '#898989' }}
+                  className="hover:text-white hover:bg-[#2a2a2a]"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -137,13 +161,17 @@ export function MediaUpload() {
             ) : (
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
+                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors"
+                style={{ 
+                  borderColor: '#2a2a2a',
+                  backgroundColor: '#171717'
+                }}
               >
-                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">
+                <Upload className="h-8 w-8 mx-auto mb-2" style={{ color: '#898989' }} />
+                <p className="text-sm" style={{ color: '#898989' }}>
                   Click to select or drag and drop
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs mt-1" style={{ color: '#898989' }}>
                   PNG, JPG, WEBP up to 20MB
                 </p>
               </div>
@@ -161,14 +189,22 @@ export function MediaUpload() {
 
         {/* Bucket Selection */}
         <div>
-          <Label htmlFor="bucket">Storage Bucket</Label>
+          <Label htmlFor="bucket" style={{ color: '#898989' }}>Storage Bucket</Label>
           <Select value={bucket} onValueChange={setBucket}>
-            <SelectTrigger id="bucket" className="mt-2">
+            <SelectTrigger 
+              id="bucket" 
+              className="mt-2"
+              style={{ 
+                backgroundColor: '#212121',
+                borderColor: '#2a2a2a',
+                color: '#898989'
+              }}
+            >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
               {BUCKETS.map((b) => (
-                <SelectItem key={b.value} value={b.value}>
+                <SelectItem key={b.value} value={b.value} style={{ color: '#898989' }}>
                   {b.label}
                 </SelectItem>
               ))}
@@ -178,14 +214,22 @@ export function MediaUpload() {
 
         {/* Category Selection */}
         <div>
-          <Label htmlFor="category">Category</Label>
+          <Label htmlFor="category" style={{ color: '#898989' }}>Category</Label>
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger id="category" className="mt-2">
+            <SelectTrigger 
+              id="category" 
+              className="mt-2"
+              style={{ 
+                backgroundColor: '#212121',
+                borderColor: '#2a2a2a',
+                color: '#898989'
+              }}
+            >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
               {CATEGORIES.map((c) => (
-                <SelectItem key={c.value} value={c.value}>
+                <SelectItem key={c.value} value={c.value} style={{ color: '#898989' }}>
                   {c.label}
                 </SelectItem>
               ))}
@@ -195,13 +239,18 @@ export function MediaUpload() {
 
         {/* Alt Text */}
         <div>
-          <Label htmlFor="altText">Alt Text</Label>
+          <Label htmlFor="altText" style={{ color: '#898989' }}>Alt Text</Label>
           <Input
             id="altText"
             value={altText}
             onChange={(e) => setAltText(e.target.value)}
             placeholder="Describe the image"
             className="mt-2"
+            style={{ 
+              backgroundColor: '#171717',
+              borderColor: '#2a2a2a',
+              color: '#ffffff'
+            }}
           />
         </div>
 
@@ -209,7 +258,28 @@ export function MediaUpload() {
         <Button
           onClick={handleUpload}
           disabled={!selectedFile || isUploading}
-          className="w-full"
+          className="w-full h-10"
+          style={{ 
+            background: (!selectedFile || isUploading)
+              ? 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)'
+              : 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
+            border: 'none',
+            color: '#ffffff',
+            fontSize: '14px',
+            fontWeight: '600',
+            transition: 'all 0.2s ease',
+            boxShadow: '0 2px 8px rgba(168, 85, 247, 0.3)'
+          }}
+          onMouseEnter={(e) => {
+            if (selectedFile && !isUploading) {
+              e.currentTarget.style.transform = 'translateY(-1px)'
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(168, 85, 247, 0.4)'
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)'
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(168, 85, 247, 0.3)'
+          }}
         >
           {isUploading ? (
             <>
@@ -227,4 +297,3 @@ export function MediaUpload() {
     </div>
   )
 }
-

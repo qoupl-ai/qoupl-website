@@ -30,9 +30,26 @@ export default async function CMSLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div 
+      className="min-h-screen"
+      style={{ 
+        backgroundColor: '#171717',
+        fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+      }}
+    >
       <CMSNav user={user} adminUser={adminUser} />
-      <main className="container mx-auto px-4 py-8">{children}</main>
+      <main 
+        data-cms-main
+        className="transition-all duration-300"
+        style={{ 
+          marginLeft: '200px', // Default expanded width (w-[200px])
+          padding: '2rem',
+          minHeight: '100vh',
+          color: '#898989'
+        }}
+      >
+        {children}
+      </main>
     </div>
   )
 }

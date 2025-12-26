@@ -34,74 +34,160 @@ export function PricingList({ plans }: PricingListProps) {
   return (
     <div className="space-y-4">
       {/* Pricing Plans Table */}
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto" style={{ borderColor: '#2a2a2a', backgroundColor: '#212121' }}>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-[50px]">#</TableHead>
-              <TableHead>Plan Name</TableHead>
-              <TableHead className="w-[120px]">Price</TableHead>
-              <TableHead className="w-[100px]">Features</TableHead>
-              <TableHead className="w-[100px]">Popular</TableHead>
-              <TableHead className="w-[100px]">Status</TableHead>
-              <TableHead className="w-[120px] text-right">Actions</TableHead>
+            <TableRow style={{ borderColor: '#2a2a2a' }}>
+              <TableHead 
+                className="w-[60px] whitespace-nowrap" 
+                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              >
+                #
+              </TableHead>
+              <TableHead 
+                className="min-w-[250px]"
+                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              >
+                Plan Name
+              </TableHead>
+              <TableHead 
+                className="w-[120px] whitespace-nowrap"
+                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              >
+                Price
+              </TableHead>
+              <TableHead 
+                className="w-[100px] whitespace-nowrap"
+                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              >
+                Features
+              </TableHead>
+              <TableHead 
+                className="w-[100px] whitespace-nowrap"
+                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              >
+                Popular
+              </TableHead>
+              <TableHead 
+                className="w-[100px] whitespace-nowrap"
+                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              >
+                Status
+              </TableHead>
+              <TableHead 
+                className="w-[120px] text-right whitespace-nowrap"
+                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              >
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {plans.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+              <TableRow style={{ borderColor: '#2a2a2a' }}>
+                <TableCell colSpan={7} className="text-center py-8" style={{ color: '#898989', fontSize: '13px' }}>
                   No pricing plans found
                 </TableCell>
               </TableRow>
             ) : (
               plans.map((plan) => (
-                <TableRow key={plan.id}>
-                  <TableCell className="font-medium">{plan.order_index}</TableCell>
-                  <TableCell>
+                <TableRow 
+                  key={plan.id}
+                  style={{ borderColor: '#2a2a2a' }}
+                  className="hover:bg-[#2a2a2a]"
+                >
+                  <TableCell 
+                    className="font-semibold" 
+                    style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px', padding: '12px 16px' }}
+                  >
+                    {plan.order_index}
+                  </TableCell>
+                  <TableCell style={{ padding: '12px 16px' }}>
                     <div className="max-w-[300px]">
-                      <p className="font-medium">{plan.name}</p>
-                      <p className="text-sm text-muted-foreground line-clamp-1 mt-1">
+                      <p 
+                        className="font-semibold mb-1" 
+                        style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px', lineHeight: '1.4' }}
+                      >
+                        {plan.name}
+                      </p>
+                      <p 
+                        className="text-sm line-clamp-1" 
+                        style={{ color: '#898989', fontSize: '12px', lineHeight: '1.5' }}
+                      >
                         {plan.description}
                       </p>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="font-semibold">
+                  <TableCell style={{ padding: '12px 16px' }}>
+                    <div className="font-semibold" style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px' }}>
                       ${plan.price}
-                      <span className="text-sm font-normal text-muted-foreground">
+                      <span className="text-sm font-normal" style={{ color: '#898989', fontSize: '12px' }}>
                         /{plan.billing_period}
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <span className="text-sm text-muted-foreground">
+                  <TableCell style={{ padding: '12px 16px' }}>
+                    <span className="text-sm whitespace-nowrap" style={{ color: '#898989', fontSize: '12px' }}>
                       {plan.features.length} items
                     </span>
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={{ padding: '12px 16px' }}>
                     {plan.is_popular && (
-                      <Check className="h-4 w-4 text-green-500" />
+                      <Badge
+                        className="whitespace-nowrap"
+                        style={{ 
+                          backgroundColor: '#f59e0b',
+                          color: '#ffffff',
+                          borderColor: '#f59e0b',
+                          fontSize: '11px',
+                          fontWeight: '600',
+                          padding: '4px 10px'
+                        }}
+                      >
+                        <Check className="h-3 w-3 mr-1 inline" />
+                        Popular
+                      </Badge>
                     )}
                   </TableCell>
-                  <TableCell>
-                    <Badge variant={plan.is_published ? 'default' : 'secondary'}>
+                  <TableCell style={{ padding: '12px 16px' }}>
+                    <Badge 
+                      variant={plan.is_published ? 'default' : 'secondary'}
+                      className="whitespace-nowrap"
+                      style={{ 
+                        backgroundColor: plan.is_published ? '#10b981' : '#6b7280',
+                        color: '#ffffff',
+                        borderColor: plan.is_published ? '#10b981' : '#6b7280',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        padding: '4px 10px'
+                      }}
+                    >
                       {plan.is_published ? 'Published' : 'Draft'}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right" style={{ padding: '12px 16px' }}>
                     <div className="flex items-center justify-end gap-2">
                       <PricingDialog
                         mode="edit"
                         plan={plan}
                       >
-                        <Button variant="ghost" size="icon">
-                          <Pencil className="h-4 w-4" />
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-8 w-8"
+                          style={{ color: '#898989' }}
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
                         </Button>
                       </PricingDialog>
                       <DeletePricingDialog plan={plan}>
-                        <Button variant="ghost" size="icon">
-                          <Trash2 className="h-4 w-4 text-destructive" />
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-8 w-8"
+                          style={{ color: '#898989' }}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </DeletePricingDialog>
                     </div>

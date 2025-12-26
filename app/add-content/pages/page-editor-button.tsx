@@ -10,7 +10,17 @@ export default function PageEditorButton() {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>
+      <Button 
+        onClick={() => setOpen(true)}
+        className="h-10 px-5"
+        style={{ 
+          backgroundColor: '#212121',
+          borderColor: '#2a2a2a',
+          color: '#898989',
+          fontWeight: '600',
+          fontSize: '14px'
+        }}
+      >
         <Plus className="mr-2 h-4 w-4" />
         Create Page
       </Button>

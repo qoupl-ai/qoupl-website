@@ -25,9 +25,16 @@ export default function SectionEditorButton({
   return (
     <>
       <Button
-        variant={section ? 'outline' : 'default'}
+        variant="outline"
         size="sm"
         onClick={() => setOpen(true)}
+        style={{
+          backgroundColor: section ? '#212121' : '#212121',
+          borderColor: '#2a2a2a',
+          color: '#898989',
+          fontWeight: '600',
+          fontSize: '13px'
+        }}
       >
         {section ? (
           'Edit'

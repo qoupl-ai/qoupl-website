@@ -148,12 +148,32 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent 
+        className="max-w-4xl max-h-[90vh] overflow-y-auto"
+        style={{
+          backgroundColor: '#212121',
+          borderColor: '#2a2a2a',
+          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+        }}
+      >
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle
+            style={{ 
+              color: '#ffffff', 
+              fontWeight: '600', 
+              fontSize: '18px',
+              lineHeight: '1.4'
+            }}
+          >
             {mode === 'create' ? 'Create New Blog Post' : 'Edit Blog Post'}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription
+            style={{ 
+              color: '#898989', 
+              fontSize: '13px',
+              lineHeight: '1.5'
+            }}
+          >
             {mode === 'create'
               ? 'Write a new blog post for your website'
               : 'Update the blog post details below'}
@@ -167,14 +187,22 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    Title
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="10 Tips for Better Dating"
                       {...field}
+                      style={{
+                        backgroundColor: '#171717',
+                        borderColor: '#2a2a2a',
+                        color: '#ffffff',
+                        fontSize: '13px'
+                      }}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                     The main title of your blog post
                   </FormDescription>
                   <FormMessage />
@@ -188,14 +216,22 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="slug"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Slug</FormLabel>
+                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                      Slug
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="10-tips-for-better-dating"
                         {...field}
+                        style={{
+                          backgroundColor: '#171717',
+                          borderColor: '#2a2a2a',
+                          color: '#ffffff',
+                          fontSize: '13px'
+                        }}
                       />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       URL-friendly version (auto-generated)
                     </FormDescription>
                     <FormMessage />
@@ -208,25 +244,38 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="category_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
+                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                      Category
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger
+                          style={{
+                            backgroundColor: '#171717',
+                            borderColor: '#2a2a2a',
+                            color: '#ffffff',
+                            fontSize: '13px'
+                          }}
+                        >
                           <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
                         {categories.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
+                          <SelectItem 
+                            key={category.id} 
+                            value={category.id}
+                            style={{ color: '#898989', fontSize: '13px' }}
+                          >
                             {category.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Post category
                     </FormDescription>
                     <FormMessage />
@@ -240,15 +289,23 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
               name="excerpt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Excerpt</FormLabel>
+                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    Excerpt
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="A brief summary of your blog post..."
                       rows={3}
                       {...field}
+                      style={{
+                        backgroundColor: '#171717',
+                        borderColor: '#2a2a2a',
+                        color: '#ffffff',
+                        fontSize: '13px'
+                      }}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                     Short description shown in listings
                   </FormDescription>
                   <FormMessage />
@@ -261,15 +318,23 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Content</FormLabel>
+                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    Content
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Write your blog post content here (Markdown supported)..."
                       rows={12}
                       {...field}
+                      style={{
+                        backgroundColor: '#171717',
+                        borderColor: '#2a2a2a',
+                        color: '#ffffff',
+                        fontSize: '13px'
+                      }}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                     Full blog post content (supports Markdown)
                   </FormDescription>
                   <FormMessage />
@@ -283,14 +348,22 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="publish_date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Publish Date</FormLabel>
+                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                      Publish Date
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="date"
                         {...field}
+                        style={{
+                          backgroundColor: '#171717',
+                          borderColor: '#2a2a2a',
+                          color: '#ffffff',
+                          fontSize: '13px'
+                        }}
                       />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Publication date
                     </FormDescription>
                     <FormMessage />
@@ -303,15 +376,23 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="read_time"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Read Time (min)</FormLabel>
+                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                      Read Time (min)
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min={1}
                         {...field}
+                        style={{
+                          backgroundColor: '#171717',
+                          borderColor: '#2a2a2a',
+                          color: '#ffffff',
+                          fontSize: '13px'
+                        }}
                       />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Estimated minutes
                     </FormDescription>
                     <FormMessage />
@@ -324,22 +405,35 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="is_published"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                      Status
+                    </FormLabel>
                     <Select
                       onValueChange={(value) => field.onChange(value === 'true')}
                       defaultValue={field.value ? 'true' : 'false'}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger
+                          style={{
+                            backgroundColor: '#171717',
+                            borderColor: '#2a2a2a',
+                            color: '#ffffff',
+                            fontSize: '13px'
+                          }}
+                        >
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="true">Published</SelectItem>
-                        <SelectItem value="false">Draft</SelectItem>
+                      <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+                        <SelectItem value="true" style={{ color: '#898989', fontSize: '13px' }}>
+                          Published
+                        </SelectItem>
+                        <SelectItem value="false" style={{ color: '#898989', fontSize: '13px' }}>
+                          Draft
+                        </SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Publication status
                     </FormDescription>
                     <FormMessage />
@@ -354,10 +448,29 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
+                className="h-10 px-5"
+                style={{
+                  backgroundColor: '#212121',
+                  borderColor: '#2a2a2a',
+                  color: '#898989',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button 
+                type="submit" 
+                disabled={isPending}
+                className="h-10 px-5"
+                style={{
+                  backgroundColor: isPending ? '#171717' : '#212121',
+                  borderColor: '#2a2a2a',
+                  color: isPending ? '#5a5a5a' : '#898989',
+                  fontSize: '14px',
+                  fontWeight: '600'
+                }}
+              >
                 {isPending
                   ? mode === 'create'
                     ? 'Creating...'

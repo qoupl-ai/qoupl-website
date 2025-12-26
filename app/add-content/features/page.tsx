@@ -28,23 +28,42 @@ export default async function FeaturesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Features</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 
+            className="text-2xl font-semibold mb-1.5"
+            style={{ color: '#ffffff', fontWeight: '600', fontSize: '20px', lineHeight: '1.3' }}
+          >
+            Features
+          </h1>
+          <p 
+            className="text-sm"
+            style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}
+          >
             Manage app features and highlights
           </p>
         </div>
         <FeatureDialog categories={categories || []} mode="create">
-          <Button>
+          <Button
+            className="h-10 px-5"
+            style={{ 
+              backgroundColor: '#212121',
+              borderColor: '#2a2a2a',
+              color: '#898989',
+              fontWeight: '600',
+              fontSize: '14px'
+            }}
+          >
             <Plus className="mr-2 h-4 w-4" />
             Add Feature
           </Button>
         </FeatureDialog>
       </div>
 
-      <Card>
+      <Card style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
         <CardHeader>
-          <CardTitle>All Features ({features?.length || 0})</CardTitle>
-          <CardDescription>
+          <CardTitle style={{ color: '#ffffff', fontWeight: '600', fontSize: '16px', lineHeight: '1.4' }}>
+            All Features ({features?.length || 0})
+          </CardTitle>
+          <CardDescription style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}>
             Edit, reorder, or delete features
           </CardDescription>
         </CardHeader>

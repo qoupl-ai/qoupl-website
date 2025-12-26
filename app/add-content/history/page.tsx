@@ -18,16 +18,26 @@ export default async function HistoryPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Content History</h1>
-        <p className="text-muted-foreground mt-2">
+        <h1 
+          className="text-2xl font-semibold mb-1.5"
+          style={{ color: '#ffffff', fontWeight: '600', fontSize: '20px', lineHeight: '1.3' }}
+        >
+          Content History
+        </h1>
+        <p 
+          className="text-sm"
+          style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}
+        >
           View all content changes and updates ({history?.length || 0} entries)
         </p>
       </div>
 
-      <Card>
+      <Card style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>
+          <CardTitle style={{ color: '#ffffff', fontWeight: '600', fontSize: '16px', lineHeight: '1.4' }}>
+            Recent Activity
+          </CardTitle>
+          <CardDescription style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}>
             Last 100 content modifications
           </CardDescription>
         </CardHeader>
