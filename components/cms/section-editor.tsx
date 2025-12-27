@@ -9,7 +9,7 @@
 
 import { useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
+import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import {
@@ -344,8 +344,14 @@ export default function SectionEditor({
     data: Record<string, unknown>
   }
 
+  // Type-safe resolver wrapper to handle Zod v4 compatibility with react-hook-form
+  // Zod v4 uses 'unknown' types which are incompatible with react-hook-form's FieldValues
+  // This type assertion is necessary for compatibility
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const typedResolver = zodResolver(schema as any) as Resolver<FormData>
+
   const form = useForm<FormData>({
-    resolver: zodResolver(schema) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    resolver: typedResolver,
     defaultValues: {
       type: sectionType,
       order_index: section?.order_index || 0,
@@ -1340,71 +1346,72 @@ export default function SectionEditor({
               render={({ field }) => {
                 const bundles = asArray<{ messages: number; popular: boolean }>(field.value)
                 return (
-                <div className="space-y-3">
-                  {bundles.map((bundle, index: number) => (
-                    <div
-                      key={index}
-                      className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium cms-text-secondary">
-                          Bundle #{index + 1}
-                        </span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            const newBundles = bundles.filter((_, i: number) => i !== index)
-                            field.onChange(newBundles)
-                          }}
-                          className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <FormField
-                          control={form.control}
-                          name={`data.bundles.${index}.messages`}
-                          render={({ field: messagesField }) => (
-                            <FormItem>
-                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
-                                Messages
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  type="number"
-                                  {...messagesField}
-                                  value={asNumber(messagesField.value)}
-                                  onChange={(e) => messagesField.onChange(parseInt(e.target.value) || 0)}
-                                  placeholder="10"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`data.bundles.${index}.popular`}
-                          render={({ field: popularField }) => (
-                            <FormItem className="flex items-center space-x-2 space-y-0 pt-7">
-                              <FormControl>
-                                <Switch
-                                  checked={asBoolean(popularField.value)}
-                                  onCheckedChange={popularField.onChange}
-                                />
-                              </FormControl>
-                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
-                                Popular
-                              </FormLabel>
-                            </FormItem>
-                          )}
-                        />
+                  <div className="space-y-3">
+                    {bundles.map((bundle, index: number) => (
+                      <div
+                        key={index}
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium cms-text-secondary">
+                            Bundle #{index + 1}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const newBundles = bundles.filter((_, i: number) => i !== index)
+                              field.onChange(newBundles)
+                            }}
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <FormField
+                            control={form.control}
+                            name={`data.bundles.${index}.messages`}
+                            render={({ field: messagesField }) => (
+                              <FormItem>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                                  Messages
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    {...messagesField}
+                                    value={asNumber(messagesField.value)}
+                                    onChange={(e) => messagesField.onChange(parseInt(e.target.value) || 0)}
+                                    placeholder="10"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`data.bundles.${index}.popular`}
+                            render={({ field: popularField }) => (
+                              <FormItem className="flex items-center space-x-2 space-y-0 pt-7">
+                                <FormControl>
+                                  <Switch
+                                    checked={asBoolean(popularField.value)}
+                                    onCheckedChange={popularField.onChange}
+                                  />
+                                </FormControl>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                                  Popular
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                       </div>
                     ))}
-                </div>
+                  </div>
                 )
               }}
             />
@@ -1453,34 +1460,35 @@ export default function SectionEditor({
               render={({ field }) => {
                 const items = asArray<string>(field.value)
                 return (
-                <div className="space-y-3">
-                  {items.map((item: string, index: number) => (
-                    <div key={index} className="flex gap-2">
-                      <Input
-                        value={asString(item)}
-                        onChange={(e) => {
-                          const updatedItems = [...items]
-                          updatedItems[index] = e.target.value
-                          field.onChange(updatedItems)
-                        }}
-                        placeholder="e.g., Pay ₹10/month for platform access"
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          const updatedItems = items.filter((_, i: number) => i !== index)
-                          field.onChange(updatedItems)
-                        }}
-                        className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
+                  <div className="space-y-3">
+                    {items.map((item: string, index: number) => (
+                      <div key={index} className="flex gap-2">
+                        <Input
+                          value={asString(item)}
+                          onChange={(e) => {
+                            const updatedItems = [...items]
+                            updatedItems[index] = e.target.value
+                            field.onChange(updatedItems)
+                          }}
+                          placeholder="e.g., Pay ₹10/month for platform access"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const updatedItems = items.filter((_, i: number) => i !== index)
+                            field.onChange(updatedItems)
+                          }}
+                          className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )
+              }}
             />
           </div>
         )
@@ -1527,63 +1535,64 @@ export default function SectionEditor({
               render={({ field }) => {
                 const faqs = asArray<{ question: string; answer: string }>(field.value)
                 return (
-                <div className="space-y-3">
-                  {faqs.map((faq, index: number) => (
-                    <div
-                      key={index}
-                      className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium cms-text-secondary">
-                          FAQ #{index + 1}
-                        </span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            const newFaqs = faqs.filter((_, i: number) => i !== index)
-                            field.onChange(newFaqs)
-                          }}
-                          className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
+                  <div className="space-y-3">
+                    {faqs.map((faq, index: number) => (
+                      <div
+                        key={index}
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium cms-text-secondary">
+                            FAQ #{index + 1}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const newFaqs = faqs.filter((_, i: number) => i !== index)
+                              field.onChange(newFaqs)
+                            }}
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <FormField
+                          control={form.control}
+                          name={`data.faqs.${index}.question`}
+                          render={({ field: questionField }) => (
+                            <FormItem>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                                Question
+                              </FormLabel>
+                              <FormControl>
+                                <Input {...questionField} placeholder="e.g., Do message bundles expire?" value={asString(questionField.value)} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`data.faqs.${index}.answer`}
+                          render={({ field: answerField }) => (
+                            <FormItem>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                                Answer
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea {...answerField} placeholder="e.g., No, your purchased message bundles never expire." value={asString(answerField.value)} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </div>
-                      <FormField
-                        control={form.control}
-                        name={`data.faqs.${index}.question`}
-                        render={({ field: questionField }) => (
-                          <FormItem>
-                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
-                              Question
-                            </FormLabel>
-                            <FormControl>
-                              <Input {...questionField} placeholder="e.g., Do message bundles expire?" value={asString(questionField.value)} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`data.faqs.${index}.answer`}
-                        render={({ field: answerField }) => (
-                          <FormItem>
-                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
-                              Answer
-                            </FormLabel>
-                            <FormControl>
-                              <Textarea {...answerField} placeholder="e.g., No, your purchased message bundles never expire." value={asString(answerField.value)} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )
+              }}
             />
             <FormField
               control={form.control}
@@ -1811,8 +1820,9 @@ export default function SectionEditor({
                       />
                     </div>
                   ))}
-                </div>
-              )}
+                  </div>
+                )
+              }}
             />
           </div>
         )
@@ -1874,8 +1884,8 @@ export default function SectionEditor({
               render={({ field }) => {
                 const items = asArray<{ icon: string; title: string; description: string }>(field.value)
                 return (
-                <div className="space-y-3">
-                  {items.map((item, index: number) => (
+                  <div className="space-y-3">
+                    {items.map((item, index: number) => (
                     <div
                       key={index}
                       className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -2793,8 +2803,8 @@ export default function SectionEditor({
                 render={({ field }) => {
                   const testimonials = asArray<{ name: string; image: string; text: string; location?: string; rating?: number; date?: string }>(field.value)
                   return (
-                  <div className="space-y-3">
-                    {testimonials.map((testimonial, index: number) => (
+                    <div className="space-y-3">
+                      {testimonials.map((testimonial, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -2928,8 +2938,9 @@ export default function SectionEditor({
                         No testimonials added yet. Click &quot;Add Testimonial&quot; to get started.
                       </p>
                     )}
-                  </div>
-                )}
+                    </div>
+                  )
+                }}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -3808,9 +3819,9 @@ export default function SectionEditor({
                       />
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                          <label className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                             Items (Optional)
-                          </FormLabel>
+                          </label>
                           <Button
                             type="button"
                             variant="ghost"
@@ -3863,8 +3874,9 @@ export default function SectionEditor({
                       No sections added yet. Click &quot;Add Section&quot; to get started.
                     </p>
                   )}
-                </div>
-              )}
+                  </div>
+                )
+              }}
             />
           </div>
         )
