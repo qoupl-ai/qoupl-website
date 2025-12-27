@@ -19,6 +19,8 @@
     "ensure:pages": "ts-node --project tsconfig.node.json scripts/ensure-all-pages.ts",
     "cleanup:legacy": "ts-node --project tsconfig.node.json scripts/cleanup-legacy-code.ts",
     "populate:legal": "ts-node --project tsconfig.node.json scripts/populate-legal-content.ts",
+    "seed:pricing": "ts-node --project tsconfig.node.json scripts/seed-pricing-sections.ts",
+    "seed:contact": "ts-node --project tsconfig.node.json scripts/seed-contact-sections.ts",
     "setup:all": "npm run setup:storage && npm run upload:images && npm run seed:content"
   },
   "dependencies": {

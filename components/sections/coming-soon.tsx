@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Users } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { useTheme } from "next-themes";
@@ -35,9 +35,16 @@ interface ComingSoonProps {
 
 export default function ComingSoon({ data }: ComingSoonProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
-  // Default to light mode if theme not resolved yet
-  const isDark = resolvedTheme === 'dark';
+  
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Default to light mode during SSR to match server render
+  const isDark = mounted && resolvedTheme === 'dark';
 
   const title = data?.title || "Get Early Access";
   const subtitle = data?.subtitle || "Join thousands of college students waiting for qoupl to launch. Be the first to experience the future of dating.";

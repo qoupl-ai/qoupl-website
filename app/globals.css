@@ -116,17 +116,51 @@
     font-family: 'Google Sans Flex', system-ui, sans-serif;
   }
   
-  .supabase-auth-ui_ui-input {
+  /* Input fields - multiple selectors to ensure coverage - MUST override inline styles */
+  .supabase-auth-ui_ui-input,
+  input[class*="supabase-auth-ui"],
+  .supabase-auth-ui_ui input,
+  .supabase-auth-ui_ui input[type="email"],
+  .supabase-auth-ui_ui input[type="password"],
+  .supabase-auth-ui_ui input[type="text"],
+  input[type="email"][class*="supabase"],
+  input[type="password"][class*="supabase"],
+  input[type="text"][class*="supabase"] {
     background-color: #171717 !important;
+    background: #171717 !important;
     border-color: #2a2a2a !important;
+    border: 1px solid #2a2a2a !important;
     color: #ffffff !important;
     font-size: 14px !important;
   }
   
-  .supabase-auth-ui_ui-input:focus {
+  .supabase-auth-ui_ui-input:focus,
+  input[class*="supabase-auth-ui"]:focus,
+  .supabase-auth-ui_ui input:focus,
+  .supabase-auth-ui_ui input[type="email"]:focus,
+  .supabase-auth-ui_ui input[type="password"]:focus,
+  .supabase-auth-ui_ui input[type="text"]:focus,
+  input[type="email"][class*="supabase"]:focus,
+  input[type="password"][class*="supabase"]:focus,
+  input[type="text"][class*="supabase"]:focus {
+    background-color: #171717 !important;
+    background: #171717 !important;
     border-color: #662D91 !important;
+    border: 1px solid #662D91 !important;
     outline: none !important;
     box-shadow: none !important;
+  }
+  
+  .supabase-auth-ui_ui-input:hover,
+  input[class*="supabase-auth-ui"]:hover,
+  .supabase-auth-ui_ui input:hover,
+  input[type="email"][class*="supabase"]:hover,
+  input[type="password"][class*="supabase"]:hover,
+  input[type="text"][class*="supabase"]:hover {
+    background-color: #212121 !important;
+    background: #212121 !important;
+    border-color: #2a2a2a !important;
+    border: 1px solid #2a2a2a !important;
   }
   
   .supabase-auth-ui_ui-label {
@@ -176,6 +210,85 @@
   
   .supabase-auth-ui_ui-anchor:hover {
     color: #8B3DB8 !important;
+  }
+  
+  /* More specific selectors for Supabase Auth UI inputs */
+  [class*="supabase-auth-ui"] input,
+  [class*="supabase-auth-ui"] input[type="email"],
+  [class*="supabase-auth-ui"] input[type="password"],
+  [class*="supabase-auth-ui"] input[type="text"],
+  [class*="supabase-auth-ui"] input[type="email"]:not([style*="background"]),
+  [class*="supabase-auth-ui"] input[type="password"]:not([style*="background"]) {
+    background-color: #171717 !important;
+    border-color: #2a2a2a !important;
+    color: #ffffff !important;
+  }
+  
+  [class*="supabase-auth-ui"] input:focus,
+  [class*="supabase-auth-ui"] input[type="email"]:focus,
+  [class*="supabase-auth-ui"] input[type="password"]:focus,
+  [class*="supabase-auth-ui"] input[type="text"]:focus {
+    background-color: #171717 !important;
+    border-color: #662D91 !important;
+    color: #ffffff !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  [class*="supabase-auth-ui"] input:hover {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+  }
+  
+  /* Target inputs within login page - most specific - override ALL styles */
+  .login-page input[type="email"],
+  .login-page input[type="password"],
+  .login-page input[type="text"],
+  .login-page [class*="supabase-auth-ui"] input,
+  .login-page [class*="supabase-auth-ui"] input[type="email"],
+  .login-page [class*="supabase-auth-ui"] input[type="password"],
+  .login-page input[type="email"][class*="supabase"],
+  .login-page input[type="password"][class*="supabase"],
+  .login-page input[type="text"][class*="supabase"],
+  .login-page div input[type="email"],
+  .login-page div input[type="password"],
+  .login-page div input[type="text"] {
+    background-color: #171717 !important;
+    background: #171717 !important;
+    border-color: #2a2a2a !important;
+    border: 1px solid #2a2a2a !important;
+    color: #ffffff !important;
+  }
+  
+  .login-page input[type="email"]:focus,
+  .login-page input[type="password"]:focus,
+  .login-page input[type="text"]:focus,
+  .login-page [class*="supabase-auth-ui"] input:focus,
+  .login-page input[type="email"][class*="supabase"]:focus,
+  .login-page input[type="password"][class*="supabase"]:focus,
+  .login-page div input[type="email"]:focus,
+  .login-page div input[type="password"]:focus {
+    background-color: #171717 !important;
+    background: #171717 !important;
+    border-color: #662D91 !important;
+    border: 1px solid #662D91 !important;
+    color: #ffffff !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  .login-page input[type="email"]:hover,
+  .login-page input[type="password"]:hover,
+  .login-page input[type="text"]:hover,
+  .login-page [class*="supabase-auth-ui"] input:hover,
+  .login-page input[type="email"][class*="supabase"]:hover,
+  .login-page input[type="password"][class*="supabase"]:hover,
+  .login-page div input[type="email"]:hover,
+  .login-page div input[type="password"]:hover {
+    background-color: #212121 !important;
+    background: #212121 !important;
+    border-color: #2a2a2a !important;
+    border: 1px solid #2a2a2a !important;
   }
 }
 

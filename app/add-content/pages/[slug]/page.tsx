@@ -40,7 +40,7 @@ export default async function PageEditorPage({ params }: PageProps) {
     notFound()
   }
 
-  // Fetch sections for this page
+  // Fetch sections for this page - get ALL sections (published and unpublished) for CMS editing
   const { data: sections, error: sectionsError } = await supabase
     .from('sections')
     .select('*')
@@ -77,6 +77,7 @@ export default async function PageEditorPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen cms-main-bg">
+      <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Link href="/add-content/pages">
@@ -207,7 +208,7 @@ export default async function PageEditorPage({ params }: PageProps) {
               <CardDescription className="cms-text-secondary" style={{ fontSize: '13px' }}>
                 {slug === 'blog' 
                   ? 'This page displays blog posts directly. Use the "Manage Posts" button above to add or edit blog posts.'
-                  : 'This page doesn\'t have any sections yet. Create your first section to get started.'}
+                  : `This page doesn't have any sections yet. Create your first section to get started.${slug === 'pricing' ? ' For pricing page, you can add: pricing-hero, pricing-plans, free-messages, message-bundles, pricing-info, and pricing-faq sections.' : ''}`}
               </CardDescription>
             </CardHeader>
             {slug !== 'blog' && (
@@ -220,6 +221,7 @@ export default async function PageEditorPage({ params }: PageProps) {
             )}
           </Card>
         )}
+      </div>
     </div>
   )
 }

@@ -29,6 +29,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -300,15 +307,33 @@ export default function SectionEditor({
     const content = { ...section.content }
     
     // Only add images structure for hero sections
-    if (sectionType === 'hero' && content.images) {
+    if (sectionType === 'hero' && content.images && typeof content.images === 'object' && !Array.isArray(content.images)) {
+      const images = content.images as Record<string, unknown>
       content.images = {
-        women: Array.isArray(content.images.women) ? content.images.women : [],
-        men: Array.isArray(content.images.men) ? content.images.men : [],
-        ...content.images,
+        women: Array.isArray(images.women) ? images.women : [],
+        men: Array.isArray(images.men) ? images.men : [],
+        ...images,
       }
     }
     
     return content
+  }
+
+  // Type-safe helper functions
+  const asString = (value: unknown): string => {
+    return typeof value === 'string' ? value : ''
+  }
+
+  const asNumber = (value: unknown): number => {
+    return typeof value === 'number' ? value : 0
+  }
+
+  const asArray = <T,>(value: unknown): T[] => {
+    return Array.isArray(value) ? value as T[] : []
+  }
+
+  const asBoolean = (value: unknown): boolean => {
+    return typeof value === 'boolean' ? value : false
   }
 
   // Use a more generic type to avoid type inference issues with dynamic schemas
@@ -373,7 +398,7 @@ export default function SectionEditor({
       
       // Use startTransition for better UX during refresh
       startTransition(() => {
-        router.refresh()
+      router.refresh()
       })
     } catch (error) {
       toast.error('Failed to save section', {
@@ -395,7 +420,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -408,7 +433,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Tagline</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -421,7 +446,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={3} />
+                    <Textarea {...field} rows={3} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -435,7 +460,7 @@ export default function SectionEditor({
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Hero Image</FormLabel>
                   <FormControl>
                     <ImageUploadField
-                      value={field.value}
+                      value={asString(field.value)}
                       onChange={field.onChange}
                       bucket="hero-images"
                       label=""
@@ -454,7 +479,7 @@ export default function SectionEditor({
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Background Image (Optional)</FormLabel>
                   <FormControl>
                     <ImageUploadField
-                      value={field.value}
+                      value={asString(field.value)}
                       onChange={field.onChange}
                       bucket="hero-images"
                       label=""
@@ -522,7 +547,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Call to Action Text (Optional)</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g., Get Started" />
+                    <Input {...field} placeholder="e.g., Get Started" value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -535,7 +560,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Button Text (Optional)</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g., Sign Up Now" />
+                    <Input {...field} placeholder="e.g., Sign Up Now" value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -548,7 +573,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Button Link (Optional)</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g., /signup" />
+                    <Input {...field} placeholder="e.g., /signup" value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -567,7 +592,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -580,7 +605,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Slug</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -593,7 +618,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Excerpt</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={3} />
+                    <Textarea {...field} rows={3} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -606,7 +631,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Content</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={10} />
+                    <Textarea {...field} rows={10} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -619,7 +644,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormControl>
                     <ImageUploadField
-                      value={field.value}
+                      value={asString(field.value)}
                       onChange={field.onChange}
                       bucket="blog-images"
                       label="Featured Image"
@@ -638,7 +663,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Author</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Author name" />
+                      <Input {...field} placeholder="Author name" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -654,6 +679,7 @@ export default function SectionEditor({
                       <Input
                         type="number"
                         {...field}
+                        value={asNumber(field.value)}
                         onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                         placeholder="5"
                       />
@@ -669,14 +695,14 @@ export default function SectionEditor({
       case 'faq-category':
         return (
           <div className="space-y-4">
-            <FormField
-              control={form.control}
+          <FormField
+            control={form.control}
               name="data.category_id"
-              render={({ field }) => (
-                <FormItem>
+            render={({ field }) => (
+              <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Category ID</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="e.g., general" />
+                <FormControl>
+                    <Input {...field} placeholder="e.g., general" value={asString(field.value)} />
                   </FormControl>
                   <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     Category identifier for grouping FAQs
@@ -694,7 +720,7 @@ export default function SectionEditor({
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  const currentFaqs = form.getValues('data.faqs') || []
+                  const currentFaqs = asArray<{ question: string; answer: string }>(form.getValues('data.faqs'))
                   form.setValue('data.faqs', [...currentFaqs, { question: '', answer: '' }])
                 }}
                 className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -706,9 +732,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.faqs"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const faqs = asArray<{ question: string; answer: string }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((faq: any, index: number) => (
+                    {faqs.map((faq, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -722,7 +750,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newFaqs = field.value.filter((_: any, i: number) => i !== index)
+                              const newFaqs = faqs.filter((_, i: number) => i !== index)
                               field.onChange(newFaqs)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -762,13 +790,14 @@ export default function SectionEditor({
                         />
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {faqs.length === 0 && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No FAQs added yet. Click &quot;Add FAQ&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
           </div>
         )
@@ -783,7 +812,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Category ID</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g., core-features" />
+                    <Input {...field} placeholder="e.g., core-features" value={asString(field.value)} />
                   </FormControl>
                   <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     Category identifier for grouping features
@@ -801,7 +830,7 @@ export default function SectionEditor({
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  const currentFeatures = form.getValues('data.features') || []
+                  const currentFeatures = asArray<{ title: string; description: string; icon: string }>(form.getValues('data.features'))
                   form.setValue('data.features', [...currentFeatures, { title: '', description: '', icon: '' }])
                 }}
                 className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -813,9 +842,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.features"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const features = asArray<{ title: string; description: string; icon: string }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((feature: any, index: number) => (
+                    {features.map((feature, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -829,7 +860,8 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newFeatures = field.value.filter((_: any, i: number) => i !== index)
+                              const features = asArray<string>(field.value)
+                              const newFeatures = features.filter((_, i: number) => i !== index)
                               field.onChange(newFeatures)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -846,7 +878,7 @@ export default function SectionEditor({
                                 Title
                               </FormLabel>
                               <FormControl>
-                                <Input {...titleField} placeholder="Feature title" />
+                                <Input {...titleField} placeholder="Feature title" value={asString(titleField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -861,7 +893,7 @@ export default function SectionEditor({
                                 Description
                               </FormLabel>
                               <FormControl>
-                                <Textarea {...descField} rows={2} placeholder="Feature description" />
+                                <Textarea {...descField} rows={2} placeholder="Feature description" value={asString(descField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -877,7 +909,7 @@ export default function SectionEditor({
                               </FormLabel>
                               <FormControl>
                                 <IconSelector
-                                  value={iconField.value}
+                                  value={asString(iconField.value)}
                                   onChange={iconField.onChange}
                                   label="Icon"
                                 />
@@ -888,13 +920,14 @@ export default function SectionEditor({
                         />
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {features.length === 0 && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No features added yet. Click &quot;Add Feature&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
           </div>
         )
@@ -911,7 +944,7 @@ export default function SectionEditor({
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  const currentPlans = form.getValues('data.plans') || []
+                  const currentPlans = asArray<{ name: string; price: number; features: string[] }>(form.getValues('data.plans'))
                   form.setValue('data.plans', [...currentPlans, { name: '', price: 0, features: [] }])
                 }}
                 className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -923,9 +956,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.plans"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const plans = asArray<{ name: string; price: number; features: string[] }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((plan: any, index: number) => (
+                    {plans.map((plan, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -939,7 +974,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newPlans = field.value.filter((_: any, i: number) => i !== index)
+                              const newPlans = plans.filter((_, i: number) => i !== index)
                               field.onChange(newPlans)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -995,8 +1030,8 @@ export default function SectionEditor({
                               size="sm"
                               onClick={() => {
                                 const currentFeatures = plan.features || []
-                                const updatedPlans = [...field.value]
-                                updatedPlans[index].features = [...currentFeatures, '']
+                                const updatedPlans = [...plans]
+                                updatedPlans[index] = { ...updatedPlans[index], features: [...currentFeatures, ''] }
                                 field.onChange(updatedPlans)
                               }}
                               className="h-6 px-2 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1010,8 +1045,11 @@ export default function SectionEditor({
                               <Input
                                 value={feature}
                                 onChange={(e) => {
-                                  const updatedPlans = [...field.value]
-                                  updatedPlans[index].features[featureIndex] = e.target.value
+                                  const updatedPlans = [...plans]
+                                  updatedPlans[index] = { 
+                                    ...updatedPlans[index], 
+                                    features: updatedPlans[index].features.map((f, i) => i === featureIndex ? e.target.value : f)
+                                  }
                                   field.onChange(updatedPlans)
                                 }}
                                 placeholder="Feature description"
@@ -1021,10 +1059,11 @@ export default function SectionEditor({
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => {
-                                  const updatedPlans = [...field.value]
-                                  updatedPlans[index].features = plan.features.filter(
-                                    (_: string, i: number) => i !== featureIndex
-                                  )
+                                  const updatedPlans = [...plans]
+                                  updatedPlans[index] = { 
+                                    ...updatedPlans[index], 
+                                    features: plan.features.filter((_, i: number) => i !== featureIndex)
+                                  }
                                   field.onChange(updatedPlans)
                                 }}
                                 className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
@@ -1036,14 +1075,909 @@ export default function SectionEditor({
                         </div>
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {plans.length === 0 && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No pricing plans added yet. Click &quot;Add Plan&quot; to get started.
                       </p>
                     )}
                   </div>
+                  )
+                }}
+              />
+          </div>
+        )
+
+      case 'pricing-hero':
+        return (
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="data.title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Affordable Pricing" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.subtitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Subtitle
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea {...field} placeholder="e.g., Pay only for what you use. No hidden fees, no surprises." value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.badge.text"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Badge Text
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Simple & Transparent" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )
+
+      case 'free-messages':
+        return (
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="data.count"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Free Messages Count
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                    {...field}
+                      value={asNumber(field.value)}
+                      onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                      placeholder="3"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., First 3 Messages Free Per Match!" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Description
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea {...field} placeholder="e.g., Start conversations with your matches without any additional cost." value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )
+
+      case 'message-bundles':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="data.price_per_message"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                      Price Per Message (₹)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        value={asNumber(field.value)}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                        placeholder="10"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="data.gst_rate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                      GST Rate (%)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        value={asNumber(field.value)}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                        placeholder="18"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="data.min_messages"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                      Min Messages
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        value={asNumber(field.value)}
+                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                        placeholder="5"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="data.max_messages"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                      Max Messages
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        value={asNumber(field.value)}
+                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                        placeholder="100"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="data.title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Section Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Message Bundles" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.subtitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Section Subtitle
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea {...field} placeholder="e.g., After your free messages, purchase message bundles to continue connecting" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex items-center justify-between mb-3">
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                Predefined Bundles
+              </label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  const currentBundles = asArray<{ messages: number; popular: boolean }>(form.getValues('data.bundles'))
+                  form.setValue('data.bundles', [...currentBundles, { messages: 5, popular: false }])
+                }}
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+              >
+                <Plus className="h-3 w-3 mr-1" />
+                Add Bundle
+              </Button>
+            </div>
+            <FormField
+              control={form.control}
+              name="data.bundles"
+              render={({ field }) => {
+                const bundles = asArray<{ messages: number; popular: boolean }>(field.value)
+                return (
+                <div className="space-y-3">
+                  {bundles.map((bundle, index: number) => (
+                    <div
+                      key={index}
+                      className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium cms-text-secondary">
+                          Bundle #{index + 1}
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const newBundles = bundles.filter((_, i: number) => i !== index)
+                            field.onChange(newBundles)
+                          }}
+                          className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <FormField
+                          control={form.control}
+                          name={`data.bundles.${index}.messages`}
+                          render={({ field: messagesField }) => (
+                            <FormItem>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                                Messages
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  {...messagesField}
+                                  value={asNumber(messagesField.value)}
+                                  onChange={(e) => messagesField.onChange(parseInt(e.target.value) || 0)}
+                                  placeholder="10"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`data.bundles.${index}.popular`}
+                          render={({ field: popularField }) => (
+                            <FormItem className="flex items-center space-x-2 space-y-0 pt-7">
+                              <FormControl>
+                                <Switch
+                                  checked={asBoolean(popularField.value)}
+                                  onCheckedChange={popularField.onChange}
+                                />
+                              </FormControl>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                                Popular
+                              </FormLabel>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    ))}
+                </div>
+                )
+              }}
+            />
+          </div>
+        )
+
+      case 'pricing-info':
+        return (
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="data.title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., How it works" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex items-center justify-between mb-3">
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                Info Items
+              </label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  const currentItems = asArray<string>(form.getValues('data.items'))
+                  form.setValue('data.items', [...currentItems, ''])
+                }}
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+              >
+                <Plus className="h-3 w-3 mr-1" />
+                Add Item
+              </Button>
+            </div>
+            <FormField
+              control={form.control}
+              name="data.items"
+              render={({ field }) => {
+                const items = asArray<string>(field.value)
+                return (
+                <div className="space-y-3">
+                  {items.map((item: string, index: number) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={asString(item)}
+                        onChange={(e) => {
+                          const updatedItems = [...items]
+                          updatedItems[index] = e.target.value
+                          field.onChange(updatedItems)
+                        }}
+                        placeholder="e.g., Pay ₹10/month for platform access"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          const updatedItems = items.filter((_, i: number) => i !== index)
+                          field.onChange(updatedItems)
+                        }}
+                        className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            />
+          </div>
+        )
+
+      case 'pricing-faq':
+        return (
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="data.title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Section Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Frequently Asked Questions" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex items-center justify-between mb-3">
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                FAQs
+              </label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  const currentFaqs = asArray<{ question: string; answer: string }>(form.getValues('data.faqs'))
+                  form.setValue('data.faqs', [...currentFaqs, { question: '', answer: '' }])
+                }}
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+              >
+                <Plus className="h-3 w-3 mr-1" />
+                Add FAQ
+              </Button>
+            </div>
+            <FormField
+              control={form.control}
+              name="data.faqs"
+              render={({ field }) => {
+                const faqs = asArray<{ question: string; answer: string }>(field.value)
+                return (
+                <div className="space-y-3">
+                  {faqs.map((faq, index: number) => (
+                    <div
+                      key={index}
+                      className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium cms-text-secondary">
+                          FAQ #{index + 1}
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const newFaqs = faqs.filter((_, i: number) => i !== index)
+                            field.onChange(newFaqs)
+                          }}
+                          className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name={`data.faqs.${index}.question`}
+                        render={({ field: questionField }) => (
+                          <FormItem>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                              Question
+                            </FormLabel>
+                            <FormControl>
+                              <Input {...questionField} placeholder="e.g., Do message bundles expire?" value={asString(questionField.value)} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`data.faqs.${index}.answer`}
+                        render={({ field: answerField }) => (
+                          <FormItem>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                              Answer
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea {...answerField} placeholder="e.g., No, your purchased message bundles never expire." value={asString(answerField.value)} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.cta.text"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    CTA Text
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Still have questions?" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.cta.link"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    CTA Link
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., /contact" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )
+
+      case 'contact-hero':
+        return (
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="data.title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Get in Touch" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.subtitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Subtitle
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea {...field} placeholder="e.g., Have questions about qoupl? We'd love to hear from you." value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.badge.text"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Badge Text
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., We're Here to Help" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.badge.icon"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Badge Icon
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., heart" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )
+
+      case 'contact-info':
+        return (
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="data.title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Section Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Contact Information" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex items-center justify-between mb-3">
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                Contact Items
+              </label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  const currentItems = asArray<{ icon: string; title: string; details: string; link: string | null }>(form.getValues('data.items'))
+                  form.setValue('data.items', [...currentItems, { icon: '', title: '', details: '', link: null }])
+                }}
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+              >
+                <Plus className="h-3 w-3 mr-1" />
+                Add Item
+              </Button>
+            </div>
+            <FormField
+              control={form.control}
+              name="data.items"
+              render={({ field }) => {
+                const items = asArray<{ icon: string; title: string; details: string; link: string | null }>(field.value)
+                return (
+                <div className="space-y-3">
+                  {items.map((item, index: number) => (
+                    <div
+                      key={index}
+                      className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium cms-text-secondary">
+                          Item #{index + 1}
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const newItems = items.filter((_, i: number) => i !== index)
+                            field.onChange(newItems)
+                          }}
+                          className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name={`data.items.${index}.icon`}
+                        render={({ field: iconField }) => (
+                          <FormItem>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                              Icon
+                            </FormLabel>
+                            <FormControl>
+                              <Input {...iconField} placeholder="e.g., mail, phone, map-pin" value={asString(iconField.value)} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`data.items.${index}.title`}
+                        render={({ field: titleField }) => (
+                          <FormItem>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                              Title
+                            </FormLabel>
+                            <FormControl>
+                              <Input {...titleField} placeholder="e.g., Email Us" value={asString(titleField.value)} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`data.items.${index}.details`}
+                        render={({ field: detailsField }) => (
+                          <FormItem>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                              Details
+                            </FormLabel>
+                            <FormControl>
+                              <Input {...detailsField} placeholder="e.g., support@qoupl.ai" value={asString(detailsField.value)} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`data.items.${index}.link`}
+                        render={({ field: linkField }) => (
+                          <FormItem>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                              Link (optional, leave empty for no link)
+                            </FormLabel>
+                            <FormControl>
+                              <Input {...linkField} placeholder="e.g., mailto:support@qoupl.ai" value={asString(linkField.value)} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            />
+          </div>
+        )
+
+      case 'contact-info-details':
+        return (
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="data.title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Let's Connect" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    Description
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea {...field} placeholder="e.g., Whether you have questions about features..." value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex items-center justify-between mb-3">
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                Info Items
+              </label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  const currentItems = asArray<{ icon: string; title: string; description: string }>(form.getValues('data.items'))
+                  form.setValue('data.items', [...currentItems, { icon: '', title: '', description: '' }])
+                }}
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+              >
+                <Plus className="h-3 w-3 mr-1" />
+                Add Item
+              </Button>
+            </div>
+            <FormField
+              control={form.control}
+              name="data.items"
+              render={({ field }) => {
+                const items = asArray<{ icon: string; title: string; description: string }>(field.value)
+                return (
+                <div className="space-y-3">
+                  {items.map((item, index: number) => (
+                    <div
+                      key={index}
+                      className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium cms-text-secondary">
+                          Item #{index + 1}
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const newItems = items.filter((_, i: number) => i !== index)
+                            field.onChange(newItems)
+                          }}
+                          className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name={`data.items.${index}.icon`}
+                        render={({ field: iconField }) => (
+                          <FormItem>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                              Icon
+                            </FormLabel>
+                            <FormControl>
+                              <Input {...iconField} placeholder="e.g., clock, heart, message-square" value={asString(iconField.value)} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`data.items.${index}.title`}
+                        render={({ field: titleField }) => (
+                          <FormItem>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                              Title
+                            </FormLabel>
+                            <FormControl>
+                              <Input {...titleField} placeholder="e.g., Response Time" value={asString(titleField.value)} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`data.items.${index}.description`}
+                        render={({ field: descField }) => (
+                          <FormItem>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
+                              Description
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea {...descField} placeholder="e.g., We typically respond within 24-48 hours..." value={asString(descField.value)} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  ))}
+                </div>
+                )
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="data.faq_link.text"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    FAQ Link Text
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., Visit FAQ" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="data.faq_link.url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                    FAQ Link URL
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g., /faq" value={asString(field.value)} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         )
 
@@ -1059,7 +1993,7 @@ export default function SectionEditor({
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  const currentValues = form.getValues('data.values') || []
+                  const currentValues = asArray<{ icon: string; title: string; description: string; color?: string }>(form.getValues('data.values'))
                   form.setValue('data.values', [...currentValues, { icon: '', title: '', description: '', color: 'bg-[#662D91]' }])
                 }}
                 className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1071,9 +2005,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.values"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const values = asArray<{ icon: string; title: string; description: string; color?: string }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((value: any, index: number) => (
+                    {values.map((value, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -1087,7 +2023,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newValues = field.value.filter((_: any, i: number) => i !== index)
+                              const newValues = values.filter((_, i: number) => i !== index)
                               field.onChange(newValues)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1106,7 +2042,7 @@ export default function SectionEditor({
                                 </FormLabel>
                                 <FormControl>
                                   <IconSelector
-                                    value={iconField.value}
+                                    value={asString(iconField.value)}
                                     onChange={iconField.onChange}
                                     label="Icon"
                                   />
@@ -1125,7 +2061,7 @@ export default function SectionEditor({
                                 </FormLabel>
                                 <FormControl>
                                   <ColorPicker
-                                    value={colorField.value}
+                                    value={asString(colorField.value)}
                                     onChange={colorField.onChange}
                                     label="Color"
                                   />
@@ -1144,7 +2080,7 @@ export default function SectionEditor({
                                 Title
                               </FormLabel>
                               <FormControl>
-                                <Input {...titleField} placeholder="Value title" />
+                                <Input {...titleField} placeholder="Value title" value={asString(titleField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1159,7 +2095,7 @@ export default function SectionEditor({
                                 Description
                               </FormLabel>
                               <FormControl>
-                                <Textarea {...descField} rows={2} placeholder="Value description" />
+                                <Textarea {...descField} rows={2} placeholder="Value description" value={asString(descField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1167,13 +2103,14 @@ export default function SectionEditor({
                         />
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {values.length === 0 && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No values added yet. Click &quot;Add Value&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
           </div>
         )
@@ -1188,7 +2125,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -1203,7 +2140,7 @@ export default function SectionEditor({
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    const currentSteps = form.getValues('data.steps') || []
+                    const currentSteps = asArray<{ step: string; title: string; description: string; image?: string }>(form.getValues('data.steps'))
                     form.setValue('data.steps', [...currentSteps, { step: '', title: '', description: '', image: '' }])
                   }}
                   className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1215,9 +2152,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.steps"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const steps = asArray<{ step: string; title: string; description: string; image?: string }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((step: any, index: number) => (
+                    {steps.map((step, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -1231,7 +2170,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newSteps = field.value.filter((_: any, i: number) => i !== index)
+                              const newSteps = steps.filter((_, i: number) => i !== index)
                               field.onChange(newSteps)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1249,7 +2188,7 @@ export default function SectionEditor({
                                   Step Number
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...stepField} placeholder="e.g., 01" />
+                                  <Input {...stepField} placeholder="e.g., 01" value={asString(stepField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1262,7 +2201,7 @@ export default function SectionEditor({
                               <FormItem>
                                 <FormControl>
                                   <ImageUploadField
-                                    value={imageField.value}
+                                    value={asString(imageField.value)}
                                     onChange={imageField.onChange}
                                     bucket="app-screenshots"
                                     label="Step Image"
@@ -1283,7 +2222,7 @@ export default function SectionEditor({
                                 Title
                               </FormLabel>
                               <FormControl>
-                                <Input {...titleField} placeholder="Step title" />
+                                <Input {...titleField} placeholder="Step title" value={asString(titleField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1298,7 +2237,7 @@ export default function SectionEditor({
                                 Description
                               </FormLabel>
                               <FormControl>
-                                <Textarea {...descField} rows={3} placeholder="Step description" />
+                                <Textarea {...descField} rows={3} placeholder="Step description" value={asString(descField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1306,13 +2245,14 @@ export default function SectionEditor({
                         />
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {steps.length === 0 && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No steps added yet. Click &quot;Add Step&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
           </div>
         )
@@ -1327,7 +2267,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -1340,7 +2280,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -1356,7 +2296,7 @@ export default function SectionEditor({
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    const currentFeatures = form.getValues('data.features') || []
+                    const currentFeatures = asArray<{ icon: string; title: string; description: string; highlights?: string[]; image?: string; color?: string }>(form.getValues('data.features'))
                     form.setValue('data.features', [...currentFeatures, { icon: '', title: '', description: '', highlights: [], image: '', color: 'bg-[#662D91]' }])
                   }}
                   className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1368,9 +2308,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.features"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const features = asArray<{ icon: string; title: string; description: string; highlights?: string[]; image?: string; color?: string }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((feature: any, index: number) => (
+                    {features.map((feature, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -1384,7 +2326,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newFeatures = field.value.filter((_: any, i: number) => i !== index)
+                              const newFeatures = features.filter((_, i: number) => i !== index)
                               field.onChange(newFeatures)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1403,7 +2345,7 @@ export default function SectionEditor({
                                 </FormLabel>
                                 <FormControl>
                                   <IconSelector
-                                    value={iconField.value}
+                                    value={asString(iconField.value)}
                                     onChange={iconField.onChange}
                                     label="Icon"
                                   />
@@ -1422,7 +2364,7 @@ export default function SectionEditor({
                                 </FormLabel>
                                 <FormControl>
                                   <ColorPicker
-                                    value={colorField.value}
+                                    value={asString(colorField.value)}
                                     onChange={colorField.onChange}
                                     label="Color"
                                   />
@@ -1441,7 +2383,7 @@ export default function SectionEditor({
                                 Title
                               </FormLabel>
                               <FormControl>
-                                <Input {...titleField} placeholder="Feature title" />
+                                <Input {...titleField} placeholder="Feature title" value={asString(titleField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1456,7 +2398,7 @@ export default function SectionEditor({
                                 Description
                               </FormLabel>
                               <FormControl>
-                                <Textarea {...descField} rows={2} placeholder="Feature description" />
+                                <Textarea {...descField} rows={2} placeholder="Feature description" value={asString(descField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1469,7 +2411,7 @@ export default function SectionEditor({
                             <FormItem>
                               <FormControl>
                                 <ImageUploadField
-                                  value={imageField.value}
+                                  value={asString(imageField.value)}
                                   onChange={imageField.onChange}
                                   bucket="couple-photos"
                                   label="Feature Image"
@@ -1490,9 +2432,9 @@ export default function SectionEditor({
                               variant="ghost"
                               size="sm"
                               onClick={() => {
-                                const currentHighlights = feature.highlights || []
-                                const updatedFeatures = [...field.value]
-                                updatedFeatures[index].highlights = [...currentHighlights, '']
+                                const currentHighlights = asArray<string>(feature.highlights || [])
+                                const updatedFeatures = [...features]
+                                updatedFeatures[index] = { ...updatedFeatures[index], highlights: [...currentHighlights, ''] }
                                 field.onChange(updatedFeatures)
                               }}
                               className="h-6 px-2 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1501,13 +2443,15 @@ export default function SectionEditor({
                               Add
                             </Button>
                           </div>
-                          {(feature.highlights || []).map((highlight: string, highlightIndex: number) => (
+                          {(asArray<string>(feature.highlights || [])).map((highlight: string, highlightIndex: number) => (
                             <div key={highlightIndex} className="flex gap-2">
                               <Input
                                 value={highlight}
                                 onChange={(e) => {
-                                  const updatedFeatures = [...field.value]
-                                  updatedFeatures[index].highlights[highlightIndex] = e.target.value
+                                  const updatedFeatures = [...features]
+                                  const currentHighlights = asArray<string>(updatedFeatures[index].highlights || [])
+                                  currentHighlights[highlightIndex] = e.target.value
+                                  updatedFeatures[index] = { ...updatedFeatures[index], highlights: currentHighlights }
                                   field.onChange(updatedFeatures)
                                 }}
                                 placeholder="Highlight text"
@@ -1517,10 +2461,12 @@ export default function SectionEditor({
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => {
-                                  const updatedFeatures = [...field.value]
-                                  updatedFeatures[index].highlights = feature.highlights.filter(
-                                    (_: string, i: number) => i !== highlightIndex
-                                  )
+                                  const updatedFeatures = [...features]
+                                  const currentHighlights = asArray<string>(feature.highlights || [])
+                                  updatedFeatures[index] = { 
+                                    ...updatedFeatures[index], 
+                                    highlights: currentHighlights.filter((_, i: number) => i !== highlightIndex)
+                                  }
                                   field.onChange(updatedFeatures)
                                 }}
                                 className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
@@ -1532,13 +2478,14 @@ export default function SectionEditor({
                         </div>
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {features.length === 0 && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No features added yet. Click &quot;Add Feature&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
             </div>
           </div>
@@ -1554,7 +2501,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -1567,7 +2514,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -1582,7 +2529,7 @@ export default function SectionEditor({
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Icon</FormLabel>
                     <FormControl>
                       <IconSelector
-                        value={field.value}
+                        value={asString(field.value)}
                         onChange={field.onChange}
                         label="Badge Icon"
                       />
@@ -1598,7 +2545,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Love Stories" />
+                      <Input {...field} placeholder="e.g., Love Stories" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -1607,15 +2554,15 @@ export default function SectionEditor({
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Gallery Images
-                </FormLabel>
+                </label>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    const currentImages = form.getValues('data.images') || []
+                    const currentImages = asArray<{ image: string; alt?: string; title?: string; story?: string }>(form.getValues('data.images'))
                     form.setValue('data.images', [...currentImages, { image: '', alt: '', title: '', story: '' }])
                   }}
                   className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1627,9 +2574,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.images"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const images = asArray<{ image: string; alt?: string; title?: string; story?: string }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((image: any, index: number) => (
+                    {images.map((image, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -1643,7 +2592,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newImages = field.value.filter((_: any, i: number) => i !== index)
+                              const newImages = images.filter((_, i: number) => i !== index)
                               field.onChange(newImages)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1658,7 +2607,7 @@ export default function SectionEditor({
                             <FormItem>
                               <FormControl>
                                 <ImageUploadField
-                                  value={imageField.value}
+                                  value={asString(imageField.value)}
                                   onChange={imageField.onChange}
                                   bucket="couple-photos"
                                   label="Image"
@@ -1679,7 +2628,7 @@ export default function SectionEditor({
                                   Title
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...titleField} placeholder="e.g., Sarah & Raj" />
+                                  <Input {...titleField} placeholder="e.g., Sarah & Raj" value={asString(titleField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1694,7 +2643,7 @@ export default function SectionEditor({
                                   Alt Text
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...altField} placeholder="Image alt text" />
+                                  <Input {...altField} placeholder="Image alt text" value={asString(altField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1710,7 +2659,7 @@ export default function SectionEditor({
                                 Story
                               </FormLabel>
                               <FormControl>
-                                <Textarea {...storyField} rows={2} placeholder="Love story description" />
+                                <Textarea {...storyField} rows={2} placeholder="Love story description" value={asString(storyField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1718,13 +2667,14 @@ export default function SectionEditor({
                         />
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {images.length === 0 && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No images added yet. Click &quot;Add Image&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
             </div>
             <div className="space-y-2">
@@ -1738,7 +2688,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>CTA Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Be part of something beautiful." />
+                      <Input {...field} placeholder="e.g., Be part of something beautiful." value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -1751,7 +2701,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>Highlight Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Your story could be next." />
+                      <Input {...field} placeholder="e.g., Your story could be next." value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -1771,7 +2721,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -1784,7 +2734,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={2} />
+                    <Textarea {...field} rows={2} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -1798,7 +2748,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Icon</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Heart" />
+                      <Input {...field} placeholder="e.g., Heart" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -1811,7 +2761,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Beta User Success Stories" />
+                      <Input {...field} placeholder="e.g., Beta User Success Stories" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -1820,15 +2770,15 @@ export default function SectionEditor({
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Testimonials
-                </FormLabel>
+                </label>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    const currentTestimonials = form.getValues('data.testimonials') || []
+                    const currentTestimonials = asArray<{ name: string; image: string; text: string; location?: string; rating?: number; date?: string }>(form.getValues('data.testimonials'))
                     form.setValue('data.testimonials', [...currentTestimonials, { name: '', image: '', text: '', location: '', rating: 5, date: '' }])
                   }}
                   className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1840,9 +2790,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.testimonials"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const testimonials = asArray<{ name: string; image: string; text: string; location?: string; rating?: number; date?: string }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((testimonial: any, index: number) => (
+                    {testimonials.map((testimonial, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -1856,7 +2808,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newTestimonials = field.value.filter((_: any, i: number) => i !== index)
+                              const newTestimonials = testimonials.filter((_, i: number) => i !== index)
                               field.onChange(newTestimonials)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -1874,7 +2826,7 @@ export default function SectionEditor({
                                   Name
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...nameField} placeholder="User name" />
+                                  <Input {...nameField} placeholder="User name" value={asString(nameField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1889,7 +2841,7 @@ export default function SectionEditor({
                                   Location
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...locationField} placeholder="e.g., Mumbai, Maharashtra" />
+                                  <Input {...locationField} placeholder="e.g., Mumbai, Maharashtra" value={asString(locationField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1909,6 +2861,7 @@ export default function SectionEditor({
                                   <Input
                                     type="number"
                                     {...ratingField}
+                                    value={asNumber(ratingField.value)}
                                     onChange={(e) => ratingField.onChange(parseInt(e.target.value) || 5)}
                                     min={1}
                                     max={5}
@@ -1928,7 +2881,7 @@ export default function SectionEditor({
                                   Date
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...dateField} placeholder="e.g., Beta User" />
+                                  <Input {...dateField} placeholder="e.g., Beta User" value={asString(dateField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1942,7 +2895,7 @@ export default function SectionEditor({
                             <FormItem>
                               <FormControl>
                                 <ImageUploadField
-                                  value={imageField.value}
+                                  value={asString(imageField.value)}
                                   onChange={imageField.onChange}
                                   bucket="hero-images"
                                   label="Profile Image"
@@ -1962,7 +2915,7 @@ export default function SectionEditor({
                                 Testimonial Text
                               </FormLabel>
                               <FormControl>
-                                <Textarea {...textField} rows={3} placeholder="Testimonial content" />
+                                <Textarea {...textField} rows={3} placeholder="Testimonial content" value={asString(textField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1970,7 +2923,7 @@ export default function SectionEditor({
                         />
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {(testimonials.length === 0) && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No testimonials added yet. Click &quot;Add Testimonial&quot; to get started.
                       </p>
@@ -1987,7 +2940,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Join 10,000+ people waiting" />
+                      <Input {...field} placeholder="e.g., Join 10,000+ people waiting" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2001,7 +2954,7 @@ export default function SectionEditor({
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Icon</FormLabel>
                     <FormControl>
                       <IconSelector
-                        value={field.value}
+                        value={asString(field.value)}
                         onChange={field.onChange}
                         label="Stats Icon"
                       />
@@ -2024,7 +2977,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -2037,7 +2990,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={2} />
+                    <Textarea {...field} rows={2} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -2051,7 +3004,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Icon</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Sparkles" />
+                      <Input {...field} placeholder="e.g., Sparkles" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2064,7 +3017,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Coming Soon" />
+                      <Input {...field} placeholder="e.g., Coming Soon" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2078,14 +3031,16 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.benefits"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const benefits = asArray<string>(field.value)
+                  return (
                   <div className="space-y-2">
-                    {(field.value || []).map((benefit: string, index: number) => (
+                    {benefits.map((benefit, index: number) => (
                       <div key={index} className="flex gap-2">
                         <Input
-                          value={benefit}
+                          value={asString(benefit)}
                           onChange={(e) => {
-                            const updatedBenefits = [...(field.value || [])]
+                            const updatedBenefits = [...benefits]
                             updatedBenefits[index] = e.target.value
                             field.onChange(updatedBenefits)
                           }}
@@ -2096,7 +3051,7 @@ export default function SectionEditor({
                           variant="ghost"
                           size="sm"
                           onClick={() => {
-                            const updatedBenefits = (field.value || []).filter((_: string, i: number) => i !== index)
+                            const updatedBenefits = benefits.filter((_, i: number) => i !== index)
                             field.onChange(updatedBenefits)
                           }}
                           className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
@@ -2110,7 +3065,7 @@ export default function SectionEditor({
                       variant="ghost"
                       size="sm"
                       onClick={() => {
-                        const currentBenefits = field.value || []
+                        const currentBenefits = benefits
                         field.onChange([...currentBenefits, ''])
                       }}
                       className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2119,13 +3074,14 @@ export default function SectionEditor({
                       Add Benefit
                     </Button>
                   </div>
-                )}
+                  )
+                }}
               />
             </div>
             <div className="space-y-2">
-              <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 Call to Action
-              </FormLabel>
+              </label>
               <FormField
                 control={form.control}
                 name="data.cta.text"
@@ -2133,7 +3089,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>CTA Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Join the Waitlist" />
+                      <Input {...field} placeholder="e.g., Join the Waitlist" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2146,7 +3102,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>CTA Subtext</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Limited spots available" />
+                      <Input {...field} placeholder="e.g., Limited spots available" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2155,15 +3111,15 @@ export default function SectionEditor({
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Platforms
-                </FormLabel>
+                </label>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    const currentPlatforms = form.getValues('data.platforms') || []
+                    const currentPlatforms = asArray<{ name: string; icon: string; coming: boolean }>(form.getValues('data.platforms'))
                     form.setValue('data.platforms', [...currentPlatforms, { name: '', icon: '', coming: true }])
                   }}
                   className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2175,9 +3131,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.platforms"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const platforms = asArray<{ name: string; icon: string; coming: boolean }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((platform: any, index: number) => (
+                    {platforms.map((platform, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -2191,7 +3149,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newPlatforms = field.value.filter((_: any, i: number) => i !== index)
+                              const newPlatforms = platforms.filter((_, i: number) => i !== index)
                               field.onChange(newPlatforms)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2209,7 +3167,7 @@ export default function SectionEditor({
                                   Platform Name
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...nameField} placeholder="e.g., App Store" />
+                                  <Input {...nameField} placeholder="e.g., App Store" value={asString(nameField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -2224,7 +3182,7 @@ export default function SectionEditor({
                                   Icon
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...iconField} placeholder="e.g., 🍎 or Apple" />
+                                  <Input {...iconField} placeholder="e.g., 🍎 or Apple" value={asString(iconField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -2233,13 +3191,14 @@ export default function SectionEditor({
                         </div>
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {(platforms.length === 0) && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No platforms added yet. Click &quot;Add Platform&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
             </div>
             <div className="grid grid-cols-3 gap-4">
@@ -2250,7 +3209,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Join" />
+                      <Input {...field} placeholder="e.g., Join" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2263,7 +3222,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Count</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., 10,000+" />
+                      <Input {...field} placeholder="e.g., 10,000+" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2276,7 +3235,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Suffix</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., on the waitlist" />
+                      <Input {...field} placeholder="e.g., on the waitlist" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2290,7 +3249,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormControl>
                     <MultiImageUploadField
-                      value={Array.isArray(field.value) ? field.value : []}
+                      value={asArray<string>(field.value)}
                       onChange={field.onChange}
                       bucket="couple-photos"
                       label="Decorative Images"
@@ -2315,7 +3274,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -2328,7 +3287,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={2} />
+                    <Textarea {...field} rows={2} value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -2342,7 +3301,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Icon</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Sparkles" />
+                      <Input {...field} placeholder="e.g., Sparkles" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2355,7 +3314,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., Launching Soon" />
+                      <Input {...field} placeholder="e.g., Launching Soon" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2369,7 +3328,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>CTA Text</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g., Join Waitlist Now" />
+                    <Input {...field} placeholder="e.g., Join Waitlist Now" value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -2377,15 +3336,15 @@ export default function SectionEditor({
             />
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Platforms
-                </FormLabel>
+                </label>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    const currentPlatforms = form.getValues('data.platforms') || []
+                    const currentPlatforms = asArray<{ name: string; icon: string; coming: boolean }>(form.getValues('data.platforms'))
                     form.setValue('data.platforms', [...currentPlatforms, { name: '', icon: '', coming: true }])
                   }}
                   className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2397,9 +3356,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.platforms"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const platforms = asArray<{ name: string; icon: string; coming: boolean }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((platform: any, index: number) => (
+                    {platforms.map((platform, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -2413,7 +3374,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newPlatforms = field.value.filter((_: any, i: number) => i !== index)
+                              const newPlatforms = platforms.filter((_, i: number) => i !== index)
                               field.onChange(newPlatforms)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2431,7 +3392,7 @@ export default function SectionEditor({
                                   Platform Name
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...nameField} placeholder="e.g., App Store" />
+                                  <Input {...nameField} placeholder="e.g., App Store" value={asString(nameField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -2446,7 +3407,7 @@ export default function SectionEditor({
                                   Icon
                                 </FormLabel>
                                 <FormControl>
-                                  <Input {...iconField} placeholder="e.g., Apple or Smartphone" />
+                                  <Input {...iconField} placeholder="e.g., Apple or Smartphone" value={asString(iconField.value)} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -2455,13 +3416,14 @@ export default function SectionEditor({
                         </div>
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {(platforms.length === 0) && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No platforms added yet. Click &quot;Add Platform&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -2472,7 +3434,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Text</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., people already on the waitlist" />
+                      <Input {...field} placeholder="e.g., people already on the waitlist" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2485,7 +3447,7 @@ export default function SectionEditor({
                   <FormItem>
                     <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Count</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="e.g., 10,000+" />
+                      <Input {...field} placeholder="e.g., 10,000+" value={asString(field.value)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -2527,7 +3489,7 @@ export default function SectionEditor({
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    const currentTimeline = form.getValues('data.timeline') || []
+                    const currentTimeline = asArray<{ year: string; event: string; description: string }>(form.getValues('data.timeline'))
                     form.setValue('data.timeline', [...currentTimeline, { year: '', event: '', description: '' }])
                   }}
                   className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2539,9 +3501,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.timeline"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const timeline = asArray<{ year: string; event: string; description: string }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((event: any, index: number) => (
+                    {timeline.map((event, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -2555,7 +3519,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newTimeline = field.value.filter((_: any, i: number) => i !== index)
+                              const newTimeline = timeline.filter((_, i: number) => i !== index)
                               field.onChange(newTimeline)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2612,13 +3576,14 @@ export default function SectionEditor({
                         />
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {(timeline.length === 0) && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No timeline events added yet. Click &quot;Add Event&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
             </div>
           </div>
@@ -2637,7 +3602,7 @@ export default function SectionEditor({
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    const currentItems = form.getValues('data.items') || []
+                    const currentItems = asArray<{ title: string; description: string; icon: string }>(form.getValues('data.items'))
                     form.setValue('data.items', [...currentItems, { title: '', description: '', icon: '' }])
                   }}
                   className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2649,9 +3614,11 @@ export default function SectionEditor({
               <FormField
                 control={form.control}
                 name="data.items"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const items = asArray<{ title: string; description: string; icon: string }>(field.value)
+                  return (
                   <div className="space-y-3">
-                    {(field.value || []).map((item: any, index: number) => (
+                    {items.map((item, index: number) => (
                       <div
                         key={index}
                         className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -2665,7 +3632,7 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newItems = field.value.filter((_: any, i: number) => i !== index)
+                              const newItems = items.filter((_, i: number) => i !== index)
                               field.onChange(newItems)
                             }}
                             className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2682,7 +3649,7 @@ export default function SectionEditor({
                                 Icon (Emoji or Text)
                               </FormLabel>
                               <FormControl>
-                                <Input {...iconField} placeholder="e.g., 💜 or Heart" />
+                                <Input {...iconField} placeholder="e.g., 💜 or Heart" value={asString(iconField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -2697,7 +3664,7 @@ export default function SectionEditor({
                                 Title
                               </FormLabel>
                               <FormControl>
-                                <Input {...titleField} placeholder="Item title" />
+                                <Input {...titleField} placeholder="Item title" value={asString(titleField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -2712,7 +3679,7 @@ export default function SectionEditor({
                                 Description
                               </FormLabel>
                               <FormControl>
-                                <Textarea {...descField} rows={2} placeholder="Item description" />
+                                <Textarea {...descField} rows={2} placeholder="Item description" value={asString(descField.value)} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -2720,13 +3687,14 @@ export default function SectionEditor({
                         />
                       </div>
                     ))}
-                    {(!field.value || field.value.length === 0) && (
+                    {(items.length === 0) && (
                       <p className="text-sm text-center py-4 cms-text-secondary">
                         No items added yet. Click &quot;Add Item&quot; to get started.
                       </p>
                     )}
                   </div>
-                )}
+                  )
+                }}
               />
             </div>
           </div>
@@ -2742,7 +3710,7 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Page Title</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g., Privacy Policy" />
+                    <Input {...field} placeholder="e.g., Privacy Policy" value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -2755,22 +3723,22 @@ export default function SectionEditor({
                 <FormItem>
                   <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Last Updated</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g., December 2024" />
+                    <Input {...field} placeholder="e.g., December 2024" value={asString(field.value)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex items-center justify-between mb-3">
-              <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 Content Sections
-              </FormLabel>
+              </label>
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  const currentSections = form.getValues('data.sections') || []
+                  const currentSections = asArray<{ heading: string; content: string; items: string[] }>(form.getValues('data.sections'))
                   form.setValue('data.sections', [...currentSections, { heading: '', content: '', items: [] }])
                 }}
                 className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2782,9 +3750,11 @@ export default function SectionEditor({
             <FormField
               control={form.control}
               name="data.sections"
-              render={({ field }) => (
+              render={({ field }) => {
+                const sections = asArray<{ heading: string; content: string; items: string[] }>(field.value)
+                return (
                 <div className="space-y-3">
-                  {(field.value || []).map((section: any, index: number) => (
+                  {sections.map((section, index: number) => (
                     <div
                       key={index}
                       className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
@@ -2798,7 +3768,7 @@ export default function SectionEditor({
                           variant="ghost"
                           size="sm"
                           onClick={() => {
-                            const newSections = field.value.filter((_: any, i: number) => i !== index)
+                            const newSections = sections.filter((_, i: number) => i !== index)
                             field.onChange(newSections)
                           }}
                           className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
@@ -2815,7 +3785,7 @@ export default function SectionEditor({
                               Heading
                             </FormLabel>
                             <FormControl>
-                              <Input {...headingField} placeholder="e.g., 1. Acceptance of Terms" />
+                              <Input {...headingField} placeholder="e.g., 1. Acceptance of Terms" value={asString(headingField.value)} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -2830,7 +3800,7 @@ export default function SectionEditor({
                               Content
                             </FormLabel>
                             <FormControl>
-                              <Textarea {...contentField} rows={4} placeholder="Section content text..." />
+                              <Textarea {...contentField} rows={4} placeholder="Section content text..." value={asString(contentField.value)} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -2846,8 +3816,8 @@ export default function SectionEditor({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const currentItems = section.items || []
-                              const updatedSections = [...field.value]
+                              const currentItems = asArray<string>(section.items)
+                              const updatedSections = [...sections]
                               updatedSections[index].items = [...currentItems, '']
                               field.onChange(updatedSections)
                             }}
@@ -2857,12 +3827,12 @@ export default function SectionEditor({
                             Add Item
                           </Button>
                         </div>
-                        {(section.items || []).map((item: string, itemIndex: number) => (
+                        {asArray<string>(section.items).map((item: string, itemIndex: number) => (
                           <div key={itemIndex} className="flex gap-2">
                             <Input
-                              value={item}
+                              value={asString(item)}
                               onChange={(e) => {
-                                const updatedSections = [...field.value]
+                                const updatedSections = [...sections]
                                 updatedSections[index].items[itemIndex] = e.target.value
                                 field.onChange(updatedSections)
                               }}
@@ -2873,8 +3843,8 @@ export default function SectionEditor({
                               variant="ghost"
                               size="sm"
                               onClick={() => {
-                                const updatedSections = [...field.value]
-                                updatedSections[index].items = section.items.filter(
+                                const updatedSections = [...sections]
+                                updatedSections[index].items = asArray<string>(section.items).filter(
                                   (_: string, i: number) => i !== itemIndex
                                 )
                                 field.onChange(updatedSections)
@@ -2888,7 +3858,7 @@ export default function SectionEditor({
                       </div>
                     </div>
                   ))}
-                  {(!field.value || field.value.length === 0) && (
+                  {(sections.length === 0) && (
                     <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
                       No sections added yet. Click &quot;Add Section&quot; to get started.
                     </p>
@@ -2953,17 +3923,59 @@ export default function SectionEditor({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {!isEditing && (
             <FormField
               control={form.control}
               name="type"
               render={({ field }) => (
-                <FormItem className="hidden">
+                <FormItem>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                      Section Type
+                    </FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value} disabled={isEditing}>
                   <FormControl>
-                    <Input {...field} disabled={isEditing} />
+                        <SelectTrigger className="cms-card cms-border cms-text-primary">
+                          <SelectValue placeholder="Select section type" />
+                        </SelectTrigger>
                   </FormControl>
+                      <SelectContent className="cms-card cms-border">
+                        <SelectItem value="hero" className="cms-text-primary">Hero</SelectItem>
+                        <SelectItem value="pricing-hero" className="cms-text-primary">Pricing Hero</SelectItem>
+                        <SelectItem value="pricing-plans" className="cms-text-primary">Pricing Plans</SelectItem>
+                        <SelectItem value="free-messages" className="cms-text-primary">Free Messages</SelectItem>
+                        <SelectItem value="message-bundles" className="cms-text-primary">Message Bundles</SelectItem>
+                        <SelectItem value="pricing-info" className="cms-text-primary">Pricing Info</SelectItem>
+                        <SelectItem value="pricing-faq" className="cms-text-primary">Pricing FAQ</SelectItem>
+                        <SelectItem value="faq-category" className="cms-text-primary">FAQ Category</SelectItem>
+                        <SelectItem value="feature-category" className="cms-text-primary">Feature Category</SelectItem>
+                        <SelectItem value="how-it-works" className="cms-text-primary">How It Works</SelectItem>
+                        <SelectItem value="gallery" className="cms-text-primary">Gallery</SelectItem>
+                        <SelectItem value="testimonials" className="cms-text-primary">Testimonials</SelectItem>
+                        <SelectItem value="app-download" className="cms-text-primary">App Download</SelectItem>
+                        <SelectItem value="coming-soon" className="cms-text-primary">Coming Soon</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
+                      Choose the type of section you want to create
+                  </FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />
+            )}
+            {isEditing && (
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem className="hidden">
+                    <FormControl>
+                      <Input {...field} disabled={isEditing} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            )}
 
             <FormField
               control={form.control}

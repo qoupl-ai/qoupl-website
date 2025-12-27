@@ -44,6 +44,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
   const router = useRouter()
   const supabase = createClient()
   const { theme, resolvedTheme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>('hover')
   const [isHovered, setIsHovered] = useState(false)
   const [showModeMenu, setShowModeMenu] = useState(false)
@@ -51,7 +52,13 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
   const [themeMenuPosition, setThemeMenuPosition] = useState({ top: 0, left: 0 })
   const themeButtonRef = useRef<HTMLButtonElement>(null)
   
-  const displayTheme = theme === 'system' ? resolvedTheme : theme
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  
+  // Default to light during SSR to match server render
+  const displayTheme = mounted ? (theme === 'system' ? resolvedTheme : theme) : 'light'
 
   // Determine if sidebar should be expanded based on mode
   const isExpanded = sidebarMode === 'expanded' || (sidebarMode === 'hover' && isHovered)

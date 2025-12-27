@@ -36,7 +36,8 @@ import {
   Target, 
   FileText,
   Smartphone,
-  Calendar
+  Calendar,
+  Info
 } from 'lucide-react'
 import SectionEditorButton from '@/components/cms/section-editor-button'
 import { reorderSections } from '@/app/actions/section-actions'
@@ -69,6 +70,11 @@ const getSectionIcon = (componentType: string) => {
     'faq-category': HelpCircle,
     'feature-category': Zap,
     'pricing-plans': CreditCard,
+    'pricing-hero': Sparkles,
+    'free-messages': Heart,
+    'message-bundles': MessageSquare,
+    'pricing-info': Info,
+    'pricing-faq': HelpCircle,
     'values': Heart,
     'timeline': Clock,
     'why-join': Target,
@@ -91,6 +97,11 @@ const getSectionTypeName = (componentType: string): string => {
     'faq-category': 'FAQ Category',
     'feature-category': 'Feature Category',
     'pricing-plans': 'Pricing Plans',
+    'pricing-hero': 'Pricing Hero',
+    'free-messages': 'Free Messages',
+    'message-bundles': 'Message Bundles',
+    'pricing-info': 'Pricing Info',
+    'pricing-faq': 'Pricing FAQ',
     'values': 'Values',
     'timeline': 'Timeline',
     'why-join': 'Why Join',

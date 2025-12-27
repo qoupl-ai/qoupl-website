@@ -88,6 +88,66 @@ export const pricingPlansSectionSchema = baseSectionSchema.extend({
   }),
 })
 
+// Pricing hero section schema
+export const pricingHeroSectionSchema = baseSectionSchema.extend({
+  data: z.object({
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
+    badge: z.object({
+      icon: z.string().optional(),
+      text: z.string().optional(),
+    }).optional(),
+  }),
+})
+
+// Free messages section schema
+export const freeMessagesSectionSchema = baseSectionSchema.extend({
+  data: z.object({
+    count: z.number().int().min(0).default(3),
+    title: z.string().optional(),
+    description: z.string().optional(),
+  }),
+})
+
+// Message bundles section schema
+export const messageBundlesSectionSchema = baseSectionSchema.extend({
+  data: z.object({
+    price_per_message: z.number().min(0).default(10),
+    gst_rate: z.number().min(0).max(100).default(18),
+    bundles: z.array(z.object({
+      messages: z.number().int().min(1),
+      popular: z.boolean().default(false),
+    })),
+    min_messages: z.number().int().min(1).default(5),
+    max_messages: z.number().int().min(1).default(100),
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
+  }),
+})
+
+// Pricing info section schema
+export const pricingInfoSectionSchema = baseSectionSchema.extend({
+  data: z.object({
+    title: z.string().optional(),
+    items: z.array(z.string()),
+  }),
+})
+
+// Pricing FAQ section schema
+export const pricingFaqSectionSchema = baseSectionSchema.extend({
+  data: z.object({
+    title: z.string().optional(),
+    faqs: z.array(z.object({
+      question: z.string().min(1, 'Question is required'),
+      answer: z.string().min(1, 'Answer is required'),
+    })),
+    cta: z.object({
+      text: z.string().optional(),
+      link: z.string().optional(),
+    }).optional(),
+  }),
+})
+
 // How it works section schema
 export const howItWorksSectionSchema = baseSectionSchema.extend({
   data: z.object({
@@ -202,6 +262,48 @@ export const comingSoonSectionSchema = baseSectionSchema.extend({
   }),
 })
 
+// Contact Hero section schema
+export const contactHeroSectionSchema = baseSectionSchema.extend({
+  data: z.object({
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
+    badge: z.object({
+      icon: z.string().optional(),
+      text: z.string().optional(),
+    }).optional(),
+  }),
+})
+
+// Contact Info section schema
+export const contactInfoSectionSchema = baseSectionSchema.extend({
+  data: z.object({
+    title: z.string().optional(),
+    items: z.array(z.object({
+      icon: z.string().optional(),
+      title: z.string().optional(),
+      details: z.string().optional(),
+      link: z.string().nullable().optional(),
+    })).optional(),
+  }),
+})
+
+// Contact Info Details section schema (for the info cards on the right)
+export const contactInfoDetailsSectionSchema = baseSectionSchema.extend({
+  data: z.object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    items: z.array(z.object({
+      icon: z.string().optional(),
+      title: z.string().optional(),
+      description: z.string().optional(),
+    })).optional(),
+    faq_link: z.object({
+      text: z.string().optional(),
+      url: z.string().optional(),
+    }).optional(),
+  }),
+})
+
 // Registry of all section schemas
 export const sectionSchemas: Record<string, z.ZodSchema> = {
   'hero': heroSectionSchema,
@@ -209,6 +311,14 @@ export const sectionSchemas: Record<string, z.ZodSchema> = {
   'faq-category': faqCategorySectionSchema,
   'feature-category': featureCategorySectionSchema,
   'pricing-plans': pricingPlansSectionSchema,
+  'pricing-hero': pricingHeroSectionSchema,
+  'free-messages': freeMessagesSectionSchema,
+  'message-bundles': messageBundlesSectionSchema,
+  'pricing-info': pricingInfoSectionSchema,
+  'pricing-faq': pricingFaqSectionSchema,
+  'contact-hero': contactHeroSectionSchema,
+  'contact-info': contactInfoSectionSchema,
+  'contact-info-details': contactInfoDetailsSectionSchema,
   'how-it-works': howItWorksSectionSchema,
   'gallery': gallerySectionSchema,
   'testimonials': testimonialsSectionSchema,

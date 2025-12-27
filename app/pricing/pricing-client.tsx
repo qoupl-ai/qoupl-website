@@ -16,15 +16,62 @@ interface PricingPlan {
 }
 
 interface PricingClientProps {
+  hero?: {
+    title?: string;
+    subtitle?: string;
+    badge?: {
+      icon?: string;
+      text?: string;
+    };
+  };
   plans: PricingPlan[];
+  freeMessages?: {
+    count?: number;
+    title?: string;
+    description?: string;
+  };
+  messageBundles?: {
+    price_per_message?: number;
+    gst_rate?: number;
+    bundles?: Array<{ messages: number; popular: boolean }>;
+    min_messages?: number;
+    max_messages?: number;
+    title?: string;
+    subtitle?: string;
+  };
+  pricingInfo?: {
+    title?: string;
+    items?: string[];
+  };
+  faq?: {
+    title?: string;
+    faqs?: Array<{ question: string; answer: string }>;
+    cta?: {
+      text?: string;
+      link?: string;
+    };
+  };
 }
 
-export default function PricingClient({ plans }: PricingClientProps) {
+export default function PricingClient({ 
+  hero, 
+  plans, 
+  freeMessages, 
+  messageBundles: messageBundlesData, 
+  pricingInfo, 
+  faq 
+}: PricingClientProps) {
   const [messageBundle, setMessageBundle] = useState(5);
 
+  // Get values from CMS - no defaults, only use if data exists
+  const pricePerMessage = messageBundlesData?.price_per_message ?? 10;
+  const gstRate = messageBundlesData?.gst_rate ?? 18;
+  const minMessages = messageBundlesData?.min_messages ?? 5;
+  const maxMessages = messageBundlesData?.max_messages ?? 100;
+
   const calculatePrice = (messages: number) => {
-    const basePrice = messages * 10;
-    const gst = basePrice * 0.18; // 18% GST
+    const basePrice = messages * pricePerMessage;
+    const gst = basePrice * (gstRate / 100);
     return {
       base: basePrice,
       gst: gst,
@@ -39,55 +86,71 @@ export default function PricingClient({ plans }: PricingClientProps) {
     ? plans[0].features 
     : [];
 
-  const messageBundles = [
-    { messages: 5, popular: false },
-    { messages: 10, popular: true },
-    { messages: 20, popular: false },
-    { messages: 50, popular: false }
-  ];
+  // Get message bundles from CMS - only use if data exists
+  const messageBundles = messageBundlesData?.bundles && messageBundlesData.bundles.length > 0
+    ? messageBundlesData.bundles
+    : [];
+
+  // If no sections exist at all, show a message
+  const hasAnyContent = hero || plans.length > 0 || freeMessages || messageBundlesData || pricingInfo || faq
+
+  if (!hasAnyContent) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center max-w-2xl mx-auto px-4">
+          <h1 className="text-4xl font-bold mb-4">Pricing</h1>
+          <p className="text-lg text-muted-foreground">
+            Pricing content is being set up. Please check back soon.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20 py-20">
-        <div className="container mx-auto px-4">
+      {hero && (
+        <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20 py-20">
+          <div className="container mx-auto px-4">
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto text-center"
-          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6 backdrop-blur-sm"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="max-w-4xl mx-auto text-center"
             >
-              <Sparkles className="h-4 w-4" />
-              <span className="text-sm font-semibold">Simple & Transparent</span>
+              {hero?.badge?.text && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6 backdrop-blur-sm"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  <span className="text-sm font-semibold">{hero.badge.text}</span>
+                </motion.div>
+              )}
+
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
+                {hero?.title || "Affordable Pricing"}
+              </h1>
+              <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
+                {hero?.subtitle || "Pay only for what you use. No hidden fees, no surprises."}
+              </p>
             </motion.div>
+          </div>
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-              Affordable{" "}
-              <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Pricing
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-              Pay only for what you use. No hidden fees, no surprises.
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Decorative elements */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-      </section>
+          {/* Decorative elements */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        </section>
+      )}
 
       {/* Platform Fee Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 max-w-6xl">
+      {plans.length > 0 && (
+        <section className="py-20">
+          <div className="container mx-auto px-4 max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -104,18 +167,20 @@ export default function PricingClient({ plans }: PricingClientProps) {
                 </div>
 
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                  Platform Access
+                  {plans.length > 0 ? plans[0].name || "Platform Access" : "Platform Access"}
                 </h2>
 
-                <div className="flex items-baseline justify-center gap-2 mb-4">
-                  <span className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                    ₹10
-                  </span>
-                  <span className="text-2xl text-muted-foreground">/month</span>
-                </div>
+                {plans.length > 0 && (
+                  <div className="flex items-baseline justify-center gap-2 mb-4">
+                    <span className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                      ₹{plans[0].price}
+                    </span>
+                    <span className="text-2xl text-muted-foreground">/{plans[0].billing_period || "month"}</span>
+                  </div>
+                )}
 
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Get access to the qoupl platform and unlock all features
+                  {plans.length > 0 && plans[0].description ? plans[0].description : "Get access to the qoupl platform and unlock all features"}
                 </p>
               </div>
 
@@ -142,7 +207,8 @@ export default function PricingClient({ plans }: PricingClientProps) {
           </motion.div>
 
           {/* Free Messages Notice */}
-          <motion.div
+          {freeMessages && (
+            <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -155,17 +221,20 @@ export default function PricingClient({ plans }: PricingClientProps) {
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-bold mb-2">First 3 Messages Free Per Match!</h3>
+                <h3 className="text-2xl font-bold mb-2">
+                  {freeMessages?.title || `First ${freeMessages?.count || 3} Messages Free Per Match!`}
+                </h3>
                 <p className="text-lg text-muted-foreground">
-                  Start conversations with your matches without any additional cost.
-                  Your first 3 messages with each match are completely free.
+                  {freeMessages?.description || "Start conversations with your matches without any additional cost. Your first 3 messages with each match are completely free."}
                 </p>
               </div>
             </div>
           </motion.div>
+          )}
 
           {/* Message Bundles */}
-          <div className="mb-12">
+          {messageBundlesData && (
+            <div className="mb-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -173,19 +242,17 @@ export default function PricingClient({ plans }: PricingClientProps) {
               className="text-center mb-12"
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                Message{" "}
-                <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Bundles
-                </span>
+                {messageBundlesData?.title || "Message Bundles"}
               </h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                After your free messages, purchase message bundles to continue connecting
+                {messageBundlesData?.subtitle || "After your free messages, purchase message bundles to continue connecting"}
               </p>
             </motion.div>
 
             {/* Quick Select Bundles */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {messageBundles.map((bundle, index) => {
+            {messageBundles.length > 0 ? (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                {messageBundles.map((bundle, index) => {
                 const bundlePrice = calculatePrice(bundle.messages);
                 return (
                   <motion.div
@@ -232,14 +299,19 @@ export default function PricingClient({ plans }: PricingClientProps) {
                           ₹{bundlePrice.total.toFixed(2)}
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          ₹{bundlePrice.base} + ₹{bundlePrice.gst.toFixed(2)} GST
+                          ₹{bundlePrice.base} + ₹{bundlePrice.gst.toFixed(2)} GST ({gstRate}%)
                         </p>
                       </div>
                     </div>
                   </motion.div>
                 );
               })}
-            </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground mb-12">
+                <p>No message bundles configured. Add bundles in the CMS to display them here.</p>
+              </div>
+            )}
 
             {/* Custom Bundle Calculator */}
             <motion.div
@@ -269,8 +341,8 @@ export default function PricingClient({ plans }: PricingClientProps) {
 
                     <input
                       type="range"
-                      min="5"
-                      max="100"
+                      min={minMessages}
+                      max={maxMessages}
                       step="5"
                       value={messageBundle}
                       onChange={(e) => setMessageBundle(parseInt(e.target.value))}
@@ -278,15 +350,15 @@ export default function PricingClient({ plans }: PricingClientProps) {
                       style={{
                         background: `linear-gradient(to right,
                           hsl(var(--primary)) 0%,
-                          hsl(var(--primary)) ${((messageBundle - 5) / 95) * 100}%,
-                          rgba(168, 85, 247, 0.2) ${((messageBundle - 5) / 95) * 100}%,
+                          hsl(var(--primary)) ${((messageBundle - minMessages) / (maxMessages - minMessages)) * 100}%,
+                          rgba(168, 85, 247, 0.2) ${((messageBundle - minMessages) / (maxMessages - minMessages)) * 100}%,
                           rgba(168, 85, 247, 0.2) 100%)`
                       }}
                     />
 
                     <div className="flex justify-between text-sm text-muted-foreground mt-2">
-                      <span>5 messages</span>
-                      <span>100 messages</span>
+                      <span>{minMessages} messages</span>
+                      <span>{maxMessages} messages</span>
                     </div>
                   </div>
 
@@ -294,11 +366,11 @@ export default function PricingClient({ plans }: PricingClientProps) {
                   <div className="bg-gradient-to-br from-primary/5 to-purple-600/5 rounded-2xl p-6 mb-6">
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Base Price ({messageBundle} × ₹10)</span>
+                        <span className="text-muted-foreground">Base Price ({messageBundle} × ₹{pricePerMessage})</span>
                         <span className="font-semibold">₹{price.base}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">GST (18%)</span>
+                        <span className="text-muted-foreground">GST ({gstRate}%)</span>
                         <span className="font-semibold">₹{price.gst.toFixed(2)}</span>
                       </div>
                       <div className="border-t border-border pt-3 flex justify-between items-center">
@@ -321,50 +393,43 @@ export default function PricingClient({ plans }: PricingClientProps) {
               </div>
             </motion.div>
           </div>
+          )}
 
           {/* Pricing Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-blue-50 dark:bg-blue-950/20 border border-blue-500/20 rounded-2xl p-6 mt-12"
-          >
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0">
-                <Info className="h-6 w-6 text-blue-500" />
+          {pricingInfo && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-blue-50 dark:bg-blue-950/20 border border-blue-500/20 rounded-2xl p-6 mt-12"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <Info className="h-6 w-6 text-blue-500" />
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-bold text-lg">{pricingInfo?.title || "How it works"}</h4>
+                  {pricingInfo?.items && pricingInfo.items.length > 0 ? (
+                    <ul className="space-y-2 text-muted-foreground">
+                      {pricingInfo.items.map((item, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <Check className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
               </div>
-              <div className="space-y-2">
-                <h4 className="font-bold text-lg">How it works</h4>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span>Pay ₹10/month for platform access</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span>Get 3 free messages with each match</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span>Purchase message bundles as needed (minimum 5 messages for ₹50 + GST)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span>Each message costs ₹10, bundles can be customized to your needs</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span>All prices include 18% GST</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
         </div>
       </section>
+      )}
 
       {/* FAQ Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/5 to-purple-500/5">
+      {faq && (
+        <section className="py-20 bg-gradient-to-br from-primary/5 to-purple-500/5">
         <div className="container mx-auto px-4 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -373,32 +438,12 @@ export default function PricingClient({ plans }: PricingClientProps) {
             className="text-center mb-12"
           >
             <h2 className="text-4xl font-bold mb-4">
-              Frequently Asked{" "}
-              <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Questions
-              </span>
+              {faq?.title || "Frequently Asked Questions"}
             </h2>
           </motion.div>
 
           <div className="space-y-6">
-            {[
-              {
-                q: "Do message bundles expire?",
-                a: "No, your purchased message bundles never expire. Use them whenever you're ready to connect!"
-              },
-              {
-                q: "Can I cancel my subscription?",
-                a: "Yes, you can cancel your platform subscription anytime. Your access will continue until the end of your billing period."
-              },
-              {
-                q: "Are there any hidden fees?",
-                a: "No hidden fees! The only costs are the ₹10/month platform fee and any message bundles you choose to purchase."
-              },
-              {
-                q: "How do the 3 free messages work?",
-                a: "For each match you connect with, your first 3 messages are completely free. This applies to every new match individually."
-              }
-            ].map((faq, index) => (
+            {faq?.faqs && faq.faqs.length > 0 ? faq.faqs.map((faqItem: any, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -407,23 +452,30 @@ export default function PricingClient({ plans }: PricingClientProps) {
                 transition={{ delay: index * 0.1 }}
                 className="bg-card/50 backdrop-blur-sm border border-border rounded-2xl p-6"
               >
-                <h3 className="font-bold text-lg mb-2">{faq.q}</h3>
-                <p className="text-muted-foreground">{faq.a}</p>
+                <h3 className="font-bold text-lg mb-2">{faqItem.question || faqItem.q}</h3>
+                <p className="text-muted-foreground">{faqItem.answer || faqItem.a}</p>
               </motion.div>
-            ))}
+            )) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <p>No FAQs available. Add FAQs in the CMS to display them here.</p>
+              </div>
+            )}
           </div>
 
-          <div className="text-center mt-12">
-            <p className="text-muted-foreground mb-4">Still have questions?</p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-bold hover:shadow-lg transition-all duration-300 hover:scale-105"
-            >
-              Contact Support
-            </Link>
-          </div>
+          {(faq?.cta?.text || faq?.cta?.link) && (
+            <div className="text-center mt-12">
+              <p className="text-muted-foreground mb-4">{faq.cta.text || "Still have questions?"}</p>
+              <Link
+                href={faq.cta.link || "/contact"}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-bold hover:shadow-lg transition-all duration-300 hover:scale-105"
+              >
+                Contact Support
+              </Link>
+            </div>
+          )}
         </div>
       </section>
+      )}
     </div>
   );
 }
