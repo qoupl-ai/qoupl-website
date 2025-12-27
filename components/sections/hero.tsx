@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Heart, Sparkles } from "lucide-react";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 
 export default function Hero() {
   return (
@@ -15,7 +16,7 @@ export default function Hero() {
       <div className="absolute inset-0 opacity-10 dark:opacity-5">
         <div className="absolute top-20 left-10 w-64 h-80 rounded-3xl overflow-hidden rotate-12">
           <Image
-            src="/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg"
+            src={getStorageUrl("couple-photos", "qoupl_couple_02.jpg")}
             alt="Background"
             fill
             className="object-cover"
@@ -23,7 +24,7 @@ export default function Hero() {
         </div>
         <div className="absolute bottom-20 right-10 w-64 h-80 rounded-3xl overflow-hidden -rotate-12">
           <Image
-            src="/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg"
+            src={getStorageUrl("couple-photos", "qoupl_couple_03.jpg")}
             alt="Background"
             fill
             className="object-cover"
@@ -95,10 +96,10 @@ export default function Hero() {
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
                   {[
-                    "/images/women/rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg",
-                    "/images/men/amir-esrafili-eWa7clMsowo-unsplash.jpg",
-                    "/images/women/caique-nascimento-Ij24Uq1sMwM-unsplash.jpg",
-                    "/images/men/arrul-lin-sYhUhse5uT8-unsplash.jpg",
+                    getStorageUrl("hero-images", "women/qoupl_women_03.png"),
+                    getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
+                    getStorageUrl("hero-images", "women/qoupl_women_05.png"),
+                    getStorageUrl("hero-images", "men/qoupl_men_02.jpg"),
                   ].map((img, i) => (
                     <div
                       key={i}
@@ -126,9 +127,9 @@ export default function Hero() {
               className="grid grid-cols-3 gap-4 max-w-3xl mx-auto"
             >
               {[
-                "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
-                "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
-                "/images/coupl/young-guy-with-packets-hugging-happy-lady-sitting-stone (1).jpg",
+                getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
+                getStorageUrl("couple-photos", "qoupl_couple_04.jpg"),
+                getStorageUrl("couple-photos", "qoupl_couple_05.jpg"),
               ].map((img, i) => (
                 <motion.div
                   key={i}

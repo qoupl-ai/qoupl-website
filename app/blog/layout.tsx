@@ -1,4 +1,6 @@
 import { Metadata } from 'next'
+import Navbar from '@/components/navbar'
+import Footer from '@/components/sections/footer'
 
 export const metadata: Metadata = {
   title: 'Blog - College Dating Tips & Relationship Advice',
@@ -16,5 +18,11 @@ export const metadata: Metadata = {
 }
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <Navbar />
+      {children}
+      <Footer />
+    </>
+  )
 }

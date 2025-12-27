@@ -41,8 +41,29 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       return;
     }
 
-    // Simulate submission delay for better UX
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          gender: formData.gender,
+          age: formData.age,
+          lookingFor: formData.lookingFor,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to join waitlist');
+      }
+
+      // Success
       setIsSubmitting(false);
       setIsSubmitted(true);
 
@@ -59,7 +80,10 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         });
         onClose();
       }, 5000);
-    }, 1500);
+    } catch (err) {
+      setIsSubmitting(false);
+      setError(err instanceof Error ? err.message : 'Failed to join waitlist. Please try again.');
+    }
   };
 
   const handleChange = (

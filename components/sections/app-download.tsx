@@ -2,12 +2,62 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { Sparkles, Heart, Bell } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import WaitlistModal from "@/components/waitlist-modal";
 
-export default function AppDownload() {
+interface AppDownloadProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    badge?: {
+      icon?: string;
+      text?: string;
+    };
+    benefits?: string[];
+    cta?: {
+      text?: string;
+      subtext?: string;
+    };
+    platforms?: Array<{
+      name: string;
+      icon?: string;
+      coming?: boolean;
+    }>;
+    stats?: {
+      text?: string;
+      count?: string;
+      suffix?: string;
+    };
+    images?: {
+      decorative?: string[];
+    };
+  };
+}
+
+export default function AppDownload({ data }: AppDownloadProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const title = data?.title || "qoupl is Launching Soon";
+  const subtitle = data?.subtitle || "Be among the first college students to experience the future of dating! Join our waitlist today and get exclusive early access when we launch on iOS and Android.";
+  const benefits = data?.benefits || [
+    "Get notified before official launch",
+    "Exclusive early access to the app",
+    "Special perks for early members",
+    "Help shape the future of qoupl"
+  ];
+  const ctaText = data?.cta?.text || "Join the Waitlist";
+  const ctaSubtext = data?.cta?.subtext || "Limited spots available for early access";
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
@@ -35,24 +85,15 @@ export default function AppDownload() {
             </motion.div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-              <span className="bg-[#662D91] bg-clip-text text-transparent">
-                qoupl
-              </span>{" "}
-              is Launching Soon
+              {title}
             </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Be among the first college students to experience the future of dating! Join our waitlist
-              today and get exclusive early access when we launch on iOS and Android.
+              {subtitle}
             </p>
 
             {/* Benefits List */}
             <div className="space-y-4 mb-8">
-              {[
-                "Get notified before official launch",
-                "Exclusive early access to the app",
-                "Special perks for early members",
-                "Help shape the future of qoupl"
-              ].map((benefit, index) => (
+              {benefits.map((benefit, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
@@ -77,12 +118,14 @@ export default function AppDownload() {
               className="flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#662D91] text-white shadow-lg hover:shadow-xl transition-all font-semibold text-lg"
             >
               <Bell className="h-5 w-5" />
-              Join the Waitlist
+              {ctaText}
             </motion.button>
 
-            <p className="mt-4 text-sm text-muted-foreground">
-              Limited spots available for early access
-            </p>
+            {ctaSubtext && (
+              <p className="mt-4 text-sm text-muted-foreground">
+                {ctaSubtext}
+              </p>
+            )}
           </motion.div>
 
           {/* Right Content - Coming Soon Visual */}
@@ -126,7 +169,17 @@ export default function AppDownload() {
                 <div className="space-y-3 opacity-50">
                   <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-black/5 dark:bg-white/5 border border-border">
                     <div className="w-8 h-8 rounded-lg bg-black/10 dark:bg-white/10 flex items-center justify-center">
-                      <span className="text-xs">🍎</span>
+                      <div className="relative h-5 w-5 flex items-center justify-center">
+                        {mounted && (
+                          <Image
+                            src={isDark ? "/images/brand-logo/apple-dark.png" : "/images/brand-logo/apple.png"}
+                            alt="Apple logo"
+                            width={20}
+                            height={20}
+                            className="object-contain opacity-60"
+                          />
+                        )}
+                      </div>
                     </div>
                     <div className="text-left">
                       <div className="text-xs font-normal text-muted-foreground">Coming to</div>
@@ -135,7 +188,17 @@ export default function AppDownload() {
                   </div>
                   <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-black/5 dark:bg-white/5 border border-border">
                     <div className="w-8 h-8 rounded-lg bg-black/10 dark:bg-white/10 flex items-center justify-center">
-                      <span className="text-xs">📱</span>
+                      <div className="relative h-5 w-5 flex items-center justify-center">
+                        {mounted && (
+                          <Image
+                            src={isDark ? "/images/brand-logo/android-dark.png" : "/images/brand-logo/android.png"}
+                            alt="Android logo"
+                            width={20}
+                            height={20}
+                            className="object-contain opacity-60"
+                          />
+                        )}
+                      </div>
                     </div>
                     <div className="text-left">
                       <div className="text-xs font-normal text-muted-foreground">Coming to</div>
@@ -164,7 +227,7 @@ export default function AppDownload() {
                 className="absolute -left-8 top-12 w-32 h-56 rounded-3xl overflow-hidden shadow-xl border-4 border-gray-800 dark:border-gray-700 opacity-70"
               >
                 <Image
-                  src="/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg"
+                  src={getStorageUrl("couple-photos", "qoupl_couple_03.jpg")}
                   alt="qoupl preview"
                   fill
                   className="object-cover"
@@ -184,7 +247,7 @@ export default function AppDownload() {
                 className="absolute -right-8 bottom-12 w-32 h-56 rounded-3xl overflow-hidden shadow-xl border-4 border-gray-800 dark:border-gray-700 opacity-70"
               >
                 <Image
-                  src="/images/coupl/young-guy-with-packets-hugging-happy-lady-sitting-stone (1).jpg"
+                  src={getStorageUrl("couple-photos", "qoupl_couple_05.jpg")}
                   alt="qoupl preview"
                   fill
                   className="object-cover"
