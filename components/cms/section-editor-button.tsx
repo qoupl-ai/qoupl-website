@@ -28,10 +28,8 @@ export default function SectionEditorButton({
         variant="outline"
         size="sm"
         onClick={() => setOpen(true)}
+        className="cms-card cms-border cms-text-secondary"
         style={{
-          backgroundColor: section ? '#212121' : '#212121',
-          borderColor: '#2a2a2a',
-          color: '#898989',
           fontWeight: '600',
           fontSize: '13px'
         }}

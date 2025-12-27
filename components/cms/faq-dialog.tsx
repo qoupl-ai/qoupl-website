@@ -122,17 +122,15 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
         {children}
       </DialogTrigger>
       <DialogContent 
-        className="max-w-2xl max-h-[90vh] overflow-y-auto"
+        className="max-w-2xl max-h-[90vh] overflow-y-auto cms-card cms-border"
         style={{
-          backgroundColor: '#212121',
-          borderColor: '#2a2a2a',
           fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
           <DialogTitle
+            className="cms-text-primary"
             style={{ 
-              color: '#ffffff', 
               fontWeight: '600', 
               fontSize: '18px',
               lineHeight: '1.4'
@@ -141,8 +139,8 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
             {mode === 'create' ? 'Create New FAQ' : 'Edit FAQ'}
           </DialogTitle>
           <DialogDescription
+            className="cms-text-secondary"
             style={{ 
-              color: '#898989', 
               fontSize: '13px',
               lineHeight: '1.5'
             }}
@@ -160,7 +158,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
               name="category_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                  <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                     Category
                   </FormLabel>
                   <Select
@@ -179,19 +177,20 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+                    <SelectContent>
                       {categories.map((category) => (
                         <SelectItem 
                           key={category.id} 
                           value={category.id}
-                          style={{ color: '#898989', fontSize: '13px' }}
+                          className="cms-text-secondary"
+                          style={{ fontSize: '13px' }}
                         >
                           {category.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     Choose the category this FAQ belongs to
                   </FormDescription>
                   <FormMessage />
@@ -204,7 +203,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
               name="question"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                  <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                     Question
                   </FormLabel>
                   <FormControl>
@@ -219,7 +218,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                       }}
                     />
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     The question users are asking
                   </FormDescription>
                   <FormMessage />
@@ -232,7 +231,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
               name="answer"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                  <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                     Answer
                   </FormLabel>
                   <FormControl>
@@ -248,7 +247,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                       }}
                     />
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     The detailed answer to the question
                   </FormDescription>
                   <FormMessage />
@@ -262,7 +261,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                 name="order_index"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                       Order
                     </FormLabel>
                     <FormControl>
@@ -278,7 +277,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                         }}
                       />
                     </FormControl>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Display order within category
                     </FormDescription>
                     <FormMessage />
@@ -291,7 +290,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                 name="published"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                       Status
                     </FormLabel>
                     <Select
@@ -310,16 +309,16 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
-                        <SelectItem value="true" style={{ color: '#898989', fontSize: '13px' }}>
+                      <SelectContent>
+                        <SelectItem value="true" className="cms-text-secondary" style={{ fontSize: '13px' }}>
                           Published
                         </SelectItem>
-                        <SelectItem value="false" style={{ color: '#898989', fontSize: '13px' }}>
+                        <SelectItem value="false" className="cms-text-secondary" style={{ fontSize: '13px' }}>
                           Draft
                         </SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Publication status
                     </FormDescription>
                     <FormMessage />
@@ -334,11 +333,8 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
-                className="h-10 px-5"
+                className="h-10 px-5 cms-card cms-border cms-text-secondary"
                 style={{
-                  backgroundColor: '#212121',
-                  borderColor: '#2a2a2a',
-                  color: '#898989',
                   fontSize: '14px',
                   fontWeight: '500'
                 }}
@@ -348,11 +344,8 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
               <Button 
                 type="submit" 
                 disabled={isPending}
-                className="h-10 px-5"
+                className="h-10 px-5 cms-card cms-border cms-text-secondary"
                 style={{
-                  backgroundColor: isPending ? '#171717' : '#212121',
-                  borderColor: '#2a2a2a',
-                  color: isPending ? '#5a5a5a' : '#898989',
                   fontSize: '14px',
                   fontWeight: '600'
                 }}

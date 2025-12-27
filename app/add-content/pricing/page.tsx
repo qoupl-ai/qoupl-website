@@ -18,26 +18,17 @@ export default async function PricingPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 
-            className="text-2xl font-semibold mb-1.5"
-            style={{ color: '#ffffff', fontWeight: '600', fontSize: '20px', lineHeight: '1.3' }}
-          >
+          <h1 className="text-2xl font-semibold mb-1.5 cms-text-primary" style={{ fontWeight: '600', fontSize: '20px', lineHeight: '1.3' }}>
             Pricing Plans
           </h1>
-          <p 
-            className="text-sm"
-            style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}
-          >
+          <p className="text-sm cms-text-secondary" style={{ fontSize: '13px', lineHeight: '1.5' }}>
             Manage subscription tiers and pricing
           </p>
         </div>
         <PricingDialog mode="create">
           <Button
-            className="h-10 px-5"
+            className="h-10 px-5 cms-card cms-border cms-text-secondary"
             style={{ 
-              backgroundColor: '#212121',
-              borderColor: '#2a2a2a',
-              color: '#898989',
               fontWeight: '600',
               fontSize: '14px'
             }}
@@ -48,12 +39,12 @@ export default async function PricingPage() {
         </PricingDialog>
       </div>
 
-      <Card style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+      <Card className="cms-card cms-border border">
         <CardHeader>
-          <CardTitle style={{ color: '#ffffff', fontWeight: '600', fontSize: '16px', lineHeight: '1.4' }}>
+          <CardTitle className="cms-text-primary" style={{ fontWeight: '600', fontSize: '16px', lineHeight: '1.4' }}>
             All Plans ({plans?.length || 0})
           </CardTitle>
-          <CardDescription style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}>
+          <CardDescription className="cms-text-secondary" style={{ fontSize: '13px', lineHeight: '1.5' }}>
             Edit, reorder, or delete pricing plans
           </CardDescription>
         </CardHeader>

@@ -149,17 +149,15 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
         {children}
       </DialogTrigger>
       <DialogContent 
-        className="max-w-4xl max-h-[90vh] overflow-y-auto"
+        className="max-w-4xl max-h-[90vh] overflow-y-auto cms-card cms-border"
         style={{
-          backgroundColor: '#212121',
-          borderColor: '#2a2a2a',
           fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
           <DialogTitle
+            className="cms-text-primary"
             style={{ 
-              color: '#ffffff', 
               fontWeight: '600', 
               fontSize: '18px',
               lineHeight: '1.4'
@@ -168,8 +166,8 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
             {mode === 'create' ? 'Create New Blog Post' : 'Edit Blog Post'}
           </DialogTitle>
           <DialogDescription
+            className="cms-text-secondary"
             style={{ 
-              color: '#898989', 
               fontSize: '13px',
               lineHeight: '1.5'
             }}
@@ -187,7 +185,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                  <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                     Title
                   </FormLabel>
                   <FormControl>
@@ -202,7 +200,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                       }}
                     />
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     The main title of your blog post
                   </FormDescription>
                   <FormMessage />
@@ -216,7 +214,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="slug"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                       Slug
                     </FormLabel>
                     <FormControl>
@@ -231,7 +229,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                         }}
                       />
                     </FormControl>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       URL-friendly version (auto-generated)
                     </FormDescription>
                     <FormMessage />
@@ -244,7 +242,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="category_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                       Category
                     </FormLabel>
                     <Select
@@ -263,19 +261,20 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                           <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+                        <SelectContent>
                         {categories.map((category) => (
                           <SelectItem 
                             key={category.id} 
                             value={category.id}
-                            style={{ color: '#898989', fontSize: '13px' }}
+                            className="cms-text-secondary"
+                            style={{ fontSize: '13px' }}
                           >
                             {category.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Post category
                     </FormDescription>
                     <FormMessage />
@@ -289,7 +288,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
               name="excerpt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                  <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                     Excerpt
                   </FormLabel>
                   <FormControl>
@@ -305,7 +304,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                       }}
                     />
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     Short description shown in listings
                   </FormDescription>
                   <FormMessage />
@@ -318,7 +317,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                  <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                     Content
                   </FormLabel>
                   <FormControl>
@@ -334,7 +333,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                       }}
                     />
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     Full blog post content (supports Markdown)
                   </FormDescription>
                   <FormMessage />
@@ -348,7 +347,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="publish_date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                       Publish Date
                     </FormLabel>
                     <FormControl>
@@ -363,7 +362,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                         }}
                       />
                     </FormControl>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Publication date
                     </FormDescription>
                     <FormMessage />
@@ -376,7 +375,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="read_time"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                       Read Time (min)
                     </FormLabel>
                     <FormControl>
@@ -392,7 +391,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                         }}
                       />
                     </FormControl>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Estimated minutes
                     </FormDescription>
                     <FormMessage />
@@ -405,7 +404,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 name="published"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>
+                    <FormLabel className="cms-text-secondary" style={{ fontSize: '13px', fontWeight: '600' }}>
                       Status
                     </FormLabel>
                     <Select
@@ -424,16 +423,16 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
-                        <SelectItem value="true" style={{ color: '#898989', fontSize: '13px' }}>
+                        <SelectContent>
+                        <SelectItem value="true" className="cms-text-secondary" style={{ fontSize: '13px' }}>
                           Published
                         </SelectItem>
-                        <SelectItem value="false" style={{ color: '#898989', fontSize: '13px' }}>
+                        <SelectItem value="false" className="cms-text-secondary" style={{ fontSize: '13px' }}>
                           Draft
                         </SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Publication status
                     </FormDescription>
                     <FormMessage />
@@ -448,11 +447,8 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
-                className="h-10 px-5"
+                className="h-10 px-5 cms-card cms-border cms-text-secondary"
                 style={{
-                  backgroundColor: '#212121',
-                  borderColor: '#2a2a2a',
-                  color: '#898989',
                   fontSize: '14px',
                   fontWeight: '500'
                 }}
@@ -462,11 +458,8 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
               <Button 
                 type="submit" 
                 disabled={isPending}
-                className="h-10 px-5"
+                className="h-10 px-5 cms-card cms-border cms-text-secondary"
                 style={{
-                  backgroundColor: isPending ? '#171717' : '#212121',
-                  borderColor: '#2a2a2a',
-                  color: isPending ? '#5a5a5a' : '#898989',
                   fontSize: '14px',
                   fontWeight: '600'
                 }}

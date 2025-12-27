@@ -11,8 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Plus, ArrowLeft, GripVertical, FileText, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
-import SectionEditor from '@/components/cms/section-editor'
-import SectionEditorButton from './section-editor-button'
+import SectionEditorButton from '@/components/cms/section-editor-button'
 import SortableSectionsList from '@/components/cms/sortable-sections-list'
 
 interface PageProps {
@@ -77,30 +76,24 @@ export default async function PageEditorPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#171717' }}>
+    <div className="min-h-screen cms-main-bg">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Link href="/add-content/pages">
               <Button 
                 variant="ghost" 
                 size="sm"
-                style={{ color: '#898989' }}
+                className="cms-text-secondary"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
               </Button>
             </Link>
             <div>
-              <h1 
-                className="text-3xl font-semibold mb-2"
-                style={{ color: '#ffffff' }}
-              >
+              <h1 className="text-3xl font-semibold mb-2 cms-text-primary">
                 {page.title}
               </h1>
-              <p 
-                className="text-sm"
-                style={{ color: '#898989' }}
-              >
+              <p className="text-sm cms-text-secondary">
                 /{page.slug}
               </p>
             </div>
@@ -111,12 +104,8 @@ export default async function PageEditorPage({ params }: PageProps) {
                 <Button
                   variant="outline"
                   size="sm"
-                  style={{ 
-                    backgroundColor: '#212121',
-                    borderColor: '#2a2a2a',
-                    color: '#898989',
-                    fontSize: '13px'
-                  }}
+                  className="cms-card cms-border cms-text-secondary"
+                  style={{ fontSize: '13px' }}
                 >
                   <FileText className="mr-2 h-4 w-4" />
                   Manage Posts
@@ -129,14 +118,14 @@ export default async function PageEditorPage({ params }: PageProps) {
 
         {/* Blog Posts Preview for Blog Page */}
         {slug === 'blog' && blogPosts.length > 0 && (
-          <Card className="mb-6" style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+          <Card className="mb-6 cms-card cms-border border">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle style={{ color: '#ffffff', fontSize: '18px', fontWeight: '600' }}>
+                  <CardTitle className="cms-text-primary" style={{ fontSize: '18px', fontWeight: '600' }}>
                     Blog Posts ({blogPosts.length})
                   </CardTitle>
-                  <CardDescription style={{ color: '#898989', fontSize: '13px', marginTop: '4px' }}>
+                  <CardDescription className="cms-text-secondary" style={{ fontSize: '13px', marginTop: '4px' }}>
                     These posts will be displayed on the blog page
                   </CardDescription>
                 </div>
@@ -159,22 +148,15 @@ export default async function PageEditorPage({ params }: PageProps) {
                   return (
                     <div
                       key={post.id}
-                      className="flex items-center justify-between p-3 rounded-lg"
-                      style={{ backgroundColor: '#171717', border: '1px solid #2a2a2a' }}
+                      className="flex items-center justify-between p-3 rounded-lg cms-main-bg cms-border border"
                     >
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate" style={{ color: '#ffffff' }}>
+                        <p className="text-sm font-medium truncate cms-text-primary">
                           {post.title}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
                           {category && (
-                            <span 
-                              className="text-xs px-2 py-0.5 rounded"
-                              style={{ 
-                                backgroundColor: '#2a2a2a',
-                                color: '#898989'
-                              }}
-                            >
+                            <span className="text-xs px-2 py-0.5 rounded cms-card-bg cms-text-secondary">
                               {category.name}
                             </span>
                           )}
@@ -190,7 +172,8 @@ export default async function PageEditorPage({ params }: PageProps) {
                         <Button
                           variant="ghost"
                           size="sm"
-                          style={{ color: '#898989', fontSize: '12px' }}
+                          className="cms-text-secondary"
+                          style={{ fontSize: '12px' }}
                         >
                           Edit
                         </Button>
@@ -205,29 +188,23 @@ export default async function PageEditorPage({ params }: PageProps) {
 
         {hasSections ? (
           <>
-            <div 
-              className="mb-6 p-4 rounded-lg border"
-              style={{ 
-                backgroundColor: '#212121',
-                borderColor: '#2a2a2a'
-              }}
-            >
-              <p className="text-sm flex items-center gap-2" style={{ color: '#898989' }}>
+            <div className="mb-6 p-4 rounded-lg border cms-card cms-border">
+              <p className="text-sm flex items-center gap-2 cms-text-secondary">
                 <GripVertical className="h-4 w-4" style={{ color: '#662D91' }} />
                 <span>
-                  <strong style={{ color: '#ffffff' }}>Tip:</strong> Drag sections by the grip icon to reorder them. Changes save automatically.
+                  <strong className="cms-text-primary">Tip:</strong> Drag sections by the grip icon to reorder them. Changes save automatically.
                 </span>
               </p>
             </div>
             <SortableSectionsList sections={safeSections} pageId={page.id} pageSlug={page.slug} />
           </>
         ) : (
-          <Card style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+          <Card className="cms-card cms-border border">
             <CardHeader>
-              <CardTitle style={{ color: '#ffffff', fontSize: '18px', fontWeight: '600' }}>
+              <CardTitle className="cms-text-primary" style={{ fontSize: '18px', fontWeight: '600' }}>
                 No Sections
               </CardTitle>
-              <CardDescription style={{ color: '#898989', fontSize: '13px' }}>
+              <CardDescription className="cms-text-secondary" style={{ fontSize: '13px' }}>
                 {slug === 'blog' 
                   ? 'This page displays blog posts directly. Use the "Manage Posts" button above to add or edit blog posts.'
                   : 'This page doesn\'t have any sections yet. Create your first section to get started.'}
@@ -235,10 +212,7 @@ export default async function PageEditorPage({ params }: PageProps) {
             </CardHeader>
             {slug !== 'blog' && (
               <CardContent className="py-8 text-center">
-                <p 
-                  className="mb-6 text-sm"
-                  style={{ color: '#898989' }}
-                >
+                <p className="mb-6 text-sm cms-text-secondary">
                   Sections are the building blocks of your page. Add a hero section, content blocks, or any other component type.
                 </p>
                 <SectionEditorButton pageId={page.id} />

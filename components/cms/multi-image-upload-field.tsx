@@ -207,7 +207,7 @@ export function MultiImageUploadField({
 
     return (
       <div className="relative group">
-        <div className="relative w-full aspect-square rounded-md overflow-hidden border border-[#2a2a2a] bg-[#171717]">
+        <div className="relative w-full aspect-square rounded-md overflow-hidden border cms-card-bg cms-border">
           {!imageError ? (
             <Image
               src={imageUrl}
@@ -221,7 +221,7 @@ export function MultiImageUploadField({
               }}
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center p-4" style={{ color: '#5a5a5a' }}>
+            <div className="w-full h-full flex flex-col items-center justify-center p-4 cms-text-secondary">
               <AlertCircle className="h-6 w-6 mb-2" />
               <p className="text-xs text-center">Image not found</p>
               <p className="text-[10px] text-center mt-1 opacity-75 line-clamp-2 break-all">
@@ -236,7 +236,7 @@ export function MultiImageUploadField({
                 variant="ghost"
                 size="sm"
                 onClick={onMoveUp}
-                className="h-7 w-7 p-0 bg-[#212121] text-white hover:bg-[#2a2a2a]"
+                className="h-7 w-7 p-0 cms-card cms-text-primary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 title="Move up"
               >
                 ↑
@@ -248,7 +248,7 @@ export function MultiImageUploadField({
                 variant="ghost"
                 size="sm"
                 onClick={onMoveDown}
-                className="h-7 w-7 p-0 bg-[#212121] text-white hover:bg-[#2a2a2a]"
+                className="h-7 w-7 p-0 cms-card cms-text-primary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 title="Move down"
               >
                 ↓
@@ -259,7 +259,7 @@ export function MultiImageUploadField({
               variant="ghost"
               size="sm"
               onClick={onDelete}
-              className="h-7 w-7 p-0 bg-[#212121] text-white hover:bg-[#2a2a2a]"
+              className="h-7 w-7 p-0 cms-card cms-text-primary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
               title="Delete"
             >
               <X className="h-3 w-3" />
@@ -276,7 +276,7 @@ export function MultiImageUploadField({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium" style={{ color: '#ffffff', fontWeight: '500' }}>
+        <label className="text-sm font-medium cms-text-primary" style={{ fontWeight: '500' }}>
           {label} ({images.length}/{maxImages})
         </label>
         {images.length < maxImages && (
@@ -286,7 +286,7 @@ export function MultiImageUploadField({
             size="sm"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="h-7 px-2 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+            className="h-7 px-2 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
           >
             <Plus className="h-3 w-3 mr-1" />
             Add Images
@@ -320,21 +320,21 @@ export function MultiImageUploadField({
         </div>
       ) : (
         <div
-          className="border-2 border-dashed border-[#2a2a2a] rounded-md p-8 text-center cursor-pointer hover:border-[#3a3a3a] transition-colors bg-[#171717]"
+          className="border-2 border-dashed cms-border rounded-md p-8 text-center cursor-pointer hover:border-opacity-70 transition-colors cms-card-bg"
           onClick={() => fileInputRef.current?.click()}
         >
           {isUploading ? (
             <div className="flex flex-col items-center gap-2">
-              <Loader2 className="h-8 w-8 animate-spin text-[#898989]" />
-              <p className="text-sm" style={{ color: '#898989' }}>Uploading...</p>
+              <Loader2 className="h-8 w-8 animate-spin cms-text-secondary" />
+              <p className="text-sm cms-text-secondary">Uploading...</p>
             </div>
           ) : (
             <div className="flex flex-col items-center gap-2">
-              <ImageIcon className="h-8 w-8 text-[#898989]" />
-              <p className="text-sm" style={{ color: '#898989' }}>
+              <ImageIcon className="h-8 w-8 cms-text-secondary" />
+              <p className="text-sm cms-text-secondary">
                 Click to upload images or drag and drop
               </p>
-              <p className="text-xs" style={{ color: '#5a5a5a' }}>
+              <p className="text-xs cms-text-secondary">
                 PNG, JPG, WEBP up to 20MB each
               </p>
             </div>
@@ -343,7 +343,7 @@ export function MultiImageUploadField({
       )}
 
       {description && (
-        <p className="text-xs" style={{ color: '#898989' }}>
+        <p className="text-xs cms-text-secondary">
           {description}
         </p>
       )}

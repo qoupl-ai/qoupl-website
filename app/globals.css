@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Improved font rendering for better clarity and reduced blur */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1;
+  font-kerning: normal;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -65,22 +74,108 @@
   
   /* Fix white background on scroll for CMS */
   body.cms-page {
-    background-color: #171717 !important;
     overflow-x: hidden;
   }
   
-  html body.cms-page {
+  /* Ensure no white shows when scrolling CMS - Dark Mode */
+  .dark body.cms-page {
     background-color: #171717 !important;
   }
   
-  /* Ensure no white shows when scrolling CMS */
-  [data-cms-main] {
+  .dark html body.cms-page {
+    background-color: #171717 !important;
+  }
+  
+  .dark [data-cms-main] {
     background-color: #171717;
   }
   
-  /* Fix scrollbar area */
-  body.cms-page::-webkit-scrollbar-track {
+  .dark body.cms-page::-webkit-scrollbar-track {
     background-color: #171717;
+  }
+
+  /* Light Mode */
+  .light body.cms-page {
+    background-color: #FCFCFC !important;
+  }
+  
+  .light html body.cms-page {
+    background-color: #FCFCFC !important;
+  }
+  
+  .light [data-cms-main] {
+    background-color: #FCFCFC;
+  }
+  
+  .light body.cms-page::-webkit-scrollbar-track {
+    background-color: #FCFCFC;
+  }
+  
+  /* Supabase Auth UI Styling for Login Page */
+  .supabase-auth-ui_ui {
+    font-family: 'Google Sans Flex', system-ui, sans-serif;
+  }
+  
+  .supabase-auth-ui_ui-input {
+    background-color: #171717 !important;
+    border-color: #2a2a2a !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+  }
+  
+  .supabase-auth-ui_ui-input:focus {
+    border-color: #662D91 !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  .supabase-auth-ui_ui-label {
+    color: #898989 !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+  }
+  
+  .supabase-auth-ui_ui-button {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+    color: #898989 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s !important;
+  }
+  
+  .supabase-auth-ui_ui-button:hover {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+  }
+  
+  .supabase-auth-ui_ui-button[type="submit"] {
+    background-color: #662D91 !important;
+    border-color: #662D91 !important;
+    color: #ffffff !important;
+  }
+  
+  .supabase-auth-ui_ui-button[type="submit"]:hover {
+    background-color: #7a35a8 !important;
+    border-color: #7a35a8 !important;
+  }
+  
+  .supabase-auth-ui_ui-message {
+    color: #898989 !important;
+    font-size: 13px !important;
+  }
+  
+  .supabase-auth-ui_ui-message[data-state="error"] {
+    color: #ef4444 !important;
+  }
+  
+  .supabase-auth-ui_ui-anchor {
+    color: #662D91 !important;
+    font-size: 13px !important;
+  }
+  
+  .supabase-auth-ui_ui-anchor:hover {
+    color: #8B3DB8 !important;
   }
 }
 
@@ -137,24 +232,107 @@
     display: none;  /* Chrome, Safari and Opera */
   }
 
-  /* CMS Input and Textarea styling */
-  [data-cms-main] input::placeholder,
-  [data-cms-main] textarea::placeholder {
+  /* CMS Input and Textarea styling - Dark Mode */
+  .dark [data-cms-main] input::placeholder,
+  .dark [data-cms-main] textarea::placeholder,
+  .dark [role="dialog"] input::placeholder,
+  .dark [role="dialog"] textarea::placeholder {
     color: #5a5a5a !important;
   }
 
-  [data-cms-main] input,
-  [data-cms-main] textarea {
+  .dark [data-cms-main] input,
+  .dark [data-cms-main] textarea,
+  .dark [role="dialog"] input,
+  .dark [role="dialog"] textarea,
+  .dark [data-cms-main] [class*="Input"],
+  .dark [role="dialog"] [class*="Input"],
+  .dark [data-cms-main] [class*="Textarea"],
+  .dark [role="dialog"] [class*="Textarea"] {
     background-color: #171717 !important;
     border-color: #2a2a2a !important;
     color: #ffffff !important;
   }
 
-  [data-cms-main] input:focus,
-  [data-cms-main] textarea:focus,
-  [data-cms-main] input:focus-visible,
-  [data-cms-main] textarea:focus-visible {
+  .dark [data-cms-main] input:hover,
+  .dark [data-cms-main] textarea:hover,
+  .dark [role="dialog"] input:hover,
+  .dark [role="dialog"] textarea:hover,
+  .dark [data-cms-main] [class*="Input"]:hover,
+  .dark [role="dialog"] [class*="Input"]:hover,
+  .dark [data-cms-main] [class*="Textarea"]:hover,
+  .dark [role="dialog"] [class*="Textarea"]:hover {
+    background-color: #212121 !important;
     border-color: #2a2a2a !important;
+  }
+
+  .dark [data-cms-main] input:focus,
+  .dark [data-cms-main] textarea:focus,
+  .dark [data-cms-main] input:focus-visible,
+  .dark [data-cms-main] textarea:focus-visible,
+  .dark [role="dialog"] input:focus,
+  .dark [role="dialog"] textarea:focus,
+  .dark [role="dialog"] input:focus-visible,
+  .dark [role="dialog"] textarea:focus-visible,
+  .dark [data-cms-main] [class*="Input"]:focus,
+  .dark [role="dialog"] [class*="Input"]:focus,
+  .dark [data-cms-main] [class*="Textarea"]:focus,
+  .dark [role="dialog"] [class*="Textarea"]:focus {
+    background-color: #212121 !important;
+    border-color: #662D91 !important;
+    color: #ffffff !important;
+    outline: none !important;
+    box-shadow: none !important;
+    ring: none !important;
+  }
+
+  /* CMS Input and Textarea styling - Light Mode */
+  .light [data-cms-main] input::placeholder,
+  .light [data-cms-main] textarea::placeholder,
+  .light [role="dialog"] input::placeholder,
+  .light [role="dialog"] textarea::placeholder {
+    color: rgba(112, 112, 112, 0.5) !important;
+  }
+
+  .light [data-cms-main] input,
+  .light [data-cms-main] textarea,
+  .light [role="dialog"] input,
+  .light [role="dialog"] textarea,
+  .light [data-cms-main] [class*="Input"],
+  .light [role="dialog"] [class*="Input"],
+  .light [data-cms-main] [class*="Textarea"],
+  .light [role="dialog"] [class*="Textarea"] {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+    color: rgb(112, 112, 112) !important;
+  }
+
+  .light [data-cms-main] input:hover,
+  .light [data-cms-main] textarea:hover,
+  .light [role="dialog"] input:hover,
+  .light [role="dialog"] textarea:hover,
+  .light [data-cms-main] [class*="Input"]:hover,
+  .light [role="dialog"] [class*="Input"]:hover,
+  .light [data-cms-main] [class*="Textarea"]:hover,
+  .light [role="dialog"] [class*="Textarea"]:hover {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.5) !important;
+  }
+
+  .light [data-cms-main] input:focus,
+  .light [data-cms-main] textarea:focus,
+  .light [data-cms-main] input:focus-visible,
+  .light [data-cms-main] textarea:focus-visible,
+  .light [role="dialog"] input:focus,
+  .light [role="dialog"] textarea:focus,
+  .light [role="dialog"] input:focus-visible,
+  .light [role="dialog"] textarea:focus-visible,
+  .light [data-cms-main] [class*="Input"]:focus,
+  .light [role="dialog"] [class*="Input"]:focus,
+  .light [data-cms-main] [class*="Textarea"]:focus,
+  .light [role="dialog"] [class*="Textarea"]:focus {
+    background-color: #FFFFFF !important;
+    border-color: #662D91 !important;
+    color: rgb(112, 112, 112) !important;
     outline: none !important;
     box-shadow: none !important;
     ring: none !important;
@@ -178,40 +356,737 @@
     ring: none !important;
   }
 
-  /* Select components in CMS */
-  [data-cms-main] [role="combobox"],
-  [role="dialog"] [role="combobox"] {
+  /* Select components in CMS - Dark Mode */
+  .dark [data-cms-main] [role="combobox"],
+  .dark [role="dialog"] [role="combobox"],
+  .dark [data-cms-main] [class*="SelectTrigger"],
+  .dark [role="dialog"] [class*="SelectTrigger"] {
     background-color: #171717 !important;
     border-color: #2a2a2a !important;
     color: #ffffff !important;
   }
 
-  [data-cms-main] [role="listbox"],
-  [role="dialog"] [role="listbox"] {
+  .dark [data-cms-main] [role="combobox"]:hover,
+  .dark [role="dialog"] [role="combobox"]:hover,
+  .dark [data-cms-main] [class*="SelectTrigger"]:hover,
+  .dark [role="dialog"] [class*="SelectTrigger"]:hover {
     background-color: #212121 !important;
     border-color: #2a2a2a !important;
   }
 
-  [data-cms-main] [role="option"],
-  [role="dialog"] [role="option"] {
+  .dark [data-cms-main] [role="listbox"],
+  .dark [role="dialog"] [role="listbox"],
+  .dark [data-cms-main] [class*="SelectContent"],
+  .dark [role="dialog"] [class*="SelectContent"] {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+  }
+
+  .dark [data-cms-main] [role="option"],
+  .dark [role="dialog"] [role="option"],
+  .dark [data-cms-main] [class*="SelectItem"],
+  .dark [role="dialog"] [class*="SelectItem"] {
     color: #898989 !important;
   }
 
-  [data-cms-main] [role="option"]:hover,
-  [role="dialog"] [role="option"]:hover {
+  .dark [data-cms-main] [role="option"]:hover,
+  .dark [role="dialog"] [role="option"]:hover,
+  .dark [data-cms-main] [class*="SelectItem"]:hover,
+  .dark [role="dialog"] [class*="SelectItem"]:hover {
     background-color: #2a2a2a !important;
     color: #ffffff !important;
   }
 
-  /* Select placeholder text */
-  [data-cms-main] [data-placeholder],
-  [role="dialog"] [data-placeholder] {
+  .dark [data-cms-main] [data-placeholder],
+  .dark [role="dialog"] [data-placeholder] {
     color: #898989 !important;
   }
 
-  /* Ensure SelectValue text is visible */
-  [data-cms-main] button[role="combobox"] span,
-  [role="dialog"] button[role="combobox"] span {
+  .dark [data-cms-main] button[role="combobox"] span,
+  .dark [role="dialog"] button[role="combobox"] span {
     color: #ffffff !important;
+  }
+
+  /* Select components in CMS - Light Mode */
+  .light [data-cms-main] [role="combobox"],
+  .light [role="dialog"] [role="combobox"],
+  .light [data-cms-main] [class*="SelectTrigger"],
+  .light [role="dialog"] [class*="SelectTrigger"] {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+    color: rgb(112, 112, 112) !important;
+  }
+
+  .light [data-cms-main] [role="combobox"]:hover,
+  .light [role="dialog"] [role="combobox"]:hover,
+  .light [data-cms-main] [class*="SelectTrigger"]:hover,
+  .light [role="dialog"] [class*="SelectTrigger"]:hover {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.5) !important;
+  }
+
+  .light [data-cms-main] [role="listbox"],
+  .light [role="dialog"] [role="listbox"],
+  .light [data-cms-main] [class*="SelectContent"],
+  .light [role="dialog"] [class*="SelectContent"] {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+  }
+
+  .light [data-cms-main] [role="option"],
+  .light [role="dialog"] [role="option"],
+  .light [data-cms-main] [class*="SelectItem"],
+  .light [role="dialog"] [class*="SelectItem"] {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  .light [data-cms-main] [role="option"]:hover,
+  .light [role="dialog"] [role="option"]:hover,
+  .light [data-cms-main] [class*="SelectItem"]:hover,
+  .light [role="dialog"] [class*="SelectItem"]:hover {
+    background-color: rgba(23, 23, 23, 0.1) !important;
+    color: #171717 !important;
+  }
+
+  .light [data-cms-main] [data-placeholder],
+  .light [role="dialog"] [data-placeholder] {
+    color: rgba(112, 112, 112, 0.7) !important;
+  }
+
+  .light [data-cms-main] button[role="combobox"] span,
+  .light [role="dialog"] button[role="combobox"] span {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* CMS Theme-Aware Classes */
+  /* Dark Mode (default) */
+  .cms-sidebar-bg {
+    background-color: #212121;
+  }
+  
+  .cms-sidebar-border {
+    border-color: #2a2a2a;
+  }
+  
+  .cms-sidebar-border-t {
+    border-top-color: #2a2a2a;
+  }
+  
+  .cms-sidebar-border-b {
+    border-bottom-color: #2a2a2a;
+  }
+  
+  .cms-main-bg {
+    background-color: #171717;
+  }
+  
+  .cms-card-bg {
+    background-color: #212121;
+  }
+  
+  .cms-text-primary {
+    color: #ffffff;
+  }
+  
+  .cms-text-secondary {
+    color: #898989;
+  }
+
+  .cms-text-tertiary {
+    color: #5a5a5a;
+  }
+  
+  .cms-border {
+    border-color: #2a2a2a;
+  }
+  
+  .light .cms-border {
+    border-color: rgba(112, 112, 112, 0.3);
+  }
+  
+  .cms-card {
+    background-color: #212121;
+    border-color: #2a2a2a;
+  }
+  
+  .light .cms-card {
+    background-color: #FFFFFF;
+    border-color: rgba(112, 112, 112, 0.3);
+  }
+  
+  .cms-sidebar-button {
+    color: #898989;
+  }
+  
+  .cms-sidebar-button:hover {
+    color: #ffffff;
+    background-color: #2a2a2a;
+  }
+  
+  .cms-menu-bg {
+    background-color: #171717;
+  }
+  
+  .cms-menu-border {
+    border-color: #2a2a2a;
+  }
+  
+  .cms-menu-item {
+    color: #898989;
+  }
+  
+  .cms-menu-item:hover {
+    color: #ffffff;
+    background-color: #2a2a2a;
+  }
+  
+  .cms-menu-item-active {
+    background-color: #2a2a2a;
+    color: #ffffff;
+  }
+  
+  .cms-menu-item-inactive {
+    color: #898989;
+  }
+  
+  .cms-theme-toggle-button {
+    color: #898989;
+  }
+  
+  .cms-theme-toggle-button:hover {
+    color: #ffffff;
+    background-color: #2a2a2a;
+  }
+
+  /* Light Mode */
+  .light .cms-sidebar-bg {
+    background-color: #F5F5F5;
+  }
+  
+  .light .cms-sidebar-border {
+    border-color: rgb(112, 112, 112);
+  }
+  
+  .light .cms-sidebar-border-t {
+    border-top-color: rgb(112, 112, 112);
+  }
+  
+  .light .cms-sidebar-border-b {
+    border-bottom-color: rgb(112, 112, 112);
+  }
+  
+  .light .cms-main-bg {
+    background-color: #FCFCFC;
+  }
+  
+  .light .cms-card-bg {
+    background-color: #FFFFFF;
+  }
+  
+  .light .cms-text-primary {
+    color: rgb(112, 112, 112);
+  }
+  
+  .light .cms-text-secondary {
+    color: rgb(112, 112, 112);
+  }
+
+  .light .cms-text-tertiary {
+    color: rgba(112, 112, 112, 0.7);
+  }
+  
+  .light .cms-border {
+    border-color: rgba(112, 112, 112, 0.3);
+  }
+
+  .light .cms-card {
+    background-color: #FFFFFF;
+    border-color: rgba(112, 112, 112, 0.3);
+  }
+  
+  .light .cms-sidebar-button {
+    color: rgb(112, 112, 112);
+  }
+  
+  .light .cms-sidebar-button:hover {
+    color: #171717;
+    background-color: rgba(23, 23, 23, 0.1);
+  }
+  
+  .light .cms-menu-bg {
+    background-color: #FFFFFF;
+  }
+  
+  .light .cms-menu-border {
+    border-color: rgb(112, 112, 112);
+  }
+  
+  .light .cms-menu-item {
+    color: rgb(112, 112, 112);
+  }
+  
+  .light .cms-menu-item:hover {
+    color: #171717;
+    background-color: rgba(23, 23, 23, 0.1);
+  }
+  
+  .light .cms-menu-item-active {
+    background-color: rgba(23, 23, 23, 0.1);
+    color: #171717;
+  }
+  
+  .light .cms-menu-item-inactive {
+    color: rgb(112, 112, 112);
+  }
+  
+  .light .cms-theme-toggle-button {
+    color: rgb(112, 112, 112);
+  }
+  
+  .light .cms-theme-toggle-button:hover {
+    color: #171717;
+    background-color: rgba(23, 23, 23, 0.1);
+  }
+
+  /* Improved Typography for CMS */
+  [data-cms-main],
+  .cms-sidebar-bg,
+  [role="dialog"] {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal;
+  }
+  
+  /* Better contrast for text in dark mode */
+  .dark [data-cms-main] {
+    color: #E0E0E0;
+  }
+  
+  /* Better contrast for text in light mode */
+  .light [data-cms-main] {
+    color: rgb(112, 112, 112);
+  }
+
+  /* Dialog/Modal Components - Dark Mode */
+  .dark [role="dialog"] [class*="DialogContent"] {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+  }
+
+  .dark [role="dialog"] [class*="DialogTitle"] {
+    color: #ffffff !important;
+  }
+
+  .dark [role="dialog"] [class*="DialogDescription"] {
+    color: #898989 !important;
+  }
+
+  /* Dialog/Modal Components - Light Mode */
+  .light [role="dialog"] [class*="DialogContent"],
+  .light [role="alertdialog"] [class*="AlertDialogContent"],
+  .light [role="dialog"] > div[class*="DialogContent"],
+  .light [role="alertdialog"] > div[class*="AlertDialogContent"],
+  .light [role="dialog"] [class*="cms-card"],
+  .light [role="dialog"] [class*="cms-card-bg"],
+  .light [role="dialog"] div[class*="cms-card"],
+  .light [role="dialog"] div[class*="cms-card-bg"] {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+  }
+
+  .light [role="dialog"] [class*="DialogTitle"],
+  .light [role="alertdialog"] [class*="AlertDialogTitle"],
+  .light [role="dialog"] h2,
+  .light [role="alertdialog"] h2 {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  .light [role="dialog"] [class*="DialogDescription"],
+  .light [role="alertdialog"] [class*="AlertDialogDescription"],
+  .light [role="dialog"] p,
+  .light [role="alertdialog"] p {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* AlertDialog Components - Dark Mode */
+  .dark [role="alertdialog"] [class*="AlertDialogContent"] {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+  }
+
+  .dark [role="alertdialog"] [class*="AlertDialogTitle"] {
+    color: #ffffff !important;
+  }
+
+  .dark [role="alertdialog"] [class*="AlertDialogDescription"] {
+    color: #898989 !important;
+  }
+
+  /* Button in dialogs - Dark Mode */
+  .dark [role="dialog"] button:not([class*="bg-"]):not([class*="text-"]) {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+    color: #898989 !important;
+  }
+
+  .dark [role="dialog"] button:hover:not([class*="bg-"]):not([class*="text-"]) {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+  }
+
+  /* Button in dialogs - Light Mode */
+  .light [role="dialog"] button:not([class*="bg-"]):not([class*="text-"]) {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+    color: rgb(112, 112, 112) !important;
+  }
+
+  .light [role="dialog"] button:hover:not([class*="bg-"]):not([class*="text-"]) {
+    background-color: rgba(23, 23, 23, 0.1) !important;
+    color: #171717 !important;
+  }
+
+  /* FormLabel in dialogs - Dark Mode */
+  .dark [role="dialog"] [class*="FormLabel"],
+  .dark [role="dialog"] label {
+    color: #ffffff !important;
+  }
+
+  /* FormLabel in dialogs - Light Mode */
+  .light [role="dialog"] [class*="FormLabel"],
+  .light [role="dialog"] label {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* FormDescription in dialogs - Dark Mode */
+  .dark [role="dialog"] [class*="FormDescription"] {
+    color: #898989 !important;
+  }
+
+  /* FormDescription in dialogs - Light Mode */
+  .light [role="dialog"] [class*="FormDescription"] {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* Table components - Dark Mode */
+  .dark [data-cms-main] table,
+  .dark [data-cms-main] [class*="Table"] {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+  }
+
+  .dark [data-cms-main] [class*="TableRow"] {
+    border-color: #2a2a2a !important;
+  }
+
+  .dark [data-cms-main] [class*="TableRow"]:hover {
+    background-color: #2a2a2a !important;
+  }
+
+  .dark [data-cms-main] [class*="TableHead"],
+  .dark [data-cms-main] [class*="TableCell"] {
+    color: #898989 !important;
+  }
+
+  .dark [data-cms-main] [class*="TableHead"] {
+    color: #898989 !important;
+  }
+
+  /* Table components - Light Mode */
+  .light [data-cms-main] table,
+  .light [data-cms-main] [class*="Table"] {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+  }
+
+  .light [data-cms-main] [class*="TableRow"] {
+    border-color: rgba(112, 112, 112, 0.3) !important;
+  }
+
+  .light [data-cms-main] [class*="TableRow"]:hover {
+    background-color: rgba(23, 23, 23, 0.05) !important;
+  }
+
+  .light [data-cms-main] [class*="TableHead"],
+  .light [data-cms-main] [class*="TableCell"] {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* Select components in lists - Dark Mode */
+  .dark [data-cms-main] [class*="SelectTrigger"] {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+    color: #898989 !important;
+  }
+
+  .dark [data-cms-main] [class*="SelectContent"] {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+  }
+
+  .dark [data-cms-main] [class*="SelectItem"] {
+    color: #898989 !important;
+  }
+
+  /* Select components in lists - Light Mode */
+  .light [data-cms-main] [class*="SelectTrigger"] {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+    color: rgb(112, 112, 112) !important;
+  }
+
+  .light [data-cms-main] [class*="SelectContent"] {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+  }
+
+  .light [data-cms-main] [class*="SelectItem"] {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  .light [data-cms-main] [class*="SelectItem"]:hover {
+    background-color: rgba(23, 23, 23, 0.1) !important;
+    color: #171717 !important;
+  }
+
+  /* Label components - Dark Mode */
+  .dark [data-cms-main] label {
+    color: #898989 !important;
+  }
+
+  /* Label components - Light Mode */
+  .light [data-cms-main] label {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* Text elements in cards - Dark Mode */
+  .dark [data-cms-main] [class*="Card"] strong,
+  .dark [data-cms-main] [class*="Card"] p:not([class*="text-"]) {
+    color: #ffffff !important;
+  }
+
+  .dark [data-cms-main] [class*="Card"] p:not([class*="text-"]) {
+    color: #898989 !important;
+  }
+
+  /* Text elements in cards - Light Mode */
+  .light [data-cms-main] [class*="Card"] strong,
+  .light [data-cms-main] [class*="Card"] p:not([class*="text-"]) {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  .light [data-cms-main] [class*="Card"] p:not([class*="text-"]) {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* Span elements - Dark Mode */
+  .dark [data-cms-main] span:not([class*="text-"]):not([style*="color"]) {
+    color: #898989 !important;
+  }
+
+  /* Span elements - Light Mode */
+  .light [data-cms-main] span:not([class*="text-"]):not([style*="color"]) {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* FormItem - ensure proper backgrounds */
+  .dark [role="dialog"] [class*="FormItem"],
+  .dark [data-cms-main] [class*="FormItem"] {
+    background-color: transparent !important;
+  }
+
+  .light [role="dialog"] [class*="FormItem"],
+  .light [data-cms-main] [class*="FormItem"] {
+    background-color: transparent !important;
+  }
+
+  /* FormItem hover states - prevent black background on hover */
+  .dark [role="dialog"] [class*="FormItem"]:hover,
+  .dark [data-cms-main] [class*="FormItem"]:hover {
+    background-color: transparent !important;
+  }
+
+  .light [role="dialog"] [class*="FormItem"]:hover,
+  .light [data-cms-main] [class*="FormItem"]:hover {
+    background-color: transparent !important;
+  }
+
+  /* Ensure all form containers are transparent on hover */
+  .dark [role="dialog"] [class*="FormControl"]:hover,
+  .dark [data-cms-main] [class*="FormControl"]:hover {
+    background-color: transparent !important;
+  }
+
+  .light [role="dialog"] [class*="FormControl"]:hover,
+  .light [data-cms-main] [class*="FormControl"]:hover {
+    background-color: transparent !important;
+  }
+
+  /* Prevent any form field wrapper from having black background */
+  .dark [role="dialog"] [class*="FormField"]:hover,
+  .dark [data-cms-main] [class*="FormField"]:hover {
+    background-color: transparent !important;
+  }
+
+  .light [role="dialog"] [class*="FormField"]:hover,
+  .light [data-cms-main] [class*="FormField"]:hover {
+    background-color: transparent !important;
+  }
+
+  /* Ensure Switch components are properly styled */
+  .dark [role="dialog"] [class*="Switch"],
+  .dark [data-cms-main] [class*="Switch"],
+  .dark [role="dialog"] button[role="switch"],
+  .dark [data-cms-main] button[role="switch"] {
+    background-color: #2a2a2a !important;
+  }
+
+  .dark [role="dialog"] [class*="Switch"][data-state="checked"],
+  .dark [data-cms-main] [class*="Switch"][data-state="checked"],
+  .dark [role="dialog"] button[role="switch"][data-state="checked"],
+  .dark [data-cms-main] button[role="switch"][data-state="checked"] {
+    background-color: #662D91 !important;
+  }
+
+  .light [role="dialog"] [class*="Switch"],
+  .light [data-cms-main] [class*="Switch"],
+  .light [role="dialog"] button[role="switch"],
+  .light [data-cms-main] button[role="switch"] {
+    background-color: rgba(112, 112, 112, 0.2) !important;
+  }
+
+  .light [role="dialog"] [class*="Switch"][data-state="checked"],
+  .light [data-cms-main] [class*="Switch"][data-state="checked"],
+  .light [role="dialog"] button[role="switch"][data-state="checked"],
+  .light [data-cms-main] button[role="switch"][data-state="checked"] {
+    background-color: #662D91 !important;
+  }
+
+  /* Switch thumb styling */
+  .dark [role="dialog"] [class*="Switch"] [class*="Thumb"],
+  .dark [data-cms-main] [class*="Switch"] [class*="Thumb"],
+  .dark [role="dialog"] button[role="switch"] [class*="Thumb"],
+  .dark [data-cms-main] button[role="switch"] [class*="Thumb"] {
+    background-color: #ffffff !important;
+  }
+
+  .light [role="dialog"] [class*="Switch"] [class*="Thumb"],
+  .light [data-cms-main] [class*="Switch"] [class*="Thumb"],
+  .light [role="dialog"] button[role="switch"] [class*="Thumb"],
+  .light [data-cms-main] button[role="switch"] [class*="Thumb"] {
+    background-color: #ffffff !important;
+  }
+
+  /* Light mode - ensure inputs in dialogs don't have black backgrounds */
+  .light [role="dialog"] input,
+  .light [role="dialog"] textarea,
+  .light [role="dialog"] [class*="Input"],
+  .light [role="dialog"] [class*="Textarea"] {
+    background-color: #FFFFFF !important;
+    border-color: rgb(112, 112, 112) !important;
+    color: rgb(112, 112, 112) !important;
+  }
+
+  .light [role="dialog"] input:hover,
+  .light [role="dialog"] textarea:hover,
+  .light [role="dialog"] [class*="Input"]:hover,
+  .light [role="dialog"] [class*="Textarea"]:hover {
+    background-color: #FFFFFF !important;
+    border-color: rgb(112, 112, 112) !important;
+  }
+
+  /* Dark mode - ensure inputs in dialogs have proper backgrounds */
+  .dark [role="dialog"] input,
+  .dark [role="dialog"] textarea,
+  .dark [role="dialog"] [class*="Input"],
+  .dark [role="dialog"] [class*="Textarea"] {
+    background-color: #171717 !important;
+    border-color: #2a2a2a !important;
+    color: #ffffff !important;
+  }
+
+  .dark [role="dialog"] input:hover,
+  .dark [role="dialog"] textarea:hover,
+  .dark [role="dialog"] [class*="Input"]:hover,
+  .dark [role="dialog"] [class*="Textarea"]:hover {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+  }
+
+  /* ============================================
+     COMPREHENSIVE LIGHT MODE OVERRIDES
+     Override ALL hardcoded dark colors in light mode
+     ============================================ */
+
+  /* Override FormLabel colors in light mode */
+  .light [role="dialog"] [class*="FormLabel"],
+  .light [role="dialog"] label,
+  .light [data-cms-main] [class*="FormLabel"],
+  .light [data-cms-main] label {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* Override FormDescription colors in light mode */
+  .light [role="dialog"] [class*="FormDescription"],
+  .light [data-cms-main] [class*="FormDescription"] {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* Override strong/bold text colors in light mode */
+  .light [role="dialog"] strong,
+  .light [data-cms-main] strong {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* Override paragraph and span colors in light mode (only if not already styled) */
+  .light [role="dialog"] p:not([class*="text-"]),
+  .light [role="dialog"] span:not([class*="text-"]),
+  .light [data-cms-main] p:not([class*="text-"]),
+  .light [data-cms-main] span:not([class*="text-"]) {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* Override pre and code block colors in light mode */
+  .light [role="dialog"] pre,
+  .light [role="dialog"] code,
+  .light [data-cms-main] pre,
+  .light [data-cms-main] code {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* Override PopoverContent in light mode */
+  .light [class*="PopoverContent"],
+  .light [role="dialog"] [class*="PopoverContent"],
+  .light [data-cms-main] [class*="PopoverContent"],
+  .light [class*="PopoverContent"] [class*="cms-card"],
+  .light [class*="PopoverContent"] [class*="cms-card-bg"] {
+    background-color: #FFFFFF !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+  }
+
+  .light [class*="PopoverContent"] *:not([class*="text-"]):not([style*="color"]),
+  .light [role="dialog"] [class*="PopoverContent"] *:not([class*="text-"]):not([style*="color"]),
+  .light [data-cms-main] [class*="PopoverContent"] *:not([class*="text-"]):not([style*="color"]) {
+    color: rgb(112, 112, 112) !important;
+  }
+
+  /* PopoverContent dark mode */
+  .dark [class*="PopoverContent"],
+  .dark [role="dialog"] [class*="PopoverContent"],
+  .dark [data-cms-main] [class*="PopoverContent"] {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+  }
+
+  /* Override Badge colors in light mode */
+  .light [data-cms-main] [class*="Badge"],
+  .light [role="dialog"] [class*="Badge"] {
+    background-color: rgba(112, 112, 112, 0.1) !important;
+    border-color: rgba(112, 112, 112, 0.3) !important;
+    color: rgb(112, 112, 112) !important;
   }
 }

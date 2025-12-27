@@ -55,7 +55,7 @@ export function MediaGrid({ media }: MediaGridProps) {
           }}
         >
           {/* Image Preview */}
-          <div className="aspect-square relative" style={{ backgroundColor: '#171717' }}>
+          <div className="aspect-square relative cms-card-bg">
             {file.file_type.startsWith('image/') ? (
               <Image
                 src={file.url}
@@ -66,7 +66,7 @@ export function MediaGrid({ media }: MediaGridProps) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <File className="h-12 w-12" style={{ color: '#898989' }} />
+                <File className="h-12 w-12 cms-text-secondary" />
               </div>
             )}
 
@@ -80,7 +80,7 @@ export function MediaGrid({ media }: MediaGridProps) {
                   backgroundColor: '#212121',
                   color: '#898989'
                 }}
-                className="hover:text-white hover:bg-[#2a2a2a]"
+                className="hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
               >
                 <ExternalLink className="h-4 w-4" />
               </Button>
@@ -92,7 +92,7 @@ export function MediaGrid({ media }: MediaGridProps) {
                   backgroundColor: '#212121',
                   color: '#898989'
                 }}
-                className="hover:text-white hover:bg-[#2a2a2a]"
+                className="hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
               >
                 {copiedId === file.id ? (
                   <Check className="h-4 w-4" />
@@ -106,7 +106,7 @@ export function MediaGrid({ media }: MediaGridProps) {
           {/* File Info */}
           <div className="p-3 space-y-2">
             <div className="flex items-start justify-between gap-2">
-              <p className="text-sm font-semibold truncate" title={file.filename} style={{ color: '#ffffff', fontWeight: '600' }}>
+              <p className="text-sm font-semibold truncate cms-text-primary" title={file.filename} style={{ fontWeight: '600' }}>
                 {file.filename}
               </p>
               <Badge 
@@ -135,7 +135,7 @@ export function MediaGrid({ media }: MediaGridProps) {
               </Badge>
             </div>
 
-            <p className="text-xs font-mono truncate" style={{ color: '#898989' }}>
+            <p className="text-xs font-mono truncate cms-text-secondary">
               {file.storage_path}
             </p>
           </div>

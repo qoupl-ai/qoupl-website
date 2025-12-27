@@ -7,7 +7,7 @@
 
 'use client'
 
-import { useState, useEffect, useTransition } from 'react'
+import { useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -260,7 +260,7 @@ const sectionSchemas: Record<string, z.ZodSchema> = {
     }),
   }),
   'content': baseSectionSchema.extend({
-    data: z.record(z.any()),
+    data: z.record(z.string(), z.any()),
   }),
 }
 
@@ -270,7 +270,7 @@ interface SectionEditorProps {
     id: string
     component_type: string
     order_index: number
-    content: any
+    content: Record<string, unknown>
     published: boolean
   }
   open: boolean
@@ -290,7 +290,7 @@ export default function SectionEditor({
 
   // Get schema for this section type, fallback to base
   const schema = sectionSchemas[sectionType] || baseSectionSchema.extend({
-    data: z.record(z.any()),
+    data: z.record(z.string(), z.any()),
   })
 
   // Helper to get default data based on section type
@@ -311,8 +311,16 @@ export default function SectionEditor({
     return content
   }
 
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  // Use a more generic type to avoid type inference issues with dynamic schemas
+  type FormData = {
+    type: string
+    order_index: number
+    published: boolean
+    data: Record<string, unknown>
+  }
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     defaultValues: {
       type: sectionType,
       order_index: section?.order_index || 0,
@@ -331,9 +339,10 @@ export default function SectionEditor({
         data: defaultData,
       })
     }
-  }, [section, open, form, sectionType])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [section, open, sectionType])
 
-  const onSubmit = async (values: z.infer<typeof schema>) => {
+  const onSubmit = async (values: FormData) => {
     try {
       if (isEditing && section) {
         const updateData: UpdateSectionInput = {
@@ -384,7 +393,7 @@ export default function SectionEditor({
               name="data.title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Title</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -397,7 +406,7 @@ export default function SectionEditor({
               name="data.tagline"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Tagline</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Tagline</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -410,7 +419,7 @@ export default function SectionEditor({
               name="data.subtitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Subtitle</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
                     <Textarea {...field} rows={3} />
                   </FormControl>
@@ -423,7 +432,7 @@ export default function SectionEditor({
               name="data.image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Hero Image</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Hero Image</FormLabel>
                   <FormControl>
                     <ImageUploadField
                       value={field.value}
@@ -442,7 +451,7 @@ export default function SectionEditor({
               name="data.background_image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Background Image (Optional)</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Background Image (Optional)</FormLabel>
                   <FormControl>
                     <ImageUploadField
                       value={field.value}
@@ -465,7 +474,7 @@ export default function SectionEditor({
                 
                 return (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Women Carousel Images</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Women Carousel Images</FormLabel>
                     <FormControl>
                       <MultiImageUploadField
                         value={fieldValue}
@@ -490,7 +499,7 @@ export default function SectionEditor({
                 
                 return (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Men Carousel Images</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Men Carousel Images</FormLabel>
                     <FormControl>
                       <MultiImageUploadField
                         value={fieldValue}
@@ -511,7 +520,7 @@ export default function SectionEditor({
               name="data.cta.text"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Call to Action Text (Optional)</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Call to Action Text (Optional)</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="e.g., Get Started" />
                   </FormControl>
@@ -524,7 +533,7 @@ export default function SectionEditor({
               name="data.cta.buttonText"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Button Text (Optional)</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Button Text (Optional)</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="e.g., Sign Up Now" />
                   </FormControl>
@@ -537,7 +546,7 @@ export default function SectionEditor({
               name="data.cta.link"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Button Link (Optional)</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Button Link (Optional)</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="e.g., /signup" />
                   </FormControl>
@@ -556,7 +565,7 @@ export default function SectionEditor({
               name="data.title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Title</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -569,7 +578,7 @@ export default function SectionEditor({
               name="data.slug"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Slug</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Slug</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -582,7 +591,7 @@ export default function SectionEditor({
               name="data.excerpt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Excerpt</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Excerpt</FormLabel>
                   <FormControl>
                     <Textarea {...field} rows={3} />
                   </FormControl>
@@ -595,7 +604,7 @@ export default function SectionEditor({
               name="data.content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Content</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Content</FormLabel>
                   <FormControl>
                     <Textarea {...field} rows={10} />
                   </FormControl>
@@ -627,7 +636,7 @@ export default function SectionEditor({
                 name="data.author"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Author</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Author</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Author name" />
                     </FormControl>
@@ -640,7 +649,7 @@ export default function SectionEditor({
                 name="data.read_time"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Read Time (minutes)</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Read Time (minutes)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -665,11 +674,11 @@ export default function SectionEditor({
               name="data.category_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Category ID</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Category ID</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="e.g., general" />
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     Category identifier for grouping FAQs
                   </FormDescription>
                   <FormMessage />
@@ -677,7 +686,7 @@ export default function SectionEditor({
               )}
             />
             <div className="flex items-center justify-between mb-3">
-              <label style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 FAQs
               </label>
               <Button
@@ -688,7 +697,7 @@ export default function SectionEditor({
                   const currentFaqs = form.getValues('data.faqs') || []
                   form.setValue('data.faqs', [...currentFaqs, { question: '', answer: '' }])
                 }}
-                className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
               >
                 <Plus className="h-3 w-3 mr-1" />
                 Add FAQ
@@ -702,10 +711,10 @@ export default function SectionEditor({
                     {(field.value || []).map((faq: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             FAQ #{index + 1}
                           </span>
                           <Button
@@ -716,7 +725,7 @@ export default function SectionEditor({
                               const newFaqs = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newFaqs)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -726,7 +735,7 @@ export default function SectionEditor({
                           name={`data.faqs.${index}.question`}
                           render={({ field: questionField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Question
                               </FormLabel>
                               <FormControl>
@@ -741,7 +750,7 @@ export default function SectionEditor({
                           name={`data.faqs.${index}.answer`}
                           render={({ field: answerField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Answer
                               </FormLabel>
                               <FormControl>
@@ -754,8 +763,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No FAQs added yet. Click "Add FAQ" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No FAQs added yet. Click &quot;Add FAQ&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -772,11 +781,11 @@ export default function SectionEditor({
               name="data.category_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Category ID</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Category ID</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="e.g., core-features" />
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     Category identifier for grouping features
                   </FormDescription>
                   <FormMessage />
@@ -784,7 +793,7 @@ export default function SectionEditor({
               )}
             />
             <div className="flex items-center justify-between mb-3">
-              <label style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 Features
               </label>
               <Button
@@ -795,7 +804,7 @@ export default function SectionEditor({
                   const currentFeatures = form.getValues('data.features') || []
                   form.setValue('data.features', [...currentFeatures, { title: '', description: '', icon: '' }])
                 }}
-                className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
               >
                 <Plus className="h-3 w-3 mr-1" />
                 Add Feature
@@ -809,10 +818,10 @@ export default function SectionEditor({
                     {(field.value || []).map((feature: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Feature #{index + 1}
                           </span>
                           <Button
@@ -823,7 +832,7 @@ export default function SectionEditor({
                               const newFeatures = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newFeatures)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -833,7 +842,7 @@ export default function SectionEditor({
                           name={`data.features.${index}.title`}
                           render={({ field: titleField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Title
                               </FormLabel>
                               <FormControl>
@@ -848,7 +857,7 @@ export default function SectionEditor({
                           name={`data.features.${index}.description`}
                           render={({ field: descField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Description
                               </FormLabel>
                               <FormControl>
@@ -863,7 +872,7 @@ export default function SectionEditor({
                           name={`data.features.${index}.icon`}
                           render={({ field: iconField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Icon
                               </FormLabel>
                               <FormControl>
@@ -880,8 +889,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No features added yet. Click "Add Feature" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No features added yet. Click &quot;Add Feature&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -894,7 +903,7 @@ export default function SectionEditor({
         return (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-3">
-              <label style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 Pricing Plans
               </label>
               <Button
@@ -905,7 +914,7 @@ export default function SectionEditor({
                   const currentPlans = form.getValues('data.plans') || []
                   form.setValue('data.plans', [...currentPlans, { name: '', price: 0, features: [] }])
                 }}
-                className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
               >
                 <Plus className="h-3 w-3 mr-1" />
                 Add Plan
@@ -919,10 +928,10 @@ export default function SectionEditor({
                     {(field.value || []).map((plan: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Plan #{index + 1}
                           </span>
                           <Button
@@ -933,7 +942,7 @@ export default function SectionEditor({
                               const newPlans = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newPlans)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -944,7 +953,7 @@ export default function SectionEditor({
                             name={`data.plans.${index}.name`}
                             render={({ field: nameField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Plan Name
                                 </FormLabel>
                                 <FormControl>
@@ -959,7 +968,7 @@ export default function SectionEditor({
                             name={`data.plans.${index}.price`}
                             render={({ field: priceField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Price
                                 </FormLabel>
                                 <FormControl>
@@ -977,7 +986,7 @@ export default function SectionEditor({
                         </div>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <label className="text-xs font-medium" style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                            <label className="text-xs font-medium cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                               Features
                             </label>
                             <Button
@@ -990,7 +999,7 @@ export default function SectionEditor({
                                 updatedPlans[index].features = [...currentFeatures, '']
                                 field.onChange(updatedPlans)
                               }}
-                              className="h-6 px-2 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                              className="h-6 px-2 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                             >
                               <Plus className="h-3 w-3 mr-1" />
                               Add
@@ -1018,7 +1027,7 @@ export default function SectionEditor({
                                   )
                                   field.onChange(updatedPlans)
                                 }}
-                                className="h-9 w-9 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a] shrink-0"
+                                className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
                               >
                                 <Trash2 className="h-3 w-3" />
                               </Button>
@@ -1028,8 +1037,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No pricing plans added yet. Click "Add Plan" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No pricing plans added yet. Click &quot;Add Plan&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -1042,7 +1051,7 @@ export default function SectionEditor({
         return (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-3">
-              <label style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 Values
               </label>
               <Button
@@ -1053,7 +1062,7 @@ export default function SectionEditor({
                   const currentValues = form.getValues('data.values') || []
                   form.setValue('data.values', [...currentValues, { icon: '', title: '', description: '', color: 'bg-[#662D91]' }])
                 }}
-                className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
               >
                 <Plus className="h-3 w-3 mr-1" />
                 Add Value
@@ -1067,10 +1076,10 @@ export default function SectionEditor({
                     {(field.value || []).map((value: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Value #{index + 1}
                           </span>
                           <Button
@@ -1081,7 +1090,7 @@ export default function SectionEditor({
                               const newValues = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newValues)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -1092,7 +1101,7 @@ export default function SectionEditor({
                             name={`data.values.${index}.icon`}
                             render={({ field: iconField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Icon
                                 </FormLabel>
                                 <FormControl>
@@ -1111,7 +1120,7 @@ export default function SectionEditor({
                             name={`data.values.${index}.color`}
                             render={({ field: colorField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Color
                                 </FormLabel>
                                 <FormControl>
@@ -1131,7 +1140,7 @@ export default function SectionEditor({
                           name={`data.values.${index}.title`}
                           render={({ field: titleField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Title
                               </FormLabel>
                               <FormControl>
@@ -1146,7 +1155,7 @@ export default function SectionEditor({
                           name={`data.values.${index}.description`}
                           render={({ field: descField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Description
                               </FormLabel>
                               <FormControl>
@@ -1159,8 +1168,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No values added yet. Click "Add Value" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No values added yet. Click &quot;Add Value&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -1177,7 +1186,7 @@ export default function SectionEditor({
               name="data.title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Title</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -1186,7 +1195,7 @@ export default function SectionEditor({
               )}
             />
             <div className="flex items-center justify-between mb-3">
-              <label style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 Steps
               </label>
                 <Button
@@ -1197,7 +1206,7 @@ export default function SectionEditor({
                     const currentSteps = form.getValues('data.steps') || []
                     form.setValue('data.steps', [...currentSteps, { step: '', title: '', description: '', image: '' }])
                   }}
-                  className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                  className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <Plus className="h-3 w-3 mr-1" />
                   Add Step
@@ -1211,10 +1220,10 @@ export default function SectionEditor({
                     {(field.value || []).map((step: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Step #{index + 1}
                           </span>
                           <Button
@@ -1225,7 +1234,7 @@ export default function SectionEditor({
                               const newSteps = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newSteps)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -1236,7 +1245,7 @@ export default function SectionEditor({
                             name={`data.steps.${index}.step`}
                             render={({ field: stepField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Step Number
                                 </FormLabel>
                                 <FormControl>
@@ -1270,7 +1279,7 @@ export default function SectionEditor({
                           name={`data.steps.${index}.title`}
                           render={({ field: titleField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Title
                               </FormLabel>
                               <FormControl>
@@ -1285,7 +1294,7 @@ export default function SectionEditor({
                           name={`data.steps.${index}.description`}
                           render={({ field: descField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Description
                               </FormLabel>
                               <FormControl>
@@ -1298,8 +1307,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No steps added yet. Click "Add Step" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No steps added yet. Click &quot;Add Step&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -1316,7 +1325,7 @@ export default function SectionEditor({
               name="data.title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Title</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -1329,7 +1338,7 @@ export default function SectionEditor({
               name="data.subtitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Subtitle</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -1338,10 +1347,10 @@ export default function SectionEditor({
               )}
             />
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <div className="flex items-center justify-between mb-3">
+                <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Features
-                </FormLabel>
+                </label>
                 <Button
                   type="button"
                   variant="ghost"
@@ -1350,7 +1359,7 @@ export default function SectionEditor({
                     const currentFeatures = form.getValues('data.features') || []
                     form.setValue('data.features', [...currentFeatures, { icon: '', title: '', description: '', highlights: [], image: '', color: 'bg-[#662D91]' }])
                   }}
-                  className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                  className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <Plus className="h-3 w-3 mr-1" />
                   Add Feature
@@ -1364,10 +1373,10 @@ export default function SectionEditor({
                     {(field.value || []).map((feature: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Feature #{index + 1}
                           </span>
                           <Button
@@ -1378,7 +1387,7 @@ export default function SectionEditor({
                               const newFeatures = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newFeatures)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -1389,7 +1398,7 @@ export default function SectionEditor({
                             name={`data.features.${index}.icon`}
                             render={({ field: iconField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Icon
                                 </FormLabel>
                                 <FormControl>
@@ -1408,7 +1417,7 @@ export default function SectionEditor({
                             name={`data.features.${index}.color`}
                             render={({ field: colorField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Color
                                 </FormLabel>
                                 <FormControl>
@@ -1428,7 +1437,7 @@ export default function SectionEditor({
                           name={`data.features.${index}.title`}
                           render={({ field: titleField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Title
                               </FormLabel>
                               <FormControl>
@@ -1443,7 +1452,7 @@ export default function SectionEditor({
                           name={`data.features.${index}.description`}
                           render={({ field: descField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Description
                               </FormLabel>
                               <FormControl>
@@ -1473,7 +1482,7 @@ export default function SectionEditor({
                         />
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <label className="text-xs font-medium" style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                            <label className="text-xs font-medium cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                               Highlights
                             </label>
                             <Button
@@ -1486,7 +1495,7 @@ export default function SectionEditor({
                                 updatedFeatures[index].highlights = [...currentHighlights, '']
                                 field.onChange(updatedFeatures)
                               }}
-                              className="h-6 px-2 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                              className="h-6 px-2 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                             >
                               <Plus className="h-3 w-3 mr-1" />
                               Add
@@ -1514,7 +1523,7 @@ export default function SectionEditor({
                                   )
                                   field.onChange(updatedFeatures)
                                 }}
-                                className="h-9 w-9 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a] shrink-0"
+                                className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
                               >
                                 <Trash2 className="h-3 w-3" />
                               </Button>
@@ -1524,8 +1533,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No features added yet. Click "Add Feature" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No features added yet. Click &quot;Add Feature&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -1543,7 +1552,7 @@ export default function SectionEditor({
               name="data.title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Title</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -1556,7 +1565,7 @@ export default function SectionEditor({
               name="data.subtitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Subtitle</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -1570,7 +1579,7 @@ export default function SectionEditor({
                 name="data.badge.icon"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Badge Icon</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Icon</FormLabel>
                     <FormControl>
                       <IconSelector
                         value={field.value}
@@ -1587,7 +1596,7 @@ export default function SectionEditor({
                 name="data.badge.text"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Badge Text</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Love Stories" />
                     </FormControl>
@@ -1598,7 +1607,7 @@ export default function SectionEditor({
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Gallery Images
                 </FormLabel>
                 <Button
@@ -1609,7 +1618,7 @@ export default function SectionEditor({
                     const currentImages = form.getValues('data.images') || []
                     form.setValue('data.images', [...currentImages, { image: '', alt: '', title: '', story: '' }])
                   }}
-                  className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                  className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <Plus className="h-3 w-3 mr-1" />
                   Add Image
@@ -1623,10 +1632,10 @@ export default function SectionEditor({
                     {(field.value || []).map((image: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Image #{index + 1}
                           </span>
                           <Button
@@ -1637,7 +1646,7 @@ export default function SectionEditor({
                               const newImages = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newImages)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -1666,7 +1675,7 @@ export default function SectionEditor({
                             name={`data.images.${index}.title`}
                             render={({ field: titleField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Title
                                 </FormLabel>
                                 <FormControl>
@@ -1681,7 +1690,7 @@ export default function SectionEditor({
                             name={`data.images.${index}.alt`}
                             render={({ field: altField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Alt Text
                                 </FormLabel>
                                 <FormControl>
@@ -1697,7 +1706,7 @@ export default function SectionEditor({
                           name={`data.images.${index}.story`}
                           render={({ field: storyField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Story
                               </FormLabel>
                               <FormControl>
@@ -1710,8 +1719,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No images added yet. Click "Add Image" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No images added yet. Click &quot;Add Image&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -1719,7 +1728,7 @@ export default function SectionEditor({
               />
             </div>
             <div className="space-y-2">
-              <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 Call to Action (Optional)
               </FormLabel>
               <FormField
@@ -1727,7 +1736,7 @@ export default function SectionEditor({
                 name="data.cta.text"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>CTA Text</FormLabel>
+                    <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>CTA Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Be part of something beautiful." />
                     </FormControl>
@@ -1740,7 +1749,7 @@ export default function SectionEditor({
                 name="data.cta.highlight"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>Highlight Text</FormLabel>
+                    <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>Highlight Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Your story could be next." />
                     </FormControl>
@@ -1760,7 +1769,7 @@ export default function SectionEditor({
               name="data.title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Title</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -1773,7 +1782,7 @@ export default function SectionEditor({
               name="data.subtitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Subtitle</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
                     <Textarea {...field} rows={2} />
                   </FormControl>
@@ -1787,7 +1796,7 @@ export default function SectionEditor({
                 name="data.badge.icon"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Badge Icon</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Icon</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Heart" />
                     </FormControl>
@@ -1800,7 +1809,7 @@ export default function SectionEditor({
                 name="data.badge.text"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Badge Text</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Beta User Success Stories" />
                     </FormControl>
@@ -1811,7 +1820,7 @@ export default function SectionEditor({
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Testimonials
                 </FormLabel>
                 <Button
@@ -1822,7 +1831,7 @@ export default function SectionEditor({
                     const currentTestimonials = form.getValues('data.testimonials') || []
                     form.setValue('data.testimonials', [...currentTestimonials, { name: '', image: '', text: '', location: '', rating: 5, date: '' }])
                   }}
-                  className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                  className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <Plus className="h-3 w-3 mr-1" />
                   Add Testimonial
@@ -1836,10 +1845,10 @@ export default function SectionEditor({
                     {(field.value || []).map((testimonial: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Testimonial #{index + 1}
                           </span>
                           <Button
@@ -1850,7 +1859,7 @@ export default function SectionEditor({
                               const newTestimonials = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newTestimonials)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -1861,7 +1870,7 @@ export default function SectionEditor({
                             name={`data.testimonials.${index}.name`}
                             render={({ field: nameField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Name
                                 </FormLabel>
                                 <FormControl>
@@ -1876,7 +1885,7 @@ export default function SectionEditor({
                             name={`data.testimonials.${index}.location`}
                             render={({ field: locationField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Location
                                 </FormLabel>
                                 <FormControl>
@@ -1893,7 +1902,7 @@ export default function SectionEditor({
                             name={`data.testimonials.${index}.rating`}
                             render={({ field: ratingField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Rating (1-5)
                                 </FormLabel>
                                 <FormControl>
@@ -1915,7 +1924,7 @@ export default function SectionEditor({
                             name={`data.testimonials.${index}.date`}
                             render={({ field: dateField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Date
                                 </FormLabel>
                                 <FormControl>
@@ -1949,7 +1958,7 @@ export default function SectionEditor({
                           name={`data.testimonials.${index}.text`}
                           render={({ field: textField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Testimonial Text
                               </FormLabel>
                               <FormControl>
@@ -1962,8 +1971,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No testimonials added yet. Click "Add Testimonial" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No testimonials added yet. Click &quot;Add Testimonial&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -1976,7 +1985,7 @@ export default function SectionEditor({
                 name="data.stats.text"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Stats Text</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Join 10,000+ people waiting" />
                     </FormControl>
@@ -1989,7 +1998,7 @@ export default function SectionEditor({
                 name="data.stats.icon"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Stats Icon</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Icon</FormLabel>
                     <FormControl>
                       <IconSelector
                         value={field.value}
@@ -2013,7 +2022,7 @@ export default function SectionEditor({
               name="data.title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Title</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -2026,7 +2035,7 @@ export default function SectionEditor({
               name="data.subtitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Subtitle</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
                     <Textarea {...field} rows={2} />
                   </FormControl>
@@ -2040,7 +2049,7 @@ export default function SectionEditor({
                 name="data.badge.icon"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Badge Icon</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Icon</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Sparkles" />
                     </FormControl>
@@ -2053,7 +2062,7 @@ export default function SectionEditor({
                 name="data.badge.text"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Badge Text</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Coming Soon" />
                     </FormControl>
@@ -2063,9 +2072,9 @@ export default function SectionEditor({
               />
             </div>
             <div className="space-y-2">
-              <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <label className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px', display: 'block' }}>
                 Benefits
-              </FormLabel>
+              </label>
               <FormField
                 control={form.control}
                 name="data.benefits"
@@ -2090,7 +2099,7 @@ export default function SectionEditor({
                             const updatedBenefits = (field.value || []).filter((_: string, i: number) => i !== index)
                             field.onChange(updatedBenefits)
                           }}
-                          className="h-9 w-9 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a] shrink-0"
+                          className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>
@@ -2104,7 +2113,7 @@ export default function SectionEditor({
                         const currentBenefits = field.value || []
                         field.onChange([...currentBenefits, ''])
                       }}
-                      className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                      className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                     >
                       <Plus className="h-3 w-3 mr-1" />
                       Add Benefit
@@ -2114,7 +2123,7 @@ export default function SectionEditor({
               />
             </div>
             <div className="space-y-2">
-              <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 Call to Action
               </FormLabel>
               <FormField
@@ -2122,7 +2131,7 @@ export default function SectionEditor({
                 name="data.cta.text"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>CTA Text</FormLabel>
+                    <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>CTA Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Join the Waitlist" />
                     </FormControl>
@@ -2135,7 +2144,7 @@ export default function SectionEditor({
                 name="data.cta.subtext"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>CTA Subtext</FormLabel>
+                    <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>CTA Subtext</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Limited spots available" />
                     </FormControl>
@@ -2146,7 +2155,7 @@ export default function SectionEditor({
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Platforms
                 </FormLabel>
                 <Button
@@ -2157,7 +2166,7 @@ export default function SectionEditor({
                     const currentPlatforms = form.getValues('data.platforms') || []
                     form.setValue('data.platforms', [...currentPlatforms, { name: '', icon: '', coming: true }])
                   }}
-                  className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                  className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <Plus className="h-3 w-3 mr-1" />
                   Add Platform
@@ -2171,10 +2180,10 @@ export default function SectionEditor({
                     {(field.value || []).map((platform: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Platform #{index + 1}
                           </span>
                           <Button
@@ -2185,7 +2194,7 @@ export default function SectionEditor({
                               const newPlatforms = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newPlatforms)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -2196,7 +2205,7 @@ export default function SectionEditor({
                             name={`data.platforms.${index}.name`}
                             render={({ field: nameField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Platform Name
                                 </FormLabel>
                                 <FormControl>
@@ -2211,7 +2220,7 @@ export default function SectionEditor({
                             name={`data.platforms.${index}.icon`}
                             render={({ field: iconField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Icon
                                 </FormLabel>
                                 <FormControl>
@@ -2225,8 +2234,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No platforms added yet. Click "Add Platform" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No platforms added yet. Click &quot;Add Platform&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -2239,7 +2248,7 @@ export default function SectionEditor({
                 name="data.stats.text"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Stats Text</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Join" />
                     </FormControl>
@@ -2252,7 +2261,7 @@ export default function SectionEditor({
                 name="data.stats.count"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Stats Count</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Count</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., 10,000+" />
                     </FormControl>
@@ -2265,7 +2274,7 @@ export default function SectionEditor({
                 name="data.stats.suffix"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Stats Suffix</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Suffix</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., on the waitlist" />
                     </FormControl>
@@ -2304,7 +2313,7 @@ export default function SectionEditor({
               name="data.title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Title</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Title</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -2317,7 +2326,7 @@ export default function SectionEditor({
               name="data.subtitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Subtitle</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Subtitle</FormLabel>
                   <FormControl>
                     <Textarea {...field} rows={2} />
                   </FormControl>
@@ -2331,7 +2340,7 @@ export default function SectionEditor({
                 name="data.badge.icon"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Badge Icon</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Icon</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Sparkles" />
                     </FormControl>
@@ -2344,7 +2353,7 @@ export default function SectionEditor({
                 name="data.badge.text"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Badge Text</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Badge Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., Launching Soon" />
                     </FormControl>
@@ -2358,7 +2367,7 @@ export default function SectionEditor({
               name="data.cta.text"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>CTA Text</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>CTA Text</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="e.g., Join Waitlist Now" />
                   </FormControl>
@@ -2368,7 +2377,7 @@ export default function SectionEditor({
             />
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Platforms
                 </FormLabel>
                 <Button
@@ -2379,7 +2388,7 @@ export default function SectionEditor({
                     const currentPlatforms = form.getValues('data.platforms') || []
                     form.setValue('data.platforms', [...currentPlatforms, { name: '', icon: '', coming: true }])
                   }}
-                  className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                  className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <Plus className="h-3 w-3 mr-1" />
                   Add Platform
@@ -2393,10 +2402,10 @@ export default function SectionEditor({
                     {(field.value || []).map((platform: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Platform #{index + 1}
                           </span>
                           <Button
@@ -2407,7 +2416,7 @@ export default function SectionEditor({
                               const newPlatforms = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newPlatforms)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -2418,7 +2427,7 @@ export default function SectionEditor({
                             name={`data.platforms.${index}.name`}
                             render={({ field: nameField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Platform Name
                                 </FormLabel>
                                 <FormControl>
@@ -2433,7 +2442,7 @@ export default function SectionEditor({
                             name={`data.platforms.${index}.icon`}
                             render={({ field: iconField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Icon
                                 </FormLabel>
                                 <FormControl>
@@ -2447,8 +2456,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No platforms added yet. Click "Add Platform" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No platforms added yet. Click &quot;Add Platform&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -2461,7 +2470,7 @@ export default function SectionEditor({
                 name="data.stats.text"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Stats Text</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Text</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., people already on the waitlist" />
                     </FormControl>
@@ -2474,7 +2483,7 @@ export default function SectionEditor({
                 name="data.stats.count"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500' }}>Stats Count</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500' }}>Stats Count</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="e.g., 10,000+" />
                     </FormControl>
@@ -2510,7 +2519,7 @@ export default function SectionEditor({
           <div className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Timeline Events
                 </FormLabel>
                 <Button
@@ -2521,7 +2530,7 @@ export default function SectionEditor({
                     const currentTimeline = form.getValues('data.timeline') || []
                     form.setValue('data.timeline', [...currentTimeline, { year: '', event: '', description: '' }])
                   }}
-                  className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                  className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <Plus className="h-3 w-3 mr-1" />
                   Add Event
@@ -2535,10 +2544,10 @@ export default function SectionEditor({
                     {(field.value || []).map((event: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Event #{index + 1}
                           </span>
                           <Button
@@ -2549,7 +2558,7 @@ export default function SectionEditor({
                               const newTimeline = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newTimeline)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -2560,7 +2569,7 @@ export default function SectionEditor({
                             name={`data.timeline.${index}.year`}
                             render={({ field: yearField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Year
                                 </FormLabel>
                                 <FormControl>
@@ -2575,7 +2584,7 @@ export default function SectionEditor({
                             name={`data.timeline.${index}.event`}
                             render={({ field: eventField }) => (
                               <FormItem>
-                                <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                                <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                   Event Title
                                 </FormLabel>
                                 <FormControl>
@@ -2591,7 +2600,7 @@ export default function SectionEditor({
                           name={`data.timeline.${index}.description`}
                           render={({ field: descField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Description
                               </FormLabel>
                               <FormControl>
@@ -2604,8 +2613,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No timeline events added yet. Click "Add Event" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No timeline events added yet. Click &quot;Add Event&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -2620,7 +2629,7 @@ export default function SectionEditor({
           <div className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+                <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                   Join Reasons
                 </FormLabel>
                 <Button
@@ -2631,7 +2640,7 @@ export default function SectionEditor({
                     const currentItems = form.getValues('data.items') || []
                     form.setValue('data.items', [...currentItems, { title: '', description: '', icon: '' }])
                   }}
-                  className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                  className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <Plus className="h-3 w-3 mr-1" />
                   Add Item
@@ -2645,10 +2654,10 @@ export default function SectionEditor({
                     {(field.value || []).map((item: any, index: number) => (
                       <div
                         key={index}
-                        className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                        className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                          <span className="text-xs font-medium cms-text-secondary">
                             Item #{index + 1}
                           </span>
                           <Button
@@ -2659,7 +2668,7 @@ export default function SectionEditor({
                               const newItems = field.value.filter((_: any, i: number) => i !== index)
                               field.onChange(newItems)
                             }}
-                            className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                            className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -2669,7 +2678,7 @@ export default function SectionEditor({
                           name={`data.items.${index}.icon`}
                           render={({ field: iconField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Icon (Emoji or Text)
                               </FormLabel>
                               <FormControl>
@@ -2684,7 +2693,7 @@ export default function SectionEditor({
                           name={`data.items.${index}.title`}
                           render={({ field: titleField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Title
                               </FormLabel>
                               <FormControl>
@@ -2699,7 +2708,7 @@ export default function SectionEditor({
                           name={`data.items.${index}.description`}
                           render={({ field: descField }) => (
                             <FormItem>
-                              <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                              <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                                 Description
                               </FormLabel>
                               <FormControl>
@@ -2712,8 +2721,8 @@ export default function SectionEditor({
                       </div>
                     ))}
                     {(!field.value || field.value.length === 0) && (
-                      <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                        No items added yet. Click "Add Item" to get started.
+                      <p className="text-sm text-center py-4 cms-text-secondary">
+                        No items added yet. Click &quot;Add Item&quot; to get started.
                       </p>
                     )}
                   </div>
@@ -2731,7 +2740,7 @@ export default function SectionEditor({
               name="data.title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Page Title</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Page Title</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="e.g., Privacy Policy" />
                   </FormControl>
@@ -2744,7 +2753,7 @@ export default function SectionEditor({
               name="data.lastUpdated"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Last Updated</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Last Updated</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="e.g., December 2024" />
                   </FormControl>
@@ -2753,7 +2762,7 @@ export default function SectionEditor({
               )}
             />
             <div className="flex items-center justify-between mb-3">
-              <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+              <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                 Content Sections
               </FormLabel>
               <Button
@@ -2764,7 +2773,7 @@ export default function SectionEditor({
                   const currentSections = form.getValues('data.sections') || []
                   form.setValue('data.sections', [...currentSections, { heading: '', content: '', items: [] }])
                 }}
-                className="h-8 px-3 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                className="h-8 px-3 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
               >
                 <Plus className="h-3 w-3 mr-1" />
                 Add Section
@@ -2778,10 +2787,10 @@ export default function SectionEditor({
                   {(field.value || []).map((section: any, index: number) => (
                     <div
                       key={index}
-                      className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717] space-y-3"
+                      className="p-4 rounded-md border cms-card-bg cms-border space-y-3"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium" style={{ color: '#898989' }}>
+                        <span className="text-xs font-medium cms-text-secondary">
                           Section #{index + 1}
                         </span>
                         <Button
@@ -2792,7 +2801,7 @@ export default function SectionEditor({
                             const newSections = field.value.filter((_: any, i: number) => i !== index)
                             field.onChange(newSections)
                           }}
-                          className="h-7 w-7 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                          className="h-7 w-7 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>
@@ -2802,7 +2811,7 @@ export default function SectionEditor({
                         name={`data.sections.${index}.heading`}
                         render={({ field: headingField }) => (
                           <FormItem>
-                            <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                               Heading
                             </FormLabel>
                             <FormControl>
@@ -2817,7 +2826,7 @@ export default function SectionEditor({
                         name={`data.sections.${index}.content`}
                         render={({ field: contentField }) => (
                           <FormItem>
-                            <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                            <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                               Content
                             </FormLabel>
                             <FormControl>
@@ -2829,7 +2838,7 @@ export default function SectionEditor({
                       />
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <FormLabel style={{ color: '#898989', fontWeight: '400', fontSize: '12px' }}>
+                          <FormLabel className="cms-text-secondary" style={{ fontWeight: '400', fontSize: '12px' }}>
                             Items (Optional)
                           </FormLabel>
                           <Button
@@ -2842,7 +2851,7 @@ export default function SectionEditor({
                               updatedSections[index].items = [...currentItems, '']
                               field.onChange(updatedSections)
                             }}
-                            className="h-6 px-2 text-xs text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+                              className="h-6 px-2 text-xs cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                           >
                             <Plus className="h-3 w-3 mr-1" />
                             Add Item
@@ -2870,7 +2879,7 @@ export default function SectionEditor({
                                 )
                                 field.onChange(updatedSections)
                               }}
-                              className="h-9 w-9 p-0 text-[#898989] hover:text-white hover:bg-[#2a2a2a] shrink-0"
+                              className="h-9 w-9 p-0 cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white shrink-0"
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>
@@ -2881,7 +2890,7 @@ export default function SectionEditor({
                   ))}
                   {(!field.value || field.value.length === 0) && (
                     <p className="text-sm text-center py-4" style={{ color: '#5a5a5a' }}>
-                      No sections added yet. Click "Add Section" to get started.
+                      No sections added yet. Click &quot;Add Section&quot; to get started.
                     </p>
                   )}
                 </div>
@@ -2892,16 +2901,16 @@ export default function SectionEditor({
 
       default:
         return (
-          <div className="p-4 rounded-md border border-[#2a2a2a] bg-[#171717]">
-            <p className="text-sm" style={{ color: '#898989' }}>
-              Visual editor not available for section type: <strong style={{ color: '#ffffff' }}>{sectionType}</strong>
+          <div className="p-4 rounded-md border cms-card-bg cms-border">
+            <p className="text-sm cms-text-secondary">
+              Visual editor not available for section type: <strong className="cms-text-primary">{sectionType}</strong>
             </p>
-            <p className="text-xs mt-2" style={{ color: '#5a5a5a' }}>
+            <p className="text-xs mt-2 cms-text-secondary">
               Please contact the development team to add support for this section type.
             </p>
-            <div className="mt-4 p-3 rounded bg-[#212121] border border-[#2a2a2a]">
-              <p className="text-xs mb-2" style={{ color: '#898989' }}>Current content:</p>
-              <pre className="text-xs overflow-auto max-h-40" style={{ color: '#898989' }}>
+            <div className="mt-4 p-3 rounded cms-card-bg cms-border border">
+              <p className="text-xs mb-2 cms-text-secondary">Current content:</p>
+              <pre className="text-xs overflow-auto max-h-40 cms-text-secondary">
                 {JSON.stringify(section?.content || {}, null, 2)}
               </pre>
             </div>
@@ -2913,17 +2922,15 @@ export default function SectionEditor({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="max-w-4xl max-h-[90vh] overflow-y-auto"
+        className="max-w-4xl max-h-[90vh] overflow-y-auto cms-card cms-border"
         style={{
-          backgroundColor: '#212121',
-          borderColor: '#2a2a2a',
           fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
           <DialogTitle
+            className="cms-text-primary"
             style={{ 
-              color: '#ffffff', 
               fontWeight: '600', 
               fontSize: '18px',
               lineHeight: '1.4'
@@ -2932,8 +2939,8 @@ export default function SectionEditor({
             {isEditing ? 'Edit Section' : 'Create Section'}
           </DialogTitle>
           <DialogDescription
+            className="cms-text-secondary"
             style={{ 
-              color: '#898989', 
               fontSize: '13px',
               lineHeight: '1.5'
             }}
@@ -2980,15 +2987,12 @@ export default function SectionEditor({
               control={form.control}
               name="published"
               render={({ field }) => (
-                <FormItem className="flex items-center justify-between p-4 rounded-lg border" style={{ 
-                  backgroundColor: '#171717',
-                  borderColor: '#2a2a2a'
-                }}>
+                <FormItem className="flex items-center justify-between p-4 rounded-lg border cms-card-bg cms-border">
                   <div className="space-y-1 leading-none">
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
                       Publish Section
                     </FormLabel>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       {field.value 
                         ? 'This section will be visible on the website' 
                         : 'This section will be saved as a draft'}
@@ -3009,11 +3013,8 @@ export default function SectionEditor({
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
-                className="h-10 px-5"
+                className="h-10 px-5 cms-card cms-border cms-text-secondary"
                 style={{
-                  backgroundColor: '#212121',
-                  borderColor: '#2a2a2a',
-                  color: '#898989',
                   fontSize: '14px',
                   fontWeight: '500'
                 }}
@@ -3025,9 +3026,9 @@ export default function SectionEditor({
                 disabled={form.formState.isSubmitting || isPending}
                 className="h-10 px-5"
                 style={{
-                  backgroundColor: (form.formState.isSubmitting || isPending) ? '#171717' : (form.watch('published') ? '#662D91' : '#212121'),
-                  borderColor: '#2a2a2a',
-                  color: (form.formState.isSubmitting || isPending) ? '#5a5a5a' : '#ffffff',
+                  backgroundColor: (form.formState.isSubmitting || isPending) ? 'rgba(102, 45, 145, 0.5)' : ((form.watch('published') as boolean) ? '#662D91' : 'transparent'),
+                  borderColor: (form.watch('published') as boolean) ? '#662D91' : 'transparent',
+                  color: (form.watch('published') as boolean) ? '#ffffff' : 'inherit',
                   fontSize: '14px',
                   fontWeight: '600'
                 }}

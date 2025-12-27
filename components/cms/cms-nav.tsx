@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -14,7 +14,12 @@ import {
   History,
   Power,
   PanelLeft,
+  Moon,
+  Sun,
+  Monitor,
 } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { CMSThemeToggle } from './cms-theme-toggle'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import type { AdminUser } from '@/lib/supabase/types'
@@ -38,9 +43,15 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
+  const { theme, resolvedTheme, setTheme } = useTheme()
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>('hover')
   const [isHovered, setIsHovered] = useState(false)
   const [showModeMenu, setShowModeMenu] = useState(false)
+  const [showThemeMenu, setShowThemeMenu] = useState(false)
+  const [themeMenuPosition, setThemeMenuPosition] = useState({ top: 0, left: 0 })
+  const themeButtonRef = useRef<HTMLButtonElement>(null)
+  
+  const displayTheme = theme === 'system' ? resolvedTheme : theme
 
   // Determine if sidebar should be expanded based on mode
   const isExpanded = sidebarMode === 'expanded' || (sidebarMode === 'hover' && isHovered)
@@ -82,6 +93,61 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
     }
   }, [isExpanded, showModeMenu, sidebarMode])
 
+  // Close theme menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (!target.closest('[data-theme-menu]')) {
+        setShowThemeMenu(false)
+      }
+    }
+
+    if (showThemeMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showThemeMenu])
+
+  // Close theme menu when sidebar collapses (if in hover mode)
+  useEffect(() => {
+    if (!isExpanded && showThemeMenu && sidebarMode === 'hover') {
+      setShowThemeMenu(false)
+    }
+  }, [isExpanded, showThemeMenu, sidebarMode])
+
+  // Calculate theme menu position based on button position
+  useEffect(() => {
+    if (showThemeMenu && themeButtonRef.current) {
+      const updatePosition = () => {
+        if (themeButtonRef.current) {
+          const buttonRect = themeButtonRef.current.getBoundingClientRect()
+          const menuHeight = 120 // Approximate height of menu (3 items × ~40px each)
+          setThemeMenuPosition({
+            top: buttonRect.top - menuHeight - 8, // Position above button with 8px gap
+            left: buttonRect.right + 8, // Position to the right of button
+          })
+        }
+      }
+      
+      // Use requestAnimationFrame to ensure DOM is updated
+      requestAnimationFrame(() => {
+        updatePosition()
+      })
+      
+      // Recalculate on window resize or scroll
+      window.addEventListener('resize', updatePosition)
+      window.addEventListener('scroll', updatePosition, true)
+      
+      return () => {
+        window.removeEventListener('resize', updatePosition)
+        window.removeEventListener('scroll', updatePosition, true)
+      }
+    } else if (!showThemeMenu) {
+      // Reset position when menu is closed
+      setThemeMenuPosition({ top: 0, left: 0 })
+    }
+  }, [showThemeMenu, isExpanded])
+
   const modeOptions = [
     { value: 'expanded' as SidebarMode, label: 'Expanded' },
     { value: 'collapsed' as SidebarMode, label: 'Collapsed' },
@@ -90,7 +156,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-screen bg-[#212121] border-r border-[#2a2a2a] transition-all duration-300 z-50 flex flex-col ${
+      className={`fixed left-0 top-0 h-screen cms-sidebar-bg cms-sidebar-border transition-all duration-300 z-50 flex flex-col ${
         isExpanded ? 'w-[200px]' : 'w-[60px]'
       }`}
       style={{ fontFamily: "'Google Sans Flex', system-ui, sans-serif" }}
@@ -106,7 +172,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
       }}
     >
       {/* Header */}
-      <div className="h-16 flex items-center justify-between px-3 border-b border-[#2a2a2a]">
+      <div className="h-16 flex items-center justify-between px-3 cms-sidebar-border-b">
         {isExpanded && (
           <Link href="/add-content" className="flex items-center gap-2">
             <div className="relative h-7 w-auto">
@@ -115,11 +181,10 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
                 alt="qoupl logo"
                 width={80}
                 height={28}
-                className="h-7 w-auto"
-                style={{ filter: 'brightness(0) invert(1)' }}
+                className="h-7 w-auto cms-logo"
               />
             </div>
-            <span className="text-xs font-semibold" style={{ color: '#898989' }}>CMS</span>
+            <span className="text-xs font-semibold cms-text-secondary">CMS</span>
           </Link>
         )}
         {!isExpanded && (
@@ -130,8 +195,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
                 alt="qoupl logo"
                 width={28}
                 height={28}
-                className="h-7 w-7"
-                style={{ filter: 'brightness(0) invert(1)' }}
+                className="h-7 w-7 cms-logo"
               />
             </div>
           </Link>
@@ -148,10 +212,10 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
               <Link key={item.href} href={item.href}>
                 <Button
                   variant="ghost"
-                  className={`w-full gap-2 h-10 px-2 text-[#898989] hover:text-white hover:bg-[#2a2a2a] transition-colors ${
+                  className={`w-full gap-2 h-10 px-2 cms-sidebar-button transition-colors ${
                     isExpanded ? 'justify-start' : 'justify-center'
                   } ${
-                    isActive ? 'bg-[#2a2a2a] text-white' : ''
+                    isActive ? 'cms-menu-item-active' : ''
                   }`}
                   style={{ fontWeight: '600' }}
                 >
@@ -166,21 +230,21 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
         </div>
       </nav>
 
-      {/* Bottom Section - User, Logout, and Sidebar Control */}
-      <div className="border-t border-[#2a2a2a] space-y-1 mt-auto">
+      {/* Bottom Section - User, Logout, Sidebar Control, and Theme Toggle */}
+      <div className="cms-sidebar-border-t space-y-1 mt-auto">
         {/* User Profile */}
         <div className="p-2">
           {isExpanded ? (
             <div className="px-2 py-1">
-              <p className="font-semibold text-white truncate" style={{ fontWeight: '600', fontSize: '13px' }}>
+              <p className="font-semibold cms-text-primary truncate" style={{ fontWeight: '600', fontSize: '13px' }}>
                 {adminUser.name || user.email}
               </p>
-              <p className="text-[#898989] font-medium" style={{ fontSize: '11px' }}>Admin</p>
+              <p className="cms-text-secondary font-medium" style={{ fontSize: '11px' }}>Admin</p>
             </div>
           ) : (
             <div className="flex justify-center">
-              <div className="h-8 w-8 rounded-full bg-[#2a2a2a] flex items-center justify-center">
-                <span className="text-xs text-white font-semibold" style={{ fontWeight: '600' }}>
+              <div className="h-8 w-8 rounded-full cms-card-bg flex items-center justify-center cms-border border">
+                <span className="text-xs cms-text-primary font-semibold" style={{ fontWeight: '600' }}>
                   {(adminUser.name || user.email || 'A').charAt(0).toUpperCase()}
                 </span>
               </div>
@@ -194,7 +258,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
             <Button
               variant="ghost"
               onClick={handleSignOut}
-              className="w-full justify-start gap-2 h-9 px-2 text-[#898989] hover:text-white hover:bg-[#2a2a2a]"
+              className="w-full justify-start gap-2 h-9 px-2 cms-sidebar-button"
               style={{ fontWeight: '600' }}
             >
               <Power className="h-4 w-4 shrink-0" />
@@ -205,7 +269,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
               variant="ghost"
               size="icon"
               onClick={handleSignOut}
-              className="w-full h-9 text-[#898989] hover:text-white hover:bg-[#2a2a2a] justify-center"
+              className="w-full h-9 cms-sidebar-button justify-center"
               title="Sign Out"
             >
               <Power className="h-4 w-4" />
@@ -218,7 +282,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
           <Button
             variant="ghost"
             onClick={() => setShowModeMenu(!showModeMenu)}
-            className={`w-full gap-2 h-9 px-2 text-[#898989] hover:text-white hover:bg-[#2a2a2a] ${
+            className={`w-full gap-2 h-9 px-2 cms-sidebar-button ${
               isExpanded ? 'justify-start' : 'justify-center'
             }`}
             style={{ fontWeight: '600' }}
@@ -238,12 +302,12 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
           {/* Mode Menu - Positioned outside sidebar */}
           {showModeMenu && (
             <div 
-              className="fixed bg-[#171717] border border-[#2a2a2a] rounded-md shadow-lg overflow-hidden"
+              className="fixed cms-menu-bg cms-menu-border rounded-md shadow-lg overflow-hidden"
               style={{ 
                 zIndex: 1000, 
                 width: '140px',
                 left: isExpanded ? '208px' : '68px',
-                bottom: '16px'
+                bottom: '80px'
               }}
               onMouseEnter={() => {
                 // Keep sidebar expanded when hovering over menu
@@ -269,10 +333,10 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
                       setIsHovered(false)
                     }
                   }}
-                  className={`w-full text-left px-3 py-2 transition-colors ${
+                  className={`w-full text-left px-3 py-2 transition-colors cms-menu-item ${
                     sidebarMode === option.value
-                      ? 'bg-[#2a2a2a] text-white'
-                      : 'text-[#898989] hover:text-white hover:bg-[#2a2a2a]'
+                      ? 'cms-menu-item-active'
+                      : 'cms-menu-item-inactive'
                   }`}
                   style={{ fontWeight: '600', fontSize: '12px' }}
                 >
@@ -280,6 +344,125 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
                 </button>
               ))}
             </div>
+          )}
+        </div>
+
+        {/* Theme Toggle */}
+        <div className="px-2 pb-2 relative" data-theme-menu>
+          {isExpanded ? (
+            <CMSThemeToggle />
+          ) : (
+            <>
+              <Button
+                ref={themeButtonRef}
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  if (!showThemeMenu && themeButtonRef.current) {
+                    // Calculate position immediately when opening menu
+                    const buttonRect = themeButtonRef.current.getBoundingClientRect()
+                    const menuHeight = 120
+                    const spaceAbove = buttonRect.top
+                    const spaceBelow = window.innerHeight - buttonRect.bottom
+                    
+                    // Position above button if there's enough space, otherwise below
+                    if (spaceAbove >= menuHeight + 8) {
+                      setThemeMenuPosition({
+                        top: buttonRect.top - menuHeight - 8,
+                        left: buttonRect.right + 8,
+                      })
+                    } else {
+                      setThemeMenuPosition({
+                        top: buttonRect.bottom + 8,
+                        left: buttonRect.right + 8,
+                      })
+                    }
+                  }
+                  setShowThemeMenu(!showThemeMenu)
+                }}
+                className="w-full h-9 cms-sidebar-button justify-center"
+                title="Theme"
+                onMouseEnter={() => {
+                  // Prevent sidebar from collapsing when hovering over the theme button
+                  if (sidebarMode === 'hover') {
+                    setIsHovered(true)
+                  }
+                }}
+              >
+                {displayTheme === 'dark' ? <Moon className="h-4 w-4" /> : displayTheme === 'light' ? <Sun className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              </Button>
+
+              {/* Theme Menu - Positioned outside sidebar */}
+              {showThemeMenu && (
+                <div 
+                  className="fixed cms-menu-bg cms-menu-border rounded-md shadow-lg overflow-hidden"
+                  style={{ 
+                    zIndex: 1000, 
+                    width: '140px',
+                    top: `${themeMenuPosition.top}px`,
+                    left: `${themeMenuPosition.left}px`
+                  }}
+                  onMouseEnter={() => {
+                    // Keep sidebar expanded when hovering over menu
+                    if (sidebarMode === 'hover') {
+                      setIsHovered(true)
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    // Only collapse if not in expanded mode
+                    if (sidebarMode === 'hover') {
+                      setIsHovered(false)
+                    }
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      setTheme('dark')
+                      setShowThemeMenu(false)
+                    }}
+                    className={`w-full px-3 py-2 text-left text-sm flex items-center gap-2 transition-colors cms-menu-item ${
+                      theme === 'dark'
+                        ? 'cms-menu-item-active'
+                        : 'cms-menu-item-inactive'
+                    }`}
+                    style={{ fontWeight: '600', fontSize: '12px' }}
+                  >
+                    <Moon className="h-4 w-4" />
+                    Dark
+                  </button>
+                  <button
+                    onClick={() => {
+                      setTheme('light')
+                      setShowThemeMenu(false)
+                    }}
+                    className={`w-full px-3 py-2 text-left text-sm flex items-center gap-2 transition-colors cms-menu-item ${
+                      theme === 'light'
+                        ? 'cms-menu-item-active'
+                        : 'cms-menu-item-inactive'
+                    }`}
+                    style={{ fontWeight: '600', fontSize: '12px' }}
+                  >
+                    <Sun className="h-4 w-4" />
+                    Light
+                  </button>
+                  <button
+                    onClick={() => {
+                      setTheme('system')
+                      setShowThemeMenu(false)
+                    }}
+                    className={`w-full px-3 py-2 text-left text-sm flex items-center gap-2 transition-colors cms-menu-item ${
+                      theme === 'system'
+                        ? 'cms-menu-item-active'
+                        : 'cms-menu-item-inactive'
+                    }`}
+                    style={{ fontWeight: '600', fontSize: '12px' }}
+                  >
+                    <Monitor className="h-4 w-4" />
+                    System
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

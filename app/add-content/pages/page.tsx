@@ -71,16 +71,10 @@ export default async function PagesPage() {
   return (
     <div>
         <div className="mb-8">
-          <h1 
-            className="text-3xl font-semibold mb-2"
-            style={{ color: '#ffffff' }}
-          >
+          <h1 className="text-3xl font-semibold mb-2 cms-text-primary">
             Pages
           </h1>
-          <p 
-            className="text-sm"
-            style={{ color: '#898989' }}
-          >
+          <p className="text-sm cms-text-secondary">
             Manage all website pages and their sections
           </p>
         </div>
@@ -89,30 +83,20 @@ export default async function PagesPage() {
           {pagesWithCounts.map((page) => (
             <Card 
               key={page.id} 
-              className="transition-all"
-              style={{ 
-                backgroundColor: '#212121',
-                borderColor: '#2a2a2a',
-              }}
+              className="transition-all cms-card cms-border border"
             >
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <CardTitle 
-                      className="flex items-center gap-2 text-base"
-                      style={{ color: '#ffffff' }}
-                    >
+                    <CardTitle className="flex items-center gap-2 text-base cms-text-primary">
                       {page.published ? (
-                        <Eye className="h-4 w-4" style={{ color: '#898989' }} />
+                        <Eye className="h-4 w-4 cms-text-secondary" />
                       ) : (
-                        <EyeOff className="h-4 w-4" style={{ color: '#898989' }} />
+                        <EyeOff className="h-4 w-4 cms-text-secondary" />
                       )}
                       {page.title}
                     </CardTitle>
-                    <CardDescription 
-                      className="mt-1 text-xs flex items-center gap-2"
-                      style={{ color: '#898989' }}
-                    >
+                    <CardDescription className="mt-1 text-xs flex items-center gap-2 cms-text-secondary">
                       <span>/{page.slug}</span>
                       <span>•</span>
                       <span>{page.sectionCount} {page.sectionCount === 1 ? 'section' : 'sections'}</span>
@@ -122,10 +106,7 @@ export default async function PagesPage() {
               </CardHeader>
               <CardContent>
                 {page.description && (
-                  <p 
-                    className="text-sm mb-4 line-clamp-2"
-                    style={{ color: '#898989' }}
-                  >
+                  <p className="text-sm mb-4 line-clamp-2 cms-text-secondary">
                     {page.description}
                   </p>
                 )}
@@ -133,11 +114,8 @@ export default async function PagesPage() {
                   <Link href={`/add-content/pages/${page.slug}`} className="flex-1">
                     <Button 
                       variant="outline" 
-                      className="w-full h-9" 
+                      className="w-full h-9 cms-card cms-border cms-text-secondary"
                       style={{ 
-                        backgroundColor: '#212121',
-                        borderColor: '#2a2a2a',
-                        color: '#898989',
                         fontSize: '13px',
                         fontWeight: '500'
                       }}
@@ -149,9 +127,8 @@ export default async function PagesPage() {
                   <Link href={page.slug === 'home' ? '/' : `/${page.slug}`} target="_blank">
                     <Button 
                       variant="ghost" 
-                      className="h-9 px-3"
+                      className="h-9 px-3 cms-text-secondary"
                       style={{ 
-                        color: '#898989',
                         fontSize: '13px',
                         fontWeight: '500'
                       }}

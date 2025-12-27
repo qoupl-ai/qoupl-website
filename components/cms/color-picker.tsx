@@ -64,11 +64,8 @@ export function ColorPicker({ value, onChange, label = 'Color' }: ColorPickerPro
         <Button
           type="button"
           variant="outline"
-          className="w-full justify-start"
+          className="w-full justify-start cms-card cms-border cms-text-secondary"
           style={{
-            backgroundColor: '#212121',
-            borderColor: '#2a2a2a',
-            color: '#898989',
             fontSize: '13px',
             fontWeight: '500'
           }}
@@ -84,15 +81,11 @@ export function ColorPicker({ value, onChange, label = 'Color' }: ColorPickerPro
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[280px] p-0"
-        style={{
-          backgroundColor: '#212121',
-          borderColor: '#2a2a2a',
-        }}
+        className="w-[280px] p-0 cms-card-bg cms-border"
       >
         <div className="p-3 space-y-3">
           <div>
-            <label className="text-xs font-medium mb-2 block" style={{ color: '#898989' }}>
+            <label className="text-xs font-medium mb-2 block cms-text-secondary">
               Predefined Colors
             </label>
             <div className="grid grid-cols-4 gap-2">
@@ -125,7 +118,7 @@ export function ColorPicker({ value, onChange, label = 'Color' }: ColorPickerPro
             </div>
           </div>
           <div>
-            <label className="text-xs font-medium mb-2 block" style={{ color: '#898989' }}>
+            <label className="text-xs font-medium mb-2 block cms-text-secondary">
               Custom Color (Hex)
             </label>
             <div className="flex gap-2">
@@ -168,7 +161,7 @@ export function ColorPicker({ value, onChange, label = 'Color' }: ColorPickerPro
                     borderColor: '#2a2a2a',
                   }}
                 />
-                <span className="text-xs" style={{ color: '#898989' }}>
+                <span className="text-xs cms-text-secondary">
                   {customColor.match(/^#[0-9A-Fa-f]{6}$/) ? 'Valid' : 'Invalid hex'}
                 </span>
               </div>

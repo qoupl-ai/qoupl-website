@@ -83,17 +83,15 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="max-w-2xl"
+        className="max-w-2xl cms-card cms-border"
         style={{
-          backgroundColor: '#212121',
-          borderColor: '#2a2a2a',
           fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
           <DialogTitle
+            className="cms-text-primary"
             style={{ 
-              color: '#ffffff', 
               fontWeight: '600', 
               fontSize: '18px',
               lineHeight: '1.4'
@@ -102,8 +100,8 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
             {isEditing ? 'Edit Page' : 'Create Page'}
           </DialogTitle>
           <DialogDescription
+            className="cms-text-secondary"
             style={{ 
-              color: '#898989', 
               fontSize: '13px',
               lineHeight: '1.5'
             }}
@@ -169,11 +167,8 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
               type="button" 
               variant="outline" 
               onClick={() => onOpenChange(false)}
-              className="h-10 px-5"
+              className="h-10 px-5 cms-card cms-border cms-text-secondary"
               style={{
-                backgroundColor: '#212121',
-                borderColor: '#2a2a2a',
-                color: '#898989',
                 fontSize: '14px',
                 fontWeight: '500'
               }}
@@ -183,11 +178,8 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
             <Button 
               type="submit" 
               disabled={loading}
-              className="h-10 px-5"
+              className="h-10 px-5 cms-card cms-border cms-text-secondary"
               style={{
-                backgroundColor: loading ? '#171717' : '#212121',
-                borderColor: '#2a2a2a',
-                color: loading ? '#5a5a5a' : '#898989',
                 fontSize: '14px',
                 fontWeight: '600'
               }}

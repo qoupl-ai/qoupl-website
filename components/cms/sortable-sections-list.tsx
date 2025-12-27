@@ -38,7 +38,7 @@ import {
   Smartphone,
   Calendar
 } from 'lucide-react'
-import SectionEditorButton from '@/app/add-content/pages/[slug]/section-editor-button'
+import SectionEditorButton from '@/components/cms/section-editor-button'
 import { reorderSections } from '@/app/actions/section-actions'
 import { toast } from 'sonner'
 
@@ -212,24 +212,20 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
   
   const sectionTitle = getSectionTitle()
 
+  const cardClassName = isDragging 
+    ? 'transition-all hover:border-[#662D91]/50 cms-card cms-border border border-[#662D91] border-2'
+    : 'transition-all hover:border-[#662D91]/50 cms-card cms-border border'
+
   return (
     <div ref={setNodeRef} style={style}>
-      <Card
-        className="transition-all hover:border-[#662D91]/50"
-        style={{
-          backgroundColor: '#212121',
-          borderColor: isDragging ? '#662D91' : '#2a2a2a',
-          borderWidth: isDragging ? '2px' : '1px',
-        }}
-      >
+      <Card className={cardClassName}>
         <CardHeader>
           <div className="flex items-start gap-3">
             {/* Drag Handle - More Visible */}
             <div
               {...attributes}
               {...listeners}
-              className="cursor-grab active:cursor-grabbing flex items-center justify-center mt-1 p-2 rounded hover:bg-[#2a2a2a] transition-colors"
-              style={{ color: '#898989' }}
+              className="cursor-grab active:cursor-grabbing flex items-center justify-center mt-1 p-2 rounded cms-sidebar-button transition-colors"
               suppressHydrationWarning
               title="Drag to reorder"
             >
@@ -238,27 +234,17 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
             
             {/* Section Icon */}
             <div 
-              className="flex items-center justify-center w-10 h-10 rounded-lg shrink-0"
-              style={{ 
-                backgroundColor: '#171717',
-                border: '1px solid #2a2a2a'
-              }}
+              className="flex items-center justify-center w-10 h-10 rounded-lg shrink-0 cms-main-bg cms-border border"
             >
               <SectionIcon className="h-5 w-5" style={{ color: '#662D91' }} />
             </div>
 
             {/* Section Info */}
             <div className="flex-1 min-w-0">
-              <CardTitle
-                className="text-base mb-1"
-                style={{ color: '#ffffff' }}
-              >
+              <CardTitle className="text-base mb-1 cms-text-primary">
                 {sectionTitle}
               </CardTitle>
-              <CardDescription
-                className="text-xs flex items-center gap-2 flex-wrap"
-                style={{ color: '#898989' }}
-              >
+              <CardDescription className="text-xs flex items-center gap-2 flex-wrap cms-text-secondary">
                 <span className="flex items-center gap-1.5">
                   <span style={{ 
                     display: 'inline-block',
@@ -272,10 +258,10 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
                 <span>•</span>
                 <span className="flex items-center gap-1">
                   <span style={{ color: '#662D91' }}>#{section.order_index + 1}</span>
-                  <span className="text-[10px]" style={{ color: '#5a5a5a' }}>in order</span>
+                  <span className="text-[10px] cms-text-secondary">in order</span>
                 </span>
                 <span>•</span>
-                <span className="text-[10px]" style={{ color: '#5a5a5a' }}>
+                <span className="text-[10px] cms-text-secondary">
                   {getSectionTypeName(section.component_type)}
                 </span>
               </CardDescription>
@@ -291,11 +277,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
           </div>
         </CardHeader>
         <CardContent>
-          <div className="text-xs p-3 rounded overflow-auto max-h-32" style={{
-            backgroundColor: '#171717',
-            color: '#898989',
-            border: '1px solid #2a2a2a'
-          }}>
+          <div className="text-xs p-3 rounded overflow-auto max-h-32 cms-card-bg cms-border border cms-text-secondary">
             {(() => {
               const content = section.content || {}
               
@@ -303,11 +285,11 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               if (section.component_type === 'hero') {
                 return (
                   <>
-                    {content.title && <p className="mb-1"><strong style={{ color: '#ffffff' }}>Title:</strong> {content.title}</p>}
-                    {content.tagline && <p className="mb-1"><strong style={{ color: '#ffffff' }}>Tagline:</strong> {content.tagline}</p>}
-                    {content.subtitle && <p className="mb-1 line-clamp-2"><strong style={{ color: '#ffffff' }}>Subtitle:</strong> {content.subtitle}</p>}
+                    {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
+                    {content.tagline && <p className="mb-1"><strong className="cms-text-primary">Tagline:</strong> {content.tagline}</p>}
+                    {content.subtitle && <p className="mb-1 line-clamp-2"><strong className="cms-text-primary">Subtitle:</strong> {content.subtitle}</p>}
                     {(content.images?.women?.length || content.images?.men?.length) && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Carousel:</strong> {content.images?.women?.length || 0} women, {content.images?.men?.length || 0} men</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Carousel:</strong> {content.images?.women?.length || 0} women, {content.images?.men?.length || 0} men</p>
                     )}
                   </>
                 )
@@ -316,20 +298,20 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               // Values section
               if (section.component_type === 'values') {
                 if (!content.values || content.values.length === 0) {
-                  return <p style={{ color: '#5a5a5a' }}>No values added yet</p>
+                  return <p className="cms-text-secondary">No values added yet</p>
                 }
                 return (
                   <>
-                    <p className="mb-2 text-[11px]" style={{ color: '#898989' }}>
-                      <strong style={{ color: '#ffffff' }}>{content.values.length}</strong> value{content.values.length !== 1 ? 's' : ''}
+                    <p className="mb-2 text-[11px] cms-text-secondary">
+                      <strong className="cms-text-primary">{content.values.length}</strong> value{content.values.length !== 1 ? 's' : ''}
                     </p>
                     {content.values.map((v: any, i: number) => (
-                      <div key={i} className="mb-2 pb-2 border-b border-[#2a2a2a] last:border-0">
-                        <p className="text-[11px] font-medium mb-0.5" style={{ color: '#ffffff' }}>
+                      <div key={i} className="mb-2 pb-2 border-b cms-border last:border-0">
+                        <p className="text-[11px] font-medium mb-0.5 cms-text-primary">
                           {v.title || 'Untitled Value'}
                         </p>
                         {v.description && (
-                          <p className="text-[10px] line-clamp-1" style={{ color: '#5a5a5a' }}>
+                          <p className="text-[10px] line-clamp-1 cms-text-secondary">
                             {v.description}
                           </p>
                         )}
@@ -343,9 +325,9 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               if (section.component_type === 'how-it-works') {
                 return (
                   <>
-                    {content.title && <p className="mb-1"><strong style={{ color: '#ffffff' }}>Title:</strong> {content.title}</p>}
+                    {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
                     {content.steps?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Steps:</strong> {content.steps.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Steps:</strong> {content.steps.length} items</p>
                     )}
                     {content.steps?.slice(0, 2).map((s: any, i: number) => (
                       <p key={i} className="mb-1 text-[11px]">• {s.title || 'Untitled step'}</p>
@@ -358,9 +340,9 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               if (section.component_type === 'product-features') {
                 return (
                   <>
-                    {content.title && <p className="mb-1"><strong style={{ color: '#ffffff' }}>Title:</strong> {content.title}</p>}
+                    {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
                     {content.features?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Features:</strong> {content.features.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Features:</strong> {content.features.length} items</p>
                     )}
                     {content.features?.slice(0, 2).map((f: any, i: number) => (
                       <p key={i} className="mb-1 text-[11px]">• {f.title || 'Untitled feature'}</p>
@@ -373,9 +355,9 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               if (section.component_type === 'gallery') {
                 return (
                   <>
-                    {content.title && <p className="mb-1"><strong style={{ color: '#ffffff' }}>Title:</strong> {content.title}</p>}
+                    {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
                     {content.images?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Images:</strong> {content.images.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Images:</strong> {content.images.length} items</p>
                     )}
                     {content.images?.slice(0, 2).map((img: any, i: number) => (
                       <p key={i} className="mb-1 text-[11px]">• {img.title || 'Untitled image'}</p>
@@ -388,9 +370,9 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               if (section.component_type === 'testimonials') {
                 return (
                   <>
-                    {content.title && <p className="mb-1"><strong style={{ color: '#ffffff' }}>Title:</strong> {content.title}</p>}
+                    {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
                     {content.testimonials?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Testimonials:</strong> {content.testimonials.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Testimonials:</strong> {content.testimonials.length} items</p>
                     )}
                     {content.testimonials?.slice(0, 2).map((t: any, i: number) => (
                       <p key={i} className="mb-1 text-[11px]">• {t.name || 'Anonymous'}</p>
@@ -404,7 +386,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
                 return (
                   <>
                     {content.faqs?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>FAQs:</strong> {content.faqs.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">FAQs:</strong> {content.faqs.length} items</p>
                     )}
                     {content.faqs?.slice(0, 2).map((faq: any, i: number) => (
                       <p key={i} className="mb-1 text-[11px] line-clamp-1">• {faq.question || 'Untitled question'}</p>
@@ -418,7 +400,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
                 return (
                   <>
                     {content.features?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Features:</strong> {content.features.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Features:</strong> {content.features.length} items</p>
                     )}
                     {content.features?.slice(0, 2).map((f: any, i: number) => (
                       <p key={i} className="mb-1 text-[11px]">• {f.title || 'Untitled feature'}</p>
@@ -432,7 +414,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
                 return (
                   <>
                     {content.plans?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Plans:</strong> {content.plans.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Plans:</strong> {content.plans.length} items</p>
                     )}
                     {content.plans?.slice(0, 2).map((p: any, i: number) => (
                       <p key={i} className="mb-1 text-[11px]">• {p.name || 'Untitled plan'} - ₹{p.price || 0}</p>
@@ -446,7 +428,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
                 return (
                   <>
                     {content.timeline?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Events:</strong> {content.timeline.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Events:</strong> {content.timeline.length} items</p>
                     )}
                     {content.timeline?.slice(0, 2).map((e: any, i: number) => (
                       <p key={i} className="mb-1 text-[11px]">• {e.year} - {e.event}</p>
@@ -460,7 +442,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
                 return (
                   <>
                     {content.items?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Items:</strong> {content.items.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Items:</strong> {content.items.length} items</p>
                     )}
                     {content.items?.slice(0, 2).map((item: any, i: number) => (
                       <p key={i} className="mb-1 text-[11px]">• {item.title || 'Untitled item'}</p>
@@ -473,12 +455,12 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               if (section.component_type === 'app-download' || section.component_type === 'coming-soon') {
                 return (
                   <>
-                    {content.title && <p className="mb-1"><strong style={{ color: '#ffffff' }}>Title:</strong> {content.title}</p>}
+                    {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
                     {content.platforms?.length > 0 && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Platforms:</strong> {content.platforms.length} items</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Platforms:</strong> {content.platforms.length} items</p>
                     )}
                     {content.stats?.count && (
-                      <p className="mb-1"><strong style={{ color: '#ffffff' }}>Stats:</strong> {content.stats.count}</p>
+                      <p className="mb-1"><strong className="cms-text-primary">Stats:</strong> {content.stats.count}</p>
                     )}
                   </>
                 )
@@ -491,13 +473,13 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
                   <>
                     {keys.length > 0 ? (
                       <>
-                        <p className="mb-1"><strong style={{ color: '#ffffff' }}>Content keys:</strong> {keys.length}</p>
+                        <p className="mb-1"><strong className="cms-text-primary">Content keys:</strong> {keys.length}</p>
                         {keys.slice(0, 3).map((key, i) => (
                           <p key={i} className="mb-1 text-[11px]">• {key}</p>
                         ))}
                       </>
                     ) : (
-                      <p style={{ color: '#5a5a5a' }}>Empty content</p>
+                      <p className="cms-text-secondary">Empty content</p>
                     )}
                   </>
                 )
@@ -505,7 +487,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               
               // Default fallback
               return (
-                <p style={{ color: '#5a5a5a' }}>No preview available for this section type</p>
+                <p className="cms-text-secondary">No preview available for this section type</p>
               )
             })()}
           </div>
@@ -546,25 +528,15 @@ export default function SortableSectionsList({ sections: initialSections, pageId
         {initialSections.map((section) => (
           <Card
             key={section.id}
-            className="transition-all"
-            style={{
-              backgroundColor: '#212121',
-              borderColor: '#2a2a2a',
-            }}
+            className="transition-all cms-card cms-border border"
           >
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <CardTitle
-                    className="flex items-center gap-2 text-base"
-                    style={{ color: '#ffffff' }}
-                  >
+                  <CardTitle className="flex items-center gap-2 text-base cms-text-primary">
                     {section.component_type}
                   </CardTitle>
-                  <CardDescription
-                    className="mt-1 text-xs"
-                    style={{ color: '#898989' }}
-                  >
+                  <CardDescription className="mt-1 text-xs cms-text-secondary">
                     Order: {section.order_index} •{' '}
                     {section.published ? 'Published' : 'Draft'}
                   </CardDescription>
@@ -576,12 +548,8 @@ export default function SortableSectionsList({ sections: initialSections, pageId
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-xs p-4 rounded overflow-auto max-h-40" style={{
-                backgroundColor: '#171717',
-                color: '#898989',
-                border: '1px solid #2a2a2a'
-              }}>
-                <p style={{ color: '#5a5a5a' }}>Loading...</p>
+              <div className="text-xs p-4 rounded overflow-auto max-h-40 cms-main-bg cms-text-secondary cms-border border">
+                <p className="cms-text-tertiary">Loading...</p>
               </div>
             </CardContent>
           </Card>
@@ -645,4 +613,3 @@ export default function SortableSectionsList({ sections: initialSections, pageId
     </DndContext>
   )
 }
-

@@ -138,17 +138,15 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
         {children}
       </DialogTrigger>
       <DialogContent 
-        className="max-w-2xl max-h-[90vh] overflow-y-auto"
+        className="max-w-2xl max-h-[90vh] overflow-y-auto cms-card cms-border"
         style={{
-          backgroundColor: '#212121',
-          borderColor: '#2a2a2a',
           fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
           <DialogTitle
+            className="cms-text-primary"
             style={{ 
-              color: '#ffffff', 
               fontWeight: '600', 
               fontSize: '18px',
               lineHeight: '1.4'
@@ -157,8 +155,8 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
             {mode === 'create' ? 'Create New Pricing Plan' : 'Edit Pricing Plan'}
           </DialogTitle>
           <DialogDescription
+            className="cms-text-secondary"
             style={{ 
-              color: '#898989', 
               fontSize: '13px',
               lineHeight: '1.5'
             }}
@@ -176,14 +174,14 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Plan Name</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Plan Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Premium"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     The name of the pricing plan
                   </FormDescription>
                   <FormMessage />
@@ -196,7 +194,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Description</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Description</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Perfect for serious daters looking for meaningful connections..."
@@ -204,7 +202,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     Brief description of the plan
                   </FormDescription>
                   <FormMessage />
@@ -218,7 +216,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Price</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Price</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -228,7 +226,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Price in USD
                     </FormDescription>
                     <FormMessage />
@@ -241,7 +239,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 name="billing_period"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Billing Period</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Billing Period</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -258,7 +256,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         <SelectItem value="one-time">One-time</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       How often the plan renews
                     </FormDescription>
                     <FormMessage />
@@ -272,7 +270,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
               name="features"
               render={() => (
                 <FormItem>
-                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Features</FormLabel>
+                  <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Features</FormLabel>
                   <FormControl>
                     <div className="space-y-3">
                       <div className="flex gap-2">
@@ -313,14 +311,14 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                                 borderColor: '#2a2a2a',
                               }}
                             >
-                              <span className="text-sm" style={{ color: '#898989' }}>{feature}</span>
+                              <span className="text-sm cms-text-secondary">{feature}</span>
                               <Button
                                 type="button"
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => removeFeature(index)}
                                 className="h-7 w-7"
-                                style={{ color: '#898989' }}
+                                className="cms-text-secondary"
                               >
                                 <X className="h-3.5 w-3.5" />
                               </Button>
@@ -330,7 +328,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                       )}
                     </div>
                   </FormControl>
-                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                  <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                     Add features included in this plan
                   </FormDescription>
                   <FormMessage />
@@ -344,7 +342,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 name="order_index"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Order</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Order</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -352,7 +350,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Display order
                     </FormDescription>
                     <FormMessage />
@@ -365,7 +363,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 name="is_popular"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Popular</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Popular</FormLabel>
                     <Select
                       onValueChange={(value) => field.onChange(value === 'true')}
                       defaultValue={field.value ? 'true' : 'false'}
@@ -380,7 +378,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         <SelectItem value="false">No</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Mark as popular
                     </FormDescription>
                     <FormMessage />
@@ -393,7 +391,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 name="published"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Status</FormLabel>
+                    <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>Status</FormLabel>
                     <Select
                       onValueChange={(value) => field.onChange(value === 'true')}
                       defaultValue={field.value ? 'true' : 'false'}
@@ -408,7 +406,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         <SelectItem value="false">Draft</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
+                    <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
                       Publication status
                     </FormDescription>
                     <FormMessage />
@@ -423,11 +421,8 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
-                className="h-10 px-5"
+                className="h-10 px-5 cms-card cms-border cms-text-secondary"
                 style={{
-                  backgroundColor: '#212121',
-                  borderColor: '#2a2a2a',
-                  color: '#898989',
                   fontSize: '14px',
                   fontWeight: '500'
                 }}
@@ -437,11 +432,8 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
               <Button 
                 type="submit" 
                 disabled={isPending}
-                className="h-10 px-5"
+                className="h-10 px-5 cms-card cms-border cms-text-secondary"
                 style={{
-                  backgroundColor: isPending ? '#171717' : '#212121',
-                  borderColor: '#2a2a2a',
-                  color: isPending ? '#5a5a5a' : '#898989',
                   fontSize: '14px',
                   fontWeight: '600'
                 }}

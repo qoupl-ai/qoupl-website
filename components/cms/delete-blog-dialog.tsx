@@ -50,16 +50,15 @@ export function DeleteBlogDialog({ post, children }: DeleteBlogDialogProps) {
         {children}
       </AlertDialogTrigger>
       <AlertDialogContent
+        className="cms-card cms-border"
         style={{
-          backgroundColor: '#212121',
-          borderColor: '#2a2a2a',
           fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <AlertDialogHeader>
           <AlertDialogTitle
+            className="cms-text-primary"
             style={{ 
-              color: '#ffffff', 
               fontWeight: '600', 
               fontSize: '18px',
               lineHeight: '1.4'
@@ -68,13 +67,13 @@ export function DeleteBlogDialog({ post, children }: DeleteBlogDialogProps) {
             Are you sure?
           </AlertDialogTitle>
           <AlertDialogDescription
+            className="cms-text-secondary"
             style={{ 
-              color: '#898989', 
               fontSize: '13px',
               lineHeight: '1.5'
             }}
           >
-            This will permanently delete the blog post: <strong style={{ color: '#ffffff' }}>{post.title}</strong>
+            This will permanently delete the blog post: <strong className="cms-text-primary">{post.title}</strong>
             <br />
             This action cannot be undone.
           </AlertDialogDescription>
@@ -82,11 +81,8 @@ export function DeleteBlogDialog({ post, children }: DeleteBlogDialogProps) {
         <AlertDialogFooter>
           <AlertDialogCancel 
             disabled={isPending}
-            className="h-10 px-5"
+            className="h-10 px-5 cms-card cms-border cms-text-secondary"
             style={{
-              backgroundColor: '#212121',
-              borderColor: '#2a2a2a',
-              color: '#898989',
               fontSize: '14px',
               fontWeight: '500'
             }}

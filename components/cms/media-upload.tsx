@@ -113,13 +113,14 @@ export function MediaUpload() {
       <div>
         <h3 
           className="text-lg font-semibold mb-2"
-          style={{ color: '#ffffff', fontWeight: '600' }}
+          className="cms-text-primary"
+          style={{ fontWeight: '600' }}
         >
           Upload New Media
         </h3>
         <p 
           className="text-sm"
-          style={{ color: '#898989' }}
+          className="cms-text-secondary"
         >
           Upload images to Supabase Storage
         </p>
@@ -128,7 +129,7 @@ export function MediaUpload() {
       <div className="space-y-4">
         {/* File Input */}
         <div>
-          <Label htmlFor="file" style={{ color: '#898989' }}>File</Label>
+          <Label htmlFor="file" className="cms-text-secondary">File</Label>
           <div className="mt-2">
             {selectedFile ? (
               <div 
@@ -138,10 +139,10 @@ export function MediaUpload() {
                   borderColor: '#2a2a2a'
                 }}
               >
-                <span className="flex-1 text-sm truncate" style={{ color: '#ffffff' }}>
+                <span className="flex-1 text-sm truncate cms-text-primary">
                   {selectedFile.name}
                 </span>
-                <span className="text-xs" style={{ color: '#898989' }}>
+                <span className="text-xs cms-text-secondary">
                   {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                 </span>
                 <Button
@@ -152,8 +153,8 @@ export function MediaUpload() {
                     setSelectedFile(null)
                     if (fileInputRef.current) fileInputRef.current.value = ''
                   }}
-                  style={{ color: '#898989' }}
-                  className="hover:text-white hover:bg-[#2a2a2a]"
+                  className="cms-text-secondary"
+                  className="hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -167,11 +168,11 @@ export function MediaUpload() {
                   backgroundColor: '#171717'
                 }}
               >
-                <Upload className="h-8 w-8 mx-auto mb-2" style={{ color: '#898989' }} />
-                <p className="text-sm" style={{ color: '#898989' }}>
+                <Upload className="h-8 w-8 mx-auto mb-2 cms-text-secondary" />
+                <p className="text-sm cms-text-secondary">
                   Click to select or drag and drop
                 </p>
-                <p className="text-xs mt-1" style={{ color: '#898989' }}>
+                <p className="text-xs mt-1 cms-text-secondary">
                   PNG, JPG, WEBP up to 20MB
                 </p>
               </div>
@@ -189,7 +190,7 @@ export function MediaUpload() {
 
         {/* Bucket Selection */}
         <div>
-          <Label htmlFor="bucket" style={{ color: '#898989' }}>Storage Bucket</Label>
+          <Label htmlFor="bucket" className="cms-text-secondary">Storage Bucket</Label>
           <Select value={bucket} onValueChange={setBucket}>
             <SelectTrigger 
               id="bucket" 
@@ -202,9 +203,9 @@ export function MediaUpload() {
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+            <SelectContent>
               {BUCKETS.map((b) => (
-                <SelectItem key={b.value} value={b.value} style={{ color: '#898989' }}>
+                <SelectItem key={b.value} value={b.value} className="cms-text-secondary">
                   {b.label}
                 </SelectItem>
               ))}
@@ -214,7 +215,7 @@ export function MediaUpload() {
 
         {/* Category Selection */}
         <div>
-          <Label htmlFor="category" style={{ color: '#898989' }}>Category</Label>
+          <Label htmlFor="category" className="cms-text-secondary">Category</Label>
           <Select value={category} onValueChange={setCategory}>
             <SelectTrigger 
               id="category" 
@@ -227,9 +228,9 @@ export function MediaUpload() {
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+            <SelectContent>
               {CATEGORIES.map((c) => (
-                <SelectItem key={c.value} value={c.value} style={{ color: '#898989' }}>
+                <SelectItem key={c.value} value={c.value} className="cms-text-secondary">
                   {c.label}
                 </SelectItem>
               ))}
@@ -239,7 +240,7 @@ export function MediaUpload() {
 
         {/* Alt Text */}
         <div>
-          <Label htmlFor="altText" style={{ color: '#898989' }}>Alt Text</Label>
+          <Label htmlFor="altText" className="cms-text-secondary">Alt Text</Label>
           <Input
             id="altText"
             value={altText}

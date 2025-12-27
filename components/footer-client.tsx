@@ -1,6 +1,6 @@
 "use client";
 
-import { Instagram, Linkedin } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -13,6 +13,9 @@ interface FooterClientProps {
 
 export default function FooterClient({ footerContent, socialLinks }: FooterClientProps) {
   const currentYear = new Date().getFullYear();
+  
+  // Ensure socialLinks has the correct structure
+  const socialLinksArray = socialLinks?.links || []
 
   return (
     <footer className="border-t bg-background">
@@ -33,22 +36,22 @@ export default function FooterClient({ footerContent, socialLinks }: FooterClien
               {footerContent.brand.description}
             </p>
             <div className="flex gap-4">
-              <Link
-                href={socialLinks.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Linkedin className="h-5 w-5" />
-              </Link>
-              <Link
-                href={socialLinks.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Instagram className="h-5 w-5" />
-              </Link>
+              {socialLinksArray.map((socialLink, index) => {
+                // Safely get the icon component
+                const IconComponent = (LucideIcons as any)[socialLink.icon] || LucideIcons.Globe
+                return (
+                  <Link
+                    key={index}
+                    href={socialLink.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                    title={socialLink.label || socialLink.icon}
+                  >
+                    <IconComponent className="h-5 w-5" />
+                  </Link>
+                )
+              })}
             </div>
           </div>
 

@@ -56,8 +56,28 @@ export async function getFooterContent() {
   return await getGlobalContent('footer')
 }
 
-export async function getSocialLinks() {
-  return await getGlobalContent('social_links')
+export async function getSocialLinks(): Promise<SocialLinks | null> {
+  const content = await getGlobalContent('social_links')
+  if (!content) return null
+  
+  // Handle backward compatibility: convert old format { linkedin, instagram } to new format { links: [...] }
+  if (content.linkedin || content.instagram) {
+    const links: SocialLink[] = []
+    if (content.linkedin) {
+      links.push({ icon: 'Linkedin', url: content.linkedin, label: 'LinkedIn' })
+    }
+    if (content.instagram) {
+      links.push({ icon: 'Instagram', url: content.instagram, label: 'Instagram' })
+    }
+    return { links }
+  }
+  
+  // New format
+  if (content.links && Array.isArray(content.links)) {
+    return content as SocialLinks
+  }
+  
+  return null
 }
 
 export async function getContactInfo() {
@@ -193,9 +213,14 @@ export interface FooterContent {
   }
 }
 
+export interface SocialLink {
+  icon: string
+  url: string
+  label?: string
+}
+
 export interface SocialLinks {
-  linkedin: string
-  instagram: string
+  links: SocialLink[]
 }
 
 export interface SiteConfig {

@@ -57,8 +57,10 @@ export default async function Footer() {
   }
 
   const defaultSocialLinks: SocialLinks = {
-    linkedin: 'https://www.linkedin.com/company/qoupl-ai/',
-    instagram: 'https://www.instagram.com/qoupl.ai?igsh=MWI1bDFqOHplYzY1Nw==',
+    links: [
+      { icon: 'Linkedin', url: 'https://www.linkedin.com/company/qoupl-ai/', label: 'LinkedIn' },
+      { icon: 'Instagram', url: 'https://www.instagram.com/qoupl.ai?igsh=MWI1bDFqOHplYzY1Nw==', label: 'Instagram' },
+    ],
   }
 
   return (

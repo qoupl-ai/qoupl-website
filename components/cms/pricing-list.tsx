@@ -34,49 +34,55 @@ export function PricingList({ plans }: PricingListProps) {
   return (
     <div className="space-y-4">
       {/* Pricing Plans Table */}
-      <div className="rounded-md border overflow-x-auto" style={{ borderColor: '#2a2a2a', backgroundColor: '#212121' }}>
+      <div className="rounded-md border overflow-x-auto cms-card-bg cms-border">
         <Table>
           <TableHeader>
-            <TableRow style={{ borderColor: '#2a2a2a' }}>
+            <TableRow>
               <TableHead 
-                className="w-[60px] whitespace-nowrap" 
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="w-[60px] whitespace-nowrap cms-text-secondary" 
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 #
               </TableHead>
               <TableHead 
                 className="min-w-[250px]"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Plan Name
               </TableHead>
               <TableHead 
                 className="w-[120px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Price
               </TableHead>
               <TableHead 
                 className="w-[100px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Features
               </TableHead>
               <TableHead 
                 className="w-[100px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Popular
               </TableHead>
               <TableHead 
                 className="w-[100px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Status
               </TableHead>
               <TableHead 
                 className="w-[120px] text-right whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Actions
               </TableHead>
@@ -84,8 +90,8 @@ export function PricingList({ plans }: PricingListProps) {
           </TableHeader>
           <TableBody>
             {plans.length === 0 ? (
-              <TableRow style={{ borderColor: '#2a2a2a' }}>
-                <TableCell colSpan={7} className="text-center py-8" style={{ color: '#898989', fontSize: '13px' }}>
+              <TableRow>
+                <TableCell colSpan={7} className="text-center py-8 cms-text-secondary" style={{ fontSize: '13px' }}>
                   No pricing plans found
                 </TableCell>
               </TableRow>
@@ -93,41 +99,40 @@ export function PricingList({ plans }: PricingListProps) {
               plans.map((plan) => (
                 <TableRow 
                   key={plan.id}
-                  style={{ borderColor: '#2a2a2a' }}
-                  className="hover:bg-[#2a2a2a]"
+                  className="hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a]"
                 >
                   <TableCell 
-                    className="font-semibold" 
-                    style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px', padding: '12px 16px' }}
+                    className="font-semibold cms-text-primary" 
+                    style={{ fontWeight: '600', fontSize: '13px', padding: '12px 16px' }}
                   >
                     {plan.order_index}
                   </TableCell>
                   <TableCell style={{ padding: '12px 16px' }}>
                     <div className="max-w-[300px]">
                       <p 
-                        className="font-semibold mb-1" 
-                        style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px', lineHeight: '1.4' }}
+                        className="font-semibold mb-1 cms-text-primary" 
+                        style={{ fontWeight: '600', fontSize: '13px', lineHeight: '1.4' }}
                       >
                         {plan.name}
                       </p>
                       <p 
-                        className="text-sm line-clamp-1" 
-                        style={{ color: '#898989', fontSize: '12px', lineHeight: '1.5' }}
+                        className="text-sm line-clamp-1 cms-text-secondary" 
+                        style={{ fontSize: '12px', lineHeight: '1.5' }}
                       >
                         {plan.description}
                       </p>
                     </div>
                   </TableCell>
                   <TableCell style={{ padding: '12px 16px' }}>
-                    <div className="font-semibold" style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px' }}>
+                    <div className="font-semibold cms-text-primary" style={{ fontWeight: '600', fontSize: '13px' }}>
                       ${plan.price}
-                      <span className="text-sm font-normal" style={{ color: '#898989', fontSize: '12px' }}>
+                      <span className="text-sm font-normal cms-text-secondary" style={{ fontSize: '12px' }}>
                         /{plan.billing_period}
                       </span>
                     </div>
                   </TableCell>
                   <TableCell style={{ padding: '12px 16px' }}>
-                    <span className="text-sm whitespace-nowrap" style={{ color: '#898989', fontSize: '12px' }}>
+                    <span className="text-sm whitespace-nowrap cms-text-secondary" style={{ fontSize: '12px' }}>
                       {plan.features.length} items
                     </span>
                   </TableCell>
@@ -175,7 +180,7 @@ export function PricingList({ plans }: PricingListProps) {
                           variant="ghost" 
                           size="icon"
                           className="h-8 w-8"
-                          style={{ color: '#898989' }}
+                          className="cms-text-secondary"
                         >
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>
@@ -185,7 +190,7 @@ export function PricingList({ plans }: PricingListProps) {
                           variant="ghost" 
                           size="icon"
                           className="h-8 w-8"
-                          style={{ color: '#898989' }}
+                          className="cms-text-secondary"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>

@@ -35,21 +35,19 @@ export default async function CMSLayout({
     <>
       <CMSBodyClass />
       <div 
-        className="min-h-screen"
+        className="min-h-screen cms-main-bg"
         style={{ 
-          backgroundColor: '#171717',
           fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <CMSNav user={user} adminUser={adminUser} />
       <main 
         data-cms-main
-        className="transition-all duration-300"
+        className="transition-all duration-300 cms-main-bg"
         style={{ 
           marginLeft: '200px', // Default expanded width (w-[200px])
           padding: '2rem',
-          minHeight: '100vh',
-          color: '#898989'
+          minHeight: '100vh'
         }}
       >
         {children}

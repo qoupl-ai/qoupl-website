@@ -90,7 +90,7 @@ export default function CareersClient({ data }: CareersClientProps) {
 
             {heroTitle && (
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                {heroTitle.split(' ').map((word, i) => 
+                {heroTitle.split(' ').map((word: string, i: number) => 
                   word === 'Dating' ? (
                     <span key={i} className="bg-[#662D91] bg-clip-text text-transparent">{word} </span>
                   ) : (
@@ -130,7 +130,7 @@ export default function CareersClient({ data }: CareersClientProps) {
 
               {comingSoonTitle && (
                 <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                  {comingSoonTitle.split(' ').map((word, i) => 
+                  {comingSoonTitle.split(' ').map((word: string, i: number) => 
                     word === 'Special' ? (
                       <span key={i} className="bg-[#662D91] bg-clip-text text-transparent">{word} </span>
                     ) : (

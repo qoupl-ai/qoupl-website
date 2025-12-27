@@ -50,16 +50,15 @@ export function DeleteFeatureDialog({ feature, children }: DeleteFeatureDialogPr
         {children}
       </AlertDialogTrigger>
       <AlertDialogContent
+        className="cms-card cms-border"
         style={{
-          backgroundColor: '#212121',
-          borderColor: '#2a2a2a',
           fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <AlertDialogHeader>
           <AlertDialogTitle
+            className="cms-text-primary"
             style={{ 
-              color: '#ffffff', 
               fontWeight: '600', 
               fontSize: '18px',
               lineHeight: '1.4'
@@ -68,13 +67,13 @@ export function DeleteFeatureDialog({ feature, children }: DeleteFeatureDialogPr
             Are you sure?
           </AlertDialogTitle>
           <AlertDialogDescription
+            className="cms-text-secondary"
             style={{ 
-              color: '#898989', 
               fontSize: '13px',
               lineHeight: '1.5'
             }}
           >
-            This will permanently delete the feature: <strong style={{ color: '#ffffff' }}>{feature.title}</strong>
+            This will permanently delete the feature: <strong className="cms-text-primary">{feature.title}</strong>
             <br />
             This action cannot be undone.
           </AlertDialogDescription>
@@ -82,11 +81,8 @@ export function DeleteFeatureDialog({ feature, children }: DeleteFeatureDialogPr
         <AlertDialogFooter>
           <AlertDialogCancel 
             disabled={isPending}
-            className="h-10 px-5"
+            className="h-10 px-5 cms-card cms-border cms-text-secondary"
             style={{
-              backgroundColor: '#212121',
-              borderColor: '#2a2a2a',
-              color: '#898989',
               fontSize: '14px',
               fontWeight: '500'
             }}

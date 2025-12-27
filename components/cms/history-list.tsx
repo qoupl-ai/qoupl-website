@@ -23,6 +23,14 @@ interface HistoryEntry {
     name: string
     email: string
   } | null
+  entityDetails?: {
+    type: string
+    title?: string
+    componentType?: string
+    pageTitle?: string
+    pageSlug?: string
+    slug?: string
+  } | null
 }
 
 interface HistoryListProps {
@@ -39,7 +47,7 @@ export function HistoryList({ history }: HistoryListProps) {
       case 'deleted':
         return <Trash2 className="h-4 w-4" style={{ color: '#ef4444' }} />
       default:
-        return <FileText className="h-4 w-4" style={{ color: '#898989' }} />
+        return <FileText className="h-4 w-4 cms-text-secondary" />
     }
   }
 
@@ -77,42 +85,48 @@ export function HistoryList({ history }: HistoryListProps) {
   }
 
   return (
-    <div className="rounded-md border overflow-x-auto" style={{ borderColor: '#2a2a2a', backgroundColor: '#212121' }}>
+    <div className="rounded-md border overflow-x-auto cms-card-bg cms-border">
       <Table>
         <TableHeader>
-          <TableRow style={{ borderColor: '#2a2a2a' }}>
+          <TableRow>
             <TableHead 
               className="w-[50px] whitespace-nowrap" 
-              style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              className="cms-text-secondary"
+              style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
             </TableHead>
             <TableHead 
               className="w-[140px] whitespace-nowrap"
-              style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              className="cms-text-secondary"
+              style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               Entity Type
             </TableHead>
             <TableHead 
               className="w-[100px] whitespace-nowrap"
-              style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              className="cms-text-secondary"
+              style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               Action
             </TableHead>
             <TableHead 
               className="min-w-[200px]"
-              style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              className="cms-text-secondary"
+              style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               Title/Name
             </TableHead>
             <TableHead 
               className="w-[180px] whitespace-nowrap"
-              style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              className="cms-text-secondary"
+              style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               Performed By
             </TableHead>
             <TableHead 
               className="w-[140px] whitespace-nowrap"
-              style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+              className="cms-text-secondary"
+              style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               When
             </TableHead>
@@ -120,22 +134,29 @@ export function HistoryList({ history }: HistoryListProps) {
         </TableHeader>
         <TableBody>
           {history.length === 0 ? (
-            <TableRow style={{ borderColor: '#2a2a2a' }}>
-              <TableCell colSpan={6} className="text-center py-8" style={{ color: '#898989', fontSize: '13px' }}>
+            <TableRow>
+              <TableCell colSpan={6} className="text-center py-8 cms-text-secondary" style={{ fontSize: '13px' }}>
                 No history entries found
               </TableCell>
             </TableRow>
           ) : (
             history.map((entry) => {
-              const title = entry.snapshot?.title || entry.snapshot?.question || entry.snapshot?.name || entry.entity_id
+              // Get title from entityDetails if available, otherwise from snapshot
+              let title = entry.entityDetails?.title
+              if (!title) {
+                title = entry.snapshot?.title || 
+                       entry.snapshot?.question || 
+                       entry.snapshot?.name || 
+                       entry.entity_id.slice(0, 8) + '...'
+              }
+              
               const actionColor = getActionBadge(entry.action)
               const entityColor = getEntityTypeColor(entry.entity_type)
 
               return (
                 <TableRow 
                   key={entry.id}
-                  style={{ borderColor: '#2a2a2a' }}
-                  className="hover:bg-[#2a2a2a]"
+                  className="hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a]"
                 >
                   <TableCell style={{ padding: '12px 16px' }}>{getActionIcon(entry.action)}</TableCell>
                   <TableCell style={{ padding: '12px 16px' }}>
@@ -171,34 +192,68 @@ export function HistoryList({ history }: HistoryListProps) {
                     </Badge>
                   </TableCell>
                   <TableCell style={{ padding: '12px 16px' }}>
-                    <div 
-                      className="max-w-[300px] truncate" 
-                      title={title} 
-                      style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px' }}
-                    >
-                      {title}
+                    <div className="space-y-1">
+                      <div 
+                        className="max-w-[300px] truncate" 
+                        title={title} 
+                        className="cms-text-primary"
+                        style={{ fontWeight: '600', fontSize: '13px' }}
+                      >
+                        {title}
+                      </div>
+                      {entry.entityDetails?.type === 'section' && (
+                        <div className="text-xs cms-text-secondary">
+                          {entry.entityDetails.pageTitle && (
+                            <span>on <span style={{ color: '#662D91' }}>{entry.entityDetails.pageTitle}</span> page</span>
+                          )}
+                          {entry.entityDetails.componentType && (
+                            <span className="ml-2">• {entry.entityDetails.componentType.replace(/-/g, ' ')}</span>
+                          )}
+                        </div>
+                      )}
+                      {entry.entityDetails?.type === 'page' && entry.entityDetails.slug && (
+                        <div className="text-xs cms-text-secondary">
+                          /{entry.entityDetails.slug}
+                        </div>
+                      )}
+                      {entry.entityDetails?.type === 'blog_post' && entry.entityDetails.slug && (
+                        <div className="text-xs cms-text-secondary">
+                          /blog/{entry.entityDetails.slug}
+                        </div>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell style={{ padding: '12px 16px' }}>
                     <div className="text-sm">
                       {entry.admin ? (
                         <div>
-                          <p className="font-semibold" style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px' }}>
+                          <p className="font-semibold cms-text-primary" style={{ fontWeight: '600', fontSize: '13px' }}>
                             {entry.admin.name}
                           </p>
-                          <p className="text-xs" style={{ color: '#898989', fontSize: '12px' }}>
+                          <p className="text-xs cms-text-secondary" style={{ fontSize: '12px' }}>
                             {entry.admin.email}
                           </p>
                         </div>
                       ) : (
-                        <span style={{ color: '#898989', fontSize: '13px' }}>System</span>
+                        <span className="cms-text-secondary" style={{ fontSize: '13px' }}>System</span>
                       )}
                     </div>
                   </TableCell>
                   <TableCell style={{ padding: '12px 16px' }}>
-                    <span className="text-sm whitespace-nowrap" style={{ color: '#898989', fontSize: '12px' }}>
-                      {formatDistanceToNow(new Date(entry.performed_at), { addSuffix: true })}
-                    </span>
+                    <div className="space-y-0.5">
+                      <span className="text-sm whitespace-nowrap block cms-text-secondary" style={{ fontSize: '12px' }}>
+                        {formatDistanceToNow(new Date(entry.performed_at), { addSuffix: true })}
+                      </span>
+                      <span className="text-xs whitespace-nowrap block" style={{ color: '#5a5a5a', fontSize: '11px' }}>
+                        {new Date(entry.performed_at).toLocaleString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
+                    </div>
                   </TableCell>
                 </TableRow>
               )

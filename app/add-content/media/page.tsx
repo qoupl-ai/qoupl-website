@@ -33,16 +33,10 @@ export default async function MediaPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 
-            className="text-2xl font-semibold mb-1.5"
-            style={{ color: '#ffffff', fontWeight: '600', fontSize: '20px', lineHeight: '1.3' }}
-          >
+          <h1 className="text-2xl font-semibold mb-1.5 cms-text-primary" style={{ fontWeight: '600', fontSize: '20px', lineHeight: '1.3' }}>
             Media Library
           </h1>
-          <p 
-            className="text-sm"
-            style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}
-          >
+          <p className="text-sm cms-text-secondary" style={{ fontSize: '13px', lineHeight: '1.5' }}>
             Browse and manage images from Supabase Storage ({mediaWithUrls.length} files)
           </p>
         </div>
@@ -54,16 +48,16 @@ export default async function MediaPage() {
       {Object.entries(groupedMedia).map(([category, files]) => (
         <Card 
           key={category}
-          style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}
+          className="cms-card cms-border border"
         >
           <CardHeader>
             <CardTitle 
-              className="capitalize" 
-              style={{ color: '#ffffff', fontWeight: '600', fontSize: '16px', lineHeight: '1.4' }}
+              className="capitalize cms-text-primary" 
+              style={{ fontWeight: '600', fontSize: '16px', lineHeight: '1.4' }}
             >
               {category} ({files.length})
             </CardTitle>
-            <CardDescription style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}>
+            <CardDescription className="cms-text-secondary" style={{ fontSize: '13px', lineHeight: '1.5' }}>
               Images stored in Supabase Storage
             </CardDescription>
           </CardHeader>

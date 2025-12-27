@@ -69,7 +69,7 @@ export default async function Blog() {
 
   return (
     <Suspense fallback={<BlogLoading />}>
-      <BlogClient posts={posts} categories={categories} />
+      <BlogClient posts={posts as any} categories={categories} />
     </Suspense>
   )
 }

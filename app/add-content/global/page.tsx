@@ -25,6 +25,12 @@ export default async function GlobalContentPage() {
     throw new Error(`Failed to fetch global content: ${error.message}`)
   }
 
+  // Fetch all pages for the page selector
+  const { data: pages } = await supabase
+    .from('pages')
+    .select('slug, title')
+    .order('slug', { ascending: true })
+
   // Organize content by key
   const contentMap = new Map(globalContent?.map(item => [item.key, item]) || [])
 
@@ -64,16 +70,10 @@ export default async function GlobalContentPage() {
   return (
     <div>
         <div className="mb-8">
-          <h1 
-            className="text-2xl font-semibold mb-1.5"
-            style={{ color: '#ffffff', fontWeight: '600', fontSize: '20px', lineHeight: '1.3' }}
-          >
+          <h1 className="text-2xl font-semibold mb-1.5 cms-text-primary" style={{ fontWeight: '600', fontSize: '20px', lineHeight: '1.3' }}>
             Global Content
           </h1>
-          <p 
-            className="text-sm"
-            style={{ color: '#898989', fontSize: '13px', lineHeight: '1.5' }}
-          >
+          <p className="text-sm cms-text-secondary" style={{ fontSize: '13px', lineHeight: '1.5' }}>
             Edit site-wide content that appears on all pages
           </p>
         </div>
@@ -84,29 +84,25 @@ export default async function GlobalContentPage() {
             return (
               <Card 
                 key={item.key} 
-                className="transition-all hover:border-[#2a2a2a]"
-                style={{ 
-                  backgroundColor: '#212121',
-                  borderColor: '#2a2a2a'
-                }}
+                className="transition-all cms-card cms-border border"
               >
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2" style={{ color: '#ffffff' }}>
-                    <item.icon className="h-5 w-5" style={{ color: '#898989' }} />
+                  <CardTitle className="flex items-center gap-2 cms-text-primary">
+                    <item.icon className="h-5 w-5 cms-text-secondary" />
                     {item.title}
                   </CardTitle>
-                  <CardDescription style={{ color: '#898989' }}>
+                  <CardDescription className="cms-text-secondary">
                     {item.description}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
                     {content ? (
-                      <p className="text-sm" style={{ color: '#898989' }}>
+                      <p className="text-sm cms-text-secondary">
                         Last updated: {new Date(content.updated_at).toLocaleDateString()}
                       </p>
                     ) : (
-                      <p className="text-sm" style={{ color: '#898989' }}>
+                      <p className="text-sm cms-text-secondary">
                         Not configured yet
                       </p>
                     )}
@@ -114,14 +110,12 @@ export default async function GlobalContentPage() {
                       key={item.key}
                       contentKey={item.key}
                       existingContent={content}
+                      pages={pages || []}
                     >
                       <Button 
                         variant="outline" 
-                        className="w-full h-10" 
+                        className="w-full h-10 cms-card cms-border cms-text-secondary"
                         style={{ 
-                          backgroundColor: '#212121',
-                          borderColor: '#2a2a2a',
-                          color: '#898989',
                           fontWeight: '600',
                           fontSize: '14px'
                         }}

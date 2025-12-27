@@ -126,17 +126,15 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
         {children}
       </DialogTrigger>
       <DialogContent 
-        className="max-w-2xl max-h-[90vh] overflow-y-auto"
+        className="max-w-2xl max-h-[90vh] overflow-y-auto cms-card cms-border"
         style={{
-          backgroundColor: '#212121',
-          borderColor: '#2a2a2a',
           fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
           <DialogTitle
+            className="cms-text-primary"
             style={{ 
-              color: '#ffffff', 
               fontWeight: '600', 
               fontSize: '18px',
               lineHeight: '1.4'
@@ -145,8 +143,8 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
             {mode === 'create' ? 'Create New Feature' : 'Edit Feature'}
           </DialogTitle>
           <DialogDescription
+            className="cms-text-secondary"
             style={{ 
-              color: '#898989', 
               fontSize: '13px',
               lineHeight: '1.5'
             }}
@@ -310,11 +308,8 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
-                className="h-10 px-5"
+                className="h-10 px-5 cms-card cms-border cms-text-secondary"
                 style={{
-                  backgroundColor: '#212121',
-                  borderColor: '#2a2a2a',
-                  color: '#898989',
                   fontSize: '14px',
                   fontWeight: '500'
                 }}
@@ -324,11 +319,8 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
               <Button 
                 type="submit" 
                 disabled={isPending}
-                className="h-10 px-5"
+                className="h-10 px-5 cms-card cms-border cms-text-secondary"
                 style={{
-                  backgroundColor: isPending ? '#171717' : '#212121',
-                  borderColor: '#2a2a2a',
-                  color: isPending ? '#5a5a5a' : '#898989',
                   fontSize: '14px',
                   fontWeight: '600'
                 }}

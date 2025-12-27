@@ -32,11 +32,7 @@ interface BlogPost {
   publish_date: string
   published: boolean
   read_time: number
-  category: {
-    id: string
-    name: string
-    slug: string
-  }
+  category: any
 }
 
 interface Category {
@@ -79,7 +75,10 @@ export function BlogList({ posts, categories }: BlogListProps) {
   let filteredPosts = posts
 
   if (selectedCategory !== 'all') {
-    filteredPosts = filteredPosts.filter(post => post.category.id === selectedCategory)
+    filteredPosts = filteredPosts.filter(post => {
+      const category = Array.isArray(post.category) ? post.category[0] : post.category
+      return category?.id === selectedCategory
+    })
   }
 
   if (statusFilter === 'published') {
@@ -94,27 +93,22 @@ export function BlogList({ posts, categories }: BlogListProps) {
       <div className="flex items-center gap-4 flex-wrap">
         <div className="flex items-center gap-2">
           <label 
-            className="text-sm font-semibold whitespace-nowrap" 
-            style={{ color: '#898989', fontWeight: '600', fontSize: '13px' }}
+            className="text-sm font-semibold whitespace-nowrap cms-text-secondary" 
+            style={{ fontWeight: '600', fontSize: '13px' }}
           >
             Category:
           </label>
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger 
-              className="w-[200px]"
-              style={{ 
-                backgroundColor: '#212121',
-                borderColor: '#2a2a2a',
-                color: '#898989',
-                fontSize: '13px'
-              }}
+              className="w-[200px] cms-card cms-border cms-text-secondary"
+              style={{ fontSize: '13px' }}
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
-              <SelectItem value="all" style={{ color: '#898989', fontSize: '13px' }}>All Categories</SelectItem>
+            <SelectContent className="cms-card cms-border">
+              <SelectItem value="all" className="cms-text-secondary" style={{ fontSize: '13px' }}>All Categories</SelectItem>
               {categories.map((category) => (
-                <SelectItem key={category.id} value={category.id} style={{ color: '#898989', fontSize: '13px' }}>
+                <SelectItem key={category.id} value={category.id} className="cms-text-secondary" style={{ fontSize: '13px' }}>
                   {category.name}
                 </SelectItem>
               ))}
@@ -124,74 +118,69 @@ export function BlogList({ posts, categories }: BlogListProps) {
 
         <div className="flex items-center gap-2">
           <label 
-            className="text-sm font-semibold whitespace-nowrap" 
-            style={{ color: '#898989', fontWeight: '600', fontSize: '13px' }}
+            className="text-sm font-semibold whitespace-nowrap cms-text-secondary" 
+            style={{ fontWeight: '600', fontSize: '13px' }}
           >
             Status:
           </label>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger 
-              className="w-[150px]"
-              style={{ 
-                backgroundColor: '#212121',
-                borderColor: '#2a2a2a',
-                color: '#898989',
-                fontSize: '13px'
-              }}
+              className="w-[150px] cms-card cms-border cms-text-secondary"
+              style={{ fontSize: '13px' }}
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
-              <SelectItem value="all" style={{ color: '#898989', fontSize: '13px' }}>All</SelectItem>
-              <SelectItem value="published" style={{ color: '#898989', fontSize: '13px' }}>Published</SelectItem>
-              <SelectItem value="draft" style={{ color: '#898989', fontSize: '13px' }}>Draft</SelectItem>
+            <SelectContent className="cms-card cms-border">
+              <SelectItem value="all" className="cms-text-secondary" style={{ fontSize: '13px' }}>All</SelectItem>
+              <SelectItem value="published" className="cms-text-secondary" style={{ fontSize: '13px' }}>Published</SelectItem>
+              <SelectItem value="draft" className="cms-text-secondary" style={{ fontSize: '13px' }}>Draft</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        <span className="text-sm ml-auto whitespace-nowrap" style={{ color: '#898989', fontSize: '13px' }}>
+        <span className="text-sm ml-auto whitespace-nowrap cms-text-secondary" style={{ fontSize: '13px' }}>
           Showing {filteredPosts.length} of {posts.length} posts
         </span>
       </div>
 
       {/* Blog Posts Table */}
-      <div className="rounded-md border overflow-x-auto" style={{ borderColor: '#2a2a2a', backgroundColor: '#212121' }}>
+      <div className="rounded-md border overflow-x-auto cms-card cms-border">
         <Table>
           <TableHeader>
-            <TableRow style={{ borderColor: '#2a2a2a' }}>
+            <TableRow className="cms-border">
               <TableHead 
-                className="min-w-[300px]"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="min-w-[300px] cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Title
               </TableHead>
               <TableHead 
-                className="w-[140px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="w-[140px] whitespace-nowrap cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Category
               </TableHead>
               <TableHead 
-                className="w-[120px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="w-[120px] whitespace-nowrap cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Publish Date
               </TableHead>
               <TableHead 
-                className="w-[100px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="w-[100px] whitespace-nowrap cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Read Time
               </TableHead>
               <TableHead 
-                className="w-[100px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="w-[100px] whitespace-nowrap cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Status
               </TableHead>
               <TableHead 
-                className="w-[150px] text-right whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="w-[150px] text-right whitespace-nowrap cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Actions
               </TableHead>
@@ -199,32 +188,26 @@ export function BlogList({ posts, categories }: BlogListProps) {
           </TableHeader>
           <TableBody>
             {filteredPosts.length === 0 ? (
-              <TableRow style={{ borderColor: '#2a2a2a' }}>
-                <TableCell colSpan={6} className="text-center py-8" style={{ color: '#898989', fontSize: '13px' }}>
+              <TableRow className="cms-border">
+                <TableCell colSpan={6} className="text-center py-8 cms-text-secondary" style={{ fontSize: '13px' }}>
                   No blog posts found
                 </TableCell>
               </TableRow>
             ) : (
               filteredPosts.map((post) => {
-                const categoryColor = getCategoryColor(post.category.name)
+                const category = Array.isArray(post.category) ? post.category[0] : post.category
+                const categoryColor = getCategoryColor(category?.name || '')
                 return (
                   <TableRow 
                     key={post.id}
-                    style={{ borderColor: '#2a2a2a' }}
-                    className="hover:bg-[#2a2a2a]"
+                    className="cms-border"
                   >
                     <TableCell style={{ padding: '12px 16px' }}>
                       <div className="max-w-[400px]">
-                        <p 
-                          className="font-semibold mb-1" 
-                          style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px', lineHeight: '1.4' }}
-                        >
+                        <p className="font-semibold mb-1 cms-text-primary" style={{ fontWeight: '600', fontSize: '13px', lineHeight: '1.4' }}>
                           {post.title}
                         </p>
-                        <p 
-                          className="text-sm line-clamp-1" 
-                          style={{ color: '#898989', fontSize: '12px', lineHeight: '1.5' }}
-                        >
+                        <p className="text-sm line-clamp-1 cms-text-secondary" style={{ fontSize: '12px', lineHeight: '1.5' }}>
                           {post.excerpt}
                         </p>
                       </div>
@@ -242,16 +225,16 @@ export function BlogList({ posts, categories }: BlogListProps) {
                           padding: '4px 10px'
                         }}
                       >
-                        {post.category.name}
+                        {category?.name || 'Uncategorized'}
                       </Badge>
                     </TableCell>
                     <TableCell style={{ padding: '12px 16px' }}>
-                      <span className="text-sm whitespace-nowrap" style={{ color: '#898989', fontSize: '12px' }}>
+                      <span className="text-sm whitespace-nowrap cms-text-secondary" style={{ fontSize: '12px' }}>
                         {format(new Date(post.publish_date), 'MMM d, yyyy')}
                       </span>
                     </TableCell>
                     <TableCell style={{ padding: '12px 16px' }}>
-                      <span className="text-sm whitespace-nowrap" style={{ color: '#898989', fontSize: '12px' }}>
+                      <span className="text-sm whitespace-nowrap cms-text-secondary" style={{ fontSize: '12px' }}>
                         {post.read_time} min
                       </span>
                     </TableCell>
@@ -277,8 +260,7 @@ export function BlogList({ posts, categories }: BlogListProps) {
                           variant="ghost" 
                           size="icon" 
                           asChild
-                          className="h-8 w-8"
-                          style={{ color: '#898989' }}
+                          className="h-8 w-8 cms-text-secondary"
                         >
                           <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer">
                             <Eye className="h-3.5 w-3.5" />
@@ -292,8 +274,7 @@ export function BlogList({ posts, categories }: BlogListProps) {
                           <Button 
                             variant="ghost" 
                             size="icon"
-                            className="h-8 w-8"
-                            style={{ color: '#898989' }}
+                            className="h-8 w-8 cms-text-secondary"
                           >
                             <Pencil className="h-3.5 w-3.5" />
                           </Button>
@@ -302,8 +283,7 @@ export function BlogList({ posts, categories }: BlogListProps) {
                           <Button 
                             variant="ghost" 
                             size="icon"
-                            className="h-8 w-8"
-                            style={{ color: '#898989' }}
+                            className="h-8 w-8 cms-text-secondary"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </Button>

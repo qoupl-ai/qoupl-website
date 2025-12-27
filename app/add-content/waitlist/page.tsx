@@ -35,28 +35,22 @@ export default async function WaitlistPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 
-            className="text-3xl font-semibold mb-2"
-            style={{ color: '#ffffff' }}
-          >
+          <h1 className="text-3xl font-semibold mb-2 cms-text-primary">
             Waitlist Signups
           </h1>
-          <p 
-            className="text-sm"
-            style={{ color: '#898989' }}
-          >
+          <p className="text-sm cms-text-secondary">
             View and manage all waitlist signups ({signups?.length || 0} total)
           </p>
         </div>
       </div>
 
       {signups && signups.length > 0 ? (
-        <Card style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+        <Card className="cms-card cms-border border">
           <CardHeader>
-            <CardTitle style={{ color: '#ffffff', fontSize: '18px', fontWeight: '600' }}>
+            <CardTitle className="cms-text-primary" style={{ fontSize: '18px', fontWeight: '600' }}>
               All Signups
             </CardTitle>
-            <CardDescription style={{ color: '#898989', fontSize: '13px' }}>
+            <CardDescription className="cms-text-secondary" style={{ fontSize: '13px' }}>
               Complete list of users who joined the waitlist
             </CardDescription>
           </CardHeader>
@@ -64,52 +58,52 @@ export default async function WaitlistPage() {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow style={{ borderColor: '#2a2a2a' }}>
+                  <TableRow className="cms-border">
                     <TableHead 
-                      className="whitespace-nowrap"
-                      style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                      className="whitespace-nowrap cms-text-secondary"
+                      style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
                     >
                       Name
                     </TableHead>
                     <TableHead 
-                      className="whitespace-nowrap"
-                      style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                      className="whitespace-nowrap cms-text-secondary"
+                      style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
                     >
                       Email
                     </TableHead>
                     <TableHead 
-                      className="whitespace-nowrap"
-                      style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                      className="whitespace-nowrap cms-text-secondary"
+                      style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
                     >
                       Phone
                     </TableHead>
                     <TableHead 
-                      className="whitespace-nowrap"
-                      style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                      className="whitespace-nowrap cms-text-secondary"
+                      style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
                     >
                       Age
                     </TableHead>
                     <TableHead 
-                      className="whitespace-nowrap"
-                      style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                      className="whitespace-nowrap cms-text-secondary"
+                      style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
                     >
                       Gender
                     </TableHead>
                     <TableHead 
-                      className="whitespace-nowrap"
-                      style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                      className="whitespace-nowrap cms-text-secondary"
+                      style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
                     >
                       Looking For
                     </TableHead>
                     <TableHead 
-                      className="whitespace-nowrap"
-                      style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                      className="whitespace-nowrap cms-text-secondary"
+                      style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
                     >
                       Status
                     </TableHead>
                     <TableHead 
-                      className="whitespace-nowrap"
-                      style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                      className="whitespace-nowrap cms-text-secondary"
+                      style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
                     >
                       Signup Date
                     </TableHead>
@@ -119,28 +113,28 @@ export default async function WaitlistPage() {
                   {signups.map((signup) => (
                     <TableRow 
                       key={signup.id}
-                      style={{ borderColor: '#2a2a2a' }}
+                      className="cms-border"
                     >
                       <TableCell style={{ padding: '12px 16px' }}>
                         <div className="flex items-center gap-2">
-                          <User className="h-4 w-4" style={{ color: '#898989' }} />
-                          <span style={{ color: '#ffffff', fontSize: '13px' }}>
+                          <User className="h-4 w-4 cms-text-secondary" />
+                          <span className="cms-text-primary" style={{ fontSize: '13px' }}>
                             {signup.name}
                           </span>
                         </div>
                       </TableCell>
                       <TableCell style={{ padding: '12px 16px' }}>
                         <div className="flex items-center gap-2">
-                          <Mail className="h-4 w-4" style={{ color: '#898989' }} />
-                          <span style={{ color: '#898989', fontSize: '13px' }}>
+                          <Mail className="h-4 w-4 cms-text-secondary" />
+                          <span className="cms-text-secondary" style={{ fontSize: '13px' }}>
                             {signup.email}
                           </span>
                         </div>
                       </TableCell>
                       <TableCell style={{ padding: '12px 16px' }}>
                         <div className="flex items-center gap-2">
-                          <Phone className="h-4 w-4" style={{ color: '#898989' }} />
-                          <span style={{ color: '#898989', fontSize: '13px' }}>
+                          <Phone className="h-4 w-4 cms-text-secondary" />
+                          <span className="cms-text-secondary" style={{ fontSize: '13px' }}>
                             {signup.phone}
                           </span>
                         </div>
@@ -178,7 +172,7 @@ export default async function WaitlistPage() {
                         </Badge>
                       </TableCell>
                       <TableCell style={{ padding: '12px 16px' }}>
-                        <span style={{ color: '#898989', fontSize: '13px' }}>
+                        <span className="cms-text-secondary" style={{ fontSize: '13px' }}>
                           {signup.looking_for || 'N/A'}
                         </span>
                       </TableCell>
@@ -200,8 +194,8 @@ export default async function WaitlistPage() {
                       </TableCell>
                       <TableCell style={{ padding: '12px 16px' }}>
                         <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4" style={{ color: '#898989' }} />
-                          <span style={{ color: '#898989', fontSize: '13px' }}>
+                          <Calendar className="h-4 w-4 cms-text-secondary" />
+                          <span className="cms-text-secondary" style={{ fontSize: '13px' }}>
                             {new Date(signup.signup_date).toLocaleDateString('en-US', {
                               year: 'numeric',
                               month: 'short',
@@ -218,18 +212,16 @@ export default async function WaitlistPage() {
           </CardContent>
         </Card>
       ) : (
-        <Card style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
+        <Card className="cms-card cms-border border">
           <CardContent className="py-12 text-center">
-            <Users className="h-12 w-12 mx-auto mb-4" style={{ color: '#5a5a5a' }} />
+            <Users className="h-12 w-12 mx-auto mb-4 cms-text-secondary" />
             <p 
-              className="mb-2 text-sm font-medium"
-              style={{ color: '#ffffff' }}
+              className="mb-2 text-sm font-medium cms-text-primary"
             >
               No waitlist signups yet
             </p>
             <p 
-              className="text-xs"
-              style={{ color: '#898989' }}
+              className="text-xs cms-text-secondary"
             >
               Signups will appear here once users join the waitlist
             </p>

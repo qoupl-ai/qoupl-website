@@ -82,7 +82,8 @@ export function FeatureList({ features, categories }: FeatureListProps) {
       <div className="flex items-center gap-4">
         <label 
           className="text-sm font-semibold whitespace-nowrap" 
-          style={{ color: '#898989', fontWeight: '600' }}
+          className="cms-text-secondary"
+          style={{ fontWeight: '600' }}
         >
           Filter by category:
         </label>
@@ -98,58 +99,63 @@ export function FeatureList({ features, categories }: FeatureListProps) {
           >
             <SelectValue />
           </SelectTrigger>
-          <SelectContent style={{ backgroundColor: '#212121', borderColor: '#2a2a2a' }}>
-            <SelectItem value="all" style={{ color: '#898989', fontSize: '13px' }}>All Categories</SelectItem>
+          <SelectContent>
+            <SelectItem value="all" className="cms-text-secondary" style={{ fontSize: '13px' }}>All Categories</SelectItem>
             {categories.map((category) => (
-              <SelectItem key={category.id} value={category.id} style={{ color: '#898989', fontSize: '13px' }}>
+              <SelectItem key={category.id} value={category.id} className="cms-text-secondary" style={{ fontSize: '13px' }}>
                 {category.name}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <span className="text-sm whitespace-nowrap" style={{ color: '#898989', fontSize: '13px' }}>
+        <span className="text-sm whitespace-nowrap cms-text-secondary" style={{ fontSize: '13px' }}>
           Showing {filteredFeatures.length} of {features.length} features
         </span>
       </div>
 
       {/* Features Table */}
-      <div className="rounded-md border overflow-x-auto" style={{ borderColor: '#2a2a2a', backgroundColor: '#212121' }}>
+      <div className="rounded-md border overflow-x-auto cms-card-bg cms-border">
         <Table>
           <TableHeader>
-            <TableRow style={{ borderColor: '#2a2a2a' }}>
+            <TableRow>
               <TableHead 
-                className="w-[60px] whitespace-nowrap" 
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="w-[60px] whitespace-nowrap cms-text-secondary" 
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 #
               </TableHead>
               <TableHead 
                 className="w-[70px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Icon
               </TableHead>
               <TableHead 
                 className="min-w-[300px]"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Title
               </TableHead>
               <TableHead 
                 className="w-[140px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Category
               </TableHead>
               <TableHead 
                 className="w-[100px] whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Status
               </TableHead>
               <TableHead 
                 className="w-[120px] text-right whitespace-nowrap"
-                style={{ color: '#898989', fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
+                className="cms-text-secondary"
+                style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Actions
               </TableHead>
@@ -157,8 +163,8 @@ export function FeatureList({ features, categories }: FeatureListProps) {
           </TableHeader>
           <TableBody>
             {filteredFeatures.length === 0 ? (
-              <TableRow style={{ borderColor: '#2a2a2a' }}>
-                <TableCell colSpan={6} className="text-center py-8" style={{ color: '#898989', fontSize: '13px' }}>
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-8 cms-text-secondary" style={{ fontSize: '13px' }}>
                   No features found
                 </TableCell>
               </TableRow>
@@ -168,12 +174,11 @@ export function FeatureList({ features, categories }: FeatureListProps) {
                 return (
                   <TableRow 
                     key={feature.id}
-                    style={{ borderColor: '#2a2a2a' }}
-                    className="hover:bg-[#2a2a2a]"
+                    className="hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a]"
                   >
                     <TableCell 
-                      className="font-semibold" 
-                      style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px', padding: '12px 16px' }}
+                      className="font-semibold cms-text-primary" 
+                      style={{ fontWeight: '600', fontSize: '13px', padding: '12px 16px' }}
                     >
                       {feature.order_index}
                     </TableCell>
@@ -183,14 +188,14 @@ export function FeatureList({ features, categories }: FeatureListProps) {
                     <TableCell style={{ padding: '12px 16px' }}>
                       <div className="max-w-[400px]">
                         <p 
-                          className="font-semibold mb-1" 
-                          style={{ color: '#ffffff', fontWeight: '600', fontSize: '13px', lineHeight: '1.4' }}
+                          className="font-semibold mb-1 cms-text-primary" 
+                          style={{ fontWeight: '600', fontSize: '13px', lineHeight: '1.4' }}
                         >
                           {feature.title}
                         </p>
                         <p 
-                          className="text-sm line-clamp-2" 
-                          style={{ color: '#898989', fontSize: '12px', lineHeight: '1.5' }}
+                          className="text-sm line-clamp-2 cms-text-secondary" 
+                          style={{ fontSize: '12px', lineHeight: '1.5' }}
                         >
                           {feature.description}
                         </p>
@@ -239,7 +244,7 @@ export function FeatureList({ features, categories }: FeatureListProps) {
                             variant="ghost" 
                             size="icon"
                             className="h-8 w-8"
-                            style={{ color: '#898989' }}
+                            className="cms-text-secondary"
                           >
                             <Pencil className="h-3.5 w-3.5" />
                           </Button>
@@ -249,7 +254,7 @@ export function FeatureList({ features, categories }: FeatureListProps) {
                             variant="ghost" 
                             size="icon"
                             className="h-8 w-8"
-                            style={{ color: '#898989' }}
+                            className="cms-text-secondary"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </Button>
