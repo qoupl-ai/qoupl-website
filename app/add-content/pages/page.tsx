@@ -9,45 +9,84 @@ import { createClient } from '@/lib/supabase/server'
 import { assertAdmin } from '@/lib/auth/assert-admin'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus, FileText, Eye, EyeOff } from 'lucide-react'
+import { FileText, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
-import PageEditorButton from './page-editor-button'
 
 export default async function PagesPage() {
   await assertAdmin()
   const supabase = await createClient()
 
+  // Define logical page order (most important pages first)
+  const pageOrder = [
+    'home',
+    'about',
+    'features',
+    'pricing',
+    'faq',
+    'blog',
+    'careers',
+    'contact',
+    'safety',
+    'privacy',
+    'terms',
+    'community-guidelines'
+  ]
+
   const { data: pages, error } = await supabase
     .from('pages')
     .select('*')
-    .order('slug', { ascending: true })
+  
+  // Sort pages by predefined order, then alphabetically for any not in the list
+  const sortedPages = (pages || []).sort((a, b) => {
+    const aIndex = pageOrder.indexOf(a.slug)
+    const bIndex = pageOrder.indexOf(b.slug)
+    
+    if (aIndex !== -1 && bIndex !== -1) {
+      return aIndex - bIndex
+    }
+    if (aIndex !== -1) return -1
+    if (bIndex !== -1) return 1
+    return a.slug.localeCompare(b.slug)
+  })
 
   if (error) {
     throw new Error(`Failed to fetch pages: ${error.message}`)
   }
 
+  // Fetch section counts for each page
+  const pagesWithCounts = await Promise.all(
+    sortedPages.map(async (page) => {
+      const { count } = await supabase
+        .from('sections')
+        .select('*', { count: 'exact', head: true })
+        .eq('page_id', page.id)
+      
+      return {
+        ...page,
+        sectionCount: count || 0
+      }
+    })
+  )
+
   return (
     <div>
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 
-              className="text-3xl font-semibold mb-2"
-              style={{ color: '#ffffff' }}
-            >
-              Pages
-            </h1>
-            <p 
-              className="text-sm"
-              style={{ color: '#898989' }}
-            >
-              Manage all website pages
-            </p>
-          </div>
-          <PageEditorButton />
+        <div className="mb-8">
+          <h1 
+            className="text-3xl font-semibold mb-2"
+            style={{ color: '#ffffff' }}
+          >
+            Pages
+          </h1>
+          <p 
+            className="text-sm"
+            style={{ color: '#898989' }}
+          >
+            Manage all website pages and their sections
+          </p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {pages?.map((page) => (
+          {pagesWithCounts.map((page) => (
             <Card 
               key={page.id} 
               className="transition-all"
@@ -71,10 +110,12 @@ export default async function PagesPage() {
                       {page.title}
                     </CardTitle>
                     <CardDescription 
-                      className="mt-1 text-xs"
+                      className="mt-1 text-xs flex items-center gap-2"
                       style={{ color: '#898989' }}
                     >
-                      /{page.slug}
+                      <span>/{page.slug}</span>
+                      <span>•</span>
+                      <span>{page.sectionCount} {page.sectionCount === 1 ? 'section' : 'sections'}</span>
                     </CardDescription>
                   </div>
                 </div>
@@ -105,7 +146,7 @@ export default async function PagesPage() {
                       Edit
                     </Button>
                   </Link>
-                  <Link href={`/${page.slug}`} target="_blank">
+                  <Link href={page.slug === 'home' ? '/' : `/${page.slug}`} target="_blank">
                     <Button 
                       variant="ghost" 
                       className="h-9 px-3"

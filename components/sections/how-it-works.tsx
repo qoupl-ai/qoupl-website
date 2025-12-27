@@ -177,7 +177,7 @@ export default function HowItWorks({ data }: HowItWorksProps = {}) {
                   >
                     <div className="relative w-[170px] sm:w-[190px] md:w-[210px] lg:w-[240px] xl:w-[260px] aspect-[9/19] mb-4">
                       {/* Phone Frame */}
-                      <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden shadow-lg border-2 border-border/50 bg-gradient-to-br from-gray-900 to-gray-800">
+                      <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden shadow-lg border-2 border-border/50 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-900 dark:to-gray-800">
                         {/* Notch */}
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-b-2xl z-20">
                           <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-12 h-0.5 bg-gray-800 rounded-full" />

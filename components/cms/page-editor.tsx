@@ -87,7 +87,7 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
         style={{
           backgroundColor: '#212121',
           borderColor: '#2a2a2a',
-          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+          fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>

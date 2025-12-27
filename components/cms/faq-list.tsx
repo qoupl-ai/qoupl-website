@@ -27,7 +27,7 @@ interface FAQ {
   question: string
   answer: string
   order_index: number
-  is_published: boolean
+  published: boolean
   category: {
     id: string
     name: string
@@ -204,18 +204,18 @@ export function FAQList({ faqs, categories }: FAQListProps) {
                     </TableCell>
                     <TableCell style={{ padding: '12px 16px' }}>
                       <Badge 
-                        variant={faq.is_published ? 'default' : 'secondary'}
+                        variant={faq.published ? 'default' : 'secondary'}
                         className="whitespace-nowrap"
                         style={{ 
-                          backgroundColor: faq.is_published ? '#10b981' : '#6b7280',
+                          backgroundColor: faq.published ? '#10b981' : '#6b7280',
                           color: '#ffffff',
-                          borderColor: faq.is_published ? '#10b981' : '#6b7280',
+                          borderColor: faq.published ? '#10b981' : '#6b7280',
                           fontSize: '11px',
                           fontWeight: '600',
                           padding: '4px 10px'
                         }}
                       >
-                        {faq.is_published ? 'Published' : 'Draft'}
+                        {faq.published ? 'Published' : 'Draft'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right" style={{ padding: '12px 16px' }}>

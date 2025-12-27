@@ -12,7 +12,7 @@ interface BlogPostData {
   category_id: string
   publish_date: string
   read_time: number
-  is_published: boolean
+  published: boolean
 }
 
 export async function createBlogPost(data: BlogPostData) {
@@ -30,7 +30,7 @@ export async function createBlogPost(data: BlogPostData) {
     category_id: data.category_id,
     publish_date: data.publish_date,
     read_time: data.read_time,
-    is_published: data.is_published,
+    published: data.published,
   })
 
   if (error) {
@@ -58,7 +58,7 @@ export async function updateBlogPost(id: string, data: BlogPostData) {
       category_id: data.category_id,
       publish_date: data.publish_date,
       read_time: data.read_time,
-      is_published: data.is_published,
+      published: data.published,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)

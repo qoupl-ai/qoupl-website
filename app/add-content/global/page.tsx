@@ -92,7 +92,7 @@ export default async function GlobalContentPage() {
               >
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2" style={{ color: '#ffffff' }}>
-                    <item.icon className="h-5 w-5" style={{ color: '#a855f7' }} />
+                    <item.icon className="h-5 w-5" style={{ color: '#898989' }} />
                     {item.title}
                   </CardTitle>
                   <CardDescription style={{ color: '#898989' }}>

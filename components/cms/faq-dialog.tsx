@@ -41,7 +41,7 @@ const faqSchema = z.object({
   answer: z.string().min(10, 'Answer must be at least 10 characters'),
   category_id: z.string().uuid('Please select a category'),
   order_index: z.number().int().min(1, 'Order must be at least 1'),
-  is_published: z.boolean(),
+  published: z.boolean(),
 })
 
 type FAQFormValues = z.infer<typeof faqSchema>
@@ -57,7 +57,7 @@ interface FAQ {
   question: string
   answer: string
   order_index: number
-  is_published: boolean
+  published: boolean
   category: {
     id: string
     name: string
@@ -85,14 +85,14 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
           answer: faq.answer,
           category_id: faq.category.id,
           order_index: faq.order_index,
-          is_published: faq.is_published,
+          published: faq.published,
         }
       : {
           question: '',
           answer: '',
           category_id: '',
           order_index: 1,
-          is_published: false,
+          published: false,
         },
   })
 
@@ -126,7 +126,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
         style={{
           backgroundColor: '#212121',
           borderColor: '#2a2a2a',
-          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+          fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
@@ -288,7 +288,7 @@ export function FAQDialog({ categories, mode, faq, children }: FAQDialogProps) {
 
               <FormField
                 control={form.control}
-                name="is_published"
+                name="published"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>

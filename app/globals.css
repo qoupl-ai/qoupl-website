@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -54,8 +56,31 @@
   * {
     @apply border-border;
   }
+  html {
+    @apply bg-background;
+  }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Fix white background on scroll for CMS */
+  body.cms-page {
+    background-color: #171717 !important;
+    overflow-x: hidden;
+  }
+  
+  html body.cms-page {
+    background-color: #171717 !important;
+  }
+  
+  /* Ensure no white shows when scrolling CMS */
+  [data-cms-main] {
+    background-color: #171717;
+  }
+  
+  /* Fix scrollbar area */
+  body.cms-page::-webkit-scrollbar-track {
+    background-color: #171717;
   }
 }
 
@@ -110,5 +135,83 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Chrome, Safari and Opera */
+  }
+
+  /* CMS Input and Textarea styling */
+  [data-cms-main] input::placeholder,
+  [data-cms-main] textarea::placeholder {
+    color: #5a5a5a !important;
+  }
+
+  [data-cms-main] input,
+  [data-cms-main] textarea {
+    background-color: #171717 !important;
+    border-color: #2a2a2a !important;
+    color: #ffffff !important;
+  }
+
+  [data-cms-main] input:focus,
+  [data-cms-main] textarea:focus,
+  [data-cms-main] input:focus-visible,
+  [data-cms-main] textarea:focus-visible {
+    border-color: #2a2a2a !important;
+    outline: none !important;
+    box-shadow: none !important;
+    ring: none !important;
+  }
+
+  /* Remove focus rings globally for CMS */
+  [data-cms-main] *:focus,
+  [data-cms-main] *:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Dialog inputs and textareas */
+  [role="dialog"] input:focus,
+  [role="dialog"] textarea:focus,
+  [role="dialog"] input:focus-visible,
+  [role="dialog"] textarea:focus-visible {
+    border-color: #2a2a2a !important;
+    outline: none !important;
+    box-shadow: none !important;
+    ring: none !important;
+  }
+
+  /* Select components in CMS */
+  [data-cms-main] [role="combobox"],
+  [role="dialog"] [role="combobox"] {
+    background-color: #171717 !important;
+    border-color: #2a2a2a !important;
+    color: #ffffff !important;
+  }
+
+  [data-cms-main] [role="listbox"],
+  [role="dialog"] [role="listbox"] {
+    background-color: #212121 !important;
+    border-color: #2a2a2a !important;
+  }
+
+  [data-cms-main] [role="option"],
+  [role="dialog"] [role="option"] {
+    color: #898989 !important;
+  }
+
+  [data-cms-main] [role="option"]:hover,
+  [role="dialog"] [role="option"]:hover {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+  }
+
+  /* Select placeholder text */
+  [data-cms-main] [data-placeholder],
+  [role="dialog"] [data-placeholder] {
+    color: #898989 !important;
+  }
+
+  /* Ensure SelectValue text is visible */
+  [data-cms-main] button[role="combobox"] span,
+  [role="dialog"] button[role="combobox"] span {
+    color: #ffffff !important;
   }
 }

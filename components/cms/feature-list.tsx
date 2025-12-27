@@ -28,7 +28,7 @@ interface Feature {
   description: string
   icon: string
   order_index: number
-  is_published: boolean
+  published: boolean
   category: {
     id: string
     name: string
@@ -214,18 +214,18 @@ export function FeatureList({ features, categories }: FeatureListProps) {
                     </TableCell>
                     <TableCell style={{ padding: '12px 16px' }}>
                       <Badge 
-                        variant={feature.is_published ? 'default' : 'secondary'}
+                        variant={feature.published ? 'default' : 'secondary'}
                         className="whitespace-nowrap"
                         style={{ 
-                          backgroundColor: feature.is_published ? '#10b981' : '#6b7280',
+                          backgroundColor: feature.published ? '#10b981' : '#6b7280',
                           color: '#ffffff',
-                          borderColor: feature.is_published ? '#10b981' : '#6b7280',
+                          borderColor: feature.published ? '#10b981' : '#6b7280',
                           fontSize: '11px',
                           fontWeight: '600',
                           padding: '4px 10px'
                         }}
                       >
-                        {feature.is_published ? 'Published' : 'Draft'}
+                        {feature.published ? 'Published' : 'Draft'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right" style={{ padding: '12px 16px' }}>

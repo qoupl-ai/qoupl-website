@@ -45,7 +45,7 @@ const blogSchema = z.object({
   category_id: z.string().uuid('Please select a category'),
   publish_date: z.string(),
   read_time: z.number().int().min(1, 'Read time must be at least 1 minute'),
-  is_published: z.boolean(),
+  published: z.boolean(),
 })
 
 type BlogFormValues = z.infer<typeof blogSchema>
@@ -64,7 +64,7 @@ interface BlogPost {
   content: string
   publish_date: string
   read_time: number
-  is_published: boolean
+  published: boolean
   category: {
     id: string
     name: string
@@ -95,7 +95,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
           category_id: post.category.id,
           publish_date: format(new Date(post.publish_date), 'yyyy-MM-dd'),
           read_time: post.read_time,
-          is_published: post.is_published,
+          published: post.published,
         }
       : {
           title: '',
@@ -105,7 +105,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
           category_id: '',
           publish_date: format(new Date(), 'yyyy-MM-dd'),
           read_time: 5,
-          is_published: false,
+          published: false,
         },
   })
 
@@ -153,7 +153,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
         style={{
           backgroundColor: '#212121',
           borderColor: '#2a2a2a',
-          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+          fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
@@ -402,7 +402,7 @@ export function BlogDialog({ categories, mode, post, children }: BlogDialogProps
 
               <FormField
                 control={form.control}
-                name="is_published"
+                name="published"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel style={{ color: '#898989', fontSize: '13px', fontWeight: '600' }}>

@@ -5,13 +5,15 @@ import { createClient } from '@/lib/supabase/server'
 import { assertAdmin } from '@/lib/auth/assert-admin'
 
 interface PricingPlanData {
+  plan_type?: string
   name: string
   price: number
+  currency?: string
   billing_period: string
-  description: string
+  description?: string
   features: string[]
   is_popular: boolean
-  is_published: boolean
+  published: boolean
   order_index: number
 }
 
@@ -23,13 +25,15 @@ export async function createPricingPlan(data: PricingPlanData) {
 
   // Create pricing plan
   const { error } = await supabase.from('pricing_plans').insert({
+    plan_type: data.plan_type || 'subscription',
     name: data.name,
     price: data.price,
+    currency: data.currency || 'INR',
     billing_period: data.billing_period,
-    description: data.description,
+    description: data.description || null,
     features: data.features,
     is_popular: data.is_popular,
-    is_published: data.is_published,
+    published: data.published,
     order_index: data.order_index,
   })
 
@@ -47,19 +51,25 @@ export async function updatePricingPlan(id: string, data: PricingPlanData) {
   const supabase = await createClient()
 
   // Update pricing plan
+  const updateData: any = {
+    name: data.name,
+    price: data.price,
+    billing_period: data.billing_period,
+    features: data.features,
+    is_popular: data.is_popular,
+    published: data.published,
+    order_index: data.order_index,
+    updated_at: new Date().toISOString(),
+  }
+  
+  // Add optional fields if provided
+  if (data.plan_type !== undefined) updateData.plan_type = data.plan_type
+  if (data.currency !== undefined) updateData.currency = data.currency
+  if (data.description !== undefined) updateData.description = data.description
+  
   const { error } = await supabase
     .from('pricing_plans')
-    .update({
-      name: data.name,
-      price: data.price,
-      billing_period: data.billing_period,
-      description: data.description,
-      features: data.features,
-      is_popular: data.is_popular,
-      is_published: data.is_published,
-      order_index: data.order_index,
-      updated_at: new Date().toISOString(),
-    })
+    .update(updateData)
     .eq('id', id)
 
   if (error) {

@@ -260,25 +260,11 @@ export function MediaUpload() {
           disabled={!selectedFile || isUploading}
           className="w-full h-10"
           style={{ 
-            background: (!selectedFile || isUploading)
-              ? 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)'
-              : 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-            border: 'none',
-            color: '#ffffff',
+            backgroundColor: (!selectedFile || isUploading) ? '#171717' : '#212121',
+            borderColor: '#2a2a2a',
+            color: (!selectedFile || isUploading) ? '#5a5a5a' : '#898989',
             fontSize: '14px',
-            fontWeight: '600',
-            transition: 'all 0.2s ease',
-            boxShadow: '0 2px 8px rgba(168, 85, 247, 0.3)'
-          }}
-          onMouseEnter={(e) => {
-            if (selectedFile && !isUploading) {
-              e.currentTarget.style.transform = 'translateY(-1px)'
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(168, 85, 247, 0.4)'
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)'
-            e.currentTarget.style.boxShadow = '0 2px 8px rgba(168, 85, 247, 0.3)'
+            fontWeight: '600'
           }}
         >
           {isUploading ? (

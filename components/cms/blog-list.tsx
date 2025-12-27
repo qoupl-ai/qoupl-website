@@ -30,7 +30,7 @@ interface BlogPost {
   excerpt: string
   content: string
   publish_date: string
-  is_published: boolean
+  published: boolean
   read_time: number
   category: {
     id: string
@@ -83,9 +83,9 @@ export function BlogList({ posts, categories }: BlogListProps) {
   }
 
   if (statusFilter === 'published') {
-    filteredPosts = filteredPosts.filter(post => post.is_published)
+    filteredPosts = filteredPosts.filter(post => post.published)
   } else if (statusFilter === 'draft') {
-    filteredPosts = filteredPosts.filter(post => !post.is_published)
+    filteredPosts = filteredPosts.filter(post => !post.published)
   }
 
   return (
@@ -257,18 +257,18 @@ export function BlogList({ posts, categories }: BlogListProps) {
                     </TableCell>
                     <TableCell style={{ padding: '12px 16px' }}>
                       <Badge 
-                        variant={post.is_published ? 'default' : 'secondary'}
+                        variant={post.published ? 'default' : 'secondary'}
                         className="whitespace-nowrap"
                         style={{ 
-                          backgroundColor: post.is_published ? '#10b981' : '#6b7280',
+                          backgroundColor: post.published ? '#10b981' : '#6b7280',
                           color: '#ffffff',
-                          borderColor: post.is_published ? '#10b981' : '#6b7280',
+                          borderColor: post.published ? '#10b981' : '#6b7280',
                           fontSize: '11px',
                           fontWeight: '600',
                           padding: '4px 10px'
                         }}
                       >
-                        {post.is_published ? 'Published' : 'Draft'}
+                        {post.published ? 'Published' : 'Draft'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right" style={{ padding: '12px 16px' }}>

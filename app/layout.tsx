@@ -23,6 +23,9 @@ const sourceCodePro = Source_Code_Pro({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://qoupl.ai'),
+  other: {
+    'google-fonts': 'https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap',
+  },
   title: {
     default: 'qoupl - Be couple with qoupl | Dating App for College Students',
     template: '%s | qoupl'
@@ -175,6 +178,9 @@ export const metadata: Metadata = {
     canonical: 'https://qoupl.ai',
   },
   category: 'technology',
+  other: {
+    'google-fonts': 'https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap',
+  },
 };
 
 export default function RootLayout({

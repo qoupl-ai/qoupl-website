@@ -44,7 +44,7 @@ const pricingSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   features: z.array(z.string()).min(1, 'At least one feature is required'),
   is_popular: z.boolean(),
-  is_published: z.boolean(),
+  published: z.boolean(),
   order_index: z.number().int().min(1, 'Order must be at least 1'),
 })
 
@@ -58,7 +58,7 @@ interface PricingPlan {
   description: string
   features: string[]
   is_popular: boolean
-  is_published: boolean
+  published: boolean
   order_index: number
 }
 
@@ -84,7 +84,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
           description: plan.description,
           features: plan.features,
           is_popular: plan.is_popular,
-          is_published: plan.is_published,
+          published: plan.published,
           order_index: plan.order_index,
         }
       : {
@@ -94,7 +94,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
           description: '',
           features: [],
           is_popular: false,
-          is_published: false,
+          published: false,
           order_index: 1,
         },
   })
@@ -142,7 +142,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
         style={{
           backgroundColor: '#212121',
           borderColor: '#2a2a2a',
-          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+          fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
@@ -176,14 +176,14 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Plan Name</FormLabel>
+                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Plan Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Premium"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                     The name of the pricing plan
                   </FormDescription>
                   <FormMessage />
@@ -196,7 +196,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Description</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Perfect for serious daters looking for meaningful connections..."
@@ -204,7 +204,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                     Brief description of the plan
                   </FormDescription>
                   <FormMessage />
@@ -218,7 +218,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price</FormLabel>
+                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Price</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -228,7 +228,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Price in USD
                     </FormDescription>
                     <FormMessage />
@@ -241,7 +241,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 name="billing_period"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Billing Period</FormLabel>
+                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Billing Period</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -258,7 +258,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         <SelectItem value="one-time">One-time</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       How often the plan renews
                     </FormDescription>
                     <FormMessage />
@@ -272,7 +272,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
               name="features"
               render={() => (
                 <FormItem>
-                  <FormLabel>Features</FormLabel>
+                  <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Features</FormLabel>
                   <FormControl>
                     <div className="space-y-3">
                       <div className="flex gap-2">
@@ -292,6 +292,12 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                           variant="outline"
                           size="icon"
                           onClick={addFeature}
+                          className="h-10 w-10"
+                          style={{
+                            backgroundColor: '#212121',
+                            borderColor: '#2a2a2a',
+                            color: '#898989'
+                          }}
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
@@ -301,16 +307,22 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                           {features.map((feature, index) => (
                             <div
                               key={index}
-                              className="flex items-center justify-between p-2 bg-muted rounded-md"
+                              className="flex items-center justify-between p-2 rounded-md border"
+                              style={{
+                                backgroundColor: '#171717',
+                                borderColor: '#2a2a2a',
+                              }}
                             >
-                              <span className="text-sm">{feature}</span>
+                              <span className="text-sm" style={{ color: '#898989' }}>{feature}</span>
                               <Button
                                 type="button"
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => removeFeature(index)}
+                                className="h-7 w-7"
+                                style={{ color: '#898989' }}
                               >
-                                <X className="h-4 w-4" />
+                                <X className="h-3.5 w-3.5" />
                               </Button>
                             </div>
                           ))}
@@ -318,7 +330,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                       )}
                     </div>
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                     Add features included in this plan
                   </FormDescription>
                   <FormMessage />
@@ -332,7 +344,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 name="order_index"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Order</FormLabel>
+                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Order</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -340,7 +352,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Display order
                     </FormDescription>
                     <FormMessage />
@@ -353,7 +365,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 name="is_popular"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Popular</FormLabel>
+                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Popular</FormLabel>
                     <Select
                       onValueChange={(value) => field.onChange(value === 'true')}
                       defaultValue={field.value ? 'true' : 'false'}
@@ -368,7 +380,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         <SelectItem value="false">No</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Mark as popular
                     </FormDescription>
                     <FormMessage />
@@ -378,10 +390,10 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
 
               <FormField
                 control={form.control}
-                name="is_published"
+                name="published"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel style={{ color: '#ffffff', fontWeight: '500', fontSize: '14px' }}>Status</FormLabel>
                     <Select
                       onValueChange={(value) => field.onChange(value === 'true')}
                       defaultValue={field.value ? 'true' : 'false'}
@@ -396,7 +408,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                         <SelectItem value="false">Draft</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription>
+                    <FormDescription style={{ color: '#898989', fontSize: '12px' }}>
                       Publication status
                     </FormDescription>
                     <FormMessage />
@@ -427,25 +439,11 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                 disabled={isPending}
                 className="h-10 px-5"
                 style={{
-                  background: isPending 
-                    ? 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)'
-                    : 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-                  border: 'none',
-                  color: '#ffffff',
+                  backgroundColor: isPending ? '#171717' : '#212121',
+                  borderColor: '#2a2a2a',
+                  color: isPending ? '#5a5a5a' : '#898989',
                   fontSize: '14px',
-                  fontWeight: '600',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 8px rgba(168, 85, 247, 0.3)'
-                }}
-                onMouseEnter={(e) => {
-                  if (!isPending) {
-                    e.currentTarget.style.transform = 'translateY(-1px)'
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(168, 85, 247, 0.4)'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(168, 85, 247, 0.3)'
+                  fontWeight: '600'
                 }}
               >
                 {isPending

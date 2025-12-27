@@ -42,7 +42,7 @@ const featureSchema = z.object({
   icon: z.string().min(1, 'Icon is required (emoji or icon name)'),
   category_id: z.string().uuid('Please select a category'),
   order_index: z.number().int().min(1, 'Order must be at least 1'),
-  is_published: z.boolean(),
+  published: z.boolean(),
 })
 
 type FeatureFormValues = z.infer<typeof featureSchema>
@@ -59,7 +59,7 @@ interface Feature {
   description: string
   icon: string
   order_index: number
-  is_published: boolean
+  published: boolean
   category: {
     id: string
     name: string
@@ -88,7 +88,7 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
           icon: feature.icon,
           category_id: feature.category.id,
           order_index: feature.order_index,
-          is_published: feature.is_published,
+          published: feature.published,
         }
       : {
           title: '',
@@ -96,7 +96,7 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
           icon: '',
           category_id: '',
           order_index: 1,
-          is_published: false,
+          published: false,
         },
   })
 
@@ -130,7 +130,7 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
         style={{
           backgroundColor: '#212121',
           borderColor: '#2a2a2a',
-          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+          fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <DialogHeader>
@@ -277,7 +277,7 @@ export function FeatureDialog({ categories, mode, feature, children }: FeatureDi
 
               <FormField
                 control={form.control}
-                name="is_published"
+                name="published"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>

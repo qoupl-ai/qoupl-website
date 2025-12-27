@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { adminClient } from '@/lib/supabase/admin'
 import { assertAdmin } from '@/lib/auth/assert-admin'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -45,6 +46,11 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
+    // Get current user for uploaded_by
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
     // Generate unique filename
     const timestamp = Date.now()
     const sanitizedFilename = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
@@ -54,8 +60,8 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
-    // Upload to Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    // Upload to Supabase Storage using admin client to bypass RLS
+    const { data: uploadData, error: uploadError } = await adminClient.storage
       .from(bucket)
       .upload(storagePath, buffer, {
         contentType: file.type,
@@ -71,13 +77,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get current user for uploaded_by
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    // Insert into media table
-    const { data: mediaData, error: dbError } = await supabase
+    // Insert into media table using admin client to bypass RLS
+    const { data: mediaData, error: dbError } = await adminClient
       .from('media')
       .insert({
         filename: file.name,
@@ -95,8 +96,8 @@ export async function POST(request: NextRequest) {
 
     if (dbError) {
       console.error('Database insert error:', dbError)
-      // Try to delete uploaded file
-      await supabase.storage.from(bucket).remove([storagePath])
+      // Try to delete uploaded file using admin client
+      await adminClient.storage.from(bucket).remove([storagePath])
       
       return NextResponse.json(
         { error: `Database insert failed: ${dbError.message}` },

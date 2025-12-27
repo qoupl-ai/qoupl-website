@@ -22,7 +22,7 @@ interface PricingPlan {
   description: string
   features: string[]
   is_popular: boolean
-  is_published: boolean
+  published: boolean
   order_index: number
 }
 
@@ -151,18 +151,18 @@ export function PricingList({ plans }: PricingListProps) {
                   </TableCell>
                   <TableCell style={{ padding: '12px 16px' }}>
                     <Badge 
-                      variant={plan.is_published ? 'default' : 'secondary'}
+                      variant={plan.published ? 'default' : 'secondary'}
                       className="whitespace-nowrap"
                       style={{ 
-                        backgroundColor: plan.is_published ? '#10b981' : '#6b7280',
+                        backgroundColor: plan.published ? '#10b981' : '#6b7280',
                         color: '#ffffff',
-                        borderColor: plan.is_published ? '#10b981' : '#6b7280',
+                        borderColor: plan.published ? '#10b981' : '#6b7280',
                         fontSize: '11px',
                         fontWeight: '600',
                         padding: '4px 10px'
                       }}
                     >
-                      {plan.is_published ? 'Published' : 'Draft'}
+                      {plan.published ? 'Published' : 'Draft'}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right" style={{ padding: '12px 16px' }}>

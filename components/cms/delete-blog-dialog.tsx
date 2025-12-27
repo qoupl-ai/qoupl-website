@@ -53,7 +53,7 @@ export function DeleteBlogDialog({ post, children }: DeleteBlogDialogProps) {
         style={{
           backgroundColor: '#212121',
           borderColor: '#2a2a2a',
-          fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
+          fontFamily: "'Google Sans Flex', system-ui, sans-serif"
         }}
       >
         <AlertDialogHeader>
@@ -98,22 +98,10 @@ export function DeleteBlogDialog({ post, children }: DeleteBlogDialogProps) {
             disabled={isPending}
             className="h-10 px-5"
             style={{
-              backgroundColor: '#ef4444',
-              color: '#ffffff',
+              backgroundColor: isPending ? '#171717' : '#ef4444',
+              color: isPending ? '#5a5a5a' : '#ffffff',
               fontSize: '14px',
-              fontWeight: '600',
-              transition: 'all 0.2s ease',
-              boxShadow: '0 2px 8px rgba(239, 68, 68, 0.3)'
-            }}
-            onMouseEnter={(e) => {
-              if (!isPending) {
-                e.currentTarget.style.transform = 'translateY(-1px)'
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.4)'
-              }
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(239, 68, 68, 0.3)'
+              fontWeight: '600'
             }}
           >
             {isPending ? 'Deleting...' : 'Delete'}

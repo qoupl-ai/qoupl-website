@@ -360,7 +360,7 @@ export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
 
   return (
     <section
-      className="relative min-h-screen w-full flex flex-col overflow-hidden bg-white dark:bg-[#171717]"
+      className="relative min-h-screen w-full flex flex-col overflow-hidden bg-background"
     >
       {/* Main Content - Split Layout with Better Alignment */}
       <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 relative z-10 w-full flex-1 flex items-center min-h-0">

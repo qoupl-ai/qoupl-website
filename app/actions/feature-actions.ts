@@ -10,7 +10,7 @@ interface FeatureData {
   icon: string
   category_id: string
   order_index: number
-  is_published: boolean
+  published: boolean
 }
 
 export async function createFeature(data: FeatureData) {
@@ -26,7 +26,7 @@ export async function createFeature(data: FeatureData) {
     icon: data.icon,
     category_id: data.category_id,
     order_index: data.order_index,
-    is_published: data.is_published,
+    published: data.published,
   })
 
   if (error) {
@@ -51,7 +51,7 @@ export async function updateFeature(id: string, data: FeatureData) {
       icon: data.icon,
       category_id: data.category_id,
       order_index: data.order_index,
-      is_published: data.is_published,
+      published: data.published,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)

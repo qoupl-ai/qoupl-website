@@ -62,6 +62,19 @@ export async function createSection(input: CreateSectionInput) {
   // Revalidate relevant paths
   revalidatePath('/add-content')
   revalidatePath(`/add-content/pages/${input.page_id}`)
+  
+  // Get page slug to revalidate frontend page
+  const { data: page } = await supabase
+    .from('pages')
+    .select('slug')
+    .eq('id', input.page_id)
+    .single()
+  
+  if (page?.slug) {
+    // Revalidate frontend page (homepage uses '/', others use '/slug')
+    const frontendPath = page.slug === 'home' ? '/' : `/${page.slug}`
+    revalidatePath(frontendPath)
+  }
 }
 
 /**
@@ -104,7 +117,21 @@ export async function updateSection(id: string, input: UpdateSectionInput) {
   // Revalidate relevant paths
   revalidatePath('/add-content')
   if (data?.page_id) {
+    // Revalidate CMS page
     revalidatePath(`/add-content/pages/${data.page_id}`)
+    
+    // Get page slug to revalidate frontend page
+    const { data: page } = await supabase
+      .from('pages')
+      .select('slug')
+      .eq('id', data.page_id)
+      .single()
+    
+    if (page?.slug) {
+      // Revalidate frontend page (homepage uses '/', others use '/slug')
+      const frontendPath = page.slug === 'home' ? '/' : `/${page.slug}`
+      revalidatePath(frontendPath)
+    }
   }
 }
 
@@ -134,6 +161,19 @@ export async function deleteSection(id: string) {
   revalidatePath('/add-content')
   if (section?.page_id) {
     revalidatePath(`/add-content/pages/${section.page_id}`)
+    
+    // Get page slug to revalidate frontend page
+    const { data: page } = await supabase
+      .from('pages')
+      .select('slug')
+      .eq('id', section.page_id)
+      .single()
+    
+    if (page?.slug) {
+      // Revalidate frontend page (homepage uses '/', others use '/slug')
+      const frontendPath = page.slug === 'home' ? '/' : `/${page.slug}`
+      revalidatePath(frontendPath)
+    }
   }
 }
 
@@ -159,5 +199,18 @@ export async function reorderSections(pageId: string, sectionIds: string[]) {
 
   revalidatePath('/add-content')
   revalidatePath(`/add-content/pages/${pageId}`)
+  
+  // Get page slug to revalidate frontend page
+  const { data: page } = await supabase
+    .from('pages')
+    .select('slug')
+    .eq('id', pageId)
+    .single()
+  
+  if (page?.slug) {
+    // Revalidate frontend page (homepage uses '/', others use '/slug')
+    const frontendPath = page.slug === 'home' ? '/' : `/${page.slug}`
+    revalidatePath(frontendPath)
+  }
 }
 

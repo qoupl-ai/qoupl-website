@@ -66,7 +66,7 @@ export default async function CMSDashboard() {
       title: 'Waitlist Signups',
       count: waitlistCount || 0,
       icon: Users,
-      href: '/add-content',
+      href: '/add-content/waitlist',
     },
   ]
 
@@ -94,7 +94,7 @@ export default async function CMSDashboard() {
           return (
             <Link key={stat.title} href={stat.href}>
               <Card 
-                className="transition-all cursor-pointer hover:border-[#2a2a2a]"
+                className="transition-all cursor-pointer"
                 style={{ 
                   backgroundColor: '#212121',
                   borderColor: '#2a2a2a',

@@ -9,7 +9,7 @@ interface FAQData {
   answer: string
   category_id: string
   order_index: number
-  is_published: boolean
+  published: boolean
 }
 
 export async function createFAQ(data: FAQData) {
@@ -24,7 +24,7 @@ export async function createFAQ(data: FAQData) {
     answer: data.answer,
     category_id: data.category_id,
     order_index: data.order_index,
-    is_published: data.is_published,
+    published: data.published,
   })
 
   if (error) {
@@ -48,7 +48,7 @@ export async function updateFAQ(id: string, data: FAQData) {
       answer: data.answer,
       category_id: data.category_id,
       order_index: data.order_index,
-      is_published: data.is_published,
+      published: data.published,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)

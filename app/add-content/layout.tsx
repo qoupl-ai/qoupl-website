@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import CMSNav from '@/components/cms/cms-nav'
+import CMSBodyClass from '@/components/cms/cms-body-class'
+import { Toaster } from '@/components/ui/sonner'
 
 export default async function CMSLayout({
   children,
@@ -30,14 +32,16 @@ export default async function CMSLayout({
   }
 
   return (
-    <div 
-      className="min-h-screen"
-      style={{ 
-        backgroundColor: '#171717',
-        fontFamily: "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif"
-      }}
-    >
-      <CMSNav user={user} adminUser={adminUser} />
+    <>
+      <CMSBodyClass />
+      <div 
+        className="min-h-screen"
+        style={{ 
+          backgroundColor: '#171717',
+          fontFamily: "'Google Sans Flex', system-ui, sans-serif"
+        }}
+      >
+        <CMSNav user={user} adminUser={adminUser} />
       <main 
         data-cms-main
         className="transition-all duration-300"
@@ -50,6 +54,8 @@ export default async function CMSLayout({
       >
         {children}
       </main>
+      <Toaster position="top-center" richColors />
     </div>
+    </>
   )
 }
