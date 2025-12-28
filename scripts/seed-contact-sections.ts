@@ -11,8 +11,8 @@ dotenv.config({ path: path.join(__dirname, '../.env.local') })
 
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
+const supabaseServiceKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('❌ Missing Supabase environment variables')
@@ -56,15 +56,15 @@ async function seedContactSections() {
   // Check if sections already exist
   const { data: existingSections } = await adminClient
     .from('sections')
-    .select('component_type')
+    .select('section_type')
     .eq('page_id', contactPageId)
 
-  const existingTypes = new Set(existingSections?.map(s => s.component_type) || [])
+  const existingTypes = new Set(existingSections?.map(s => s.section_type) || [])
   console.log(`📊 Existing sections: ${existingTypes.size > 0 ? Array.from(existingTypes).join(', ') : 'None'}\n`)
 
   const sections = [
     {
-      component_type: 'contact-hero',
+      section_type: 'contact-hero',
       order_index: 0,
       content: {
         title: 'Get in Touch',
@@ -77,7 +77,7 @@ async function seedContactSections() {
       published: true,
     },
     {
-      component_type: 'contact-info',
+      section_type: 'contact-info',
       order_index: 1,
       content: {
         title: 'Contact Information',
@@ -105,7 +105,7 @@ async function seedContactSections() {
       published: true,
     },
     {
-      component_type: 'contact-info-details',
+      section_type: 'contact-info-details',
       order_index: 2,
       content: {
         title: 'Let\'s Connect',
@@ -141,8 +141,8 @@ async function seedContactSections() {
   let errors = 0
 
   for (const section of sections) {
-    if (existingTypes.has(section.component_type)) {
-      console.log(`⏭️  Skipping ${section.component_type} (already exists)`)
+    if (existingTypes.has(section.section_type)) {
+      console.log(`⏭️  Skipping ${section.section_type} (already exists)`)
       skipped++
       continue
     }
@@ -156,14 +156,14 @@ async function seedContactSections() {
         })
 
       if (error) {
-        console.error(`❌ Failed to create ${section.component_type}:`, error.message)
+        console.error(`❌ Failed to create ${section.section_type}:`, error.message)
         errors++
       } else {
-        console.log(`✅ Created ${section.component_type}`)
+        console.log(`✅ Created ${section.section_type}`)
         created++
       }
     } catch (error: any) {
-      console.error(`❌ Error creating ${section.component_type}:`, error.message)
+      console.error(`❌ Error creating ${section.section_type}:`, error.message)
       errors++
     }
   }

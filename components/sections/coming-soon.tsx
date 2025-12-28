@@ -123,7 +123,7 @@ export default function ComingSoon({ data }: ComingSoonProps = {}) {
                 >
                   <div className="relative h-6 w-6 flex items-center justify-center shrink-0">
                     <Image
-                      src={isDark ? "/images/brand-logo/apple-dark.png" : "/images/brand-logo/apple.png"}
+                      src={isDark ? getStorageUrl("brand-assets", "brand-logo/apple-dark.png") : getStorageUrl("brand-assets", "brand-logo/apple.png")}
                       alt="Apple logo"
                       width={24}
                       height={24}
@@ -143,7 +143,7 @@ export default function ComingSoon({ data }: ComingSoonProps = {}) {
                 >
                   <div className="relative h-6 w-6 flex items-center justify-center shrink-0">
                     <Image
-                      src={isDark ? "/images/brand-logo/android-dark.png" : "/images/brand-logo/android.png"}
+                      src={isDark ? getStorageUrl("brand-assets", "brand-logo/android-dark.png") : getStorageUrl("brand-assets", "brand-logo/android.png")}
                       alt="Android logo"
                       width={24}
                       height={24}

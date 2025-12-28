@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server"
  */
 export function getStorageUrl(bucket: string, path: string): string {
   // Use environment variable that's available on both client and server
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
   if (!supabaseUrl) {
     console.error('NEXT_PUBLIC_SUPABASE_URL is not defined')
     return ''

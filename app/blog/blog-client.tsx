@@ -66,7 +66,9 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
     // Assume it's a storage path
     if (imagePath.includes('/')) {
       const [bucket, ...rest] = imagePath.split('/');
-      return getStorageUrl(bucket, rest.join('/'));
+      if (bucket) {
+        return getStorageUrl(bucket, rest.join('/'));
+      }
     }
     return getStorageUrl("blog-images", imagePath);
   };

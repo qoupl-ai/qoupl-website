@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { getStorageUrl } from '@/lib/supabase/storage-url';
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -77,7 +78,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           {/* Grey version - using grayscale filter */}
           <div className={`relative w-full h-full ${isDark ? 'opacity-10' : 'opacity-25'}`}>
             <Image
-              src="/images/quoupl.svg"
+              src={getStorageUrl("brand-assets", "quoupl.svg")}
               alt="qoupl"
               fill
               className="object-contain"
@@ -105,7 +106,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           >
             <div className="relative w-full h-full">
               <Image
-                src="/images/quoupl.svg"
+                src={getStorageUrl("brand-assets", "quoupl.svg")}
                 alt="qoupl"
                 fill
                 className="object-contain"

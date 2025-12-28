@@ -172,7 +172,7 @@ export default function AppDownload({ data }: AppDownloadProps = {}) {
                       <div className="relative h-5 w-5 flex items-center justify-center">
                         {mounted && (
                           <Image
-                            src={isDark ? "/images/brand-logo/apple-dark.png" : "/images/brand-logo/apple.png"}
+                            src={isDark ? getStorageUrl("brand-assets", "brand-logo/apple-dark.png") : getStorageUrl("brand-assets", "brand-logo/apple.png")}
                             alt="Apple logo"
                             width={20}
                             height={20}
@@ -191,7 +191,7 @@ export default function AppDownload({ data }: AppDownloadProps = {}) {
                       <div className="relative h-5 w-5 flex items-center justify-center">
                         {mounted && (
                           <Image
-                            src={isDark ? "/images/brand-logo/android-dark.png" : "/images/brand-logo/android.png"}
+                            src={isDark ? getStorageUrl("brand-assets", "brand-logo/android-dark.png") : getStorageUrl("brand-assets", "brand-logo/android.png")}
                             alt="Android logo"
                             width={20}
                             height={20}

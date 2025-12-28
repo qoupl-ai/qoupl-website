@@ -24,15 +24,22 @@ export default async function FAQ() {
 
   // Transform sections data to FAQ format
   const faqs = sections
-    .filter(section => section.component_type === 'faq-category')
+    .filter(section => section.section_type === 'faq-category')
     .map(section => {
-      const categoryId = section.content.category_id || 'general'
+      const content = section.content as Record<string, unknown>
+      const categoryId = (typeof content['category_id'] === 'string' ? content['category_id'] : 'general')
+      const faqsArray = Array.isArray(content['faqs']) ? content['faqs'] : []
       return {
         category: categoryNameMap[categoryId] || categoryId,
-        questions: (section.content.faqs || []).map((faq: any) => ({
-          q: faq.question || faq.q,
-          a: faq.answer || faq.a,
-        })),
+        questions: faqsArray.map((faq: unknown) => {
+          const faqObj = faq as Record<string, unknown>
+          return {
+            q: (typeof faqObj['question'] === 'string' ? faqObj['question'] : null) || 
+               (typeof faqObj['q'] === 'string' ? faqObj['q'] : ''),
+            a: (typeof faqObj['answer'] === 'string' ? faqObj['answer'] : null) || 
+               (typeof faqObj['a'] === 'string' ? faqObj['a'] : ''),
+          }
+        }),
       }
     })
 

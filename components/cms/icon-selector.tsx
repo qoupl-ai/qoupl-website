@@ -74,7 +74,7 @@ export function IconSelector({ value, onChange, label = 'Icon' }: IconSelectorPr
         const exportValue = (LucideIcons as any)[name]
         
         // Must be a function (React component) and start with uppercase
-        if (typeof exportValue === 'function' && name[0] === name[0].toUpperCase() && name.length > 0) {
+        if (typeof exportValue === 'function' && name.length > 0 && name[0] === name[0]?.toUpperCase()) {
           // If it ends with "Icon", extract base name
           if (name.endsWith('Icon')) {
             const baseName = name.slice(0, -4)

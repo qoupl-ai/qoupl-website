@@ -31,7 +31,7 @@ export async function assertAdmin() {
   // Verify admin access via admin_users table
   const { data: adminUser, error: adminError } = await supabase
     .from('admin_users')
-    .select('id, user_id, email, name, is_active')
+    .select('id, user_id, email, name, is_active, created_at, updated_at')
     .eq('user_id', user.id)
     .eq('is_active', true)
     .single()

@@ -6,39 +6,7 @@ import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-// Fallback images
-const defaultGalleryImages = [
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_01.jpg'),
-    alt: "Happy couple outdoors",
-    title: "Sarah & Raj",
-    story: "Met through qoupl, now planning their future together"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_02.jpg'),
-    alt: "Couple enjoying time together",
-    title: "Priya & Arjun",
-    story: "Found love in unexpected places"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_05.jpg'),
-    alt: "Romantic moment",
-    title: "Anjali & Vikram",
-    story: "Book lovers united by their passion"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_03.jpg'),
-    alt: "Couple smiling",
-    title: "Neha & Karan",
-    story: "Perfect match from day one"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_04.jpg'),
-    alt: "Dating couple",
-    title: "Maya & Rohan",
-    story: "Adventure seekers finding love together"
-  },
-];
+// No hardcoded defaults - all content must come from database
 
 interface GalleryProps {
   data?: {
@@ -62,37 +30,61 @@ interface GalleryProps {
 }
 
 export default function Gallery({ data }: GalleryProps = {}) {
-  // Process images from data or use defaults
-  const galleryImages = data?.images?.map(item => {
-    let src = item.image;
-    // If path includes bucket, use as is, otherwise construct URL
-    if (!src.startsWith('http') && !src.startsWith('/')) {
-      if (src.includes('/')) {
-        const [bucket, ...rest] = src.split('/');
-        src = getStorageUrl(bucket, rest.join('/'));
-      } else {
-        src = getStorageUrl('couple-photos', src);
-      }
-    }
-    return {
-      src,
-      alt: item.alt || item.title || "Couple photo",
-      title: item.title || "",
-      story: item.story || ""
-    };
-  }) || defaultGalleryImages;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
+  // Process images from data only - no defaults
+  const galleryImages = (data?.images && Array.isArray(data.images) && data.images.length > 0)
+    ? data.images.map(item => {
+        if (!item.image) {
+          return {
+            src: '',
+            alt: item.alt || item.title || "Gallery image",
+            title: item.title || "",
+            story: item.story || ""
+          };
+        }
+        let src: string = item.image;
+        if (!src.startsWith('http') && !src.startsWith('/')) {
+          if (src.includes('/')) {
+            const [bucket, ...rest] = src.split('/');
+            if (bucket) {
+              src = getStorageUrl(bucket, rest.join('/'));
+            }
+          } else {
+            src = getStorageUrl('couple-photos', src);
+          }
+        }
+        return {
+          src,
+          alt: item.alt || item.title || "Gallery image",
+          title: item.title || "",
+          story: item.story || ""
+        };
+      })
+    : [];
+
   // Auto-play carousel
   useEffect(() => {
+    if (galleryImages.length === 0) return;
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % galleryImages.length);
     }, 4000); // Change every 4 seconds
 
     return () => clearInterval(timer);
-  }, [currentIndex]);
+  }, [currentIndex, galleryImages.length]);
+
+  // All content must come from database - no hardcoded fallbacks
+  if (galleryImages.length === 0) {
+    return (
+      <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-muted-foreground">Gallery content not available. Please add content in CMS.</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">

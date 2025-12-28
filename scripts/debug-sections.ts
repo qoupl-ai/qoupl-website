@@ -23,13 +23,13 @@ async function debug() {
     
     const { data: sections } = await adminClient
       .from('sections')
-      .select('id, component_type, published, order_index')
+      .select('id, section_type, published, order_index')
       .eq('page_id', page.id)
       .order('order_index')
     
     if (sections && sections.length > 0) {
       sections.forEach((s: any) => {
-        console.log(`  - ${s.component_type} (published: ${s.published}, order: ${s.order_index})`)
+        console.log(`  - ${s.section_type} (published: ${s.published}, order: ${s.order_index})`)
       })
     } else {
       console.log('  - No sections')

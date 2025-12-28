@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Palette } from 'lucide-react'
 
 // Predefined color options
 const colorOptions = [

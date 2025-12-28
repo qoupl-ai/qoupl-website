@@ -33,7 +33,7 @@ async function addHeroImages() {
       .from('sections')
       .select('*')
       .eq('page_id', homePage.id)
-      .eq('component_type', 'hero')
+      .eq('section_type', 'hero')
       .single()
 
     if (sectionError || !heroSection) {

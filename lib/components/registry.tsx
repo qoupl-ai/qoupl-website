@@ -1,85 +1,64 @@
 /**
  * Component Registry
  * 
- * Maps section types to React components.
+ * Maps section types to React components using the contracts system.
  * This enables dynamic rendering of sections based on database content.
+ * 
+ * All rendering happens server-side in Next.js App Router.
  */
 
-import dynamic from 'next/dynamic'
+import { getSectionContract } from '@/contracts/registry'
+import type { Section } from '@/types/section'
 
-// Import section components (lazy-loaded for performance)
-const HeroSection = dynamic(() => import('@/components/sections/animated-hero'), {
-  ssr: true,
-})
-
-const HowItWorksSection = dynamic(() => import('@/components/sections/how-it-works'), {
-  ssr: true,
-})
-
-const ProductFeaturesSection = dynamic(() => import('@/components/sections/product-features'), {
-  ssr: true,
-})
-
-const GallerySection = dynamic(() => import('@/components/sections/gallery'), {
-  ssr: true,
-})
-
-const TestimonialsSection = dynamic(() => import('@/components/sections/testimonials'), {
-  ssr: true,
-})
-
-const AppDownloadSection = dynamic(() => import('@/components/sections/app-download'), {
-  ssr: true,
-})
-
-const ComingSoonSection = dynamic(() => import('@/components/sections/coming-soon'), {
-  ssr: true,
-})
-
-// Type definition for section data
-export interface SectionData {
-  id: string
-  component_type: string
-  order_index: number
-  content: Record<string, any>
-  published: boolean
-}
-
-// Component registry mapping
-const componentRegistry: Record<
-  string,
-  React.ComponentType<{ data: Record<string, any> }>
-> = {
-  'hero': HeroSection,
-  'how-it-works': HowItWorksSection,
-  'product-features': ProductFeaturesSection,
-  'gallery': GallerySection,
-  'testimonials': TestimonialsSection,
-  'app-download': AppDownloadSection,
-  'coming-soon': ComingSoonSection,
-  // Add more section types as needed
-}
+// Type definition for section data (matches DB Section type)
+export type SectionData = Section
 
 /**
- * Get component for a section type
+ * Get component for a section type from contracts
+ * Returns the renderer component which is already wrapped for SSR
  */
 export function getSectionComponent(type: string) {
-  return componentRegistry[type] || null
+  const contract = getSectionContract(type)
+  if (!contract) {
+    return null
+  }
+  // Return the renderer component from the contract
+  // All renderers are wrapped for server-side rendering
+  return contract.renderer
 }
 
 /**
  * Render a section dynamically based on its type
+ * This is a server component - all data is fetched server-side
  */
 export function SectionRenderer({ section }: { section: SectionData }) {
-  const Component = getSectionComponent(section.component_type)
+  const sectionType = section.section_type
 
-  if (!Component) {
-    console.warn(`Unknown section type: ${section.component_type}`)
+  if (!sectionType) {
+    console.error('Section missing section_type field:', section)
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="bg-muted p-4 rounded-lg">
           <p className="text-sm text-muted-foreground">
-            Unknown section type: <code>{section.component_type}</code>
+            Section missing section_type field. Please ensure database migration has been run.
+          </p>
+          <pre className="mt-2 text-xs overflow-auto">
+            {JSON.stringify(section, null, 2)}
+          </pre>
+        </div>
+      </div>
+    )
+  }
+
+  const Component = getSectionComponent(sectionType)
+
+  if (!Component) {
+    console.warn(`Unknown section type: ${sectionType}`)
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-muted p-4 rounded-lg">
+          <p className="text-sm text-muted-foreground">
+            Unknown section type: <code>{sectionType}</code>
           </p>
           <pre className="mt-2 text-xs overflow-auto">
             {JSON.stringify(section.content, null, 2)}
@@ -89,28 +68,28 @@ export function SectionRenderer({ section }: { section: SectionData }) {
     )
   }
 
-  // Pass data prop (components will use it when updated, fallback to hardcoded for now)
-  // Components currently have hardcoded content but accept data prop for future updates
-  // When components are updated to use data prop, they will automatically use database content
+  // Render component with data - all components support SSR via dynamic imports
   return <Component data={section.content} />
 }
 
 /**
  * Render multiple sections in order
+ * Server component - all data is pre-fetched server-side
  */
 export function SectionsRenderer({ sections }: { sections: SectionData[] }) {
+  // Sort sections by order_index
   const sortedSections = [...sections].sort(
     (a, b) => a.order_index - b.order_index
   )
 
+  // Filter to only published sections
+  const publishedSections = sortedSections.filter((s) => s.published)
+
   return (
     <>
-      {sortedSections
-        .filter((s) => s.published)
-        .map((section) => (
-          <SectionRenderer key={section.id} section={section} />
-        ))}
+      {publishedSections.map((section) => (
+        <SectionRenderer key={section.id} section={section} />
+      ))}
     </>
   )
 }
-

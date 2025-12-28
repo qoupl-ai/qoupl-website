@@ -25,7 +25,6 @@ import {
   GripVertical, 
   Sparkles, 
   Layout, 
-  Users, 
   Image as ImageIcon, 
   MessageSquare, 
   HelpCircle, 
@@ -37,24 +36,41 @@ import {
   FileText,
   Smartphone,
   Calendar,
-  Info
+  Info,
+  MoreVertical,
+  Trash2,
+  Eye,
+  History
 } from 'lucide-react'
 import SectionEditorButton from '@/components/cms/section-editor-button'
+import { SectionPreviewDialog } from '@/components/cms/section-preview-dialog'
+import { SectionRollbackDialog } from '@/components/cms/section-rollback-dialog'
+import { DeleteSectionDialog } from '@/components/cms/delete-section-dialog'
 import { reorderSections } from '@/app/actions/section-actions'
 import { toast } from 'sonner'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { AlertTriangle } from 'lucide-react'
+import { getSectionContract } from '@/contracts/registry'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 interface Section {
   id: string
-  component_type: string
+  page_id: string
+  section_type: string
   order_index: number
   content: any
   published: boolean
+  created_at: string
+  updated_at: string
+  created_by: string | null
+  updated_by: string | null
 }
 
 interface SortableSectionsListProps {
   sections: Section[]
   pageId: string
   pageSlug: string
+  pageTitle?: string
 }
 
 // Icon mapping for section types
@@ -84,31 +100,118 @@ const getSectionIcon = (componentType: string) => {
   return iconMap[componentType] || Layout
 }
 
-// User-friendly section type names
+// Get user-friendly section type name from contract metadata
 const getSectionTypeName = (componentType: string): string => {
-  const typeNames: Record<string, string> = {
-    'hero': 'Hero Section',
-    'how-it-works': 'How It Works',
-    'product-features': 'Product Features',
-    'gallery': 'Image Gallery',
-    'testimonials': 'Testimonials',
-    'app-download': 'App Download',
-    'coming-soon': 'Coming Soon',
-    'faq-category': 'FAQ Category',
-    'feature-category': 'Feature Category',
-    'pricing-plans': 'Pricing Plans',
-    'pricing-hero': 'Pricing Hero',
-    'free-messages': 'Free Messages',
-    'message-bundles': 'Message Bundles',
-    'pricing-info': 'Pricing Info',
-    'pricing-faq': 'Pricing FAQ',
-    'values': 'Values',
-    'timeline': 'Timeline',
-    'why-join': 'Why Join',
-    'content': 'Content Block',
-    'blog-post': 'Blog Post',
+  const contract = getSectionContract(componentType)
+  if (contract?.metadata?.label) {
+    return contract.metadata.label
   }
-  return typeNames[componentType] || componentType
+  // Fallback to formatted component type
+  return componentType
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
+// Helper to get section title for display
+const getSectionTitleFromContent = (section: Section): string => {
+  const content = section.content || {}
+  if (content.title) return content.title
+  if (content.name) return content.name
+  if (content.heading) return content.heading
+  return getSectionTypeName(section.section_type)
+}
+
+// Icon-only Preview Button
+function IconOnlyPreviewButton({ section }: { section: Section }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => setOpen(true)}
+        className="h-8 w-8 cms-text-secondary hover:cms-text-primary"
+        title="Preview section"
+      >
+        <Eye className="h-4 w-4" strokeWidth={1.5} />
+      </Button>
+      <SectionPreviewDialog
+        section={section}
+        open={open}
+        onOpenChange={setOpen}
+      />
+    </>
+  )
+}
+
+// Icon-only History Button
+function IconOnlyHistoryButton({ sectionId }: { sectionId: string }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => setOpen(true)}
+        className="h-8 w-8 cms-text-secondary hover:cms-text-primary"
+        title="View history"
+      >
+        <History className="h-4 w-4" strokeWidth={1.5} />
+      </Button>
+      <SectionRollbackDialog
+        sectionId={sectionId}
+        open={open}
+        onOpenChange={setOpen}
+      />
+    </>
+  )
+}
+
+// Section Actions Menu Component
+function SectionActionsMenu({ section, pageId: _pageId }: { section: Section; pageId: string }) {
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  return (
+    <>
+      <Popover open={menuOpen} onOpenChange={setMenuOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 cms-text-secondary hover:cms-text-primary"
+            title="More actions"
+          >
+            <MoreVertical className="h-4 w-4" strokeWidth={1.5} />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-48 p-1 cms-card cms-border border" align="end">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20"
+            onClick={() => {
+              setDeleteOpen(true)
+              setMenuOpen(false)
+            }}
+          >
+            <Trash2 className="mr-2 h-4 w-4" strokeWidth={1.5} />
+            Delete Section
+          </Button>
+        </PopoverContent>
+      </Popover>
+      
+      <DeleteSectionDialog
+        sectionId={section.id}
+        sectionTitle={getSectionTitleFromContent(section)}
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+      />
+    </>
+  )
 }
 
 function SortableSectionItem({ section, pageId }: { section: Section; pageId: string }) {
@@ -129,7 +232,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
   }
 
   const content = section.content || {}
-  const SectionIcon = getSectionIcon(section.component_type)
+  const SectionIcon = getSectionIcon(section.section_type)
   
   // Generate a descriptive title based on section type and content
   const getSectionTitle = (): string => {
@@ -139,7 +242,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
     if (content.heading) return content.heading
     
     // For values section, show the actual value titles
-    if (section.component_type === 'values' && content.values && content.values.length > 0) {
+    if (section.section_type === 'values' && content.values && content.values.length > 0) {
       const valueTitles = content.values
         .slice(0, 3)
         .map((v: any) => v.title)
@@ -155,7 +258,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
     }
     
     // For steps (how-it-works), show step titles
-    if (section.component_type === 'how-it-works' && content.steps && content.steps.length > 0) {
+    if (section.section_type === 'how-it-works' && content.steps && content.steps.length > 0) {
       const stepTitles = content.steps
         .slice(0, 2)
         .map((s: any) => s.title)
@@ -167,7 +270,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
     }
     
     // For features, show feature titles
-    if (section.component_type === 'product-features' && content.features && content.features.length > 0) {
+    if (section.section_type === 'product-features' && content.features && content.features.length > 0) {
       const featureTitles = content.features
         .slice(0, 2)
         .map((f: any) => f.title)
@@ -179,7 +282,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
     }
     
     // For FAQs, show question previews
-    if (section.component_type === 'faq-category' && content.faqs && content.faqs.length > 0) {
+    if (section.section_type === 'faq-category' && content.faqs && content.faqs.length > 0) {
       const firstQuestion = content.faqs[0]?.question
       if (firstQuestion) {
         const truncated = firstQuestion.length > 40 ? firstQuestion.substring(0, 40) + '...' : firstQuestion
@@ -189,7 +292,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
     }
     
     // For testimonials, show names
-    if (section.component_type === 'testimonials' && content.testimonials && content.testimonials.length > 0) {
+    if (section.section_type === 'testimonials' && content.testimonials && content.testimonials.length > 0) {
       const names = content.testimonials
         .slice(0, 2)
         .map((t: any) => t.name)
@@ -201,7 +304,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
     }
     
     // For pricing plans, show plan names
-    if (section.component_type === 'pricing-plans' && content.plans && content.plans.length > 0) {
+    if (section.section_type === 'pricing-plans' && content.plans && content.plans.length > 0) {
       const planNames = content.plans
         .slice(0, 2)
         .map((p: any) => p.name)
@@ -213,12 +316,12 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
     }
     
     // For gallery, show image count
-    if (section.component_type === 'gallery' && content.images && content.images.length > 0) {
+    if (section.section_type === 'gallery' && content.images && content.images.length > 0) {
       return `${content.images.length} Images`
     }
     
     // Default to section type name
-    return getSectionTypeName(section.component_type)
+    return getSectionTypeName(section.section_type)
   }
   
   const sectionTitle = getSectionTitle()
@@ -256,7 +359,13 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
                 {sectionTitle}
               </CardTitle>
               <CardDescription className="text-xs flex items-center gap-2 flex-wrap cms-text-secondary">
-                <span className="flex items-center gap-1.5">
+                <span
+                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium"
+                  style={{
+                    backgroundColor: section.published ? '#10b98115' : '#6b728015',
+                    color: section.published ? '#10b981' : '#6b7280',
+                  }}
+                >
                   <span style={{ 
                     display: 'inline-block',
                     width: '6px',
@@ -267,23 +376,32 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
                   {section.published ? 'Published' : 'Draft'}
                 </span>
                 <span>•</span>
-                <span className="flex items-center gap-1">
-                  <span style={{ color: '#662D91' }}>#{section.order_index + 1}</span>
-                  <span className="text-[10px] cms-text-secondary">in order</span>
+                <span className="text-[10px] cms-text-secondary">
+                  {getSectionTypeName(section.section_type)}
                 </span>
                 <span>•</span>
                 <span className="text-[10px] cms-text-secondary">
-                  {getSectionTypeName(section.component_type)}
+                  Position #{section.order_index + 1}
                 </span>
               </CardDescription>
             </div>
 
-            {/* Edit Button */}
-            <div className="shrink-0">
+            {/* Action Buttons */}
+            <div className="shrink-0 flex items-center gap-2">
+              {/* Primary Action: Edit */}
               <SectionEditorButton
                 pageId={pageId}
                 section={section}
               />
+              
+              {/* Secondary Actions: Preview and History (icon-only) */}
+              <div className="flex items-center gap-1 border-l cms-border pl-2 ml-1">
+                <IconOnlyPreviewButton section={section} />
+                <IconOnlyHistoryButton sectionId={section.id} />
+              </div>
+              
+              {/* Destructive Actions Menu */}
+              <SectionActionsMenu section={section} pageId={pageId} />
             </div>
           </div>
         </CardHeader>
@@ -293,7 +411,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               const content = section.content || {}
               
               // Hero section
-              if (section.component_type === 'hero') {
+              if (section.section_type === 'hero') {
                 return (
                   <>
                     {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
@@ -307,7 +425,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // Values section
-              if (section.component_type === 'values') {
+              if (section.section_type === 'values') {
                 if (!content.values || content.values.length === 0) {
                   return <p className="cms-text-secondary">No values added yet</p>
                 }
@@ -333,7 +451,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // How it works
-              if (section.component_type === 'how-it-works') {
+              if (section.section_type === 'how-it-works') {
                 return (
                   <>
                     {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
@@ -348,7 +466,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // Product features
-              if (section.component_type === 'product-features') {
+              if (section.section_type === 'product-features') {
                 return (
                   <>
                     {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
@@ -363,7 +481,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // Gallery
-              if (section.component_type === 'gallery') {
+              if (section.section_type === 'gallery') {
                 return (
                   <>
                     {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
@@ -378,7 +496,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // Testimonials
-              if (section.component_type === 'testimonials') {
+              if (section.section_type === 'testimonials') {
                 return (
                   <>
                     {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
@@ -393,7 +511,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // FAQ category
-              if (section.component_type === 'faq-category') {
+              if (section.section_type === 'faq-category') {
                 return (
                   <>
                     {content.faqs?.length > 0 && (
@@ -407,7 +525,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // Feature category
-              if (section.component_type === 'feature-category') {
+              if (section.section_type === 'feature-category') {
                 return (
                   <>
                     {content.features?.length > 0 && (
@@ -421,7 +539,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // Pricing plans
-              if (section.component_type === 'pricing-plans') {
+              if (section.section_type === 'pricing-plans') {
                 return (
                   <>
                     {content.plans?.length > 0 && (
@@ -435,7 +553,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // Timeline
-              if (section.component_type === 'timeline') {
+              if (section.section_type === 'timeline') {
                 return (
                   <>
                     {content.timeline?.length > 0 && (
@@ -449,7 +567,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // Why join
-              if (section.component_type === 'why-join') {
+              if (section.section_type === 'why-join') {
                 return (
                   <>
                     {content.items?.length > 0 && (
@@ -463,7 +581,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // App download / Coming soon
-              if (section.component_type === 'app-download' || section.component_type === 'coming-soon') {
+              if (section.section_type === 'app-download' || section.section_type === 'coming-soon') {
                 return (
                   <>
                     {content.title && <p className="mb-1"><strong className="cms-text-primary">Title:</strong> {content.title}</p>}
@@ -478,7 +596,7 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
               }
               
               // Content section
-              if (section.component_type === 'content') {
+              if (section.section_type === 'content') {
                 const keys = Object.keys(content)
                 return (
                   <>
@@ -508,9 +626,10 @@ function SortableSectionItem({ section, pageId }: { section: Section; pageId: st
   )
 }
 
-export default function SortableSectionsList({ sections: initialSections, pageId, pageSlug }: SortableSectionsListProps) {
+export default function SortableSectionsList({ sections: initialSections, pageId, pageSlug, pageTitle: _pageTitle }: SortableSectionsListProps) {
+  const isGlobalPage = pageSlug === '__global__'
   const router = useRouter()
-  const [isPending, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
   const [sections, setSections] = useState(initialSections)
   const [mounted, setMounted] = useState(false)
   
@@ -545,7 +664,7 @@ export default function SortableSectionsList({ sections: initialSections, pageId
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <CardTitle className="flex items-center gap-2 text-base cms-text-primary">
-                    {section.component_type}
+                    {section.section_type}
                   </CardTitle>
                   <CardDescription className="mt-1 text-xs cms-text-secondary">
                     Order: {section.order_index} •{' '}
@@ -602,25 +721,39 @@ export default function SortableSectionsList({ sections: initialSections, pageId
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={sections.map((s) => s.id)}
-        strategy={verticalListSortingStrategy}
+    <div className="space-y-4">
+      {isGlobalPage && (
+        <Alert variant="destructive" className="cms-card cms-border">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle className="cms-text-primary" style={{ fontWeight: '600', fontSize: '14px' }}>
+            Global Page Warning
+          </AlertTitle>
+          <AlertDescription className="cms-text-secondary" style={{ fontSize: '13px' }}>
+            Changes to sections on this page affect the entire website. Be careful when editing navbar, footer, or other global content.
+          </AlertDescription>
+        </Alert>
+      )}
+      
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
       >
-        <div className="space-y-4">
-          {sections.map((section) => (
-            <SortableSectionItem
-              key={section.id}
-              section={section}
-              pageId={pageId}
-            />
-          ))}
-        </div>
-      </SortableContext>
-    </DndContext>
+        <SortableContext
+          items={sections.map((s) => s.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-4">
+            {sections.map((section) => (
+              <SortableSectionItem
+                key={section.id}
+                section={section}
+                pageId={pageId}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+    </div>
   )
 }

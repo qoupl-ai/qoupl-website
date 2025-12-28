@@ -11,8 +11,8 @@ export default async function TermsOfService() {
   const sections = await getPageSections('terms')
 
   // Find content section
-  const contentSection = sections.find(s => s.component_type === 'content')
-  const content = contentSection?.content || {}
+  const contentSection = sections.find(s => s.section_type === 'content')
+  const content = (contentSection?.content || {}) as { title?: string; lastUpdated?: string; sections?: unknown[] }
 
   return <TermsClient content={content} />
 }

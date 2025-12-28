@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { getStorageUrl } from '@/lib/supabase/storage-url'
@@ -50,22 +51,31 @@ export function ImageUploadField({
     // If it's a storage path like "hero-images/image.png" or "hero-images/women/image.png", convert it
     if (trimmedPath.includes('/')) {
       const parts = trimmedPath.split('/').filter(p => p) // Remove empty parts
+      if (parts.length === 0) return ''
+      
       // Check if first part is a bucket name
-      const possibleBucket = parts[0]
+      const possibleBucket = parts[0] ?? ''
       // Common bucket names
-      const buckets = ['hero-images', 'blog-images', 'couple-photos', 'app-screenshots', 'user-uploads']
-      if (buckets.includes(possibleBucket) && parts.length > 1) {
+      const buckets = ['hero-images', 'blog-images', 'couple-photos', 'app-screenshots', 'user-uploads', 'brand-assets']
+      if (possibleBucket && buckets.includes(possibleBucket) && parts.length > 1) {
         // Path format: "bucket/path/to/file.png"
-        return getStorageUrl(possibleBucket, parts.slice(1).join('/'))
+        const imagePath = parts.slice(1).join('/')
+        const url = getStorageUrl(possibleBucket, imagePath)
+        console.log('ImageUploadField: Converting path', { original: trimmedPath, bucket: possibleBucket, imagePath, url })
+        return url
       }
       // If path doesn't start with a bucket name, use the provided bucket prop
       // BUT: if the path starts with /, we should have caught it above
       // This is a fallback for paths that don't start with / and aren't bucket paths
-      return getStorageUrl(bucket, trimmedPath)
+      const url = getStorageUrl(bucket, trimmedPath)
+      console.log('ImageUploadField: Using provided bucket', { original: trimmedPath, bucket, url })
+      return url
     }
     
     // If it's just a filename, assume it's in the default bucket
-    return getStorageUrl(bucket, trimmedPath)
+    const url = getStorageUrl(bucket, trimmedPath)
+    console.log('ImageUploadField: Using default bucket for filename', { original: trimmedPath, bucket, url })
+    return url
   }
 
   // Update preview when value changes (for existing images)
@@ -206,8 +216,7 @@ export function ImageUploadField({
               value={manualPath}
               onChange={(e) => setManualPath(e.target.value)}
               placeholder="/images/quoupl.svg or storage path"
-              className="flex-1"
-              className="cms-card cms-border cms-text-primary"
+              className="flex-1 cms-card cms-border cms-text-primary"
               style={{
                 fontSize: '13px',
               }}
@@ -230,8 +239,7 @@ export function ImageUploadField({
                 setShowManualInput(false)
                 setManualPath(value || '')
               }}
-              className="h-8 px-3"
-              className="cms-text-secondary"
+              className="h-8 px-3 cms-text-secondary"
             >
               Cancel
             </Button>
@@ -251,7 +259,7 @@ export function ImageUploadField({
                   fill
                   className="object-contain"
                   unoptimized
-                  onError={(e) => {
+                  onError={() => {
                     // Only show error for storage URLs, not static paths
                     if (!preview.startsWith('/')) {
                       console.error('Failed to load image:', preview)

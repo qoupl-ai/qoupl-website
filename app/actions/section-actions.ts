@@ -19,16 +19,17 @@ export interface SectionData {
   page_id: string
   type: string
   order_index: number
-  data: Record<string, any>
+  data: Record<string, unknown>
   published: boolean
 }
 
 export interface CreateSectionInput extends SectionData {}
 
 export interface UpdateSectionInput {
+  id?: string
   type?: string
   order_index?: number
-  data?: Record<string, any>
+  content?: Record<string, unknown>
   published?: boolean
 }
 
@@ -49,7 +50,7 @@ export async function createSection(input: CreateSectionInput) {
 
   const { error } = await supabase.from('sections').insert({
     page_id: input.page_id,
-    component_type: input.type,
+    section_type: input.type,
     order_index: input.order_index,
     content: input.data,
     published: input.published,
@@ -80,13 +81,17 @@ export async function createSection(input: CreateSectionInput) {
 /**
  * Update an existing section
  */
-export async function updateSection(id: string, input: UpdateSectionInput) {
+export async function updateSection(input: UpdateSectionInput) {
   // Assert admin access
   await assertAdmin()
 
-  // Validate section data if type or data is being updated
-  if (input.type && input.data) {
-    const validation = validateSectionData(input.type, input.data)
+  if (!input.id) {
+    throw new Error('Section ID is required for update')
+  }
+
+  // Validate section data if type or content is being updated
+  if (input.type && input.content) {
+    const validation = validateSectionData(input.type, input.content)
     if (!validation.success) {
       throw new Error(`Validation failed: ${validation.error}`)
     }
@@ -94,19 +99,25 @@ export async function updateSection(id: string, input: UpdateSectionInput) {
 
   const supabase = await createClient()
 
-  const updateData: any = {
+  const updateData: {
+    updated_at: string
+    section_type?: string
+    order_index?: number
+    content?: Record<string, unknown>
+    published?: boolean
+  } = {
     updated_at: new Date().toISOString(),
   }
 
-  if (input.type !== undefined) updateData.component_type = input.type
+  if (input.type !== undefined) updateData.section_type = input.type
   if (input.order_index !== undefined) updateData.order_index = input.order_index
-  if (input.data !== undefined) updateData.content = input.data
+  if (input.content !== undefined) updateData.content = input.content
   if (input.published !== undefined) updateData.published = input.published
 
   const { error, data } = await supabase
     .from('sections')
     .update(updateData)
-    .eq('id', id)
+    .eq('id', input.id)
     .select('page_id')
     .single()
 
@@ -214,3 +225,93 @@ export async function reorderSections(pageId: string, sectionIds: string[]) {
   }
 }
 
+/**
+ * Get content history for a section (for rollback)
+ */
+export async function getSectionHistory(sectionId: string) {
+  await assertAdmin()
+
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('content_history')
+    .select('*')
+    .eq('entity_type', 'sections')
+    .eq('entity_id', sectionId)
+    .order('performed_at', { ascending: false })
+    .limit(20)
+
+  if (error) {
+    throw new Error(`Failed to fetch history: ${error.message}`)
+  }
+
+  return data || []
+}
+
+/**
+ * Rollback section to a previous version from history
+ */
+export async function rollbackSection(sectionId: string, historyId: string) {
+  await assertAdmin()
+
+  const supabase = await createClient()
+
+  // Get the history snapshot
+  const { data: history, error: historyError } = await supabase
+    .from('content_history')
+    .select('snapshot')
+    .eq('id', historyId)
+    .eq('entity_type', 'sections')
+    .eq('entity_id', sectionId)
+    .single()
+
+  if (historyError || !history) {
+    throw new Error('History record not found')
+  }
+
+  const snapshot = history.snapshot as any
+
+  if (!snapshot || !snapshot.content) {
+    throw new Error('Invalid snapshot data')
+  }
+
+  // Restore section from snapshot
+  const { error: updateError } = await supabase
+    .from('sections')
+    .update({
+      content: snapshot.content,
+      section_type: snapshot.section_type,
+      order_index: snapshot.order_index,
+      published: snapshot.published,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', sectionId)
+
+  if (updateError) {
+    throw new Error(`Failed to rollback section: ${updateError.message}`)
+  }
+
+  // Get page_id for revalidation
+  const { data: section } = await supabase
+    .from('sections')
+    .select('page_id')
+    .eq('id', sectionId)
+    .single()
+
+  // Revalidate relevant paths
+  revalidatePath('/add-content')
+  if (section?.page_id) {
+    revalidatePath(`/add-content/pages/${section.page_id}`)
+    
+    const { data: page } = await supabase
+      .from('pages')
+      .select('slug')
+      .eq('id', section.page_id)
+      .single()
+    
+    if (page?.slug) {
+      const frontendPath = page.slug === 'home' ? '/' : `/${page.slug}`
+      revalidatePath(frontendPath)
+    }
+  }
+}

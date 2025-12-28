@@ -24,10 +24,11 @@ export default async function BlogPage() {
     .order('name', { ascending: true })
 
   // Normalize category data - ensure it's always an object, not an array
-  const normalizedPosts = (posts || []).map((post: any) => {
-    const category = Array.isArray(post.category) ? post.category[0] : post.category
+  const normalizedPosts = (posts || []).map((post: unknown) => {
+    const postObj = post as Record<string, unknown>
+    const category = Array.isArray(postObj['category']) ? postObj['category'][0] : postObj['category']
     return {
-      ...post,
+      ...postObj,
       category: category || null
     }
   })

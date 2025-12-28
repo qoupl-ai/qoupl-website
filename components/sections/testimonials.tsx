@@ -5,33 +5,7 @@ import Image from "next/image";
 import { Heart, Quote, Star } from "lucide-react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-// Fallback testimonials
-const defaultTestimonials = [
-  {
-    name: "Arjun",
-    image: getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
-    text: "We matched on qoupl during beta testing and instantly connected. Three months later, we're inseparable!",
-    location: "Mumbai, Maharashtra",
-    rating: 5,
-    date: "Beta User",
-  },
-  {
-    name: "Ananya",
-    image: getStorageUrl("hero-images", "women/qoupl_women_03.png"),
-    text: "Being part of the beta program was amazing! The matching algorithm really works and I can't wait for everyone to experience it.",
-    location: "Bangalore, Karnataka",
-    rating: 4,
-    date: "Beta User",
-  },
-  {
-    name: "Kavya",
-    image: getStorageUrl("hero-images", "women/qoupl_women_05.png"),
-    text: "Found my soulmate during the beta phase. qoupl changed my life forever and I'm excited for the public launch!",
-    location: "Delhi, India",
-    rating: 4,
-    date: "Beta User",
-  },
-];
+// No hardcoded defaults - all content must come from database
 
 interface TestimonialsProps {
   data?: {
@@ -57,26 +31,39 @@ interface TestimonialsProps {
 }
 
 export default function Testimonials({ data }: TestimonialsProps = {}) {
-  // Process testimonials from data or use defaults
-  const testimonials = data?.testimonials?.map(item => {
+  // All content must come from database - no hardcoded fallbacks
+  if (!data || !data.testimonials || !Array.isArray(data.testimonials) || data.testimonials.length === 0) {
+    return (
+      <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-muted-foreground">Testimonials content not available. Please add content in CMS.</p>
+        </div>
+      </section>
+    )
+  }
+
+  // Process testimonials from data only - no defaults
+  const testimonials = data.testimonials.map(item => {
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
       if (imageUrl.includes('/')) {
         const [bucket, ...rest] = imageUrl.split('/');
-        imageUrl = getStorageUrl(bucket, rest.join('/'));
+        if (bucket) {
+          imageUrl = getStorageUrl(bucket, rest.join('/'));
+        }
       } else {
         imageUrl = getStorageUrl("hero-images", imageUrl);
       }
     }
     return {
       name: item.name,
-      image: imageUrl || getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
+      image: imageUrl,
       text: item.text,
       location: item.location || "",
       rating: item.rating || 5,
       date: item.date || "",
     };
-  }) || defaultTestimonials;
+  });
   return (
     <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
       {/* Animated Background Blobs */}
@@ -141,7 +128,7 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
               <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl">
                 {/* Background Image */}
                 <Image
-                  src={testimonial.image}
+                  src={testimonial.image || '/placeholder.png'}
                   alt={testimonial.name}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-110"

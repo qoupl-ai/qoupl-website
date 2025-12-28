@@ -9,8 +9,9 @@ import { createClient } from '@/lib/supabase/server'
 import { assertAdmin } from '@/lib/auth/assert-admin'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { FileText, Eye, EyeOff } from 'lucide-react'
+import { FileText, Eye, EyeOff, Info } from 'lucide-react'
 import Link from 'next/link'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 export default async function PagesPage() {
   await assertAdmin()
@@ -74,9 +75,18 @@ export default async function PagesPage() {
           <h1 className="text-3xl font-semibold mb-2 cms-text-primary">
             Pages
           </h1>
-          <p className="text-sm cms-text-secondary">
-            Manage all website pages and their sections
+          <p className="text-sm cms-text-secondary mb-4">
+            Manage predefined website pages and their sections.
           </p>
+          <Alert className="cms-card cms-border border-blue-400/50 bg-blue-50/50 dark:bg-blue-950/20">
+            <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <AlertTitle className="cms-text-primary" style={{ fontSize: '14px', fontWeight: '600' }}>
+              Predefined Pages
+            </AlertTitle>
+            <AlertDescription className="cms-text-secondary" style={{ fontSize: '13px' }}>
+              All pages are predefined and cannot be created or deleted. You can edit page content, reorder sections, and manage publish status.
+            </AlertDescription>
+          </Alert>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

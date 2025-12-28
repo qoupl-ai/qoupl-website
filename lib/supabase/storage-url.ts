@@ -4,7 +4,7 @@
  * Safe to import in client components
  */
 export function getStorageUrl(bucket: string, path: string): string {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
 
   if (!supabaseUrl) {
     console.error('NEXT_PUBLIC_SUPABASE_URL is not defined')
@@ -12,4 +12,21 @@ export function getStorageUrl(bucket: string, path: string): string {
   }
 
   return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`
+}
+
+/**
+ * Get full public URL for structured data (SEO, Open Graph, etc.)
+ * Returns absolute URL with domain
+ */
+export function getStorageUrlAbsolute(bucket: string, path: string): string {
+  const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
+
+  if (!supabaseUrl) {
+    console.error('NEXT_PUBLIC_SUPABASE_URL is not defined')
+    return ''
+  }
+
+  // Extract domain from Supabase URL or use default
+  const url = new URL(supabaseUrl)
+  return `${url.protocol}//${url.host}/storage/v1/object/public/${bucket}/${path}`
 }

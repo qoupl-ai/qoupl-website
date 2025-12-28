@@ -11,8 +11,17 @@ export default async function Features() {
   const sections = await getPageSections('features')
 
   // Find feature categories section
-  const featuresSection = sections.find(s => s.component_type === 'feature-category')
-  const categories = featuresSection?.content?.features || []
+  const featuresSection = sections.find(s => s.section_type === 'feature-category')
+  const content = featuresSection?.content as { features?: Array<{
+    id?: string;
+    title: string;
+    icon?: string;
+    color?: string;
+    image?: string;
+    coupleImage?: string;
+    features?: Array<{ id?: string; title: string; description: string }>;
+  }> } | undefined
+  const categories = content?.features || []
 
   return <FeaturesClient categories={categories} />
 }

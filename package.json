@@ -11,17 +11,11 @@
     "setup:storage": "ts-node --project tsconfig.node.json scripts/setup-storage.ts",
     "upload:images": "ts-node --project tsconfig.node.json scripts/upload-images.ts",
     "seed:content": "ts-node --project tsconfig.node.json scripts/seed-content.ts",
-    "migrate:content": "ts-node --project tsconfig.node.json scripts/migrate-content-to-supabase.ts",
-    "migrate:legacy": "ts-node --project tsconfig.node.json scripts/migrate-legacy-to-sections.ts",
-    "migrate:pages": "ts-node --project tsconfig.node.json scripts/migrate-all-pages-content.ts",
-    "migrate:content-pages": "ts-node --project tsconfig.node.json scripts/migrate-all-content-pages.ts",
-    "populate:content": "ts-node --project tsconfig.node.json scripts/populate-content-pages.ts",
-    "ensure:pages": "ts-node --project tsconfig.node.json scripts/ensure-all-pages.ts",
-    "cleanup:legacy": "ts-node --project tsconfig.node.json scripts/cleanup-legacy-code.ts",
-    "populate:legal": "ts-node --project tsconfig.node.json scripts/populate-legal-content.ts",
     "seed:pricing": "ts-node --project tsconfig.node.json scripts/seed-pricing-sections.ts",
     "seed:contact": "ts-node --project tsconfig.node.json scripts/seed-contact-sections.ts",
-    "setup:all": "npm run setup:storage && npm run upload:images && npm run seed:content"
+    "setup:all": "npm run setup:storage && npm run upload:images && npm run seed:content",
+    "replace:images": "ts-node --project tsconfig.node.json scripts/replace-local-image-references.ts",
+    "remove:local-images": "ts-node --project tsconfig.node.json scripts/remove-local-images.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

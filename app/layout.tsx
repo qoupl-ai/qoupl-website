@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, DM_Sans, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { getStorageUrl } from '@/lib/supabase/storage-url';
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,9 +24,6 @@ const sourceCodePro = Source_Code_Pro({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://qoupl.ai'),
-  other: {
-    'google-fonts': 'https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap',
-  },
   title: {
     default: 'qoupl - Be couple with qoupl | Dating App for College Students',
     template: '%s | qoupl'
@@ -143,7 +141,7 @@ export const metadata: Metadata = {
     siteName: 'qoupl',
     images: [
       {
-        url: '/og-image.svg',
+        url: getStorageUrl("brand-assets", "og-image.svg"),
         width: 1200,
         height: 630,
         alt: 'qoupl - Find Your Perfect Match',
@@ -154,7 +152,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'qoupl - Be couple with qoupl | Dating App for College Students',
     description: 'qoupl (couple, coupl) - Best college dating app for students aged 18-25. Find your match on campus with AI-powered matching and verified student profiles.',
-    images: ['/og-image.svg'],
+    images: [getStorageUrl("brand-assets", "og-image.svg")],
     creator: '@qoupl',
   },
   robots: {

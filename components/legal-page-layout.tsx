@@ -2,10 +2,6 @@
 
 import { motion } from "framer-motion";
 import { 
-  Shield, 
-  FileText, 
-  Users, 
-  AlertTriangle,
   CheckCircle2,
   XCircle,
   AlertCircle,

@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState, Suspense } from 'react'
 import Image from 'next/image'
+import { getStorageUrl } from '@/lib/supabase/storage-url';
 
 function LoginContent() {
   const router = useRouter()
@@ -204,7 +205,7 @@ function LoginContent() {
         <div className="mb-10 text-center">
           <div className="flex justify-center mb-4">
             <Image
-              src="/images/quoupl.svg"
+              src={getStorageUrl("brand-assets", "quoupl.svg")}
               alt="qoupl"
               width={120}
               height={40}
@@ -244,13 +245,6 @@ function LoginContent() {
                     anchorTextColor: '#662D91',
                     anchorTextHoverColor: '#8B3DB8',
                   },
-                  dark: {
-                    colors: {
-                      inputBackground: '#171717',
-                      inputBorder: '#2a2a2a',
-                      inputText: '#ffffff',
-                    },
-                  },
                   space: {
                     spaceSmall: '0.5rem',
                     spaceMedium: '1rem',
@@ -263,8 +257,8 @@ function LoginContent() {
                   },
                   radii: {
                     borderRadiusButton: '0.5rem',
-                    borderRadiusInput: '0.5rem',
-                    borderRadiusLabel: '0.5rem',
+                    inputBorderRadius: '0.5rem',
+                    buttonBorderRadius: '0.5rem',
                   },
                 },
               },

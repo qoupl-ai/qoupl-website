@@ -15,7 +15,7 @@ export interface PageData {
   slug: string
   title: string
   description?: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
   published: boolean
 }
 
@@ -24,7 +24,7 @@ export interface CreatePageInput extends PageData {}
 export interface UpdatePageInput {
   title?: string
   description?: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
   published?: boolean
 }
 
@@ -62,7 +62,13 @@ export async function updatePage(slug: string, input: UpdatePageInput) {
 
   const supabase = await createClient()
 
-  const updateData: any = {
+  const updateData: {
+    updated_at: string
+    title?: string
+    description?: string
+    metadata?: Record<string, unknown>
+    published?: boolean
+  } = {
     updated_at: new Date().toISOString(),
   }
 

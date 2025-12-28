@@ -13,6 +13,7 @@ interface PricingPlan {
   features: string[];
   is_popular?: boolean;
   order_index?: number;
+  description?: string;
 }
 
 interface PricingClientProps {
@@ -82,7 +83,7 @@ export default function PricingClient({
   const price = calculatePrice(messageBundle);
 
   // Get features from first plan
-  const features = plans.length > 0 && plans[0].features?.length > 0 
+  const features = plans.length > 0 && plans[0]?.features && plans[0].features.length > 0 
     ? plans[0].features 
     : [];
 
@@ -167,10 +168,10 @@ export default function PricingClient({
                 </div>
 
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                  {plans.length > 0 ? plans[0].name || "Platform Access" : "Platform Access"}
+                  {plans.length > 0 && plans[0] ? plans[0].name || "Platform Access" : "Platform Access"}
                 </h2>
 
-                {plans.length > 0 && (
+                {plans.length > 0 && plans[0] && (
                   <div className="flex items-baseline justify-center gap-2 mb-4">
                     <span className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                       ₹{plans[0].price}
@@ -180,7 +181,7 @@ export default function PricingClient({
                 )}
 
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  {plans.length > 0 && plans[0].description ? plans[0].description : "Get access to the qoupl platform and unlock all features"}
+                  {plans.length > 0 && plans[0]?.description ? plans[0].description : "Get access to the qoupl platform and unlock all features"}
                 </p>
               </div>
 

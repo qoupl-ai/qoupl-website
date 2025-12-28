@@ -1,4 +1,4 @@
-import React from 'react';
+import { getStorageUrlAbsolute } from '@/lib/supabase/storage-url';
 
 interface StructuredDataProps {
   data: Record<string, any>;
@@ -20,7 +20,7 @@ export const organizationSchema = {
   name: 'qoupl',
   alternateName: ['qoupl Dating App', 'coupl', 'couple', 'qouple', 'qoupl app', 'college dating app qoupl'],
   url: 'https://qoupl.ai',
-  logo: 'https://qoupl.ai/images/quoupl.svg',
+  logo: getStorageUrlAbsolute("brand-assets", "quoupl.svg"),
   description: 'qoupl (also known as coupl, couple, qouple) - Be couple with qoupl. The exclusive dating and matchmaking app for college students and university students aged 18-25. Find your perfect match, boyfriend, or girlfriend on campus through AI-powered matching, verified student profiles, and safe campus dating. Best college dating app for students.',
   foundingDate: '2024',
   sameAs: [
@@ -120,7 +120,7 @@ export function generateArticleSchema(article: {
     '@type': 'Article',
     headline: article.headline,
     description: article.description,
-    image: article.image || 'https://qoupl.ai/og-image.svg',
+    image: article.image || getStorageUrlAbsolute("brand-assets", "og-image.svg"),
     datePublished: article.datePublished,
     dateModified: article.dateModified,
     author: {
@@ -132,7 +132,7 @@ export function generateArticleSchema(article: {
       name: 'qoupl',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://qoupl.ai/images/quoupl.svg',
+        url: getStorageUrlAbsolute("brand-assets", "quoupl.svg"),
       },
     },
   };

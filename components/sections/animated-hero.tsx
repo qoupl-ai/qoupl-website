@@ -8,28 +8,7 @@ import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { useState, useEffect, useRef } from "react";
 import WaitlistModal from "@/components/waitlist-modal";
 
-// Fallback images if data not provided
-const defaultWomenImages = [
-  getStorageUrl("hero-images", "women/qoupl_women_03.png"),
-  getStorageUrl("hero-images", "women/qoupl_women_05.png"),
-  getStorageUrl("hero-images", "women/qoupl_women_01.png"),
-  getStorageUrl("hero-images", "women/qoupl_women_02.png"),
-  getStorageUrl("hero-images", "women/qoupl_women_04.png"),
-  getStorageUrl("hero-images", "women/qoupl_women_06.png"),
-  getStorageUrl("hero-images", "women/qoupl_women_07.png"),
-  getStorageUrl("hero-images", "women/qoupl_women_08.png"),
-  getStorageUrl("hero-images", "women/qoupl_women_09.png"),
-  getStorageUrl("hero-images", "women/qoupl_women_10.png"),
-];
-
-const defaultMenImages = [
-  getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
-  getStorageUrl("hero-images", "men/qoupl_men_02.jpg"),
-  getStorageUrl("hero-images", "men/qoupl_men_03.jpg"),
-  getStorageUrl("hero-images", "men/qoupl_men_04.jpg"),
-  getStorageUrl("hero-images", "men/qoupl_men_05.jpg"),
-  getStorageUrl("hero-images", "men/qoupl_men_06.jpg"),
-];
+// No hardcoded defaults - all content must come from database
 
 // Modern 2025 Floating Cards with Magnetic Effect
 interface ModernFloatingCardsProps {
@@ -56,25 +35,28 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
   }, []);
 
   // Generate particle positions only on client side to avoid hydration mismatch
+  // Using requestAnimationFrame to defer state updates and avoid cascading renders
   useEffect(() => {
-    setIsMounted(true);
-    const positions = Array.from({ length: 8 }, (_, i) => ({
-      initialX: Math.random() * 100 - 50,
-      initialY: Math.random() * 100 - 50,
-      animateX: [
-        Math.random() * 200 - 100,
-        Math.random() * 300 - 150,
-        Math.random() * 200 - 100,
-      ],
-      animateY: [
-        Math.random() * 200 - 100,
-        Math.random() * 300 - 150,
-        Math.random() * 200 - 100,
-      ],
-      duration: 4 + Math.random() * 2,
-      delay: i * 0.5,
-    }));
-    setParticlePositions(positions);
+    requestAnimationFrame(() => {
+      const positions = Array.from({ length: 8 }, (_, i) => ({
+        initialX: Math.random() * 100 - 50,
+        initialY: Math.random() * 100 - 50,
+        animateX: [
+          Math.random() * 200 - 100,
+          Math.random() * 300 - 150,
+          Math.random() * 200 - 100,
+        ],
+        animateY: [
+          Math.random() * 200 - 100,
+          Math.random() * 300 - 150,
+          Math.random() * 200 - 100,
+        ],
+        duration: 4 + Math.random() * 2,
+        delay: i * 0.5,
+      }));
+      setParticlePositions(positions);
+      setIsMounted(true);
+    });
   }, []);
 
   // Mouse tracking for magnetic effect - only on desktop
@@ -329,34 +311,49 @@ interface AnimatedHeroProps {
 export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
 
-  // Use data from props or fallback to defaults
-  const title = data?.title || 'qoupl';
-  const tagline = data?.tagline || 'Be couple with qoupl';
-  const subtitle = data?.subtitle || 'Find your vibe. Match your energy. Connect for real.';
-  const ctaText = data?.cta?.text || data?.cta?.buttonText || 'Join the Waitlist';
-  const ctaSubtext = data?.cta?.subtext || '⚡ Limited spots for early access';
-  const ctaBadge = data?.cta?.badge || 'Free';
+  // All content must come from database - no hardcoded fallbacks
+  if (!data || !data.title) {
+    return (
+      <section className="relative min-h-screen w-full flex items-center justify-center bg-background">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-muted-foreground">Hero section content not available. Please add content in CMS.</p>
+        </div>
+      </section>
+    )
+  }
 
-  // Process images from data or use defaults
-  const womenImages = data?.images?.women?.map(path => {
-    // If path includes bucket, use as is, otherwise construct URL
+  const title = data.title
+  const tagline = data.tagline || ''
+  const subtitle = data.subtitle || ''
+  const ctaText = data.cta?.text || data.cta?.buttonText || ''
+  const ctaSubtext = data.cta?.subtext || ''
+  const ctaBadge = data.cta?.badge || ''
+
+  // Process images from data only - no defaults
+  const womenImages = (data.images?.women || []).map(path => {
+    if (!path) return '';
     if (path.includes('/')) {
       const [bucket, ...rest] = path.split('/');
-      return getStorageUrl(bucket, rest.join('/'));
+      if (bucket) {
+        return getStorageUrl(bucket, rest.join('/'));
+      }
     }
     return getStorageUrl("hero-images", path);
-  }) || defaultWomenImages;
+  })
 
-  const menImages = data?.images?.men?.map(path => {
+  const menImages = (data.images?.men || []).map(path => {
+    if (!path) return '';
     if (path.includes('/')) {
       const [bucket, ...rest] = path.split('/');
-      return getStorageUrl(bucket, rest.join('/'));
+      if (bucket) {
+        return getStorageUrl(bucket, rest.join('/'));
+      }
     }
     return getStorageUrl("hero-images", path);
-  }) || defaultMenImages;
+  })
 
   // Combined array: women + men images
-  const carouselImages = [...womenImages, ...menImages];
+  const carouselImages = [...womenImages, ...menImages]
 
   return (
     <section
@@ -467,7 +464,7 @@ export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex items-center justify-center lg:justify-end order-2 lg:order-2 w-full mt-4 md:mt-6 lg:mt-0 lg:-mt-16"
+            className="flex items-center justify-center lg:justify-end order-2 lg:order-2 w-full mt-4 md:mt-6 lg:-mt-16"
           >
             <ModernFloatingCards carouselImages={carouselImages} />
           </motion.div>
