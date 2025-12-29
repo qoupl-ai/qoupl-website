@@ -317,8 +317,7 @@ export function PricingDialog({ mode, plan, children }: PricingDialogProps) {
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => removeFeature(index)}
-                                className="h-7 w-7"
-                                className="cms-text-secondary"
+                                className="h-7 w-7 cms-text-secondary"
                               >
                                 <X className="h-3.5 w-3.5" />
                               </Button>

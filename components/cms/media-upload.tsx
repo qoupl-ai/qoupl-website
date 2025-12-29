@@ -118,8 +118,7 @@ export function MediaUpload() {
           Upload New Media
         </h3>
         <p 
-          className="text-sm"
-          className="cms-text-secondary"
+          className="text-sm cms-text-secondary"
         >
           Upload images to Supabase Storage
         </p>
@@ -152,8 +151,7 @@ export function MediaUpload() {
                     setSelectedFile(null)
                     if (fileInputRef.current) fileInputRef.current.value = ''
                   }}
-                  className="cms-text-secondary"
-                  className="hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
+                  className="cms-text-secondary hover:cms-text-primary hover:bg-[rgba(23,23,23,0.1)] dark:hover:bg-[#2a2a2a] dark:hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </Button>
