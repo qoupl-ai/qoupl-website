@@ -72,7 +72,7 @@ async function createTables() {
 
     // Test connection
     console.log('🔍 Testing Supabase connection...')
-    const { error } = await adminClient.from('pages').select('count')
+    const { data, error } = await adminClient.from('pages').select('count')
 
     if (error) {
       if (error.message.includes('relation') || error.message.includes('does not exist')) {

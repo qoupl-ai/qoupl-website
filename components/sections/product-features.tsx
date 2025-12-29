@@ -13,7 +13,51 @@ const iconMap: Record<string, any> = {
   Check,
 };
 
-// No hardcoded defaults - all content must come from database
+// Fallback features
+const defaultFeatures = [
+  {
+    icon: Heart,
+    title: "Smart AI Matching",
+    description:
+      "Our advanced AI algorithm analyzes compatibility factors including personality, interests, values, and lifestyle to suggest highly compatible matches tailored just for you.",
+    highlights: [
+      "Deep compatibility analysis",
+      "Personalized suggestions",
+      "Values-based matching",
+      "Learning preferences",
+    ],
+    image: getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
+    color: "bg-[#662D91]",
+  },
+  {
+    icon: Shield,
+    title: "Safe & Verified",
+    description:
+      "Multi-layered verification system with mandatory college ID verification, 24/7 AI moderation, photo verification, and encrypted messaging to keep college students safe while finding love.",
+    highlights: [
+      "College ID verification",
+      "Photo verification",
+      "24/7 AI moderation",
+      "Encrypted messaging",
+    ],
+    image: getStorageUrl("couple-photos", "qoupl_couple_02.jpg"),
+    color: "bg-[#662D91]",
+  },
+  {
+    icon: Zap,
+    title: "Instant Connections",
+    description:
+      "Connect with compatible matches instantly through our real-time matching system. Start meaningful conversations with smart conversation starters.",
+    highlights: [
+      "Real-time matching",
+      "Smart conversation starters",
+      "Meaningful connections",
+      "Instant notifications",
+    ],
+    image: getStorageUrl("couple-photos", "qoupl_couple_04.jpg"),
+    color: "bg-[#662D91]",
+  },
+];
 
 interface ProductFeaturesProps {
   data?: {
@@ -31,25 +75,14 @@ interface ProductFeaturesProps {
 }
 
 export default function ProductFeatures({ data }: ProductFeaturesProps = {}) {
-  // All content must come from database - no hardcoded fallbacks
-  if (!data || !data.features || !Array.isArray(data.features) || data.features.length === 0) {
-    return (
-      <section className="py-12 md:py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">Product features content not available. Please add content in CMS.</p>
-        </div>
-      </section>
-    )
-  }
-
-  // Process features from data only - no defaults
-  const features = data.features.map(item => {
+  // Process features from data or use defaults
+  const features = data?.features?.map(item => {
     const IconComponent = item.icon ? iconMap[item.icon] || Heart : Heart;
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
       if (imageUrl.includes('/')) {
         const [bucket, ...rest] = imageUrl.split('/');
-        imageUrl = getStorageUrl(bucket ?? 'couple-photos', rest.join('/'));
+        imageUrl = getStorageUrl(bucket, rest.join('/'));
       } else {
         imageUrl = getStorageUrl("couple-photos", imageUrl);
       }
@@ -59,10 +92,10 @@ export default function ProductFeatures({ data }: ProductFeaturesProps = {}) {
       title: item.title,
       description: item.description,
       highlights: item.highlights || [],
-      image: imageUrl,
+      image: imageUrl || getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
       color: item.color || "bg-[#662D91]",
     };
-  });
+  }) || defaultFeatures;
   return (
     <section className="py-12 md:py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
       {/* Background Blob */}
@@ -123,7 +156,7 @@ export default function ProductFeatures({ data }: ProductFeaturesProps = {}) {
                   {/* Background Image */}
                   <div className="absolute inset-0">
                     <Image
-                      src={feature.image || '/placeholder.png'}
+                      src={feature.image}
                       alt={feature.title}
                       fill
                       className="object-cover transition-all duration-700 group-hover:scale-110"

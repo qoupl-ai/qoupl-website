@@ -67,9 +67,9 @@ async function checkBuckets() {
   }
 
   console.log('\n\n🔗 Test URLs (open in browser):')
-  console.log(`${process.env['NEXT_PUBLIC_SUPABASE_URL']}/storage/v1/object/public/couple-photos/qoupl_couple_01.jpg`)
-  console.log(`${process.env['NEXT_PUBLIC_SUPABASE_URL']}/storage/v1/object/public/hero-images/women/qoupl_women_01.png`)
-  console.log(`${process.env['NEXT_PUBLIC_SUPABASE_URL']}/storage/v1/object/public/app-screenshots/qoupl_screenshot_01.png`)
+  console.log(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/couple-photos/qoupl_couple_01.jpg`)
+  console.log(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/hero-images/women/qoupl_women_01.png`)
+  console.log(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/app-screenshots/qoupl_screenshot_01.png`)
 }
 
 checkBuckets()

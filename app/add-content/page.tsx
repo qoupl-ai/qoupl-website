@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { FileText, MessageSquare, Sparkles, DollarSign, Image as ImageIcon, Users, Home, Navigation, Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react'
+import { FileText, MessageSquare, Sparkles, DollarSign, Image as ImageIcon, Users } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
@@ -24,24 +24,6 @@ export default async function CMSDashboard() {
     supabase.from('waitlist_signups').select('*', { count: 'exact', head: true }),
   ])
 
-  // Get publishing status - count published vs draft sections
-  const { data: allSections } = await supabase
-    .from('sections')
-    .select('published')
-  
-  const publishedSections = (allSections || []).filter(s => s.published === true).length
-  const draftSections = (allSections || []).filter(s => s.published === false).length
-  const totalSections = (allSections || []).length
-
-  // Get published vs draft pages
-  const { data: allPages } = await supabase
-    .from('pages')
-    .select('published')
-  
-  const publishedPages = (allPages || []).filter(p => p.published === true).length
-  const draftPages = (allPages || []).filter(p => p.published === false).length
-  const totalPages = (allPages || []).length
-
   // Get recent activity with entity details
   const { data: recentHistory } = await supabase
     .from('content_history')
@@ -52,7 +34,7 @@ export default async function CMSDashboard() {
   // Fetch entity details for each history entry
   const historyWithDetails = await Promise.all(
     (recentHistory || []).map(async (item) => {
-      let entityDetails: Record<string, unknown> | null = null
+      let entityDetails: any = null
       
       try {
         if (item.entity_type === 'sections') {
@@ -60,7 +42,7 @@ export default async function CMSDashboard() {
             .from('sections')
             .select(`
               id,
-              section_type,
+              component_type,
               content,
               page_id,
               pages!inner(slug, title)
@@ -75,12 +57,12 @@ export default async function CMSDashboard() {
             const sectionTitle = section.content?.title || 
                                 section.content?.name || 
                                 section.content?.heading ||
-                                section.section_type
+                                section.component_type
             
             entityDetails = {
               type: 'section',
               title: sectionTitle,
-              componentType: section.section_type,
+              componentType: section.component_type,
               pageTitle: pageTitle,
               pageSlug: pageSlug,
               content: section.content,
@@ -215,118 +197,6 @@ export default async function CMSDashboard() {
         </p>
       </div>
 
-      {/* Quick Actions - Large Task-Oriented Buttons */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Link href="/add-content/pages/home">
-          <Card className="transition-all cursor-pointer hover:opacity-80 cms-card cms-border border h-full">
-            <CardContent className="p-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-              <Home className="h-5 w-5 mb-4 cms-text-secondary" style={{ strokeWidth: 1.5 }} />
-              <h3 className="font-semibold text-base mb-1 cms-text-primary">Edit Homepage</h3>
-              <p className="text-xs cms-text-secondary">Manage homepage sections and content</p>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/add-content/global">
-          <Card className="transition-all cursor-pointer hover:opacity-80 cms-card cms-border border h-full">
-            <CardContent className="p-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-              <Navigation className="h-5 w-5 mb-4 cms-text-secondary" style={{ strokeWidth: 1.5 }} />
-              <h3 className="font-semibold text-base mb-1 cms-text-primary">Edit Navigation & Footer</h3>
-              <p className="text-xs cms-text-secondary">Update site-wide navigation and footer</p>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/add-content/blog">
-          <Card className="transition-all cursor-pointer hover:opacity-80 cms-card cms-border border h-full">
-            <CardContent className="p-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-              <FileText className="h-5 w-5 mb-4 cms-text-secondary" style={{ strokeWidth: 1.5 }} />
-              <h3 className="font-semibold text-base mb-1 cms-text-primary">Manage Blogs</h3>
-              <p className="text-xs cms-text-secondary">Create and edit blog posts</p>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/add-content/faqs">
-          <Card className="transition-all cursor-pointer hover:opacity-80 cms-card cms-border border h-full">
-            <CardContent className="p-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-              <MessageSquare className="h-5 w-5 mb-4 cms-text-secondary" style={{ strokeWidth: 1.5 }} />
-              <h3 className="font-semibold text-base mb-1 cms-text-primary">Manage FAQs</h3>
-              <p className="text-xs cms-text-secondary">Add and organize frequently asked questions</p>
-            </CardContent>
-          </Card>
-        </Link>
-      </div>
-
-      {/* Publishing Status Indicator */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {/* Pages Status Card */}
-        <Card className="cms-card cms-border border">
-          <CardContent className="p-5">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-2.5">
-                <FileText className="h-4 w-4 cms-text-secondary" style={{ strokeWidth: 1.5 }} />
-                <span className="text-sm font-semibold cms-text-primary">Pages</span>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold cms-text-primary">{totalPages}</div>
-                <div className="text-xs cms-text-secondary">total</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: '#10b981' }} />
-                <span className="text-xs cms-text-secondary">Published</span>
-              </div>
-              <span className="text-sm font-semibold cms-text-primary">{publishedPages}</span>
-              {draftPages > 0 && (
-                <>
-                  <span className="text-xs cms-text-tertiary">•</span>
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-2 w-2 rounded-full" style={{ backgroundColor: '#f59e0b' }} />
-                    <span className="text-xs cms-text-secondary">Draft</span>
-                  </div>
-                  <span className="text-sm font-semibold cms-text-primary">{draftPages}</span>
-                </>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Sections Status Card */}
-        <Card className="cms-card cms-border border">
-          <CardContent className="p-5">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-2.5">
-                <Sparkles className="h-4 w-4 cms-text-secondary" style={{ strokeWidth: 1.5 }} />
-                <span className="text-sm font-semibold cms-text-primary">Sections</span>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold cms-text-primary">{totalSections}</div>
-                <div className="text-xs cms-text-secondary">total</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: '#10b981' }} />
-                <span className="text-xs cms-text-secondary">Published</span>
-              </div>
-              <span className="text-sm font-semibold cms-text-primary">{publishedSections}</span>
-              {draftSections > 0 && (
-                <>
-                  <span className="text-xs cms-text-tertiary">•</span>
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-2 w-2 rounded-full" style={{ backgroundColor: '#f59e0b' }} />
-                    <span className="text-xs cms-text-secondary">Draft</span>
-                  </div>
-                  <span className="text-sm font-semibold cms-text-primary">{draftSections}</span>
-                </>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {stats.map((stat) => {
@@ -354,35 +224,22 @@ export default async function CMSDashboard() {
         })}
       </div>
 
-      {/* Recent Changes */}
-      <div>
-        <div className="mb-4">
-          <h2 className="text-base font-semibold cms-text-primary mb-1">Recent Changes</h2>
-          <p className="text-xs cms-text-secondary">Latest content updates and changes</p>
-        </div>
-        
-        {historyWithDetails && historyWithDetails.length > 0 ? (
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-3 top-0 bottom-0 w-px cms-border" />
-            
-            <div className="space-y-0">
+      {/* Recent Activity */}
+      <Card className="cms-card cms-border border">
+        <CardHeader>
+          <CardTitle className="cms-text-primary">Recent Activity</CardTitle>
+          <CardDescription className="cms-text-secondary">
+            Latest content updates and changes
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {historyWithDetails && historyWithDetails.length > 0 ? (
+            <div className="space-y-4">
               {historyWithDetails.map((item) => {
-                const getActionIcon = (action: string) => {
-                  switch (action) {
-                    case 'created': return Plus
-                    case 'updated': return Edit
-                    case 'deleted': return Trash2
-                    case 'published': return Eye
-                    case 'unpublished': return EyeOff
-                    default: return Edit
-                  }
-                }
-
                 const getActionColor = (action: string) => {
                   switch (action) {
                     case 'created': return '#10b981'
-                    case 'updated': return '#14b8a6'
+                    case 'updated': return '#3b82f6'
                     case 'deleted': return '#ef4444'
                     case 'published': return '#10b981'
                     case 'unpublished': return '#f59e0b'
@@ -394,126 +251,115 @@ export default async function CMSDashboard() {
                   const labels: Record<string, string> = {
                     'sections': 'Section',
                     'pages': 'Page',
-                    'blog_posts': 'Blog',
+                    'blog_posts': 'Blog Post',
                     'faqs': 'FAQ',
                     'features': 'Feature',
-                    'pricing_plans': 'Pricing',
+                    'pricing_plans': 'Pricing Plan',
                   }
                   return labels[entityType] || entityType
                 }
 
-                const ActionIcon = getActionIcon(item.action)
-                const actionColor = getActionColor(item.action)
-
                 return (
-                  <div key={item.id} className="relative flex gap-4 pb-5 last:pb-0">
-                    {/* Timeline dot */}
-                    <div className="relative z-10 flex-shrink-0">
-                      <ActionIcon 
-                        className="h-4 w-4" 
-                        style={{ color: actionColor }}
-                        strokeWidth={1.5}
-                      />
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 min-w-0 pt-0.5">
-                      <div className="flex items-start justify-between gap-3 mb-1.5">
-                        <div className="flex-1 min-w-0">
-                          {item.entityDetails ? (
-                            <>
-                              {item.entityDetails.type === 'section' && (
-                                <div>
-                                  <p className="font-medium text-sm cms-text-primary truncate">
-                                    {item.entityDetails.title || item.entityDetails.componentType}
-                                  </p>
-                                  <p className="text-xs cms-text-secondary mt-0.5">
-                                    <span className="font-medium">{getEntityTypeLabel(item.entity_type)}</span>
-                                    {' • '}
-                                    <span>{item.entityDetails.pageTitle || item.entityDetails.pageSlug}</span>
-                                  </p>
-                                </div>
-                              )}
-                              {item.entityDetails.type === 'page' && (
-                                <div>
-                                  <p className="font-medium text-sm cms-text-primary truncate">
-                                    {item.entityDetails.title}
-                                  </p>
-                                  <p className="text-xs cms-text-secondary mt-0.5">
-                                    <span className="font-medium">{getEntityTypeLabel(item.entity_type)}</span>
-                                    {' • '}
-                                    <span>{item.entityDetails.slug}</span>
-                                  </p>
-                                </div>
-                              )}
-                              {(item.entityDetails.type === 'blog_post' || 
-                                item.entityDetails.type === 'faq' || 
-                                item.entityDetails.type === 'feature' || 
-                                item.entityDetails.type === 'pricing_plan') && (
-                                <div>
-                                  <p className="font-medium text-sm cms-text-primary truncate">
-                                    {item.entityDetails.title}
-                                  </p>
-                                  <p className="text-xs cms-text-secondary mt-0.5">
-                                    <span className="font-medium">{getEntityTypeLabel(item.entity_type)}</span>
-                                  </p>
-                                </div>
-                              )}
-                            </>
-                          ) : (
-                            <div>
-                              <p className="font-medium text-sm cms-text-primary truncate">
-                                {getEntityTypeLabel(item.entity_type)}
-                              </p>
-                              <p className="text-xs cms-text-secondary mt-0.5">
-                                ID: {item.entity_id.slice(0, 8)}...
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                        
-                        <div className="flex-shrink-0 text-right">
+                  <div
+                    key={item.id}
+                    className="pb-4 last:pb-0 cms-border border-b"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
                           <span
-                            className="inline-block text-xs font-medium px-2 py-0.5 rounded"
+                            className="text-xs font-semibold px-2 py-0.5 rounded"
                             style={{
-                              backgroundColor: actionColor + '15',
-                              color: actionColor,
+                              backgroundColor: getActionColor(item.action) + '20',
+                              color: getActionColor(item.action),
                             }}
                           >
                             {item.action.charAt(0).toUpperCase() + item.action.slice(1)}
                           </span>
+                          <span className="text-xs px-2 py-0.5 rounded cms-card-bg cms-text-secondary">
+                            {getEntityTypeLabel(item.entity_type)}
+                          </span>
                         </div>
+                        
+                        {item.entityDetails ? (
+                          <div className="mt-2">
+                            {item.entityDetails.type === 'section' && (
+                              <>
+                                <p className="font-medium text-sm mb-1 cms-text-primary">
+                                  {item.entityDetails.title || item.entityDetails.componentType}
+                                </p>
+                                <p className="text-xs cms-text-secondary">
+                                  on <span style={{ color: '#662D91' }}>{item.entityDetails.pageTitle || item.entityDetails.pageSlug}</span> page
+                                </p>
+                                {item.entityDetails.componentType && (
+                                  <p className="text-xs mt-0.5 cms-text-tertiary">
+                                    Type: {item.entityDetails.componentType.replace(/-/g, ' ')}
+                                  </p>
+                                )}
+                              </>
+                            )}
+                            {item.entityDetails.type === 'page' && (
+                              <p className="font-medium text-sm cms-text-primary">
+                                {item.entityDetails.title} ({item.entityDetails.slug})
+                              </p>
+                            )}
+                            {item.entityDetails.type === 'blog_post' && (
+                              <p className="font-medium text-sm cms-text-primary">
+                                {item.entityDetails.title}
+                              </p>
+                            )}
+                            {item.entityDetails.type === 'faq' && (
+                              <p className="font-medium text-sm cms-text-primary">
+                                {item.entityDetails.title}
+                              </p>
+                            )}
+                            {item.entityDetails.type === 'feature' && (
+                              <p className="font-medium text-sm cms-text-primary">
+                                {item.entityDetails.title}
+                              </p>
+                            )}
+                            {item.entityDetails.type === 'pricing_plan' && (
+                              <p className="font-medium text-sm cms-text-primary">
+                                {item.entityDetails.title}
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <p className="text-sm mt-1 cms-text-secondary">
+                            {item.entity_type} (ID: {item.entity_id.slice(0, 8)}...)
+                          </p>
+                        )}
+                        
+                        <p className="text-xs mt-2 cms-text-tertiary">
+                          {new Date(item.performed_at).toLocaleString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </p>
                       </div>
-                      
-                      <p className="text-xs cms-text-tertiary">
-                        {new Date(item.performed_at).toLocaleString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </p>
                     </div>
                   </div>
                 )
               })}
+              <Link href="/add-content/history" className="mt-4 block">
+                <Button 
+                  variant="outline" 
+                  className="w-full h-10 cms-card cms-border cms-text-secondary"
+                >
+                  View All History
+                </Button>
+              </Link>
             </div>
-            
-            <Link href="/add-content/history" className="mt-4 block">
-              <Button 
-                variant="outline" 
-                className="w-full h-10 cms-card cms-border cms-text-secondary"
-              >
-                View All History
-              </Button>
-            </Link>
-          </div>
-        ) : (
-          <div className="text-center py-12 cms-card cms-border border rounded-lg">
-            <p className="text-sm cms-text-secondary">No recent activity to display</p>
-          </div>
-        )}
-      </div>
+          ) : (
+            <p className="text-sm cms-text-secondary">
+              No recent activity to display
+            </p>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Quick Actions */}
       <Card className="cms-card cms-border border">

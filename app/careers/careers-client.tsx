@@ -33,16 +33,10 @@ export default function CareersClient({ data }: CareersClientProps) {
   const whyJoin = whyJoinSection?.content?.items || [];
 
   // Process values to include icon components
-  const processedValues = values.map((item: unknown) => {
-    const itemObj = item as Record<string, unknown>
-    const iconName = itemObj['icon']
-    return {
-      ...itemObj,
-      icon: (typeof iconName === 'string' && iconName in iconMap) 
-        ? iconMap[iconName] 
-        : Heart,
-    }
-  });
+  const processedValues = values.map((item: any) => ({
+    ...item,
+    icon: item.icon ? iconMap[item.icon] || Heart : Heart,
+  }));
 
   return (
     <div className="min-h-screen bg-background">
@@ -204,9 +198,8 @@ export default function CareersClient({ data }: CareersClientProps) {
 
           {values.length > 0 && (
             <div className="grid md:grid-cols-2 gap-6">
-              {processedValues.map((value: Record<string, unknown>, index: number) => {
-              const Icon = value['icon'] as React.ComponentType<{ className?: string }> | undefined;
-              const color = typeof value['color'] === 'string' ? value['color'] : '';
+              {processedValues.map((value, index) => {
+              const Icon = value.icon;
               return (
                 <motion.div
                   key={index}
@@ -217,19 +210,19 @@ export default function CareersClient({ data }: CareersClientProps) {
                   whileHover={{ y: -8, scale: 1.02 }}
                   className="group relative"
                 >
-                  <div className={`absolute inset-0 ${color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+                  <div className={`absolute inset-0 ${value.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
 
                   <div className="relative h-full bg-card/50 backdrop-blur-sm border border-border rounded-2xl p-8 hover:border-primary/50 transition-all duration-300">
-                    <div className={`w-14 h-14 rounded-xl ${color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                      {Icon && <Icon className="h-7 w-7 text-white" />}
+                    <div className={`w-14 h-14 rounded-xl ${value.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                      <Icon className="h-7 w-7 text-white" />
                     </div>
 
                     <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
-                      {typeof value['title'] === 'string' ? value['title'] : ''}
+                      {value.title}
                     </h3>
 
                     <p className="text-muted-foreground leading-relaxed">
-                      {typeof value['description'] === 'string' ? value['description'] : ''}
+                      {value.description}
                     </p>
                   </div>
                 </motion.div>
@@ -261,25 +254,22 @@ export default function CareersClient({ data }: CareersClientProps) {
 
           {whyJoin.length > 0 && (
             <div className="grid md:grid-cols-3 gap-8">
-              {whyJoin.map((item: unknown, index: number) => {
-                const itemObj = item as Record<string, unknown>
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1, duration: 0.5 }}
-                    className="text-center p-6"
-                  >
-                    <div className="text-5xl mb-4">{typeof itemObj['icon'] === 'string' ? itemObj['icon'] : ''}</div>
-                    <h3 className="text-xl font-bold mb-3">{typeof itemObj['title'] === 'string' ? itemObj['title'] : ''}</h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {typeof itemObj['description'] === 'string' ? itemObj['description'] : ''}
-                    </p>
-                  </motion.div>
-                )
-              })}
+              {whyJoin.map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                className="text-center p-6"
+              >
+                <div className="text-5xl mb-4">{item.icon}</div>
+                <h3 className="text-xl font-bold mb-3">{item.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {item.description}
+                </p>
+              </motion.div>
+              ))}
             </div>
           )}
         </div>

@@ -32,9 +32,7 @@ export default async function Home() {
           <SectionsRenderer sections={sections} />
         ) : (
           <div className="container mx-auto px-4 py-32 text-center">
-            <p className="text-muted-foreground">
-              No content available. Please run the migration script to populate homepage content.
-            </p>
+            <p className="text-muted-foreground">No content available at this time.</p>
           </div>
         )}
         

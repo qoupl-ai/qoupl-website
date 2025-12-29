@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { X, Loader2, Image as ImageIcon, Plus, AlertCircle } from 'lucide-react'
+import { Upload, X, Loader2, Image as ImageIcon, Plus, AlertCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { getStorageUrl } from '@/lib/supabase/storage-url'
 
@@ -31,39 +31,25 @@ export function MultiImageUploadField({
   // Convert storage paths to full URLs
   const convertToUrl = (path: string): string => {
     if (!path) return ''
-    
-    // Trim whitespace
-    const trimmedPath = path.trim()
-    
     // If it's already a full URL, return as is
-    if (trimmedPath.startsWith('http://') || trimmedPath.startsWith('https://')) {
-      return trimmedPath
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path
     }
-    
     // If it's a storage path like "hero-images/women/image.png", convert it
-    if (trimmedPath.includes('/')) {
-      const parts = trimmedPath.split('/').filter(p => p) // Remove empty parts
-      if (parts.length === 0) return ''
-      
-      const possibleBucket = parts[0] ?? ''
+    if (path.includes('/')) {
+      const parts = path.split('/')
+      const possibleBucket = parts[0]
       // Common bucket names
-      const buckets = ['hero-images', 'blog-images', 'couple-photos', 'app-screenshots', 'user-uploads', 'brand-assets']
-      if (possibleBucket && buckets.includes(possibleBucket) && parts.length > 1) {
+      const buckets = ['hero-images', 'blog-images', 'couple-photos', 'app-screenshots', 'user-uploads']
+      if (buckets.includes(possibleBucket) && parts.length > 1) {
         // Path format: "bucket/path/to/file.png"
-        const imagePath = parts.slice(1).join('/')
-        const url = getStorageUrl(possibleBucket, imagePath)
-        console.log('MultiImageUploadField: Converting path', { original: trimmedPath, bucket: possibleBucket, imagePath, url })
-        return url
+        return getStorageUrl(possibleBucket, parts.slice(1).join('/'))
       }
       // If path doesn't start with a known bucket, assume it's just the path within the provided bucket
-      const url = getStorageUrl(bucket, trimmedPath)
-      console.log('MultiImageUploadField: Using provided bucket', { original: trimmedPath, bucket, url })
-      return url
+      return getStorageUrl(bucket, path)
     }
     // If it's just a filename, assume it's in the default bucket
-    const url = getStorageUrl(bucket, trimmedPath)
-    console.log('MultiImageUploadField: Using default bucket for filename', { original: trimmedPath, bucket, url })
-    return url
+    return getStorageUrl(bucket, path)
   }
 
   // Sync with value prop and convert paths to URLs
@@ -149,7 +135,7 @@ export function MultiImageUploadField({
         return v
       })
       
-      const updatedPaths = [...currentPaths, ...newPaths].filter((p): p is string => !!p)
+      const updatedPaths = [...currentPaths, ...newPaths]
       // Convert to URLs for display
       setImages(updatedPaths.map(convertToUrl))
       // Store as paths for database
@@ -175,7 +161,7 @@ export function MultiImageUploadField({
       }
       return v
     })
-    const updatedPaths = currentPaths.filter((_, i) => i !== index).filter((p): p is string => !!p)
+    const updatedPaths = currentPaths.filter((_, i) => i !== index)
     setImages(updatedPaths.map(convertToUrl))
     onChange(updatedPaths)
     toast.success('Image removed')
@@ -195,10 +181,8 @@ export function MultiImageUploadField({
       return v
     })
     
-    const updatedPaths = [...currentPaths].filter((p): p is string => !!p)
-    const temp = updatedPaths[index]
-    updatedPaths[index] = updatedPaths[newIndex]!
-    updatedPaths[newIndex] = temp!
+    const updatedPaths = [...currentPaths]
+    ;[updatedPaths[index], updatedPaths[newIndex]] = [updatedPaths[newIndex], updatedPaths[index]]
     setImages(updatedPaths.map(convertToUrl))
     onChange(updatedPaths)
   }

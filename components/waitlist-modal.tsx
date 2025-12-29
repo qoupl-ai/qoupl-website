@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { getStorageUrl } from '@/lib/supabase/storage-url';
 
 interface WaitlistModalProps {
   isOpen: boolean;
@@ -134,7 +133,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   {/* Logo Icon */}
                   <div className="flex items-center gap-3 mb-3 sm:mb-4">
                     <Image
-                      src={getStorageUrl("brand-assets", "quoupl.svg")}
+                      src="/images/quoupl.svg"
                       alt="qoupl"
                       width={40}
                       height={15}

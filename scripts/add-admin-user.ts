@@ -77,7 +77,7 @@ async function addAdminUser() {
       .insert({
         user_id: user.id,
         email: user.email,
-        name: user.user_metadata?.['full_name'] || user.email?.split('@')[0] || 'Admin',
+        name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Admin',
         is_active: true
       })
 

@@ -51,7 +51,7 @@ export default async function HistoryPage() {
             .from('sections')
             .select(`
               id,
-              section_type,
+              component_type,
               content,
               page_id,
               pages!inner(slug, title)
@@ -66,12 +66,12 @@ export default async function HistoryPage() {
             const sectionTitle = section.content?.title || 
                                 section.content?.name || 
                                 section.content?.heading ||
-                                section.section_type
+                                section.component_type
             
             entityDetails = {
               type: 'section',
               title: sectionTitle,
-              componentType: section.section_type,
+              componentType: section.component_type,
               pageTitle: pageTitle,
               pageSlug: pageSlug,
             }

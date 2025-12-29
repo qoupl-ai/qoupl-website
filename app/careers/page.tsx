@@ -13,7 +13,7 @@ export default async function Careers() {
   // Transform sections data
   const careersData = {
     sections: sections.map(section => ({
-      type: section.section_type,
+      type: section.component_type,
       content: section.content,
     })),
   }

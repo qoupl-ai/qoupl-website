@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 import {
   LayoutDashboard,
   FileText,
@@ -22,7 +23,6 @@ import { CMSThemeToggle } from './cms-theme-toggle'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import type { AdminUser } from '@/lib/supabase/types'
-import { getStorageUrl } from '@/lib/supabase/storage-url';
 
 interface CMSNavProps {
   user: User
@@ -80,8 +80,6 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
 
   // Close mode menu when clicking outside or when sidebar collapses
   useEffect(() => {
-    if (!showModeMenu) return
-
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
       if (!target.closest('[data-sidebar-mode-menu]')) {
@@ -89,8 +87,10 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    if (showModeMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [showModeMenu])
 
   // Close menu when sidebar collapses (if in hover mode)
@@ -102,8 +102,6 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
 
   // Close theme menu when clicking outside
   useEffect(() => {
-    if (!showThemeMenu) return
-
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
       if (!target.closest('[data-theme-menu]')) {
@@ -111,8 +109,10 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    if (showThemeMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [showThemeMenu])
 
   // Close theme menu when sidebar collapses (if in hover mode)
@@ -124,37 +124,34 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
 
   // Calculate theme menu position based on button position
   useEffect(() => {
-    if (!showThemeMenu || !themeButtonRef.current) {
+    if (showThemeMenu && themeButtonRef.current) {
+      const updatePosition = () => {
+        if (themeButtonRef.current) {
+          const buttonRect = themeButtonRef.current.getBoundingClientRect()
+          const menuHeight = 120 // Approximate height of menu (3 items × ~40px each)
+          setThemeMenuPosition({
+            top: buttonRect.top - menuHeight - 8, // Position above button with 8px gap
+            left: buttonRect.right + 8, // Position to the right of button
+          })
+        }
+      }
+      
+      // Use requestAnimationFrame to ensure DOM is updated
+      requestAnimationFrame(() => {
+        updatePosition()
+      })
+      
+      // Recalculate on window resize or scroll
+      window.addEventListener('resize', updatePosition)
+      window.addEventListener('scroll', updatePosition, true)
+      
+      return () => {
+        window.removeEventListener('resize', updatePosition)
+        window.removeEventListener('scroll', updatePosition, true)
+      }
+    } else if (!showThemeMenu) {
       // Reset position when menu is closed
-      if (!showThemeMenu) {
-        setThemeMenuPosition({ top: 0, left: 0 })
-      }
-      return
-    }
-    
-    const updatePosition = () => {
-      if (themeButtonRef.current) {
-        const buttonRect = themeButtonRef.current.getBoundingClientRect()
-        const menuHeight = 120 // Approximate height of menu (3 items × ~40px each)
-        setThemeMenuPosition({
-          top: buttonRect.top - menuHeight - 8, // Position above button with 8px gap
-          left: buttonRect.right + 8, // Position to the right of button
-        })
-      }
-    }
-    
-    // Use requestAnimationFrame to ensure DOM is updated
-    requestAnimationFrame(() => {
-      updatePosition()
-    })
-    
-    // Recalculate on window resize or scroll
-    window.addEventListener('resize', updatePosition)
-    window.addEventListener('scroll', updatePosition, true)
-    
-    return () => {
-      window.removeEventListener('resize', updatePosition)
-      window.removeEventListener('scroll', updatePosition, true)
+      setThemeMenuPosition({ top: 0, left: 0 })
     }
   }, [showThemeMenu, isExpanded])
 
@@ -187,7 +184,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
           <Link href="/add-content" className="flex items-center gap-2">
             <div className="relative h-7 w-auto">
               <Image
-                src={getStorageUrl("brand-assets", "quoupl.svg")}
+                src="/images/quoupl.svg"
                 alt="qoupl logo"
                 width={80}
                 height={28}
@@ -201,7 +198,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
           <Link href="/add-content" className="flex items-center justify-center w-full">
             <div className="relative h-7 w-7">
               <Image
-                src={getStorageUrl("brand-assets", "quoupl.svg")}
+                src="/images/quoupl.svg"
                 alt="qoupl logo"
                 width={28}
                 height={28}
@@ -373,6 +370,7 @@ export default function CMSNav({ user, adminUser }: CMSNavProps) {
                     const buttonRect = themeButtonRef.current.getBoundingClientRect()
                     const menuHeight = 120
                     const spaceAbove = buttonRect.top
+                    const spaceBelow = window.innerHeight - buttonRect.bottom
                     
                     // Position above button if there's enough space, otherwise below
                     if (spaceAbove >= menuHeight + 8) {

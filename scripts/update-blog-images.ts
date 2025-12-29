@@ -35,7 +35,7 @@ async function updateBlogImages() {
     console.log(`Found ${blogPosts.length} blog posts\n`)
 
     // Map old paths to new Supabase Storage URLs (using couple photos since blog-images bucket is empty)
-    const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const imageMapping: Record<string, string> = {
       '/images/indian-student-goes-first-lesson.jpg': `${supabaseUrl}/storage/v1/object/public/couple-photos/qoupl_couple_01.jpg`,
       '/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg': `${supabaseUrl}/storage/v1/object/public/couple-photos/qoupl_couple_01.jpg`,

@@ -38,10 +38,7 @@ export default function FooterClient({ footerContent, socialLinks }: FooterClien
             <div className="flex gap-4">
               {socialLinksArray.map((socialLink, index) => {
                 // Safely get the icon component
-                const IconComponent = 
-                  (socialLink.icon in LucideIcons 
-                    ? (LucideIcons as unknown as Record<string, React.ComponentType>)[socialLink.icon]
-                    : null) || LucideIcons.Globe
+                const IconComponent = (LucideIcons as any)[socialLink.icon] || LucideIcons.Globe
                 return (
                   <Link
                     key={index}

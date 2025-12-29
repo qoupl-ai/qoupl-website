@@ -1,6 +1,6 @@
 "use client";
 
-import { Shield } from "lucide-react";
+import { Shield, AlertTriangle } from "lucide-react";
 import { LegalPageLayout, LegalSection } from "@/components/legal-page-layout";
 
 interface SafetyClientProps {

@@ -81,7 +81,8 @@ export function FeatureList({ features, categories }: FeatureListProps) {
       {/* Category Filter */}
       <div className="flex items-center gap-4">
         <label 
-          className="text-sm font-semibold whitespace-nowrap cms-text-secondary"
+          className="text-sm font-semibold whitespace-nowrap" 
+          className="cms-text-secondary"
           style={{ fontWeight: '600' }}
         >
           Filter by category:
@@ -124,31 +125,36 @@ export function FeatureList({ features, categories }: FeatureListProps) {
                 #
               </TableHead>
               <TableHead 
-                className="w-[70px] whitespace-nowrap cms-text-secondary"
+                className="w-[70px] whitespace-nowrap"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Icon
               </TableHead>
               <TableHead 
-                className="min-w-[300px] cms-text-secondary"
+                className="min-w-[300px]"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Title
               </TableHead>
               <TableHead 
-                className="w-[140px] whitespace-nowrap cms-text-secondary"
+                className="w-[140px] whitespace-nowrap"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Category
               </TableHead>
               <TableHead 
-                className="w-[100px] whitespace-nowrap cms-text-secondary"
+                className="w-[100px] whitespace-nowrap"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Status
               </TableHead>
               <TableHead 
-                className="w-[120px] text-right whitespace-nowrap cms-text-secondary"
+                className="w-[120px] text-right whitespace-nowrap"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Actions
@@ -237,7 +243,8 @@ export function FeatureList({ features, categories }: FeatureListProps) {
                           <Button 
                             variant="ghost" 
                             size="icon"
-                            className="h-8 w-8 cms-text-secondary"
+                            className="h-8 w-8"
+                            className="cms-text-secondary"
                           >
                             <Pencil className="h-3.5 w-3.5" />
                           </Button>
@@ -246,7 +253,8 @@ export function FeatureList({ features, categories }: FeatureListProps) {
                           <Button 
                             variant="ghost" 
                             size="icon"
-                            className="h-8 w-8 cms-text-secondary"
+                            className="h-8 w-8"
+                            className="cms-text-secondary"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </Button>

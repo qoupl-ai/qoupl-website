@@ -1,4 +1,5 @@
-import { assertAdmin } from '@/lib/auth/assert-admin'
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 import CMSNav from '@/components/cms/cms-nav'
 import CMSBodyClass from '@/components/cms/cms-body-class'
 import { Toaster } from '@/components/ui/sonner'
@@ -8,10 +9,27 @@ export default async function CMSLayout({
 }: {
   children: React.ReactNode
 }) {
-  // Single source of truth for admin authorization
-  // assertAdmin() handles authentication and admin verification
-  // It will redirect to /login if not authenticated or throw if not admin
-  const { user, adminUser } = await assertAdmin()
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    redirect('/login?redirect=/add-content')
+  }
+
+  // Check if user is admin
+  const { data: adminUser } = await supabase
+    .from('admin_users')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('is_active', true)
+    .single()
+
+  if (!adminUser) {
+    redirect('/')
+  }
 
   return (
     <>

@@ -5,7 +5,44 @@ import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-// No hardcoded defaults - all content must come from database
+// Fallback steps
+const defaultSteps = [
+  {
+    step: "01",
+    title: "Create Your Profile",
+    description:
+      "Sign up in seconds as a college student and create a profile that showcases the real you. Verify with your college ID, add photos, interests, and what makes you unique.",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
+  },
+  {
+    step: "02",
+    title: "Smart AI Matching",
+    description:
+      "Our advanced AI algorithm analyzes compatibility factors and suggests the most suitable matches for you.",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_03.png"),
+  },
+  {
+    step: "03",
+    title: "Start Conversations",
+    description:
+      "Break the ice with our conversation starters and build meaningful connections through authentic chats.",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_04.png"),
+  },
+  {
+    step: "04",
+    title: "Plan Your Date",
+    description:
+      "Use our date planning features to find the perfect spot and make your first meeting memorable.",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_06.png"),
+  },
+  {
+    step: "05",
+    title: "Find True Love",
+    description:
+      "Build lasting relationships with people who truly understand and complement you. Your perfect match awaits!",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_07.png"),
+  },
+];
 
 interface HowItWorksProps {
   data?: {
@@ -20,24 +57,13 @@ interface HowItWorksProps {
 }
 
 export default function HowItWorks({ data }: HowItWorksProps = {}) {
-  // All content must come from database - no hardcoded fallbacks
-  if (!data || !data.steps || !Array.isArray(data.steps) || data.steps.length === 0) {
-    return (
-      <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">How it works content not available. Please add content in CMS.</p>
-        </div>
-      </section>
-    )
-  }
-
-  // Process steps from data only - no defaults
-  const steps = data.steps.map(item => {
+  // Process steps from data or use defaults
+  const steps = data?.steps?.map(item => {
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
       if (imageUrl.includes('/')) {
         const [bucket, ...rest] = imageUrl.split('/');
-        imageUrl = getStorageUrl(bucket ?? 'app-screenshots', rest.join('/'));
+        imageUrl = getStorageUrl(bucket, rest.join('/'));
       } else {
         imageUrl = getStorageUrl("app-screenshots", imageUrl);
       }
@@ -46,9 +72,9 @@ export default function HowItWorks({ data }: HowItWorksProps = {}) {
       step: item.step,
       title: item.title,
       description: item.description,
-      image: imageUrl,
+      image: imageUrl || getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
     };
-  });
+  }) || defaultSteps;
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -97,7 +123,7 @@ export default function HowItWorks({ data }: HowItWorksProps = {}) {
   }, [smoothStep]);
 
   // Get the current step data
-  const currentStepData = steps[currentStep] ?? steps[0]!;
+  const currentStepData = steps[currentStep];
 
   return (
     <section ref={containerRef} className="relative">
@@ -160,7 +186,7 @@ export default function HowItWorks({ data }: HowItWorksProps = {}) {
                         {/* Screen */}
                         <div className="absolute inset-[2px] bg-white dark:bg-gray-950 rounded-[2.3rem] overflow-hidden">
                           <Image
-                            src={currentStepData.image || '/placeholder.png'}
+                            src={currentStepData.image}
                             alt={currentStepData.title}
                             fill
                             className="object-cover"

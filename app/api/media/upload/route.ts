@@ -3,9 +3,6 @@ import { adminClient } from '@/lib/supabase/admin'
 import { assertAdmin } from '@/lib/auth/assert-admin'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Note: adminClient is used ONLY for storage operations (bypasses storage policies)
-// Database operations use regular client (RLS enforces admin access via assertAdmin)
-
 export async function POST(request: NextRequest) {
   try {
     // Verify admin access
@@ -64,7 +61,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer)
 
     // Upload to Supabase Storage using admin client to bypass RLS
-    const { error: uploadError } = await adminClient.storage
+    const { data: uploadData, error: uploadError } = await adminClient.storage
       .from(bucket)
       .upload(storagePath, buffer, {
         contentType: file.type,
@@ -80,9 +77,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Insert into media table using regular client (RLS enforces admin access)
-    // assertAdmin() already verified authorization, RLS will allow the insert
-    const { data: mediaData, error: dbError } = await supabase
+    // Insert into media table using admin client to bypass RLS
+    const { data: mediaData, error: dbError } = await adminClient
       .from('media')
       .insert({
         filename: file.name,
@@ -100,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     if (dbError) {
       console.error('Database insert error:', dbError)
-      // Try to delete uploaded file using admin client (storage cleanup)
+      // Try to delete uploaded file using admin client
       await adminClient.storage.from(bucket).remove([storagePath])
       
       return NextResponse.json(

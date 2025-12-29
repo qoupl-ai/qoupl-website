@@ -90,36 +90,42 @@ export function HistoryList({ history }: HistoryListProps) {
         <TableHeader>
           <TableRow>
             <TableHead 
-              className="w-[50px] whitespace-nowrap cms-text-secondary"
+              className="w-[50px] whitespace-nowrap" 
+              className="cms-text-secondary"
               style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
             </TableHead>
             <TableHead 
-              className="w-[140px] whitespace-nowrap cms-text-secondary"
+              className="w-[140px] whitespace-nowrap"
+              className="cms-text-secondary"
               style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               Entity Type
             </TableHead>
             <TableHead 
-              className="w-[100px] whitespace-nowrap cms-text-secondary"
+              className="w-[100px] whitespace-nowrap"
+              className="cms-text-secondary"
               style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               Action
             </TableHead>
             <TableHead 
-              className="min-w-[200px] cms-text-secondary"
+              className="min-w-[200px]"
+              className="cms-text-secondary"
               style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               Title/Name
             </TableHead>
             <TableHead 
-              className="w-[180px] whitespace-nowrap cms-text-secondary"
+              className="w-[180px] whitespace-nowrap"
+              className="cms-text-secondary"
               style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               Performed By
             </TableHead>
             <TableHead 
-              className="w-[140px] whitespace-nowrap cms-text-secondary"
+              className="w-[140px] whitespace-nowrap"
+              className="cms-text-secondary"
               style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
             >
               When
@@ -188,8 +194,9 @@ export function HistoryList({ history }: HistoryListProps) {
                   <TableCell style={{ padding: '12px 16px' }}>
                     <div className="space-y-1">
                       <div 
-                        className="max-w-[300px] truncate cms-text-primary" 
-                        title={title}
+                        className="max-w-[300px] truncate" 
+                        title={title} 
+                        className="cms-text-primary"
                         style={{ fontWeight: '600', fontSize: '13px' }}
                       >
                         {title}

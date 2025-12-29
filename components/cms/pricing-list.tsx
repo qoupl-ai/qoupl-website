@@ -45,37 +45,43 @@ export function PricingList({ plans }: PricingListProps) {
                 #
               </TableHead>
               <TableHead 
-                className="min-w-[250px] cms-text-secondary"
+                className="min-w-[250px]"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Plan Name
               </TableHead>
               <TableHead 
-                className="w-[120px] whitespace-nowrap cms-text-secondary"
+                className="w-[120px] whitespace-nowrap"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Price
               </TableHead>
               <TableHead 
-                className="w-[100px] whitespace-nowrap cms-text-secondary"
+                className="w-[100px] whitespace-nowrap"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Features
               </TableHead>
               <TableHead 
-                className="w-[100px] whitespace-nowrap cms-text-secondary"
+                className="w-[100px] whitespace-nowrap"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Popular
               </TableHead>
               <TableHead 
-                className="w-[100px] whitespace-nowrap cms-text-secondary"
+                className="w-[100px] whitespace-nowrap"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Status
               </TableHead>
               <TableHead 
-                className="w-[120px] text-right whitespace-nowrap cms-text-secondary"
+                className="w-[120px] text-right whitespace-nowrap"
+                className="cms-text-secondary"
                 style={{ fontSize: '12px', fontWeight: '600', padding: '12px 16px' }}
               >
                 Actions
@@ -173,7 +179,8 @@ export function PricingList({ plans }: PricingListProps) {
                         <Button 
                           variant="ghost" 
                           size="icon"
-                          className="h-8 w-8 cms-text-secondary"
+                          className="h-8 w-8"
+                          className="cms-text-secondary"
                         >
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>
@@ -182,7 +189,8 @@ export function PricingList({ plans }: PricingListProps) {
                         <Button 
                           variant="ghost" 
                           size="icon"
-                          className="h-8 w-8 cms-text-secondary"
+                          className="h-8 w-8"
+                          className="cms-text-secondary"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>

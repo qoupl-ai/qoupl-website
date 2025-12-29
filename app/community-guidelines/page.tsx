@@ -11,8 +11,8 @@ export default async function CommunityGuidelines() {
   const sections = await getPageSections('community-guidelines')
 
   // Find content section
-  const contentSection = sections.find(s => s.section_type === 'content')
-  const content = (contentSection?.content as Record<string, unknown>) || {}
+  const contentSection = sections.find(s => s.component_type === 'content')
+  const content = contentSection?.content || {}
 
   return <CommunityGuidelinesClient content={content} />
 }

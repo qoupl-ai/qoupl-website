@@ -11,8 +11,8 @@ import { createClient } from '@supabase/supabase-js'
 config({ path: resolve(process.cwd(), '.env.local') })
 config({ path: resolve(process.cwd(), '.env') })
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
-const supabaseServiceKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('❌ Missing Supabase environment variables')
@@ -56,15 +56,15 @@ async function seedPricingSections() {
   // Check if sections already exist
   const { data: existingSections } = await adminClient
     .from('sections')
-    .select('section_type')
+    .select('component_type')
     .eq('page_id', pricingPageId)
 
-  const existingTypes = new Set(existingSections?.map(s => s.section_type) || [])
+  const existingTypes = new Set(existingSections?.map(s => s.component_type) || [])
   console.log(`📊 Existing sections: ${existingTypes.size > 0 ? Array.from(existingTypes).join(', ') : 'None'}\n`)
 
   const sections = [
     {
-      section_type: 'pricing-hero',
+      component_type: 'pricing-hero',
       order_index: 0,
       content: {
         title: 'Affordable Pricing',
@@ -77,7 +77,7 @@ async function seedPricingSections() {
       published: true,
     },
     {
-      section_type: 'pricing-plans',
+      component_type: 'pricing-plans',
       order_index: 1,
       content: {
         plans: [
@@ -104,7 +104,7 @@ async function seedPricingSections() {
       published: true,
     },
     {
-      section_type: 'free-messages',
+      component_type: 'free-messages',
       order_index: 2,
       content: {
         title: 'First 3 Messages Free Per Match!',
@@ -114,7 +114,7 @@ async function seedPricingSections() {
       published: true,
     },
     {
-      section_type: 'message-bundles',
+      component_type: 'message-bundles',
       order_index: 3,
       content: {
         title: 'Message Bundles',
@@ -133,7 +133,7 @@ async function seedPricingSections() {
       published: true,
     },
     {
-      section_type: 'pricing-info',
+      component_type: 'pricing-info',
       order_index: 4,
       content: {
         title: 'How it works',
@@ -148,7 +148,7 @@ async function seedPricingSections() {
       published: true,
     },
     {
-      section_type: 'pricing-faq',
+      component_type: 'pricing-faq',
       order_index: 5,
       content: {
         title: 'Frequently Asked Questions',
@@ -182,8 +182,8 @@ async function seedPricingSections() {
   let errors = 0
 
   for (const section of sections) {
-    if (existingTypes.has(section.section_type)) {
-      console.log(`⏭️  Skipping ${section.section_type} (already exists)`)
+    if (existingTypes.has(section.component_type)) {
+      console.log(`⏭️  Skipping ${section.component_type} (already exists)`)
       skipped++
       continue
     }
@@ -197,14 +197,14 @@ async function seedPricingSections() {
         })
 
       if (error) {
-        console.error(`❌ Failed to create ${section.section_type}:`, error.message)
+        console.error(`❌ Failed to create ${section.component_type}:`, error.message)
         errors++
       } else {
-        console.log(`✅ Created ${section.section_type}`)
+        console.log(`✅ Created ${section.component_type}`)
         created++
       }
     } catch (error: any) {
-      console.error(`❌ Error creating ${section.section_type}:`, error.message)
+      console.error(`❌ Error creating ${section.component_type}:`, error.message)
       errors++
     }
   }

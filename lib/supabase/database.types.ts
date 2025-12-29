@@ -86,7 +86,7 @@ export interface Database {
         Row: {
           id: string
           page_id: string
-          section_type: string
+          component_type: string
           order_index: number
           content: Json
           published: boolean
@@ -98,7 +98,7 @@ export interface Database {
         Insert: {
           id?: string
           page_id: string
-          section_type: string
+          component_type: string
           order_index?: number
           content?: Json
           published?: boolean
@@ -110,7 +110,7 @@ export interface Database {
         Update: {
           id?: string
           page_id?: string
-          section_type?: string
+          component_type?: string
           order_index?: number
           content?: Json
           published?: boolean

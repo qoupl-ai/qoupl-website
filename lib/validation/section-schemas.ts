@@ -3,9 +3,6 @@
  * 
  * Type-safe validation for all section types.
  * Used in section-actions and section-editor.
- * 
- * These schemas validate the `data` field of sections, which is stored as JSONB in the database.
- * The schemas mirror the TypeScript interfaces defined in src/types/section.ts
  */
 
 import { z } from 'zod'
@@ -334,17 +331,14 @@ export const sectionSchemas: Record<string, z.ZodSchema> = {
  */
 export function getSectionSchema(type: string): z.ZodSchema {
   return sectionSchemas[type] || baseSectionSchema.extend({
-    data: z.record(z.string(), z.unknown()),
+    data: z.record(z.any()),
   })
 }
 
 /**
  * Validate section data
  */
-export function validateSectionData(
-  type: string,
-  data: unknown
-): { success: boolean; error?: string } {
+export function validateSectionData(type: string, data: any): { success: boolean; error?: string } {
   try {
     const schema = getSectionSchema(type)
     schema.parse({ type, data, order_index: 0, published: false })
@@ -353,7 +347,7 @@ export function validateSectionData(
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        error: error.issues.map((e) => `${e.path.join('.')}: ${e.message}`).join(', '),
+        error: error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(', '),
       }
     }
     return { success: false, error: 'Validation failed' }

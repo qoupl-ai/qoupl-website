@@ -88,7 +88,8 @@ export function PageSelector({ value, onChange, placeholder = 'Select a page...'
             setCustomValue('')
             onChange('')
           }}
-          className="h-8 px-3 cms-text-secondary"
+          className="h-8 px-3"
+          className="cms-text-secondary"
         >
           Cancel
         </Button>
@@ -125,7 +126,8 @@ export function PageSelector({ value, onChange, placeholder = 'Select a page...'
           variant="ghost"
           size="sm"
           onClick={() => window.open(value.startsWith('http') ? value : `http://localhost:3000${value}`, '_blank')}
-          className="h-8 w-8 p-0 cms-text-secondary"
+          className="h-8 w-8 p-0"
+          className="cms-text-secondary"
           title="Open in new tab"
         >
           <ExternalLink className="h-4 w-4" />

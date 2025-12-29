@@ -7,8 +7,8 @@ import { join } from 'path'
 dotenv.config({ path: join(process.cwd(), '.env.local') })
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
-const supabaseAnonKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
@@ -28,14 +28,14 @@ async function checkPage(slug: string) {
   
   const { data: sections } = await supabase
     .from('sections')
-    .select('section_type, content')
+    .select('component_type, content')
     .eq('page_id', page.id)
     .eq('published', true)
   
   console.log(`Found ${sections?.length || 0} sections`)
   
   sections?.forEach((s, i) => {
-    console.log(`\nSection ${i + 1}: ${s.section_type}`)
+    console.log(`\nSection ${i + 1}: ${s.component_type}`)
     console.log('Content structure:', JSON.stringify(s.content, null, 2).substring(0, 500))
   })
 }

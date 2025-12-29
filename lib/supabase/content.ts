@@ -8,13 +8,12 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { getStorageUrl } from '@/lib/supabase/storage-url'
-import type { Section } from '@/types/section'
 
 // ============================================================================
 // Global Content Helpers
 // ============================================================================
 
-export async function getGlobalContent(key: string): Promise<Record<string, unknown> | null> {
+export async function getGlobalContent(key: string): Promise<any> {
   const supabase = await createClient()
   
   try {
@@ -45,86 +44,47 @@ export async function getGlobalContent(key: string): Promise<Record<string, unkn
 }
 
 export async function getNavbarContent(): Promise<NavbarContent | null> {
-  // Get navbar from __global__ page sections only - no fallbacks
-  const sections = await getPageSections('__global__')
-  const navbarSection = sections.find(s => 
-    s.section_type === 'content' && 
-    (s.content as Record<string, unknown>)?.['key'] === 'navbar'
-  )
-
-  if (navbarSection) {
-    const content = navbarSection.content as Record<string, unknown>
-    // Extract navbar data (skip the 'key' field)
-    const navbarData = { ...content }
-    delete navbarData['key']
-    
-    if ('links' in navbarData && 'logo' in navbarData) {
-      return navbarData as unknown as NavbarContent
-    }
+  const content = await getGlobalContent('navbar')
+  // Ensure content matches NavbarContent structure
+  if (content && typeof content === 'object' && 'links' in content) {
+    return content as NavbarContent
   }
-
   return null
 }
 
 export async function getFooterContent() {
-  // Get footer from __global__ page sections only - no fallbacks
-  const sections = await getPageSections('__global__')
-  const footerSection = sections.find(s => 
-    s.section_type === 'content' && 
-    (s.content as Record<string, unknown>)?.['key'] === 'footer'
-  )
-
-  if (footerSection) {
-    const content = footerSection.content as Record<string, unknown>
-    // Extract footer data (skip the 'key' field)
-    const footerData = { ...content }
-    delete footerData['key']
-    return footerData as unknown as FooterContent
-  }
-
-  return null
+  return await getGlobalContent('footer')
 }
 
 export async function getSocialLinks(): Promise<SocialLinks | null> {
-  // Get social links from __global__ page sections only - no fallbacks
-  const sections = await getPageSections('__global__')
-  const socialSection = sections.find(s => 
-    s.section_type === 'content' && 
-    (s.content as Record<string, unknown>)?.['key'] === 'social_links'
-  )
-
-  if (socialSection) {
-    const content = socialSection.content as Record<string, unknown>
-    // Extract social links data (skip the 'key' field)
-    const socialData = { ...content }
-    delete socialData['key']
-    
-    // Handle backward compatibility: convert old format { linkedin, instagram } to new format { links: [...] }
-    if (typeof socialData['linkedin'] === 'string' || typeof socialData['instagram'] === 'string') {
-      const links: SocialLink[] = []
-      if (typeof socialData['linkedin'] === 'string') {
-        links.push({ icon: 'Linkedin', url: socialData['linkedin'], label: 'LinkedIn' })
-      }
-      if (typeof socialData['instagram'] === 'string') {
-        links.push({ icon: 'Instagram', url: socialData['instagram'], label: 'Instagram' })
-      }
-      return { links }
+  const content = await getGlobalContent('social_links')
+  if (!content) return null
+  
+  // Handle backward compatibility: convert old format { linkedin, instagram } to new format { links: [...] }
+  if (content.linkedin || content.instagram) {
+    const links: SocialLink[] = []
+    if (content.linkedin) {
+      links.push({ icon: 'Linkedin', url: content.linkedin, label: 'LinkedIn' })
     }
-    
-    // New format
-    if (Array.isArray(socialData['links'])) {
-      return socialData as unknown as SocialLinks
+    if (content.instagram) {
+      links.push({ icon: 'Instagram', url: content.instagram, label: 'Instagram' })
     }
+    return { links }
   }
-
+  
+  // New format
+  if (content.links && Array.isArray(content.links)) {
+    return content as SocialLinks
+  }
+  
   return null
 }
 
-export async function getContactInfo(): Promise<Record<string, unknown> | null> {
+export async function getContactInfo() {
   return await getGlobalContent('contact_info')
 }
 
-export async function getSiteConfig(): Promise<Record<string, unknown> | null> {
+export async function getSiteConfig() {
   return await getGlobalContent('site_config')
 }
 
@@ -132,7 +92,7 @@ export async function getSiteConfig(): Promise<Record<string, unknown> | null> {
 // Section Helpers
 // ============================================================================
 
-export async function getPageSections(pageSlug: string): Promise<Section[]> {
+export async function getPageSections(pageSlug: string) {
   const supabase = await createClient()
 
   try {
@@ -166,31 +126,22 @@ export async function getPageSections(pageSlug: string): Promise<Section[]> {
     }
 
     // Filter by published manually as a fallback (RLS should handle this, but just in case)
-    const publishedSections = (sections || []).filter((s: any) => {
-      if (!s.section_type) {
-        console.error(`[getPageSections] Section ${s.id} is missing section_type field. Please run database migration.`)
-        return false
-      }
-      return s.published === true
-    })
+    const publishedSections = (sections || []).filter(s => s.published === true)
     
     if (publishedSections.length === 0 && (sections || []).length > 0) {
-      console.warn(`[getPageSections] Found ${(sections || []).length} sections for ${pageSlug}, but none are published`)
+      console.warn(`[getPageSections] Found ${sections?.length || 0} sections for ${pageSlug}, but none are published`)
     }
 
-    return publishedSections as Section[]
+    return publishedSections
   } catch (error) {
     console.error(`[getPageSections] Unexpected error for ${pageSlug}:`, error)
     return []
   }
 }
 
-export async function getSectionByType(
-  pageSlug: string,
-  sectionType: string
-): Promise<Section | undefined> {
+export async function getSectionByType(pageSlug: string, componentType: string) {
   const sections = await getPageSections(pageSlug)
-  return sections.find((s) => s.section_type === sectionType)
+  return sections.find((s) => s.component_type === componentType)
 }
 
 // ============================================================================
@@ -208,7 +159,7 @@ export function processImagePath(path: string, bucket?: string): string {
   // If path includes bucket, extract it
   if (path.includes('/')) {
     const parts = path.split('/')
-    const bucketName = bucket || parts[0] || 'hero-images'
+    const bucketName = bucket || parts[0]
     const imagePath = parts.slice(1).join('/')
     return getStorageUrl(bucketName, imagePath)
   }

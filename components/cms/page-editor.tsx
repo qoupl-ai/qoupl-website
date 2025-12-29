@@ -23,10 +23,10 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
-import { updatePage, type UpdatePageInput } from '@/app/actions/page-actions'
+import { createPage, updatePage, type CreatePageInput, type UpdatePageInput } from '@/app/actions/page-actions'
 
 interface PageEditorProps {
-  page: {
+  page?: {
     slug: string
     title: string
     description?: string
@@ -38,11 +38,13 @@ interface PageEditorProps {
 
 export default function PageEditor({ page, open, onOpenChange }: PageEditorProps) {
   const router = useRouter()
+  const isEditing = !!page
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
-    title: page.title || '',
-    description: page.description || '',
-    published: page.published ?? false,
+    slug: page?.slug || '',
+    title: page?.title || '',
+    description: page?.description || '',
+    published: page?.published ?? false,
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,13 +52,24 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
     setLoading(true)
 
     try {
-      const updateData: UpdatePageInput = {
-        title: formData.title,
-        description: formData.description || undefined,
-        published: formData.published,
+      if (isEditing) {
+        const updateData: UpdatePageInput = {
+          title: formData.title,
+          description: formData.description || undefined,
+          published: formData.published,
+        }
+        await updatePage(page.slug, updateData)
+        toast.success('Page updated successfully')
+      } else {
+        const createData: CreatePageInput = {
+          slug: formData.slug,
+          title: formData.title,
+          description: formData.description || undefined,
+          published: formData.published,
+        }
+        await createPage(createData)
+        toast.success('Page created successfully')
       }
-      await updatePage(page.slug, updateData)
-      toast.success('Page updated successfully')
 
       onOpenChange(false)
       router.refresh()
@@ -84,7 +97,7 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
               lineHeight: '1.4'
             }}
           >
-            Edit Page
+            {isEditing ? 'Edit Page' : 'Create Page'}
           </DialogTitle>
           <DialogDescription
             className="cms-text-secondary"
@@ -93,23 +106,30 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
               lineHeight: '1.5'
             }}
           >
-            Update page information and settings. Pages are predefined and cannot be created or deleted.
+            {isEditing
+              ? 'Update page information and settings.'
+              : 'Create a new page for your website.'}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="slug">Slug</Label>
-            <Input
-              id="slug"
-              value={page.slug}
-              disabled
-              className="opacity-60 cursor-not-allowed"
-            />
-            <p className="text-sm text-muted-foreground">
-              Page slug cannot be changed (predefined)
-            </p>
-          </div>
+          {!isEditing && (
+            <div className="space-y-2">
+              <Label htmlFor="slug">Slug</Label>
+              <Input
+                id="slug"
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                placeholder="about"
+                required
+                pattern="[a-z0-9-]+"
+                title="Lowercase letters, numbers, and hyphens only"
+              />
+              <p className="text-sm text-muted-foreground">
+                URL-friendly identifier (e.g., "about", "contact")
+              </p>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
@@ -164,7 +184,7 @@ export default function PageEditor({ page, open, onOpenChange }: PageEditorProps
                 fontWeight: '600'
               }}
             >
-              {loading ? 'Saving...' : 'Update'}
+              {loading ? 'Saving...' : isEditing ? 'Update' : 'Create'}
             </Button>
           </DialogFooter>
         </form>

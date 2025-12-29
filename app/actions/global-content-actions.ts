@@ -7,19 +7,14 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { createClient } from '@/lib/supabase/server'
+import { adminClient } from '@/lib/supabase/admin'
 import { assertAdmin } from '@/lib/auth/assert-admin'
 
-export async function updateGlobalContent(
-  key: string,
-  content: Record<string, unknown>
-) {
-  // Assert admin access - single source of truth for authorization
+export async function updateGlobalContent(key: string, content: any) {
+  // Assert admin access
   await assertAdmin()
 
-  // Use regular client (RLS will enforce admin access)
-  const supabase = await createClient()
-  const { error } = await supabase
+  const { error } = await adminClient
     .from('global_content')
     .upsert({
       key,

@@ -9,7 +9,7 @@ import { assertAdmin } from '@/lib/auth/assert-admin'
 import { notFound } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, GripVertical, FileText, ExternalLink } from 'lucide-react'
+import { Plus, ArrowLeft, GripVertical, FileText, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import SectionEditorButton from '@/components/cms/section-editor-button'
 import SortableSectionsList from '@/components/cms/sortable-sections-list'
@@ -197,12 +197,7 @@ export default async function PageEditorPage({ params }: PageProps) {
                 </span>
               </p>
             </div>
-            <SortableSectionsList 
-              sections={safeSections} 
-              pageId={page.id} 
-              pageSlug={page.slug}
-              pageTitle={page.title}
-            />
+            <SortableSectionsList sections={safeSections} pageId={page.id} pageSlug={page.slug} />
           </>
         ) : (
           <Card className="cms-card cms-border border">

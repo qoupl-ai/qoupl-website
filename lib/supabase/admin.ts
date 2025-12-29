@@ -6,56 +6,38 @@ import { createClient } from '@supabase/supabase-js'
  * CRITICAL SECURITY NOTES:
  * - This client BYPASSES Row Level Security (RLS)
  * - NEVER expose this client to the browser/client-side
- * - NEVER use in server actions or API routes that handle user requests
+ * - Only use in Server Components, Server Actions, or API Routes
  * - Service role key has full database access
  *
- * APPROVED USE CASES (Scripts Only):
- * - Migration scripts (scripts/*.ts)
- * - Setup scripts (scripts/*.ts)
- * - One-time data operations (scripts/*.ts)
- * - Storage bucket management (scripts/*.ts)
- *
- * FORBIDDEN USE CASES:
- * - Server actions (use regular client + assertAdmin())
- * - API routes (use regular client + assertAdmin())
- * - Page components (use regular client + assertAdmin())
- *
- * For all user-facing operations, use:
- *   1. assertAdmin() from @/lib/auth/assert-admin
- *   2. createClient() from @/lib/supabase/server
- *   3. Let RLS policies enforce access control
+ * Use cases:
+ * - Admin operations (CMS CRUD)
+ * - Bulk data operations
+ * - User management
+ * - Storage bucket management
  */
 
-if (!process.env['NEXT_PUBLIC_SUPABASE_URL']) {
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
   throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable')
 }
 
-if (!process.env['SUPABASE_SERVICE_ROLE_KEY']) {
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable')
 }
 
 export const adminClient = createClient(
-  process.env['NEXT_PUBLIC_SUPABASE_URL'],
-  process.env['SUPABASE_SERVICE_ROLE_KEY'],
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
   {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
     },
-    db: {
-      schema: 'public',
-    },
   }
 )
 
 /**
- * @deprecated Use assertAdmin() from @/lib/auth/assert-admin instead
- * 
- * This function is kept for backward compatibility with scripts only.
- * For server actions, API routes, and page components, use assertAdmin().
- * 
- * Scripts may use this when they need to verify admin status without
- * throwing errors (e.g., for conditional logic in migration scripts).
+ * Helper function to verify the current user is an admin
+ * Call this before any admin operations
  */
 export async function verifyAdminAccess(userId: string): Promise<boolean> {
   const { data, error } = await adminClient

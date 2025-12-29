@@ -83,7 +83,7 @@ async function checkBlogPage() {
       sections.forEach((section, index) => {
         console.log(`\n   Section ${index + 1}:`)
         console.log('   - ID:', section.id)
-        console.log('   - Type:', section.section_type)
+        console.log('   - Type:', section.component_type)
         console.log('   - Order:', section.order_index)
         console.log('   - Published:', section.published)
         if (section.content?.title) {

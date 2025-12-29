@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Plus, Trash2, GripVertical } from 'lucide-react'
+import { Plus, Trash2, GripVertical, Linkedin, Instagram, Twitter, Facebook, Youtube, Github, Globe } from 'lucide-react'
 import { IconSelector } from '@/components/cms/icon-selector'
 import { toast } from 'sonner'
 import { updateGlobalContent } from '@/app/actions/global-content-actions'
@@ -43,7 +43,6 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { PageSelector } from '@/components/cms/page-selector'
 import { ImageUploadField } from '@/components/cms/image-upload-field'
-import { getStorageUrl } from '@/lib/supabase/storage-url';
 
 interface Page {
   slug: string
@@ -87,7 +86,8 @@ function SortableLinkItem({ link, index, onUpdate, onDelete, pages }: {
       <div
         {...attributes}
         {...listeners}
-        className="cursor-grab active:cursor-grabbing p-1 flex items-center justify-center cms-text-secondary"
+        className="cursor-grab active:cursor-grabbing p-1 flex items-center justify-center"
+        className="cms-text-secondary"
         style={{ minWidth: '24px' }}
       >
         <GripVertical className="h-4 w-4" />
@@ -207,13 +207,13 @@ export default function GlobalContentEditor({
       case 'navbar':
         return {
           links: [{ href: '/', label: 'Home' }],
-          logo: { src: getStorageUrl("brand-assets", "quoupl.svg"), alt: 'qoupl', width: 120, height: 40 },
+          logo: { src: '/images/quoupl.svg', alt: 'qoupl', width: 120, height: 40 },
         }
       case 'footer':
         return {
           brand: {
             description: '',
-            logo: { src: getStorageUrl("brand-assets", "quoupl.svg"), alt: 'qoupl', width: 120, height: 40 },
+            logo: { src: '/images/quoupl.svg', alt: 'qoupl', width: 120, height: 40 },
           },
           columns: {
             product: { title: 'Product', links: [] },

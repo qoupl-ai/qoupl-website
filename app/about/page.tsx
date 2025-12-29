@@ -13,8 +13,8 @@ export default async function AboutUs() {
   // Transform sections data
   const aboutData = {
     sections: sections.map(section => ({
-      type: section.section_type,
-      content: section.content as Record<string, unknown>,
+      type: section.component_type,
+      content: section.content,
     })),
   }
 

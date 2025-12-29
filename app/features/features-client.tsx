@@ -58,9 +58,7 @@ export default function FeaturesClient({ categories }: FeaturesClientProps) {
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
       if (imageUrl.includes('/')) {
         const [bucket, ...rest] = imageUrl.split('/');
-        if (bucket) {
-          imageUrl = getStorageUrl(bucket, rest.join('/'));
-        }
+        imageUrl = getStorageUrl(bucket, rest.join('/'));
       } else {
         imageUrl = getStorageUrl("app-screenshots", imageUrl);
       }
@@ -69,9 +67,7 @@ export default function FeaturesClient({ categories }: FeaturesClientProps) {
     if (coupleImageUrl && !coupleImageUrl.startsWith('http') && !coupleImageUrl.startsWith('/')) {
       if (coupleImageUrl.includes('/')) {
         const [bucket, ...rest] = coupleImageUrl.split('/');
-        if (bucket) {
-          coupleImageUrl = getStorageUrl(bucket, rest.join('/'));
-        }
+        coupleImageUrl = getStorageUrl(bucket, rest.join('/'));
       } else {
         coupleImageUrl = getStorageUrl("couple-photos", coupleImageUrl);
       }

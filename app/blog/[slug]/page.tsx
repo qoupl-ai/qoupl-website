@@ -3,6 +3,8 @@ import Image from "next/image";
 import { ArrowLeft, Calendar, Clock, User } from "lucide-react";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/sections/footer";
 import { createClient } from "@/lib/supabase/server";
 
 // Force dynamic rendering for blog posts
@@ -54,6 +56,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
   return (
     <div className="min-h-screen bg-background">
+      <Navbar />
 
       {/* Hero Section with Featured Image */}
       <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10">
@@ -150,6 +153,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
