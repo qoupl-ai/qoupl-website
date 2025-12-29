@@ -178,9 +178,6 @@ export const metadata: Metadata = {
     canonical: 'https://qoupl.ai',
   },
   category: 'technology',
-  other: {
-    'google-fonts': 'https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap',
-  },
 };
 
 export default function RootLayout({
