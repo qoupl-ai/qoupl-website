@@ -9,35 +9,10 @@ import { useTheme } from "next-themes";
 import WaitlistModal from "@/components/waitlist-modal";
 
 interface AppDownloadProps {
-  data?: {
-    title?: string;
-    subtitle?: string;
-    badge?: {
-      icon?: string;
-      text?: string;
-    };
-    benefits?: string[];
-    cta?: {
-      text?: string;
-      subtext?: string;
-    };
-    platforms?: Array<{
-      name: string;
-      icon?: string;
-      coming?: boolean;
-    }>;
-    stats?: {
-      text?: string;
-      count?: string;
-      suffix?: string;
-    };
-    images?: {
-      decorative?: string[];
-    };
-  };
+  data: Record<string, any>;
 }
 
-export default function AppDownload({ data }: AppDownloadProps = {}) {
+export default function AppDownload({ data = {} }: AppDownloadProps) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
@@ -93,7 +68,7 @@ export default function AppDownload({ data }: AppDownloadProps = {}) {
 
             {/* Benefits List */}
             <div className="space-y-4 mb-8">
-              {benefits.map((benefit, index) => (
+              {benefits.map((benefit: string, index: number) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}

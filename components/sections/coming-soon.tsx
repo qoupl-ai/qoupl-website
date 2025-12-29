@@ -10,30 +10,10 @@ import { useTheme } from "next-themes";
 import WaitlistModal from "@/components/waitlist-modal";
 
 interface ComingSoonProps {
-  data?: {
-    title?: string;
-    subtitle?: string;
-    badge?: {
-      icon?: string;
-      text?: string;
-    };
-    cta?: {
-      text?: string;
-    };
-    platforms?: Array<{
-      name: string;
-      icon?: string;
-      coming?: boolean;
-    }>;
-    stats?: {
-      text?: string;
-      count?: string;
-    };
-    screenshots?: string[];
-  };
+  data: Record<string, any>;
 }
 
-export default function ComingSoon({ data }: ComingSoonProps = {}) {
+export default function ComingSoon({ data = {} }: ComingSoonProps) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();

@@ -34,31 +34,12 @@ const defaultTestimonials = [
 ];
 
 interface TestimonialsProps {
-  data?: {
-    title?: string;
-    subtitle?: string;
-    badge?: {
-      icon?: string;
-      text?: string;
-    };
-    testimonials?: Array<{
-      name: string;
-      image?: string;
-      text: string;
-      location?: string;
-      rating?: number;
-      date?: string;
-    }>;
-    stats?: {
-      text?: string;
-      icon?: string;
-    };
-  };
+  data: Record<string, any>;
 }
 
-export default function Testimonials({ data }: TestimonialsProps = {}) {
+export default function Testimonials({ data = {} }: TestimonialsProps) {
   // Process testimonials from data or use defaults
-  const testimonials = data?.testimonials?.map(item => {
+  const testimonials = data?.testimonials?.map((item: any) => {
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
       if (imageUrl.includes('/')) {
@@ -127,7 +108,7 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
 
         {/* Testimonials Grid - Instagram Story Style */}
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
+          {testimonials.map((testimonial: any, index: number) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}

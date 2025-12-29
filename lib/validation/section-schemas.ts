@@ -331,7 +331,7 @@ export const sectionSchemas: Record<string, z.ZodSchema> = {
  */
 export function getSectionSchema(type: string): z.ZodSchema {
   return sectionSchemas[type] || baseSectionSchema.extend({
-    data: z.record(z.any()),
+    data: z.record(z.string(), z.any()),
   })
 }
 
@@ -347,7 +347,7 @@ export function validateSectionData(type: string, data: any): { success: boolean
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        error: error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(', '),
+        error: error.issues.map((e) => `${e.path.join('.')}: ${e.message}`).join(', '),
       }
     }
     return { success: false, error: 'Validation failed' }

@@ -309,24 +309,10 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
 
 
 interface AnimatedHeroProps {
-  data?: {
-    title?: string;
-    tagline?: string;
-    subtitle?: string;
-    cta?: {
-      text?: string;
-      buttonText?: string;
-      subtext?: string;
-      badge?: string;
-    };
-    images?: {
-      women?: string[];
-      men?: string[];
-    };
-  };
+  data: Record<string, any>;
 }
 
-export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
+export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
 
   // Use data from props or fallback to defaults
@@ -338,7 +324,7 @@ export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
   const ctaBadge = data?.cta?.badge || 'Free';
 
   // Process images from data or use defaults
-  const womenImages = data?.images?.women?.map(path => {
+  const womenImages = data?.images?.women?.map((path: string) => {
     // If path includes bucket, use as is, otherwise construct URL
     if (path.includes('/')) {
       const [bucket, ...rest] = path.split('/');
@@ -347,7 +333,7 @@ export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
     return getStorageUrl("hero-images", path);
   }) || defaultWomenImages;
 
-  const menImages = data?.images?.men?.map(path => {
+  const menImages = data?.images?.men?.map((path: string) => {
     if (path.includes('/')) {
       const [bucket, ...rest] = path.split('/');
       return getStorageUrl(bucket, rest.join('/'));
@@ -410,7 +396,7 @@ export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
                   fontWeight: 600,
                 }}
               >
-                {tagline.split(' ').map((word, i) => {
+                {tagline.split(' ').map((word: string, i: number) => {
                   const lowerWord = word.toLowerCase();
                   if (lowerWord.includes('qoupl') || lowerWord.includes('couple')) {
                     return (

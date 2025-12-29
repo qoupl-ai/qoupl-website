@@ -45,20 +45,12 @@ const defaultSteps = [
 ];
 
 interface HowItWorksProps {
-  data?: {
-    title?: string;
-    steps?: Array<{
-      step: string;
-      title: string;
-      description: string;
-      image?: string;
-    }>;
-  };
+  data: Record<string, any>;
 }
 
-export default function HowItWorks({ data }: HowItWorksProps = {}) {
+export default function HowItWorks({ data = {} }: HowItWorksProps) {
   // Process steps from data or use defaults
-  const steps = data?.steps?.map(item => {
+  const steps = data?.steps?.map((item: any) => {
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
       if (imageUrl.includes('/')) {
@@ -264,7 +256,7 @@ export default function HowItWorks({ data }: HowItWorksProps = {}) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              {steps.map((_, index) => (
+              {steps.map((_: any, index: number) => (
                 <motion.div
                   key={index}
                   className="h-1.5 rounded-full transition-all duration-500"

@@ -60,23 +60,12 @@ const defaultFeatures = [
 ];
 
 interface ProductFeaturesProps {
-  data?: {
-    title?: string;
-    subtitle?: string;
-    features?: Array<{
-      icon?: string;
-      title: string;
-      description: string;
-      highlights?: string[];
-      image?: string;
-      color?: string;
-    }>;
-  };
+  data: Record<string, any>;
 }
 
-export default function ProductFeatures({ data }: ProductFeaturesProps = {}) {
+export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
   // Process features from data or use defaults
-  const features = data?.features?.map(item => {
+  const features = data?.features?.map((item: any) => {
     const IconComponent = item.icon ? iconMap[item.icon] || Heart : Heart;
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
@@ -133,7 +122,7 @@ export default function ProductFeatures({ data }: ProductFeaturesProps = {}) {
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {features.map((feature, index) => {
+          {features.map((feature: any, index: number) => {
             const Icon = feature.icon;
             return (
               <motion.div
@@ -234,7 +223,7 @@ export default function ProductFeatures({ data }: ProductFeaturesProps = {}) {
                         viewport={{ once: true, amount: 0.1 }}
                         transition={{ delay: 0.25 + index * 0.05 }}
                       >
-                        {feature.highlights.map((highlight, idx) => (
+                        {feature.highlights.map((highlight: string, idx: number) => (
                           <motion.li
                             key={idx}
                             initial={{ opacity: 0, x: -20 }}

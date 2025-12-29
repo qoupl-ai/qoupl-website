@@ -41,29 +41,12 @@ const defaultGalleryImages = [
 ];
 
 interface GalleryProps {
-  data?: {
-    title?: string;
-    subtitle?: string;
-    badge?: {
-      icon?: string;
-      text?: string;
-    };
-    images?: Array<{
-      image: string;
-      alt?: string;
-      title?: string;
-      story?: string;
-    }>;
-    cta?: {
-      text?: string;
-      highlight?: string;
-    };
-  };
+  data: Record<string, any>;
 }
 
-export default function Gallery({ data }: GalleryProps = {}) {
+export default function Gallery({ data = {} }: GalleryProps) {
   // Process images from data or use defaults
-  const galleryImages = data?.images?.map(item => {
+  const galleryImages = data?.images?.map((item: any) => {
     let src = item.image;
     // If path includes bucket, use as is, otherwise construct URL
     if (!src.startsWith('http') && !src.startsWith('/')) {
@@ -164,7 +147,7 @@ export default function Gallery({ data }: GalleryProps = {}) {
             }}
           >
             <AnimatePresence initial={false} mode="popLayout" custom={direction}>
-              {galleryImages.map((image, index) => {
+              {galleryImages.map((image: any, index: number) => {
                 // Calculate position relative to current
                 const offset = (index - currentIndex + galleryImages.length) % galleryImages.length;
                 
