@@ -254,7 +254,7 @@ export default function CareersClient({ data }: CareersClientProps) {
 
           {whyJoin.length > 0 && (
             <div className="grid md:grid-cols-3 gap-8">
-              {whyJoin.map((item, index) => (
+              {whyJoin.map((item: any, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
