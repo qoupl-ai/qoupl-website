@@ -198,7 +198,7 @@ export default function CareersClient({ data }: CareersClientProps) {
 
           {values.length > 0 && (
             <div className="grid md:grid-cols-2 gap-6">
-              {processedValues.map((value, index) => {
+              {processedValues.map((value: any, index: number) => {
               const Icon = value.icon;
               return (
                 <motion.div
