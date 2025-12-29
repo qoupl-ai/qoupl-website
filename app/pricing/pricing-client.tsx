@@ -180,7 +180,7 @@ export default function PricingClient({
                 )}
 
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  {plans.length > 0 && plans[0].description ? plans[0].description : "Get access to the qoupl platform and unlock all features"}
+                  Get access to the qoupl platform and unlock all features
                 </p>
               </div>
 

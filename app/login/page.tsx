@@ -244,13 +244,6 @@ function LoginContent() {
                     anchorTextColor: '#662D91',
                     anchorTextHoverColor: '#8B3DB8',
                   },
-                  dark: {
-                    colors: {
-                      inputBackground: '#171717',
-                      inputBorder: '#2a2a2a',
-                      inputText: '#ffffff',
-                    },
-                  },
                   space: {
                     spaceSmall: '0.5rem',
                     spaceMedium: '1rem',
@@ -263,8 +256,7 @@ function LoginContent() {
                   },
                   radii: {
                     borderRadiusButton: '0.5rem',
-                    borderRadiusInput: '0.5rem',
-                    borderRadiusLabel: '0.5rem',
+                    inputBorderRadius: '0.5rem',
                   },
                 },
               },

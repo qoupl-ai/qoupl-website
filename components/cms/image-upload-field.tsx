@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { getStorageUrl } from '@/lib/supabase/storage-url'
@@ -206,8 +207,7 @@ export function ImageUploadField({
               value={manualPath}
               onChange={(e) => setManualPath(e.target.value)}
               placeholder="/images/quoupl.svg or storage path"
-              className="flex-1"
-              className="cms-card cms-border cms-text-primary"
+              className="flex-1 cms-card cms-border cms-text-primary"
               style={{
                 fontSize: '13px',
               }}
@@ -230,8 +230,7 @@ export function ImageUploadField({
                 setShowManualInput(false)
                 setManualPath(value || '')
               }}
-              className="h-8 px-3"
-              className="cms-text-secondary"
+              className="h-8 px-3 cms-text-secondary"
             >
               Cancel
             </Button>

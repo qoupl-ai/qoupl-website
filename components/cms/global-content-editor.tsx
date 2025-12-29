@@ -86,8 +86,7 @@ function SortableLinkItem({ link, index, onUpdate, onDelete, pages }: {
       <div
         {...attributes}
         {...listeners}
-        className="cursor-grab active:cursor-grabbing p-1 flex items-center justify-center"
-        className="cms-text-secondary"
+        className="cursor-grab active:cursor-grabbing p-1 flex items-center justify-center cms-text-secondary"
         style={{ minWidth: '24px' }}
       >
         <GripVertical className="h-4 w-4" />

@@ -112,8 +112,7 @@ export function MediaUpload() {
     >
       <div>
         <h3 
-          className="text-lg font-semibold mb-2"
-          className="cms-text-primary"
+          className="text-lg font-semibold mb-2 cms-text-primary"
           style={{ fontWeight: '600' }}
         >
           Upload New Media
