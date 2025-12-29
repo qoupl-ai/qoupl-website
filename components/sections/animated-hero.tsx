@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Heart } from "lucide-react";
+import { resolveLucideIcon } from "@/lib/utils/icons";
 import Image from "next/image";
-import { getStorageUrl } from "@/lib/supabase/storage-url";
+import Link from "next/link";
+import { resolveStorageUrl } from "@/lib/supabase/storage-url";
 import { useState, useEffect, useRef } from "react";
 import WaitlistModal from "@/components/waitlist-modal";
 
@@ -12,16 +13,22 @@ import WaitlistModal from "@/components/waitlist-modal";
 
 // Modern 2025 Floating Cards with Magnetic Effect
 interface ModernFloatingCardsProps {
-  carouselImages: string[];
+  carouselImages: Array<{ src: string; alt: string }>;
+  badgeIcon?: string;
+  showBadge?: boolean;
+  particleIcon?: string;
+  showParticles?: boolean;
 }
 
-function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
+function ModernFloatingCards({ carouselImages, badgeIcon, showBadge, particleIcon, showParticles }: ModernFloatingCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeIndex, setActiveIndex] = useState(0);
   const [particlePositions, setParticlePositions] = useState<Array<{ initialX: number; initialY: number; animateX: number[]; animateY: number[]; duration: number; delay: number }>>([]);
   const [isMounted, setIsMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const BadgeIcon = resolveLucideIcon(badgeIcon);
+  const ParticleIcon = resolveLucideIcon(particleIcon);
 
   // Detect if device is mobile
   useEffect(() => {
@@ -105,6 +112,7 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
 
   // Auto-rotate cards
   useEffect(() => {
+    if (carouselImages.length === 0) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % carouselImages.length);
     }, 4000);
@@ -114,6 +122,10 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
 
   // Show 5 cards at a time in a floating formation
   const visibleCards = 5;
+
+  if (carouselImages.length === 0) {
+    return null;
+  }
 
   return (
     <div
@@ -146,7 +158,7 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
 
         return (
           <motion.div
-            key={`${image}-${index}`}
+            key={`${image.src}-${index}`}
             className="absolute cursor-pointer"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{
@@ -193,8 +205,8 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
             >
               {/* Image */}
               <Image
-                src={image}
-                alt={`Profile ${index + 1}`}
+                src={image.src}
+                alt={image.alt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 240px, (max-width: 1024px) 280px, 300px"
@@ -244,14 +256,14 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
               />
 
               {/* Heart Badge - Only on front card */}
-              {depth > 0.7 && (
+              {showBadge && BadgeIcon && depth > 0.7 && (
                 <motion.div
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
                   className="absolute top-4 right-4 bg-white/20 backdrop-blur-md rounded-full p-2.5 shadow-xl border border-white/30"
                 >
-                  <Heart className="w-5 h-5 text-white fill-white" />
+                  <BadgeIcon className="w-5 h-5 text-white fill-white" />
                 </motion.div>
               )}
             </div>
@@ -260,7 +272,7 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
       })}
 
       {/* Floating Particles - Only render after mount to avoid hydration mismatch */}
-      {isMounted && particlePositions.map((particle, i) => (
+      {isMounted && showParticles && ParticleIcon && particlePositions.map((particle, i) => (
         <motion.div
           key={`particle-${i}`}
           className="absolute pointer-events-none"
@@ -282,7 +294,7 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
             delay: particle.delay,
           }}
         >
-          <Heart className="w-3 h-3 text-primary/30 fill-primary/30" />
+          <ParticleIcon className="w-3 h-3 text-primary/30 fill-primary/30" />
         </motion.div>
       ))}
     </div>
@@ -311,49 +323,57 @@ interface AnimatedHeroProps {
 export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
 
-  // All content must come from database - no hardcoded fallbacks
   if (!data || !data.title) {
-    return (
-      <section className="relative min-h-screen w-full flex items-center justify-center bg-background">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">Hero section content not available. Please add content in CMS.</p>
-        </div>
-      </section>
-    )
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('Hero section data is missing required fields.')
+    }
+    return null
   }
 
   const title = data.title
   const tagline = data.tagline || ''
   const subtitle = data.subtitle || ''
   const ctaText = data.cta?.text || data.cta?.buttonText || ''
+  const ctaLink = data.cta?.link || ''
   const ctaSubtext = data.cta?.subtext || ''
   const ctaBadge = data.cta?.badge || ''
+  const ctaIconName = data.cta?.icon
+  const CtaIcon = resolveLucideIcon(ctaIconName)
+  const showTagline = data.showTagline !== false && tagline.length > 0
+  const showSubtitle = data.showSubtitle !== false && subtitle.length > 0
+  const showCta = data.cta?.show !== false && ctaText.length > 0
+  const showCtaBadge = data.cta?.showBadge !== false && ctaBadge.length > 0
+  const showCtaSubtext = data.cta?.showSubtext !== false && ctaSubtext.length > 0
+  const showDecorativeBadge = data.decorative?.show === true
+  const showParticles = data.decorative?.showParticles === true
 
-  // Process images from data only - no defaults
-  const womenImages = (data.images?.women || []).map(path => {
-    if (!path) return '';
-    if (path.includes('/')) {
-      const [bucket, ...rest] = path.split('/');
-      if (bucket) {
-        return getStorageUrl(bucket, rest.join('/'));
-      }
+  const normalizeImageItem = (item: { image?: string; alt?: string } | string) => {
+    if (typeof item === 'string') {
+      return { image: item, alt: '' }
     }
-    return getStorageUrl("hero-images", path);
-  })
-
-  const menImages = (data.images?.men || []).map(path => {
-    if (!path) return '';
-    if (path.includes('/')) {
-      const [bucket, ...rest] = path.split('/');
-      if (bucket) {
-        return getStorageUrl(bucket, rest.join('/'));
-      }
+    return {
+      image: item?.image || '',
+      alt: item?.alt || '',
     }
-    return getStorageUrl("hero-images", path);
-  })
+  }
 
-  // Combined array: women + men images
-  const carouselImages = [...womenImages, ...menImages]
+  const womenImages = (data.images?.women || [])
+    .map((item) => normalizeImageItem(item as { image?: string; alt?: string } | string))
+    .map((item) => ({
+      src: resolveStorageUrl(item.image),
+      alt: item.alt || '',
+    }))
+    .filter((item) => item.src.length > 0);
+
+  const menImages = (data.images?.men || [])
+    .map((item) => normalizeImageItem(item as { image?: string; alt?: string } | string))
+    .map((item) => ({
+      src: resolveStorageUrl(item.image),
+      alt: item.alt || '',
+    }))
+    .filter((item) => item.src.length > 0);
+
+  const carouselImages = [...womenImages, ...menImages];
 
   return (
     <section
@@ -400,34 +420,38 @@ export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="space-y-1 mb-6 md:mb-8 pl-0 md:pl-4 lg:pl-8 xl:pl-12"
             >
-              <p
-                className="text-base md:text-lg font-semibold text-foreground leading-relaxed"
-                style={{
-                  fontFamily: "var(--font-poppins), system-ui, sans-serif",
-                  fontWeight: 600,
-                }}
-              >
-                {tagline.split(' ').map((word, i) => {
-                  const lowerWord = word.toLowerCase();
-                  if (lowerWord.includes('qoupl') || lowerWord.includes('couple')) {
-                    return (
-                      <span key={i} className="text-[#662D91]">
-                        {word}{' '}
-                      </span>
-                    );
-                  }
-                  return <span key={i}>{word} </span>;
-                })}
-              </p>
-              <p
-                className="text-base md:text-lg font-semibold text-muted-foreground leading-relaxed"
-                style={{
-                  fontFamily: "var(--font-poppins), system-ui, sans-serif",
-                  fontWeight: 600,
-                }}
-              >
-                {subtitle}
-              </p>
+              {showTagline && (
+                <p
+                  className="text-base md:text-lg font-semibold text-foreground leading-relaxed"
+                  style={{
+                    fontFamily: "var(--font-poppins), system-ui, sans-serif",
+                    fontWeight: 600,
+                  }}
+                >
+                  {tagline.split(' ').map((word, i) => {
+                    const lowerWord = word.toLowerCase();
+                    if (lowerWord.includes('qoupl') || lowerWord.includes('couple')) {
+                      return (
+                        <span key={i} className="text-[#662D91]">
+                          {word}{' '}
+                        </span>
+                      );
+                    }
+                    return <span key={i}>{word} </span>;
+                  })}
+                </p>
+              )}
+              {showSubtitle && (
+                <p
+                  className="text-base md:text-lg font-semibold text-muted-foreground leading-relaxed"
+                  style={{
+                    fontFamily: "var(--font-poppins), system-ui, sans-serif",
+                    fontWeight: 600,
+                  }}
+                >
+                  {subtitle}
+                </p>
+              )}
             </motion.div>
 
             {/* CTA Button - Smaller Size - Indented with Better Spacing */}
@@ -437,20 +461,39 @@ export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
               transition={{ delay: 0.6, duration: 0.6 }}
               className="flex flex-col items-center lg:items-start space-y-2 w-full mt-8 md:mt-10 lg:mt-12 pl-0 md:pl-4 lg:pl-8 xl:pl-12"
             >
-              <Button
-                size="default"
-                onClick={() => setIsWaitlistModalOpen(true)}
-                className="group px-6 py-3 h-auto rounded-full bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
-              >
-                <Sparkles className="mr-2 h-4 w-4" />
-                {ctaText}
-                {ctaBadge && (
-                  <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">
-                    {ctaBadge}
-                  </span>
-                )}
-              </Button>
-              {ctaSubtext && (
+              {showCta && (
+                ctaLink ? (
+                  <Link href={ctaLink}>
+                    <Button
+                      size="default"
+                      className="group px-6 py-3 h-auto rounded-full bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                    >
+                      {CtaIcon && <CtaIcon className="mr-2 h-4 w-4" />}
+                      {ctaText}
+                      {showCtaBadge && (
+                        <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">
+                          {ctaBadge}
+                        </span>
+                      )}
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    size="default"
+                    onClick={() => setIsWaitlistModalOpen(true)}
+                    className="group px-6 py-3 h-auto rounded-full bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                  >
+                    {CtaIcon && <CtaIcon className="mr-2 h-4 w-4" />}
+                    {ctaText}
+                    {showCtaBadge && (
+                      <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">
+                        {ctaBadge}
+                      </span>
+                    )}
+                  </Button>
+                )
+              )}
+              {showCtaSubtext && (
                 <p className="text-xs text-muted-foreground text-center lg:text-left">
                   {ctaSubtext}
                 </p>
@@ -466,7 +509,15 @@ export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex items-center justify-center lg:justify-end order-2 lg:order-2 w-full mt-4 md:mt-6 lg:-mt-16"
           >
-            <ModernFloatingCards carouselImages={carouselImages} />
+            {carouselImages.length > 0 && (
+              <ModernFloatingCards
+                carouselImages={carouselImages}
+                badgeIcon={data.decorative?.icon}
+                showBadge={showDecorativeBadge}
+                particleIcon={data.decorative?.icon}
+                showParticles={showParticles}
+              />
+            )}
           </motion.div>
         </div>
       </div>

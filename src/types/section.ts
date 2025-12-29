@@ -56,6 +56,7 @@ export type SectionType =
   | 'blog-post'
   | 'faq-category'
   | 'feature-category'
+  | 'product-features'
   | 'pricing-plans'
   | 'pricing-hero'
   | 'free-messages'
@@ -82,13 +83,36 @@ export type SectionType =
 // Hero Section
 export interface HeroSectionData {
   title: string
+  titleHighlight?: string
   tagline?: string
   subtitle?: string
-  image?: string
-  background_image?: string
+  description?: string
+  showTagline?: boolean
+  showSubtitle?: boolean
+  showDescription?: boolean
+  badge?: {
+    text?: string
+    icon?: string
+    show?: boolean
+  }
+  stats?: Array<{
+    text?: string
+    icon?: string
+    show?: boolean
+  }>
   images?: {
-    women?: string[]
-    men?: string[]
+    women?: Array<{
+      image?: string
+      alt?: string
+    }>
+    men?: Array<{
+      image?: string
+      alt?: string
+    }>
+    grid?: Array<{
+      image?: string
+      alt?: string
+    }>
   }
   cta?: {
     text?: string
@@ -96,6 +120,21 @@ export interface HeroSectionData {
     link?: string
     subtext?: string
     badge?: string
+    icon?: string
+    show?: boolean
+    showBadge?: boolean
+    showSubtext?: boolean
+  }
+  decorative?: {
+    icon?: string
+    show?: boolean
+    showParticles?: boolean
+  }
+  floatingBadge?: {
+    value?: string
+    label?: string
+    icon?: string
+    show?: boolean
   }
 }
 
@@ -115,32 +154,78 @@ export interface BlogPostSectionData {
 // FAQ Category Section
 export interface FaqCategorySectionData {
   category_id: string
+  category_label?: string
   faqs: Array<{
     question: string
     answer: string
     order_index?: number
+    show?: boolean
   }>
 }
 
 // Feature Category Section
 export interface FeatureCategorySectionData {
-  category_id: string
+  hero?: {
+    title?: string
+    titleHighlight?: string
+    subtitle?: string
+    showTitle?: boolean
+    showSubtitle?: boolean
+  }
   features: Array<{
     title: string
-    description: string
     icon?: string
-    order_index?: number
+    color?: string
+    image?: string
+    imageAlt?: string
+    show?: boolean
+    features?: Array<{
+      title: string
+      description: string
+      icon?: string
+      show?: boolean
+    }>
+  }>
+  cta?: {
+    title?: string
+    subtitle?: string
+    buttonText?: string
+    show?: boolean
+  }
+}
+
+// Product Features Section
+export interface ProductFeaturesSectionData {
+  title?: string
+  subtitle?: string
+  showTitle?: boolean
+  showSubtitle?: boolean
+  highlightIcon?: string
+  features: Array<{
+    icon?: string
+    title: string
+    description: string
+    highlights?: string[]
+    image?: string
+    imageAlt?: string
+    color?: string
+    showHighlights?: boolean
+    show?: boolean
   }>
 }
 
 // Pricing Plans Section
 export interface PricingPlansSectionData {
   plans: Array<{
+    icon?: string
     name: string
     price: number
     currency?: string
     billing_period?: string
+    description?: string
     features: string[]
+    featureIcon?: string
+    showFeatures?: boolean
     is_popular?: boolean
     order_index?: number
   }>
@@ -149,10 +234,14 @@ export interface PricingPlansSectionData {
 // Pricing Hero Section
 export interface PricingHeroSectionData {
   title?: string
+  titleHighlight?: string
   subtitle?: string
+  showTitle?: boolean
+  showSubtitle?: boolean
   badge?: {
     icon?: string
     text?: string
+    show?: boolean
   }
 }
 
@@ -161,26 +250,51 @@ export interface FreeMessagesSectionData {
   count?: number
   title?: string
   description?: string
+  icon?: string
+  show?: boolean
+  showIcon?: boolean
 }
 
 // Message Bundles Section
 export interface MessageBundlesSectionData {
   price_per_message?: number
   gst_rate?: number
+  currencySymbol?: string
+  icon?: string
+  showIcon?: boolean
+  show?: boolean
   bundles: Array<{
     messages: number
     popular?: boolean
+    label?: string
+    show?: boolean
   }>
   min_messages?: number
   max_messages?: number
   title?: string
   subtitle?: string
+  labels?: {
+    popular?: string
+    messages?: string
+    customBundleTitle?: string
+    customBundleSubtitle?: string
+    quantityLabel?: string
+    basePriceLabel?: string
+    gstLabel?: string
+    totalLabel?: string
+    purchaseLabel?: string
+  }
 }
 
 // Pricing Info Section
 export interface PricingInfoSectionData {
   title?: string
   items: string[]
+  icon?: string
+  itemIcon?: string
+  show?: boolean
+  showIcon?: boolean
+  showItemIcon?: boolean
 }
 
 // Pricing FAQ Section
@@ -189,20 +303,25 @@ export interface PricingFaqSectionData {
   faqs: Array<{
     question: string
     answer: string
+    show?: boolean
   }>
   cta?: {
     text?: string
     link?: string
+    buttonText?: string
+    show?: boolean
   }
 }
 
 // Contact Hero Section
 export interface ContactHeroSectionData {
   title?: string
+  titleHighlight?: string
   subtitle?: string
   badge?: {
     icon?: string
     text?: string
+    show?: boolean
   }
 }
 
@@ -214,6 +333,7 @@ export interface ContactInfoSectionData {
     title?: string
     details?: string
     link?: string | null
+    show?: boolean
   }>
 }
 
@@ -225,31 +345,65 @@ export interface ContactInfoDetailsSectionData {
     icon?: string
     title?: string
     description?: string
+    show?: boolean
   }>
   faq_link?: {
     text?: string
     url?: string
+    icon?: string
+    title?: string
+    description?: string
+    show?: boolean
+  }
+  form?: {
+    title?: string
+    required_indicator?: string
+    name_label?: string
+    name_placeholder?: string
+    email_label?: string
+    email_placeholder?: string
+    subject_label?: string
+    subject_placeholder?: string
+    message_label?: string
+    message_placeholder?: string
+    submit_text?: string
+    submit_icon?: string
+    sending_text?: string
+    success_title?: string
+    success_message?: string
+    success_icon?: string
+    error_message?: string
+    toast_success?: string
+    toast_error?: string
+    show?: boolean
   }
 }
 
 // How It Works Section
 export interface HowItWorksSectionData {
   title?: string
+  titleHighlight?: string
+  showTitle?: boolean
   steps: Array<{
     step: string
     title: string
     description: string
     image?: string
+    imageAlt?: string
+    showImage?: boolean
+    showBadge?: boolean
   }>
 }
 
 // Gallery Section
 export interface GallerySectionData {
   title?: string
+  titleHighlight?: string
   subtitle?: string
   badge?: {
     icon?: string
     text?: string
+    show?: boolean
   }
   images: Array<{
     image: string
@@ -260,28 +414,47 @@ export interface GallerySectionData {
   cta?: {
     text?: string
     highlight?: string
+    show?: boolean
+  }
+  successBadge?: {
+    text?: string
+    show?: boolean
+  }
+  icons?: {
+    badge?: string
+    story?: string
   }
 }
 
 // Testimonials Section
 export interface TestimonialsSectionData {
   title?: string
+  titleHighlight?: string
   subtitle?: string
   badge?: {
     icon?: string
     text?: string
+    show?: boolean
   }
   testimonials: Array<{
     name: string
     image?: string
+    imageAlt?: string
     text: string
     location?: string
     rating?: number
     date?: string
+    showRating?: boolean
   }>
   stats?: {
     text?: string
     icon?: string
+    show?: boolean
+  }
+  icons?: {
+    quote?: string
+    heart?: string
+    rating?: string
   }
 }
 
@@ -292,24 +465,50 @@ export interface AppDownloadSectionData {
   badge?: {
     icon?: string
     text?: string
+    show?: boolean
   }
-  benefits?: string[]
+  benefits?: Array<{
+    text?: string
+    icon?: string
+    showIcon?: boolean
+  }>
+  showBenefits?: boolean
   cta?: {
     text?: string
     subtext?: string
+    icon?: string
+    show?: boolean
+    showSubtext?: boolean
+    secondaryText?: string
+    secondaryLink?: string
+    secondaryIcon?: string
+    showSecondary?: boolean
+  }
+  card?: {
+    title?: string
+    subtitle?: string
+    icon?: string
+    show?: boolean
+    platformsLabel?: string
+    showPlatforms?: boolean
+    statsPrefix?: string
+    statsHighlight?: string
+    statsSuffix?: string
+    showStats?: boolean
   }
   platforms?: Array<{
-    name: string
-    icon?: string
+    label?: string
+    name?: string
+    iconImage?: string
+    iconAlt?: string
     coming?: boolean
+    show?: boolean
   }>
-  stats?: {
-    text?: string
-    count?: string
-    suffix?: string
-  }
   images?: {
-    decorative?: string[]
+    decorative?: Array<{
+      image?: string
+      alt?: string
+    }>
   }
 }
 
@@ -320,52 +519,124 @@ export interface ComingSoonSectionData {
   badge?: {
     icon?: string
     text?: string
+    show?: boolean
   }
   cta?: {
     text?: string
-  }
-  platforms?: Array<{
-    name: string
     icon?: string
-    coming?: boolean
-  }>
-  stats?: {
-    text?: string
-    count?: string
+    link?: string
+    show?: boolean
   }
-  screenshots?: string[]
+  callout?: {
+    title?: string
+    description?: string
+    show?: boolean
+  }
+  footer_note?: string
+  platforms?: Array<{
+    label?: string
+    name?: string
+    iconImage?: string
+    iconAlt?: string
+    coming?: boolean
+    show?: boolean
+  }>
+  showPlatforms?: boolean
+  stats?: {
+    prefix?: string
+    highlight?: string
+    suffix?: string
+    icon?: string
+    show?: boolean
+  }
+  screenshots?: Array<{
+    image?: string
+    alt?: string
+  }>
+  showScreenshots?: boolean
 }
 
 // Timeline Section
 export interface TimelineSectionData {
+  title?: string
+  titleHighlight?: string
+  subtitle?: string
+  badge?: {
+    text?: string
+    icon?: string
+    show?: boolean
+  }
+  itemIcon?: string
+  showItemIcon?: boolean
   timeline: Array<{
     year: string
     event: string
     description: string
+    show?: boolean
   }>
 }
 
 // Why Join Section
 export interface WhyJoinSectionData {
+  title?: string
+  titleHighlight?: string
+  subtitle?: string
+  badge?: {
+    text?: string
+    icon?: string
+    show?: boolean
+  }
   items: Array<{
     title: string
     description: string
     icon: string
+    color?: string
+    show?: boolean
   }>
 }
 
 // Values Section
 export interface ValuesSectionData {
+  useMissionVisionLayout?: boolean
+  title?: string
+  titleHighlight?: string
+  subtitle?: string
+  badge?: {
+    text?: string
+    icon?: string
+    show?: boolean
+  }
   values: Array<{
     icon: string
+    label?: string
+    labelIcon?: string
     title: string
     description: string
+    body?: string[]
     color?: string
+    show?: boolean
   }>
 }
 
 // Generic Content Section
-export type ContentSectionData = Record<string, unknown>
+export interface ContentSectionData {
+  key?: string
+  title?: string
+  icon?: string
+  showIcon?: boolean
+  lastUpdated?: string
+  sections?: Array<{
+    heading?: string
+    content?: string
+    items?: Array<{
+      text?: string
+      icon?: string
+      show?: boolean
+    }>
+    isImportant?: boolean
+    show?: boolean
+  }>
+}
 
 // ============================================================================
 // Union Type for All Section Data
@@ -376,6 +647,7 @@ export type SectionData =
   | BlogPostSectionData
   | FaqCategorySectionData
   | FeatureCategorySectionData
+  | ProductFeaturesSectionData
   | PricingPlansSectionData
   | PricingHeroSectionData
   | FreeMessagesSectionData
@@ -422,4 +694,3 @@ export function assertSectionType<T extends SectionType>(
 ): section is Section & { section_type: T; content: Record<string, unknown> } {
   return section.section_type === type
 }
-

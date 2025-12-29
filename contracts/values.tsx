@@ -5,16 +5,9 @@
 import React from 'react'
 import { z } from 'zod'
 import type { SectionContract } from './types'
+import { valuesSectionSchema } from '@/lib/validation/section-schemas'
 
-// Schema for values section
-const valuesDataSchema = z.object({
-  values: z.array(z.object({
-    icon: z.string(),
-    title: z.string(),
-    description: z.string(),
-    color: z.string().optional(),
-  })),
-})
+const valuesDataSchema = valuesSectionSchema.shape.data
 
 // Placeholder renderer
 const ValuesRenderer: React.ComponentType<{ data: z.infer<typeof valuesDataSchema> }> = () => {
@@ -34,9 +27,7 @@ const ValuesEditor: React.ComponentType<{
   )
 }
 
-const defaultData: z.infer<typeof valuesDataSchema> = {
-  values: [],
-}
+const defaultData: z.infer<typeof valuesDataSchema> = valuesDataSchema.parse({})
 
 export const valuesContract: SectionContract<z.infer<typeof valuesDataSchema>> = {
   type: 'values',
@@ -51,4 +42,3 @@ export const valuesContract: SectionContract<z.infer<typeof valuesDataSchema>> =
     category: 'content',
   },
 }
-

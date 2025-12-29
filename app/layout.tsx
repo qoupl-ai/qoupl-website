@@ -3,6 +3,8 @@ import { Poppins, DM_Sans, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { getStorageUrl } from '@/lib/supabase/storage-url';
+import { GlobalContentProvider } from '@/components/global-content-provider';
+import { getGlobalContentTyped } from '@/lib/supabase/content';
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -181,11 +183,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [
+    themeToggle,
+    waitlistModal,
+    splashScreen,
+    legalUi,
+    errorUi,
+    loadingUi,
+  ] = await Promise.all([
+    getGlobalContentTyped('theme_toggle'),
+    getGlobalContentTyped('waitlist_modal'),
+    getGlobalContentTyped('splash_screen'),
+    getGlobalContentTyped('legal_ui'),
+    getGlobalContentTyped('error_ui'),
+    getGlobalContentTyped('loading_ui'),
+  ])
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.variable} ${dmSans.variable} ${sourceCodePro.variable} font-sans antialiased`} suppressHydrationWarning>
@@ -195,7 +213,18 @@ export default function RootLayout({
           enableSystem={true}
           disableTransitionOnChange
         >
-          {children}
+          <GlobalContentProvider
+            value={{
+              themeToggle,
+              waitlistModal,
+              splashScreen,
+              legalUi,
+              errorUi,
+              loadingUi,
+            }}
+          >
+            {children}
+          </GlobalContentProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -38,13 +38,7 @@ const HeroEditor: React.ComponentType<{
 const heroDataSchema = heroSectionSchema.shape.data
 
 // Default data
-const defaultData: z.infer<typeof heroDataSchema> = {
-  title: 'Welcome to Qoupl',
-  tagline: undefined,
-  subtitle: undefined,
-  cta: undefined,
-  images: undefined,
-}
+const defaultData: z.infer<typeof heroDataSchema> = heroDataSchema.parse({})
 
 export const heroContract: SectionContract<z.infer<typeof heroDataSchema>> = {
   type: 'hero',
@@ -59,4 +53,3 @@ export const heroContract: SectionContract<z.infer<typeof heroDataSchema>> = {
     category: 'layout',
   },
 }
-

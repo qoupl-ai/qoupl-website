@@ -9,6 +9,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { getStorageUrl } from '@/lib/supabase/storage-url'
 import type { Section } from '@/types/section'
+import { getGlobalContentSchema, type GlobalContentKey } from '@/lib/validation/global-content-schemas'
 
 // ============================================================================
 // Global Content Helpers
@@ -44,88 +45,42 @@ export async function getGlobalContent(key: string): Promise<Record<string, unkn
   }
 }
 
-export async function getNavbarContent(): Promise<NavbarContent | null> {
-  // Get navbar from __global__ page sections only - no fallbacks
-  const sections = await getPageSections('__global__')
-  const navbarSection = sections.find(s => 
-    s.section_type === 'content' && 
-    (s.content as Record<string, unknown>)?.['key'] === 'navbar'
-  )
+export async function getGlobalContentTyped<T>(key: GlobalContentKey): Promise<T | null> {
+  const content = await getGlobalContent(key)
+  if (!content) return null
 
-  if (navbarSection) {
-    const content = navbarSection.content as Record<string, unknown>
-    // Extract navbar data (skip the 'key' field)
-    const navbarData = { ...content }
-    delete navbarData['key']
-    
-    if ('links' in navbarData && 'logo' in navbarData) {
-      return navbarData as unknown as NavbarContent
+  const schema = getGlobalContentSchema(key)
+  if (!schema) return content as T
+
+  const parsed = schema.safeParse(content)
+  if (!parsed.success) {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error(`Global content "${key}" is invalid: ${parsed.error.message}`)
     }
+    return null
   }
 
-  return null
+  return parsed.data as T
+}
+
+export async function getNavbarContent(): Promise<NavbarContent | null> {
+  return await getGlobalContentTyped<NavbarContent>('navbar')
 }
 
 export async function getFooterContent() {
-  // Get footer from __global__ page sections only - no fallbacks
-  const sections = await getPageSections('__global__')
-  const footerSection = sections.find(s => 
-    s.section_type === 'content' && 
-    (s.content as Record<string, unknown>)?.['key'] === 'footer'
-  )
-
-  if (footerSection) {
-    const content = footerSection.content as Record<string, unknown>
-    // Extract footer data (skip the 'key' field)
-    const footerData = { ...content }
-    delete footerData['key']
-    return footerData as unknown as FooterContent
-  }
-
-  return null
+  return await getGlobalContentTyped<FooterContent>('footer')
 }
 
 export async function getSocialLinks(): Promise<SocialLinks | null> {
-  // Get social links from __global__ page sections only - no fallbacks
-  const sections = await getPageSections('__global__')
-  const socialSection = sections.find(s => 
-    s.section_type === 'content' && 
-    (s.content as Record<string, unknown>)?.['key'] === 'social_links'
-  )
-
-  if (socialSection) {
-    const content = socialSection.content as Record<string, unknown>
-    // Extract social links data (skip the 'key' field)
-    const socialData = { ...content }
-    delete socialData['key']
-    
-    // Handle backward compatibility: convert old format { linkedin, instagram } to new format { links: [...] }
-    if (typeof socialData['linkedin'] === 'string' || typeof socialData['instagram'] === 'string') {
-      const links: SocialLink[] = []
-      if (typeof socialData['linkedin'] === 'string') {
-        links.push({ icon: 'Linkedin', url: socialData['linkedin'], label: 'LinkedIn' })
-      }
-      if (typeof socialData['instagram'] === 'string') {
-        links.push({ icon: 'Instagram', url: socialData['instagram'], label: 'Instagram' })
-      }
-      return { links }
-    }
-    
-    // New format
-    if (Array.isArray(socialData['links'])) {
-      return socialData as unknown as SocialLinks
-    }
-  }
-
-  return null
+  return await getGlobalContentTyped<SocialLinks>('social_links')
 }
 
 export async function getContactInfo(): Promise<Record<string, unknown> | null> {
-  return await getGlobalContent('contact_info')
+  return await getGlobalContentTyped<Record<string, unknown>>('contact_info')
 }
 
 export async function getSiteConfig(): Promise<Record<string, unknown> | null> {
-  return await getGlobalContent('site_config')
+  return await getGlobalContentTyped<Record<string, unknown>>('site_config')
 }
 
 // ============================================================================
@@ -223,20 +178,27 @@ export function processImagePath(path: string, bucket?: string): string {
 // ============================================================================
 
 export interface NavbarContent {
-  links: Array<{ href: string; label: string }>
+  links: Array<{ href: string; label: string; show?: boolean }>
   logo: {
-    src: string
+    image: string
     alt: string
     width: number
     height: number
+  }
+  mobile_toggle?: {
+    open_icon: string
+    close_icon: string
+    aria_label: string
+    show: boolean
   }
 }
 
 export interface FooterContent {
   brand: {
+    show?: boolean
     description: string
     logo: {
-      src: string
+      image: string
       alt: string
       width: number
       height: number
@@ -244,21 +206,33 @@ export interface FooterContent {
   }
   columns: {
     product: {
+      show?: boolean
       title: string
       links: Array<{ href: string; label: string }>
     }
     company: {
+      show?: boolean
       title: string
       links: Array<{ href: string; label: string }>
     }
     legal: {
+      show?: boolean
       title: string
       links: Array<{ href: string; label: string }>
     }
   }
   copyright: {
-    text: string
+    show?: boolean
+    primary_prefix?: string
     company: string
+    year?: string
+    show_year?: boolean
+    primary_suffix?: string
+    secondary_text?: string
+    show_secondary?: boolean
+  }
+  theme_toggle?: {
+    show?: boolean
   }
 }
 
@@ -277,4 +251,3 @@ export interface SiteConfig {
   tagline: string
   subtitle: string
 }
-

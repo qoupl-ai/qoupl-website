@@ -5,15 +5,9 @@
 import React from 'react'
 import { z } from 'zod'
 import type { SectionContract } from './types'
+import { timelineSectionSchema } from '@/lib/validation/section-schemas'
 
-// Schema for timeline section
-const timelineDataSchema = z.object({
-  timeline: z.array(z.object({
-    year: z.string(),
-    event: z.string(),
-    description: z.string(),
-  })),
-})
+const timelineDataSchema = timelineSectionSchema.shape.data
 
 // Placeholder renderer
 const TimelineRenderer: React.ComponentType<{ data: z.infer<typeof timelineDataSchema> }> = () => {
@@ -33,9 +27,7 @@ const TimelineEditor: React.ComponentType<{
   )
 }
 
-const defaultData: z.infer<typeof timelineDataSchema> = {
-  timeline: [],
-}
+const defaultData: z.infer<typeof timelineDataSchema> = timelineDataSchema.parse({})
 
 export const timelineContract: SectionContract<z.infer<typeof timelineDataSchema>> = {
   type: 'timeline',
@@ -50,4 +42,3 @@ export const timelineContract: SectionContract<z.infer<typeof timelineDataSchema
     category: 'content',
   },
 }
-

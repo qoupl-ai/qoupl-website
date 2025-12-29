@@ -28,6 +28,26 @@ export function MultiImageUploadField({
   const [images, setImages] = useState<string[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  const isSupabaseStorageUrl = (url: string): boolean => {
+    try {
+      const parsed = new URL(url)
+      return parsed.pathname.includes('/storage/v1/object/public/')
+    } catch {
+      return false
+    }
+  }
+
+  const extractStoragePath = (url: string): string | null => {
+    if (!isSupabaseStorageUrl(url)) return null
+    try {
+      const parsed = new URL(url)
+      const parts = parsed.pathname.split('/storage/v1/object/public/')
+      return parts.length > 1 ? parts[1] ?? null : null
+    } catch {
+      return null
+    }
+  }
+
   // Convert storage paths to full URLs
   const convertToUrl = (path: string): string => {
     if (!path) return ''
@@ -35,9 +55,12 @@ export function MultiImageUploadField({
     // Trim whitespace
     const trimmedPath = path.trim()
     
-    // If it's already a full URL, return as is
+    // If it's already a full Supabase storage URL, return as is
     if (trimmedPath.startsWith('http://') || trimmedPath.startsWith('https://')) {
-      return trimmedPath
+      if (isSupabaseStorageUrl(trimmedPath)) {
+        return trimmedPath
+      }
+      return ''
     }
     
     // If it's a storage path like "hero-images/women/image.png", convert it
@@ -55,10 +78,7 @@ export function MultiImageUploadField({
         console.log('MultiImageUploadField: Converting path', { original: trimmedPath, bucket: possibleBucket, imagePath, url })
         return url
       }
-      // If path doesn't start with a known bucket, assume it's just the path within the provided bucket
-      const url = getStorageUrl(bucket, trimmedPath)
-      console.log('MultiImageUploadField: Using provided bucket', { original: trimmedPath, bucket, url })
-      return url
+      return ''
     }
     // If it's just a filename, assume it's in the default bucket
     const url = getStorageUrl(bucket, trimmedPath)
@@ -142,9 +162,7 @@ export function MultiImageUploadField({
       // Get current paths (convert URLs to paths if needed)
       const currentPaths = (value || []).map(v => {
         if (v.startsWith('http://') || v.startsWith('https://')) {
-          const urlObj = new URL(v)
-          const pathParts = urlObj.pathname.split('/storage/v1/object/public/')
-          return pathParts.length > 1 ? pathParts[1] : v
+          return extractStoragePath(v) || ''
         }
         return v
       })
@@ -169,9 +187,7 @@ export function MultiImageUploadField({
   const handleDelete = (index: number) => {
     const currentPaths = (value || []).map(v => {
       if (v.startsWith('http://') || v.startsWith('https://')) {
-        const urlObj = new URL(v)
-        const pathParts = urlObj.pathname.split('/storage/v1/object/public/')
-        return pathParts.length > 1 ? pathParts[1] : v
+        return extractStoragePath(v) || ''
       }
       return v
     })
@@ -188,9 +204,7 @@ export function MultiImageUploadField({
     // Get current paths
     const currentPaths = (value || []).map(v => {
       if (v.startsWith('http://') || v.startsWith('https://')) {
-        const urlObj = new URL(v)
-        const pathParts = urlObj.pathname.split('/storage/v1/object/public/')
-        return pathParts.length > 1 ? pathParts[1] : v
+        return extractStoragePath(v) || ''
       }
       return v
     })
@@ -366,4 +380,3 @@ export function MultiImageUploadField({
     </div>
   )
 }
-

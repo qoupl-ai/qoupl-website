@@ -35,10 +35,7 @@ const HowItWorksEditor: React.ComponentType<{
 
 const howItWorksDataSchema = howItWorksSectionSchema.shape.data
 
-const defaultData: z.infer<typeof howItWorksDataSchema> = {
-  title: undefined,
-  steps: [],
-}
+const defaultData: z.infer<typeof howItWorksDataSchema> = howItWorksDataSchema.parse({})
 
 export const howItWorksContract: SectionContract<z.infer<typeof howItWorksDataSchema>> = {
   type: 'how-it-works',
@@ -53,4 +50,3 @@ export const howItWorksContract: SectionContract<z.infer<typeof howItWorksDataSc
     category: 'content',
   },
 }
-

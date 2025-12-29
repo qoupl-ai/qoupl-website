@@ -27,10 +27,7 @@ const FeatureCategoryEditor: React.ComponentType<{
 
 const featureCategoryDataSchema = featureCategorySectionSchema.shape.data
 
-const defaultData: z.infer<typeof featureCategoryDataSchema> = {
-  category_id: '',
-  features: [],
-}
+const defaultData: z.infer<typeof featureCategoryDataSchema> = featureCategoryDataSchema.parse({})
 
 export const featureCategoryContract: SectionContract<z.infer<typeof featureCategoryDataSchema>> = {
   type: 'feature-category',
@@ -45,4 +42,3 @@ export const featureCategoryContract: SectionContract<z.infer<typeof featureCate
     category: 'content',
   },
 }
-

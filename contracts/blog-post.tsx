@@ -27,17 +27,7 @@ const BlogPostEditor: React.ComponentType<{
 
 const blogPostDataSchema = blogPostSectionSchema.shape.data
 
-const defaultData: z.infer<typeof blogPostDataSchema> = {
-  title: 'New Blog Post',
-  slug: 'new-blog-post',
-  excerpt: 'Enter a brief excerpt for this blog post...',
-  content: 'Enter the full content of your blog post here...',
-  category_id: undefined,
-  author: undefined,
-  publish_date: undefined,
-  read_time: undefined,
-  featured_image: undefined,
-}
+const defaultData: z.infer<typeof blogPostDataSchema> = blogPostDataSchema.parse({})
 
 export const blogPostContract: SectionContract<z.infer<typeof blogPostDataSchema>> = {
   type: 'blog-post',
@@ -52,4 +42,3 @@ export const blogPostContract: SectionContract<z.infer<typeof blogPostDataSchema
     category: 'content',
   },
 }
-

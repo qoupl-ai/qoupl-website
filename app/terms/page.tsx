@@ -4,6 +4,7 @@
  */
 
 import { getPageSections } from '@/lib/supabase/content'
+import type { ContentSectionData } from '@/types/section'
 import TermsClient from './terms-client'
 
 export default async function TermsOfService() {
@@ -12,7 +13,11 @@ export default async function TermsOfService() {
 
   // Find content section
   const contentSection = sections.find(s => s.section_type === 'content')
-  const content = (contentSection?.content || {}) as { title?: string; lastUpdated?: string; sections?: unknown[] }
+  const content = contentSection?.content as ContentSectionData | undefined
 
-  return <TermsClient content={content} />
+  if (!content && process.env.NODE_ENV !== 'production') {
+    throw new Error('Terms page content is missing in CMS.')
+  }
+
+  return <TermsClient content={content || {}} />
 }

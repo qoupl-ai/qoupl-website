@@ -4,13 +4,15 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { getStorageUrl } from '@/lib/supabase/storage-url';
+import { resolveStorageUrl } from "@/lib/supabase/storage-url";
+import { useGlobalContent } from "@/components/global-content-provider";
 
 interface SplashScreenProps {
   onComplete: () => void;
 }
 
 export default function SplashScreen({ onComplete }: SplashScreenProps) {
+  const { splashScreen } = useGlobalContent();
   const { resolvedTheme } = useTheme();
   const [fillProgress, setFillProgress] = useState(0);
   const [mounted, setMounted] = useState(false);
@@ -55,6 +57,21 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   // Clean solid background based on theme
   const backgroundColor = isDark ? '#171717' : '#ffffff';
 
+  if (!splashScreen || splashScreen.show === false) {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('Splash screen content is missing in CMS.');
+    }
+    return null;
+  }
+
+  const logoSrc = resolveStorageUrl(splashScreen.logo?.image);
+  if (!logoSrc) {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('Splash screen logo is missing or invalid.');
+    }
+    return null;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 1 }}
@@ -78,8 +95,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           {/* Grey version - using grayscale filter */}
           <div className={`relative w-full h-full ${isDark ? 'opacity-10' : 'opacity-25'}`}>
             <Image
-              src={getStorageUrl("brand-assets", "quoupl.svg")}
-              alt="qoupl"
+              src={logoSrc}
+              alt={splashScreen.logo?.alt || ""}
               fill
               className="object-contain"
               style={{
@@ -106,8 +123,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           >
             <div className="relative w-full h-full">
               <Image
-                src={getStorageUrl("brand-assets", "quoupl.svg")}
-                alt="qoupl"
+                src={logoSrc}
+                alt={splashScreen.logo?.alt || ""}
                 fill
                 className="object-contain"
                 priority

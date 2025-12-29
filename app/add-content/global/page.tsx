@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 import { assertAdmin } from '@/lib/auth/assert-admin'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Edit, Link2, FileText, Smartphone, Mail, Settings } from 'lucide-react'
+import { Edit, Link2, FileText, Smartphone, Mail, Settings, SunMoon, Users, Sparkles, Scale, TriangleAlert, Loader, HelpCircle, Newspaper } from 'lucide-react'
 import GlobalContentEditor from '@/components/cms/global-content-editor'
 
 export default async function GlobalContentPage() {
@@ -52,6 +52,54 @@ export default async function GlobalContentPage() {
       title: 'Social Links',
       description: 'Edit social media links (LinkedIn, Instagram)',
       icon: Smartphone,
+    },
+    {
+      key: 'theme_toggle',
+      title: 'Theme Toggle',
+      description: 'Edit theme toggle labels and icons',
+      icon: SunMoon,
+    },
+    {
+      key: 'waitlist_modal',
+      title: 'Waitlist Modal',
+      description: 'Edit waitlist modal content and form fields',
+      icon: Users,
+    },
+    {
+      key: 'splash_screen',
+      title: 'Splash Screen',
+      description: 'Edit splash screen logo and visibility',
+      icon: Sparkles,
+    },
+    {
+      key: 'legal_ui',
+      title: 'Legal UI',
+      description: 'Edit legal page labels and icons',
+      icon: Scale,
+    },
+    {
+      key: 'error_ui',
+      title: 'Error UI',
+      description: 'Edit error boundary messaging',
+      icon: TriangleAlert,
+    },
+    {
+      key: 'loading_ui',
+      title: 'Loading UI',
+      description: 'Edit loading states and icons',
+      icon: Loader,
+    },
+    {
+      key: 'faq_ui',
+      title: 'FAQ UI',
+      description: 'Edit FAQ page hero, icons, and CTAs',
+      icon: HelpCircle,
+    },
+    {
+      key: 'blog_ui',
+      title: 'Blog UI',
+      description: 'Edit blog listing and detail UI text',
+      icon: Newspaper,
     },
     {
       key: 'contact_info',

@@ -9,6 +9,8 @@
 
 import { getSectionContract } from '@/contracts/registry'
 import type { Section } from '@/types/section'
+import { getSectionSchema } from '@/lib/validation/section-schemas'
+import { normalizeContentData } from '@/components/cms/section-editor/helpers'
 
 // Type definition for section data (matches DB Section type)
 export type SectionData = Section
@@ -35,41 +37,41 @@ export function SectionRenderer({ section }: { section: SectionData }) {
   const sectionType = section.section_type
 
   if (!sectionType) {
-    console.error('Section missing section_type field:', section)
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-muted p-4 rounded-lg">
-          <p className="text-sm text-muted-foreground">
-            Section missing section_type field. Please ensure database migration has been run.
-          </p>
-          <pre className="mt-2 text-xs overflow-auto">
-            {JSON.stringify(section, null, 2)}
-          </pre>
-        </div>
-      </div>
-    )
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('Section is missing section_type. Please ensure the database migration has been run.')
+    }
+    return null
   }
 
-  const Component = getSectionComponent(sectionType)
+  const contract = getSectionContract(sectionType)
+  const Component = contract?.renderer
 
   if (!Component) {
-    console.warn(`Unknown section type: ${sectionType}`)
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-muted p-4 rounded-lg">
-          <p className="text-sm text-muted-foreground">
-            Unknown section type: <code>{sectionType}</code>
-          </p>
-          <pre className="mt-2 text-xs overflow-auto">
-            {JSON.stringify(section.content, null, 2)}
-          </pre>
-        </div>
-      </div>
-    )
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error(`Unknown section type: ${sectionType}`)
+    }
+    return null
+  }
+
+  const contractSchema = contract?.schema
+  const normalizedContent = normalizeContentData(section.content as Record<string, unknown>, sectionType)
+  const parsed = contractSchema
+    ? contractSchema.safeParse(normalizedContent)
+    : getSectionSchema(sectionType).safeParse({
+        type: sectionType,
+        data: normalizedContent,
+        order_index: section.order_index ?? 0,
+        published: section.published ?? false,
+      })
+  if (!parsed.success) {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error(`Invalid data for section type \"${sectionType}\": ${parsed.error.message}`)
+    }
+    return null
   }
 
   // Render component with data - all components support SSR via dynamic imports
-  return <Component data={section.content} />
+  return <Component data={contractSchema ? parsed.data : parsed.data.data} />
 }
 
 /**

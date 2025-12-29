@@ -69,9 +69,12 @@ async function seedPricingSections() {
       content: {
         title: 'Affordable Pricing',
         subtitle: 'Pay only for what you use. No hidden fees, no surprises.',
+        showTitle: true,
+        showSubtitle: true,
         badge: {
-          icon: 'sparkles',
+          icon: 'Sparkles',
           text: 'Transparent Pricing',
+          show: true,
         },
       },
       published: true,
@@ -82,9 +85,10 @@ async function seedPricingSections() {
       content: {
         plans: [
           {
+            icon: 'Zap',
             name: 'Platform Access',
             price: 10,
-            currency: 'INR',
+            currency: '₹',
             billing_period: 'month',
             features: [
               'AI-powered matching algorithm',
@@ -96,6 +100,8 @@ async function seedPricingSections() {
               'Ad-free experience',
               'Enhanced privacy controls',
             ],
+            featureIcon: 'Check',
+            showFeatures: true,
             is_popular: false,
             order_index: 0,
           },
@@ -110,6 +116,9 @@ async function seedPricingSections() {
         title: 'First 3 Messages Free Per Match!',
         description: 'Start conversations with your matches without any additional cost. Your first 3 messages with each match are completely free.',
         count: 3,
+        icon: 'Heart',
+        show: true,
+        showIcon: true,
       },
       published: true,
     },
@@ -121,14 +130,29 @@ async function seedPricingSections() {
         subtitle: 'After your free messages, purchase message bundles to continue connecting',
         price_per_message: 10,
         gst_rate: 18,
+        currencySymbol: '₹',
+        icon: 'MessageSquare',
+        showIcon: true,
+        show: true,
         min_messages: 5,
         max_messages: 100,
         bundles: [
-          { messages: 5, popular: false },
-          { messages: 10, popular: true },
-          { messages: 20, popular: false },
-          { messages: 50, popular: false },
+          { messages: 5, popular: false, show: true },
+          { messages: 10, popular: true, label: 'Popular', show: true },
+          { messages: 20, popular: false, show: true },
+          { messages: 50, popular: false, show: true },
         ],
+        labels: {
+          popular: 'Popular',
+          messages: 'Messages',
+          customBundleTitle: 'Custom Bundle',
+          customBundleSubtitle: 'Choose your own message bundle size (minimum 5 messages)',
+          quantityLabel: 'Number of Messages',
+          basePriceLabel: 'Base Price',
+          gstLabel: 'GST',
+          totalLabel: 'Total Amount',
+          purchaseLabel: 'Purchase',
+        },
       },
       published: true,
     },
@@ -144,6 +168,11 @@ async function seedPricingSections() {
           'Each message costs ₹10, bundles can be customized to your needs',
           'All prices include 18% GST',
         ],
+        icon: 'Info',
+        itemIcon: 'Check',
+        show: true,
+        showIcon: true,
+        showItemIcon: true,
       },
       published: true,
     },
@@ -156,22 +185,30 @@ async function seedPricingSections() {
           {
             question: 'Do message bundles expire?',
             answer: 'No, your purchased message bundles never expire. Use them whenever you\'re ready to connect!',
+            show: true,
           },
           {
             question: 'Can I cancel my subscription?',
             answer: 'Yes, you can cancel your platform subscription anytime. Your access will continue until the end of your billing period.',
+            show: true,
           },
           {
             question: 'Are there any hidden fees?',
             answer: 'No hidden fees! The only costs are the ₹10/month platform fee and any message bundles you choose to purchase.',
+            show: true,
           },
           {
             question: 'How do the 3 free messages work?',
             answer: 'For each match you connect with, your first 3 messages are completely free. This applies to every new match individually.',
+            show: true,
           },
         ],
-        cta_text: 'Still have questions?',
-        cta_link: '/contact',
+        cta: {
+          text: 'Still have questions?',
+          link: '/contact',
+          buttonText: 'Contact Support',
+          show: true,
+        },
       },
       published: true,
     },
@@ -222,4 +259,3 @@ seedPricingSections()
     console.error('❌ Fatal error:', error)
     process.exit(1)
   })
-

@@ -1,6 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
+import { getGlobalContentTyped } from '@/lib/supabase/content'
+import type { BlogUiContentData } from '@/lib/validation/global-content-schemas'
 import BlogClient from './blog-client'
 import { Suspense } from 'react'
+import { PageLoading } from '@/components/loading-spinner'
 
 async function getBlogData() {
   const supabase = await createClient()
@@ -49,27 +52,17 @@ async function getBlogData() {
   }
 }
 
-function BlogLoading() {
-  return (
-    <div className="min-h-screen bg-background">
-      <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10 py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading blog posts...</p>
-          </div>
-        </div>
-      </section>
-    </div>
-  )
-}
-
 export default async function Blog() {
   const { posts, categories } = await getBlogData()
+  const blogUi = await getGlobalContentTyped<BlogUiContentData>('blog_ui')
+
+  if (!blogUi && process.env.NODE_ENV !== 'production') {
+    throw new Error('Blog UI content is missing in CMS.')
+  }
 
   return (
-    <Suspense fallback={<BlogLoading />}>
-      <BlogClient posts={posts as any} categories={categories} />
+    <Suspense fallback={<PageLoading />}>
+      <BlogClient posts={posts as any} categories={categories} ui={blogUi || {}} />
     </Suspense>
   )
 }

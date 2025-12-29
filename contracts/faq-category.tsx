@@ -27,10 +27,7 @@ const FaqCategoryEditor: React.ComponentType<{
 
 const faqCategoryDataSchema = faqCategorySectionSchema.shape.data
 
-const defaultData: z.infer<typeof faqCategoryDataSchema> = {
-  category_id: '',
-  faqs: [],
-}
+const defaultData: z.infer<typeof faqCategoryDataSchema> = faqCategoryDataSchema.parse({})
 
 export const faqCategoryContract: SectionContract<z.infer<typeof faqCategoryDataSchema>> = {
   type: 'faq-category',
@@ -45,4 +42,3 @@ export const faqCategoryContract: SectionContract<z.infer<typeof faqCategoryData
     category: 'content',
   },
 }
-

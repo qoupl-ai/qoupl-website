@@ -1,12 +1,8 @@
 "use client";
 
-import { Heart, Users, Zap, Code, Rocket, Mail, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-
-// Icon mapping
-const iconMap: Record<string, any> = {
-  Heart, Users, Zap, Code, Rocket, Mail, Sparkles
-};
+import type { ComponentType } from "react";
+import { resolveLucideIcon } from "@/lib/utils/icons";
 
 interface CareersClientProps {
   data: {
@@ -24,25 +20,101 @@ export default function CareersClient({ data }: CareersClientProps) {
   const valuesSection = data.sections.find(s => s.type === 'values');
   const whyJoinSection = data.sections.find(s => s.type === 'why-join');
 
-  const heroTitle = heroSection?.content?.title;
-  const heroSubtitle = heroSection?.content?.subtitle;
-  const comingSoonTitle = comingSoonSection?.content?.title;
-  const comingSoonDescription = comingSoonSection?.content?.description;
-  const comingSoonEmail = comingSoonSection?.content?.email;
-  const values = valuesSection?.content?.values || [];
-  const whyJoin = whyJoinSection?.content?.items || [];
+  const heroContent = (heroSection?.content || {}) as Record<string, unknown>;
+  const comingSoonContent = (comingSoonSection?.content || {}) as Record<string, unknown>;
+  const valuesContent = (valuesSection?.content || {}) as Record<string, unknown>;
+  const whyJoinContent = (whyJoinSection?.content || {}) as Record<string, unknown>;
+
+  const heroTitle = typeof heroContent['title'] === 'string' ? heroContent['title'] : '';
+  const heroTitleHighlight = typeof heroContent['titleHighlight'] === 'string' ? heroContent['titleHighlight'] : '';
+  const heroSubtitle = typeof heroContent['subtitle'] === 'string' ? heroContent['subtitle'] : '';
+  const heroBadge = (heroContent['badge'] || {}) as Record<string, unknown>;
+
+  const comingSoonTitle = typeof comingSoonContent['title'] === 'string' ? comingSoonContent['title'] : '';
+  const comingSoonSubtitle = typeof comingSoonContent['subtitle'] === 'string' ? comingSoonContent['subtitle'] : '';
+  const comingSoonBadge = (comingSoonContent['badge'] || {}) as Record<string, unknown>;
+  const comingSoonCta = (comingSoonContent['cta'] || {}) as Record<string, unknown>;
+  const comingSoonCallout = (comingSoonContent['callout'] || {}) as Record<string, unknown>;
+  const comingSoonFooterNote = typeof comingSoonContent['footer_note'] === 'string' ? comingSoonContent['footer_note'] : '';
+
+  const valuesTitle = typeof valuesContent['title'] === 'string' ? valuesContent['title'] : '';
+  const valuesTitleHighlight = typeof valuesContent['titleHighlight'] === 'string' ? valuesContent['titleHighlight'] : '';
+  const valuesSubtitle = typeof valuesContent['subtitle'] === 'string' ? valuesContent['subtitle'] : '';
+  const values = Array.isArray(valuesContent['values'])
+    ? valuesContent['values'].filter((item) => (item as Record<string, unknown>)['show'] !== false)
+    : [];
+
+  const whyJoinTitle = typeof whyJoinContent['title'] === 'string' ? whyJoinContent['title'] : '';
+  const whyJoinTitleHighlight = typeof whyJoinContent['titleHighlight'] === 'string' ? whyJoinContent['titleHighlight'] : '';
+  const whyJoin = Array.isArray(whyJoinContent['items'])
+    ? whyJoinContent['items'].filter((item) => (item as Record<string, unknown>)['show'] !== false)
+    : [];
 
   // Process values to include icon components
   const processedValues = values.map((item: unknown) => {
     const itemObj = item as Record<string, unknown>
-    const iconName = itemObj['icon']
+    const iconName = typeof itemObj['icon'] === 'string' ? itemObj['icon'] : ''
     return {
       ...itemObj,
-      icon: (typeof iconName === 'string' && iconName in iconMap) 
-        ? iconMap[iconName] 
-        : Heart,
+      icon: resolveLucideIcon(iconName),
     }
   });
+
+  const renderHighlightedText = (text: string, highlight: string) => {
+    if (!highlight) return text;
+    const index = text.toLowerCase().indexOf(highlight.toLowerCase());
+    if (index === -1) return text;
+    const before = text.slice(0, index);
+    const match = text.slice(index, index + highlight.length);
+    const after = text.slice(index + highlight.length);
+    return (
+      <>
+        {before}
+        <span className="bg-[#662D91] bg-clip-text text-transparent">{match}</span>
+        {after}
+      </>
+    );
+  };
+
+  const heroBadgeText = typeof heroBadge['text'] === 'string' ? heroBadge['text'] : '';
+  const heroBadgeIconName = typeof heroBadge['icon'] === 'string' ? heroBadge['icon'] : '';
+  const heroBadgeShow = heroBadge['show'] !== false && heroBadgeText.length > 0;
+  const HeroBadgeIcon = resolveLucideIcon(heroBadgeIconName);
+
+  const comingSoonBadgeIconName = typeof comingSoonBadge['icon'] === 'string' ? comingSoonBadge['icon'] : '';
+  const comingSoonBadgeShow = comingSoonBadge['show'] !== false && comingSoonBadgeIconName.length > 0;
+  const ComingSoonBadgeIcon = resolveLucideIcon(comingSoonBadgeIconName);
+
+  const comingSoonCtaText = typeof comingSoonCta['text'] === 'string' ? comingSoonCta['text'] : '';
+  const comingSoonCtaLink = typeof comingSoonCta['link'] === 'string' ? comingSoonCta['link'] : '';
+  const comingSoonCtaShow = comingSoonCta['show'] !== false && comingSoonCtaText.length > 0;
+  const comingSoonCtaIconName = typeof comingSoonCta['icon'] === 'string' ? comingSoonCta['icon'] : '';
+  const ComingSoonCtaIcon = resolveLucideIcon(comingSoonCtaIconName);
+
+  const comingSoonCalloutTitle = typeof comingSoonCallout['title'] === 'string' ? comingSoonCallout['title'] : '';
+  const comingSoonCalloutDescription = typeof comingSoonCallout['description'] === 'string' ? comingSoonCallout['description'] : '';
+  const comingSoonCalloutShow = comingSoonCallout['show'] !== false && (comingSoonCalloutTitle.length > 0 || comingSoonCalloutDescription.length > 0);
+
+  if (process.env.NODE_ENV !== 'production') {
+    if (!heroTitle) {
+      throw new Error('Careers hero title is missing in CMS.');
+    }
+    if (!comingSoonTitle) {
+      throw new Error('Careers coming soon title is missing in CMS.');
+    }
+    if (heroBadgeShow && heroBadgeIconName && !HeroBadgeIcon) {
+      throw new Error('Careers hero badge icon is missing or invalid in CMS.');
+    }
+    if (comingSoonBadgeShow && comingSoonBadgeIconName && !ComingSoonBadgeIcon) {
+      throw new Error('Careers coming soon badge icon is missing or invalid in CMS.');
+    }
+    if (comingSoonCtaShow && comingSoonCtaIconName && !ComingSoonCtaIcon) {
+      throw new Error('Careers coming soon CTA icon is missing or invalid in CMS.');
+    }
+    if (comingSoonCtaShow && !comingSoonCtaLink) {
+      throw new Error('Careers coming soon CTA link is missing in CMS.');
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -84,25 +156,21 @@ export default function CareersClient({ data }: CareersClientProps) {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6 backdrop-blur-sm"
-            >
-              <Rocket className="h-4 w-4" />
-              <span className="text-sm font-semibold">Join Our Team</span>
-            </motion.div>
+            {heroBadgeShow && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6 backdrop-blur-sm"
+              >
+                {HeroBadgeIcon && <HeroBadgeIcon className="h-4 w-4" />}
+                <span className="text-sm font-semibold">{heroBadgeText}</span>
+              </motion.div>
+            )}
 
             {heroTitle && (
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                {heroTitle.split(' ').map((word: string, i: number) => 
-                  word === 'Dating' ? (
-                    <span key={i} className="bg-[#662D91] bg-clip-text text-transparent">{word} </span>
-                  ) : (
-                    <span key={i}>{word} </span>
-                  )
-                )}
+                {renderHighlightedText(heroTitle, heroTitleHighlight)}
               </h1>
             )}
 
@@ -130,51 +198,54 @@ export default function CareersClient({ data }: CareersClientProps) {
             <div className="absolute inset-0 bg-[#662D91]/20 rounded-3xl blur-xl" />
 
             <div className="relative bg-card/50 backdrop-blur-sm border border-primary/20 rounded-3xl p-12 md:p-16 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#662D91] mb-8">
-                <Sparkles className="h-10 w-10 text-white" />
-              </div>
+              {comingSoonBadgeShow && ComingSoonBadgeIcon && (
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#662D91] mb-8">
+                  <ComingSoonBadgeIcon className="h-10 w-10 text-white" />
+                </div>
+              )}
 
               {comingSoonTitle && (
                 <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                  {comingSoonTitle.split(' ').map((word: string, i: number) => 
-                    word === 'Special' ? (
-                      <span key={i} className="bg-[#662D91] bg-clip-text text-transparent">{word} </span>
-                    ) : (
-                      <span key={i}>{word} </span>
-                    )
-                  )}
+                  {comingSoonTitle}
                 </h2>
               )}
 
-              {comingSoonDescription && (
+              {comingSoonSubtitle && (
                 <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                  {comingSoonDescription}
+                  {comingSoonSubtitle}
                 </p>
               )}
 
-              <div className="bg-[#662D91]/5 rounded-2xl p-8 mb-8">
-                <h3 className="text-2xl font-bold mb-4">Be in Touch</h3>
-                <p className="text-lg text-muted-foreground mb-6">
-                  Send us your resume and a note about why you'd like to join qoupl.
-                  We'll reach out when positions become available.
+              {comingSoonCalloutShow && (
+                <div className="bg-[#662D91]/5 rounded-2xl p-8 mb-8">
+                  {comingSoonCalloutTitle && (
+                    <h3 className="text-2xl font-bold mb-4">{comingSoonCalloutTitle}</h3>
+                  )}
+                  {comingSoonCalloutDescription && (
+                    <p className="text-lg text-muted-foreground mb-6">
+                      {comingSoonCalloutDescription}
+                    </p>
+                  )}
+
+                  {comingSoonCtaShow && comingSoonCtaLink && (
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <a
+                        href={comingSoonCtaLink}
+                        className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#662D91] text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                      >
+                        {ComingSoonCtaIcon && <ComingSoonCtaIcon className="h-5 w-5" />}
+                        {comingSoonCtaText}
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {comingSoonFooterNote && (
+                <p className="text-sm text-muted-foreground">
+                  {comingSoonFooterNote}
                 </p>
-
-                {comingSoonEmail && (
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a
-                      href={`mailto:${comingSoonEmail}`}
-                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#662D91] text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                    >
-                      <Mail className="h-5 w-5" />
-                      {comingSoonEmail}
-                    </a>
-                  </div>
-                )}
-              </div>
-
-              <p className="text-sm text-muted-foreground">
-                We're an equal opportunity employer and value diversity at our company.
-              </p>
+              )}
             </div>
           </motion.div>
         </div>
@@ -191,21 +262,22 @@ export default function CareersClient({ data }: CareersClientProps) {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              What We{" "}
-              <span className="bg-[#662D91] bg-clip-text text-transparent">
-                Value
-              </span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              These principles guide how we work and build together
-            </p>
+            {valuesTitle && (
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                {renderHighlightedText(valuesTitle, valuesTitleHighlight)}
+              </h2>
+            )}
+            {valuesSubtitle && (
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                {valuesSubtitle}
+              </p>
+            )}
           </motion.div>
 
           {values.length > 0 && (
             <div className="grid md:grid-cols-2 gap-6">
               {processedValues.map((value: Record<string, unknown>, index: number) => {
-              const Icon = value['icon'] as React.ComponentType<{ className?: string }> | undefined;
+              const Icon = value['icon'] as ComponentType<{ className?: string }> | undefined;
               const color = typeof value['color'] === 'string' ? value['color'] : '';
               return (
                 <motion.div
@@ -251,18 +323,20 @@ export default function CareersClient({ data }: CareersClientProps) {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Why Join{" "}
-              <span className="bg-[#662D91] bg-clip-text text-transparent">
-                qoupl?
-              </span>
-            </h2>
+            {whyJoinTitle && (
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                {renderHighlightedText(whyJoinTitle, whyJoinTitleHighlight)}
+              </h2>
+            )}
           </motion.div>
 
           {whyJoin.length > 0 && (
             <div className="grid md:grid-cols-3 gap-8">
               {whyJoin.map((item: unknown, index: number) => {
                 const itemObj = item as Record<string, unknown>
+                const iconName = typeof itemObj['icon'] === 'string' ? itemObj['icon'] : ''
+                const ItemIcon = resolveLucideIcon(iconName)
+
                 return (
                   <motion.div
                     key={index}
@@ -272,8 +346,12 @@ export default function CareersClient({ data }: CareersClientProps) {
                     transition={{ delay: index * 0.1, duration: 0.5 }}
                     className="text-center p-6"
                   >
-                    <div className="text-5xl mb-4">{typeof itemObj['icon'] === 'string' ? itemObj['icon'] : ''}</div>
-                    <h3 className="text-xl font-bold mb-3">{typeof itemObj['title'] === 'string' ? itemObj['title'] : ''}</h3>
+                    <div className="text-5xl mb-4">
+                      {ItemIcon && <ItemIcon className="h-12 w-12 mx-auto text-primary" />}
+                    </div>
+                    <h3 className="text-xl font-bold mb-3">
+                      {typeof itemObj['title'] === 'string' ? itemObj['title'] : ''}
+                    </h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {typeof itemObj['description'] === 'string' ? itemObj['description'] : ''}
                     </p>
@@ -287,4 +365,3 @@ export default function CareersClient({ data }: CareersClientProps) {
     </div>
   );
 }
-

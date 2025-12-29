@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useScroll } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { resolveLucideIcon } from "@/lib/utils/icons";
+import { resolveStorageUrl } from "@/lib/supabase/storage-url";
 import type { NavbarContent } from "@/lib/supabase/content";
 
 interface NavbarClientProps {
@@ -29,7 +30,32 @@ export default function NavbarClient({ content }: NavbarClientProps) {
     });
   }, [scrollY]);
 
-  const navLinks = content.links;
+  const navLinks = Array.isArray(content.links)
+    ? content.links.filter((link) => link.show !== false)
+    : [];
+
+  const logoSrc = resolveStorageUrl(content.logo?.image);
+  const logoWidth = content.logo?.width ?? 0;
+  const logoHeight = content.logo?.height ?? 0;
+  if (!logoSrc || logoWidth <= 0 || logoHeight <= 0) {
+    if (process.env.NODE_ENV !== "production") {
+      throw new Error("Navbar logo image is missing or invalid.");
+    }
+    return null;
+  }
+
+  const toggleConfig = content.mobile_toggle;
+  const OpenIcon = resolveLucideIcon(toggleConfig?.open_icon);
+  const CloseIcon = resolveLucideIcon(toggleConfig?.close_icon);
+  const showToggle = toggleConfig?.show !== false;
+  const toggleLabel = toggleConfig?.aria_label ?? "";
+
+  if (showToggle && (!OpenIcon || !CloseIcon)) {
+    if (process.env.NODE_ENV !== "production") {
+      throw new Error("Navbar mobile toggle icons are missing or invalid.");
+    }
+    return null;
+  }
 
   return (
     <motion.nav
@@ -68,10 +94,10 @@ export default function NavbarClient({ content }: NavbarClientProps) {
           {/* Logo */}
           <Link href="/" className="flex items-center z-10">
             <Image
-              src={content.logo.src}
-              alt={content.logo.alt}
-              width={content.logo.width}
-              height={content.logo.height}
+              src={logoSrc}
+              alt={content.logo?.alt || ""}
+              width={logoWidth}
+              height={logoHeight}
               className="h-8 w-auto"
             />
           </Link>
@@ -106,17 +132,19 @@ export default function NavbarClient({ content }: NavbarClientProps) {
           {/* Right Side - Mobile Menu */}
           <div className="flex items-center gap-3">
             {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/5 transition-colors"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </button>
+            {showToggle && (
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg hover:bg-white/10 dark:hover:bg-white/5 transition-colors"
+                aria-label={toggleLabel}
+              >
+                {isMobileMenuOpen ? (
+                  CloseIcon ? <CloseIcon className="h-5 w-5" /> : null
+                ) : (
+                  OpenIcon ? <OpenIcon className="h-5 w-5" /> : null
+                )}
+              </button>
+            )}
           </div>
         </div>
 
@@ -154,4 +182,3 @@ export default function NavbarClient({ content }: NavbarClientProps) {
     </motion.nav>
   );
 }
-

@@ -4,6 +4,7 @@
  */
 
 import { getPageSections } from '@/lib/supabase/content'
+import type { ContentSectionData } from '@/types/section'
 import CommunityGuidelinesClient from './community-guidelines-client'
 
 export default async function CommunityGuidelines() {
@@ -12,7 +13,11 @@ export default async function CommunityGuidelines() {
 
   // Find content section
   const contentSection = sections.find(s => s.section_type === 'content')
-  const content = (contentSection?.content as Record<string, unknown>) || {}
+  const content = contentSection?.content as ContentSectionData | undefined
 
-  return <CommunityGuidelinesClient content={content} />
+  if (!content && process.env.NODE_ENV !== 'production') {
+    throw new Error('Community guidelines content is missing in CMS.')
+  }
+
+  return <CommunityGuidelinesClient content={content || {}} />
 }

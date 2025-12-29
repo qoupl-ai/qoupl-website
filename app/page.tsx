@@ -15,6 +15,9 @@ import { StructuredData, organizationSchema, websiteSchema, webApplicationSchema
 export default async function Home() {
   // Fetch sections for home page
   const sections = await getPageSections('home')
+  if (sections.length === 0 && process.env.NODE_ENV !== 'production') {
+    throw new Error('Homepage has no published sections in CMS.')
+  }
 
   return (
     <div className="relative min-h-screen">
@@ -28,15 +31,7 @@ export default async function Home() {
         <Navbar />
         
         {/* Render sections dynamically from database */}
-        {sections.length > 0 ? (
-          <SectionsRenderer sections={sections} />
-        ) : (
-          <div className="container mx-auto px-4 py-32 text-center">
-            <p className="text-muted-foreground">
-              No content available. Please run the migration script to populate homepage content.
-            </p>
-          </div>
-        )}
+        {sections.length > 0 && <SectionsRenderer sections={sections} />}
         
         <Footer />
       </div>

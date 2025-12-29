@@ -3,18 +3,20 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Heart } from "lucide-react";
-import { getStorageUrl } from "@/lib/supabase/storage-url";
+import { resolveStorageUrl } from "@/lib/supabase/storage-url";
+import { resolveLucideIcon } from "@/lib/utils/icons";
 
 // No hardcoded defaults - all content must come from database
 
 interface GalleryProps {
   data?: {
     title?: string;
+    titleHighlight?: string;
     subtitle?: string;
     badge?: {
       icon?: string;
       text?: string;
+      show?: boolean;
     };
     images?: Array<{
       image: string;
@@ -25,6 +27,15 @@ interface GalleryProps {
     cta?: {
       text?: string;
       highlight?: string;
+      show?: boolean;
+    };
+    successBadge?: {
+      text?: string;
+      show?: boolean;
+    };
+    icons?: {
+      badge?: string;
+      story?: string;
     };
   };
 }
@@ -33,35 +44,16 @@ export default function Gallery({ data }: GalleryProps = {}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  // Process images from data only - no defaults
   const galleryImages = (data?.images && Array.isArray(data.images) && data.images.length > 0)
     ? data.images.map(item => {
-        if (!item.image) {
-          return {
-            src: '',
-            alt: item.alt || item.title || "Gallery image",
-            title: item.title || "",
-            story: item.story || ""
-          };
-        }
-        let src: string = item.image;
-        if (!src.startsWith('http') && !src.startsWith('/')) {
-          if (src.includes('/')) {
-            const [bucket, ...rest] = src.split('/');
-            if (bucket) {
-              src = getStorageUrl(bucket, rest.join('/'));
-            }
-          } else {
-            src = getStorageUrl('couple-photos', src);
-          }
-        }
+        const src = resolveStorageUrl(item.image);
         return {
           src,
-          alt: item.alt || item.title || "Gallery image",
+          alt: item.alt || "",
           title: item.title || "",
           story: item.story || ""
         };
-      })
+      }).filter(item => item.src.length > 0)
     : [];
 
   // Auto-play carousel
@@ -75,14 +67,35 @@ export default function Gallery({ data }: GalleryProps = {}) {
     return () => clearInterval(timer);
   }, [currentIndex, galleryImages.length]);
 
-  // All content must come from database - no hardcoded fallbacks
   if (galleryImages.length === 0) {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('Gallery section data is missing required images.')
+    }
+    return null
+  }
+
+  const BadgeIcon = resolveLucideIcon(data?.badge?.icon || data?.icons?.badge)
+  const StoryIcon = resolveLucideIcon(data?.icons?.story)
+  const showBadge = data?.badge?.show === true && (data.badge?.text || '').length > 0
+  const showCta = data?.cta?.show === true && (data.cta?.text || '').length > 0
+  const showSuccessBadge = data?.successBadge?.show === true && (data.successBadge?.text || '').length > 0
+  const title = data?.title || ''
+  const titleHighlight = data?.titleHighlight || ''
+  const subtitle = data?.subtitle || ''
+
+  const renderTitle = () => {
+    if (!titleHighlight) return title
+    const index = title.toLowerCase().indexOf(titleHighlight.toLowerCase())
+    if (index === -1) return title
+    const before = title.slice(0, index)
+    const match = title.slice(index, index + titleHighlight.length)
+    const after = title.slice(index + titleHighlight.length)
     return (
-      <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">Gallery content not available. Please add content in CMS.</p>
-        </div>
-      </section>
+      <>
+        {before}
+        <span className="bg-[#662D91] bg-clip-text text-transparent">{match}</span>
+        {after}
+      </>
     )
   }
 
@@ -124,26 +137,29 @@ export default function Gallery({ data }: GalleryProps = {}) {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ delay: 0.2, type: "spring" }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
-          >
-            <Heart className="h-4 w-4 fill-primary" />
-            <span className="text-sm font-medium">Love Stories</span>
-          </motion.div>
+          {showBadge && (
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: 0.2, type: "spring" }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
+            >
+              {BadgeIcon && <BadgeIcon className="h-4 w-4 fill-primary" />}
+              <span className="text-sm font-medium">{data?.badge?.text}</span>
+            </motion.div>
+          )}
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            Real{" "}
-            <span className="bg-[#662D91] bg-clip-text text-transparent">
-              Connections
-            </span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Join thousands of college student couples who found their perfect match through qoupl
-          </p>
+          {title && (
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+              {renderTitle()}
+            </h2>
+          )}
+          {subtitle && (
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {subtitle}
+            </p>
+          )}
         </motion.div>
 
         {/* Enhanced 3D Carousel Container */}
@@ -295,35 +311,39 @@ export default function Gallery({ data }: GalleryProps = {}) {
                           className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white z-10"
                         >
                           {/* Animated Heart */}
-                          <motion.div
-                            className="absolute top-6 right-6"
-                            initial={{ scale: 0 }}
-                            animate={{ 
-                              scale: [1, 1.3, 1],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                            }}
-                          >
-                            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl border border-white/30">
-                              <Heart className="h-7 w-7 text-white fill-white" />
-                            </div>
-                          </motion.div>
+                          {StoryIcon && (
+                            <motion.div
+                              className="absolute top-6 right-6"
+                              initial={{ scale: 0 }}
+                              animate={{ 
+                                scale: [1, 1.3, 1],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              }}
+                            >
+                              <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl border border-white/30">
+                                <StoryIcon className="h-7 w-7 text-white fill-white" />
+                              </div>
+                            </motion.div>
+                          )}
 
                           <h3 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">{image.title}</h3>
                           <p className="text-white/95 text-base md:text-lg drop-shadow-md">{image.story}</p>
                           
                           {/* Beta User Badge */}
-                          <motion.div 
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.5 }}
-                            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#662D91]/30 to-[#662D91]/30 backdrop-blur-md border border-white/30"
-                          >
-                            <span className="text-sm font-semibold">Beta Success Story</span>
-                          </motion.div>
+                          {showSuccessBadge && (
+                            <motion.div 
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.5 }}
+                              className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#662D91]/30 to-[#662D91]/30 backdrop-blur-md border border-white/30"
+                            >
+                              <span className="text-sm font-semibold">{data?.successBadge?.text}</span>
+                            </motion.div>
+                          )}
                         </motion.div>
                       )}
 
@@ -361,24 +381,27 @@ export default function Gallery({ data }: GalleryProps = {}) {
           </div>
         </div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-center mt-16 relative z-30"
-        >
-          <motion.p
-            whileHover={{ scale: 1.05 }}
-            className="text-lg md:text-xl text-muted-foreground"
+        {showCta && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-center mt-16 relative z-30"
           >
-            Be part of something beautiful.{" "}
-            <span className="text-primary font-semibold">
-              Your story could be next.
-            </span>
-          </motion.p>
-        </motion.div>
+            <motion.p
+              whileHover={{ scale: 1.05 }}
+              className="text-lg md:text-xl text-muted-foreground"
+            >
+              {data?.cta?.text}{" "}
+              {data?.cta?.highlight && (
+                <span className="text-primary font-semibold">
+                  {data?.cta?.highlight}
+                </span>
+              )}
+            </motion.p>
+          </motion.div>
+        )}
       </div>
     </section>
   );

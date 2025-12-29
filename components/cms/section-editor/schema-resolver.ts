@@ -63,6 +63,14 @@ export function getDataSchema(sectionType: string): z.ZodSchema {
 export function getDefaultData(sectionType: string): Record<string, unknown> {
   const contract = getSectionContract(sectionType)
   if (contract) {
+    try {
+      const parsed = contract.schema.safeParse({})
+      if (parsed.success && parsed.data && typeof parsed.data === 'object') {
+        return parsed.data as Record<string, unknown>
+      }
+    } catch (error) {
+      console.warn('Failed to derive defaults from schema for', sectionType, error)
+    }
     return contract.defaultData as Record<string, unknown>
   }
   return {}
@@ -80,4 +88,3 @@ export function normalizeContentData(
   // This function can be extended to handle format conversions if needed
   return content || {}
 }
-

@@ -13,6 +13,7 @@
     "seed:content": "ts-node --project tsconfig.node.json scripts/seed-content.ts",
     "seed:pricing": "ts-node --project tsconfig.node.json scripts/seed-pricing-sections.ts",
     "seed:contact": "ts-node --project tsconfig.node.json scripts/seed-contact-sections.ts",
+    "seed:about": "ts-node --project tsconfig.node.json scripts/seed-about-sections.ts",
     "setup:all": "npm run setup:storage && npm run upload:images && npm run seed:content",
     "replace:images": "ts-node --project tsconfig.node.json scripts/replace-local-image-references.ts",
     "remove:local-images": "ts-node --project tsconfig.node.json scripts/remove-local-images.ts"

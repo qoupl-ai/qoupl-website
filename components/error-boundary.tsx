@@ -2,7 +2,9 @@
 
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, RefreshCw } from 'lucide-react'
+import { resolveLucideIcon } from '@/lib/utils/icons'
+import { useGlobalContent } from '@/components/global-content-provider'
+import type { ErrorUiContentData } from '@/lib/validation/global-content-schemas'
 
 interface ErrorBoundaryState {
   hasError: boolean
@@ -14,7 +16,11 @@ interface ErrorBoundaryProps {
   fallback?: React.ComponentType<{ error: Error | null; resetError: () => void }>
 }
 
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+interface ErrorBoundaryInnerProps extends ErrorBoundaryProps {
+  errorUi: ErrorUiContentData
+}
+
+class ErrorBoundaryInner extends React.Component<ErrorBoundaryInnerProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props)
     this.state = { hasError: false, error: null }
@@ -34,6 +40,11 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
   override render() {
     if (this.state.hasError) {
+      const { errorUi } = this.props
+      const MainIcon = resolveLucideIcon(errorUi.icon)
+      const RetryIcon = resolveLucideIcon(errorUi.retry_icon)
+      const HomeIcon = resolveLucideIcon(errorUi.home_icon)
+
       if (this.props.fallback) {
         const Fallback = this.props.fallback
         return <Fallback error={this.state.error} resetError={this.resetError} />
@@ -43,30 +54,33 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
         <div className="min-h-screen flex items-center justify-center bg-background p-4">
           <div className="max-w-md w-full text-center space-y-6">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-destructive/10 mb-4">
-              <AlertCircle className="h-8 w-8 text-destructive" />
+              {MainIcon && <MainIcon className="h-8 w-8 text-destructive" />}
             </div>
             
             <div>
-              <h2 className="text-2xl font-bold mb-2">Something went wrong</h2>
+              <h2 className="text-2xl font-bold mb-2">{errorUi.title}</h2>
               <p className="text-muted-foreground mb-4">
-                {this.state.error?.message || 'An unexpected error occurred'}
+                {process.env.NODE_ENV === 'production'
+                  ? errorUi.description
+                  : this.state.error?.message || errorUi.description}
               </p>
             </div>
 
             <div className="flex gap-4 justify-center">
               <Button onClick={this.resetError} variant="default">
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Try Again
+                {RetryIcon && <RetryIcon className="mr-2 h-4 w-4" />}
+                {errorUi.retry_label}
               </Button>
               <Button onClick={() => window.location.href = '/'} variant="outline">
-                Go Home
+                {HomeIcon && <HomeIcon className="mr-2 h-4 w-4" />}
+                {errorUi.home_label}
               </Button>
             </div>
 
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mt-6 text-left">
                 <summary className="cursor-pointer text-sm text-muted-foreground">
-                  Error Details (Development Only)
+                  {errorUi.details_label}
                 </summary>
                 <pre className="mt-2 p-4 bg-muted rounded-lg text-xs overflow-auto">
                   {this.state.error.stack}
@@ -82,3 +96,15 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 }
 
+export function ErrorBoundary(props: ErrorBoundaryProps) {
+  const { errorUi } = useGlobalContent()
+
+  if (!errorUi) {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('Error UI content is missing in CMS.')
+    }
+    return null
+  }
+
+  return <ErrorBoundaryInner {...props} errorUi={errorUi} />
+}

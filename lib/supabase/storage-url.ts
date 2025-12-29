@@ -30,3 +30,33 @@ export function getStorageUrlAbsolute(bucket: string, path: string): string {
   const url = new URL(supabaseUrl)
   return `${url.protocol}//${url.host}/storage/v1/object/public/${bucket}/${path}`
 }
+
+const STORAGE_BUCKETS = [
+  'hero-images',
+  'blog-images',
+  'couple-photos',
+  'app-screenshots',
+  'user-uploads',
+  'brand-assets',
+]
+
+export function resolveStorageUrl(path?: string): string {
+  if (!path) return ''
+  const trimmed = path.trim()
+  if (!trimmed) return ''
+
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed.includes('/storage/v1/object/public/') ? trimmed : ''
+  }
+
+  if (!trimmed.includes('/')) {
+    return ''
+  }
+
+  const [bucket, ...rest] = trimmed.split('/').filter(Boolean)
+  if (!bucket || rest.length === 0 || !STORAGE_BUCKETS.includes(bucket)) {
+    return ''
+  }
+
+  return getStorageUrl(bucket, rest.join('/'))
+}
