@@ -3,46 +3,78 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-const steps = [
+// Fallback steps
+const defaultSteps = [
   {
     step: "01",
     title: "Create Your Profile",
     description:
       "Sign up in seconds as a college student and create a profile that showcases the real you. Verify with your college ID, add photos, interests, and what makes you unique.",
-    image: "/qoupl/1.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
   },
   {
     step: "02",
     title: "Smart AI Matching",
     description:
       "Our advanced AI algorithm analyzes compatibility factors and suggests the most suitable matches for you.",
-    image: "/qoupl/3.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_03.png"),
   },
   {
     step: "03",
     title: "Start Conversations",
     description:
       "Break the ice with our conversation starters and build meaningful connections through authentic chats.",
-    image: "/qoupl/4.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_04.png"),
   },
   {
     step: "04",
     title: "Plan Your Date",
     description:
       "Use our date planning features to find the perfect spot and make your first meeting memorable.",
-    image: "/qoupl/6.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_06.png"),
   },
   {
     step: "05",
     title: "Find True Love",
     description:
       "Build lasting relationships with people who truly understand and complement you. Your perfect match awaits!",
-    image: "/qoupl/7.png",
+    image: getStorageUrl("app-screenshots", "qoupl_screenshot_07.png"),
   },
 ];
 
-export default function HowItWorks() {
+interface HowItWorksProps {
+  data?: {
+    title?: string;
+    steps?: Array<{
+      step: string;
+      title: string;
+      description: string;
+      image?: string;
+    }>;
+  };
+}
+
+export default function HowItWorks({ data }: HowItWorksProps = {}) {
+  // Process steps from data or use defaults
+  const steps = data?.steps?.map(item => {
+    let imageUrl = item.image;
+    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+      if (imageUrl.includes('/')) {
+        const [bucket, ...rest] = imageUrl.split('/');
+        imageUrl = getStorageUrl(bucket, rest.join('/'));
+      } else {
+        imageUrl = getStorageUrl("app-screenshots", imageUrl);
+      }
+    }
+    return {
+      step: item.step,
+      title: item.title,
+      description: item.description,
+      image: imageUrl || getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
+    };
+  }) || defaultSteps;
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -145,7 +177,7 @@ export default function HowItWorks() {
                   >
                     <div className="relative w-[170px] sm:w-[190px] md:w-[210px] lg:w-[240px] xl:w-[260px] aspect-[9/19] mb-4">
                       {/* Phone Frame */}
-                      <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden shadow-lg border-2 border-border/50 bg-gradient-to-br from-gray-900 to-gray-800">
+                      <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden shadow-lg border-2 border-border/50 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-900 dark:to-gray-800">
                         {/* Notch */}
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-b-2xl z-20">
                           <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-12 h-0.5 bg-gray-800 rounded-full" />

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, DM_Sans } from "next/font/google";
+import { Poppins, DM_Sans, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -15,8 +15,17 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
 });
 
+const sourceCodePro = Source_Code_Pro({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-source-code-pro",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://qoupl.ai'),
+  other: {
+    'google-fonts': 'https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap',
+  },
   title: {
     default: 'qoupl - Be couple with qoupl | Dating App for College Students',
     template: '%s | qoupl'
@@ -159,21 +168,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/icon.svg', sizes: 'any' }
-    ],
-    apple: [
-      { url: '/apple-icon.svg', type: 'image/svg+xml' }
-    ],
-    other: [
-      {
-        rel: 'mask-icon',
-        url: '/icon.svg',
-      },
-    ],
-  },
   manifest: '/manifest.json',
   verification: {
     google: 'your-google-verification-code',
@@ -184,6 +178,9 @@ export const metadata: Metadata = {
     canonical: 'https://qoupl.ai',
   },
   category: 'technology',
+  other: {
+    'google-fonts': 'https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap',
+  },
 };
 
 export default function RootLayout({
@@ -193,10 +190,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} ${dmSans.variable} font-sans antialiased`} suppressHydrationWarning>
+      <body className={`${poppins.variable} ${dmSans.variable} ${sourceCodePro.variable} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
-          enableSystem={false}
+          defaultTheme="dark"
+          enableSystem={true}
           disableTransitionOnChange
         >
           {children}

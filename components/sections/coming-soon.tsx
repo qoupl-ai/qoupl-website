@@ -2,13 +2,53 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Apple, Smartphone, Sparkles, Users } from "lucide-react";
-import { useState } from "react";
+import { Sparkles, Users } from "lucide-react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
+import { useTheme } from "next-themes";
 import WaitlistModal from "@/components/waitlist-modal";
 
-export default function ComingSoon() {
+interface ComingSoonProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    badge?: {
+      icon?: string;
+      text?: string;
+    };
+    cta?: {
+      text?: string;
+    };
+    platforms?: Array<{
+      name: string;
+      icon?: string;
+      coming?: boolean;
+    }>;
+    stats?: {
+      text?: string;
+      count?: string;
+    };
+    screenshots?: string[];
+  };
+}
+
+export default function ComingSoon({ data }: ComingSoonProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
+  
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Default to light mode during SSR to match server render
+  const isDark = mounted && resolvedTheme === 'dark';
+
+  const title = data?.title || "Get Early Access";
+  const subtitle = data?.subtitle || "Join thousands of college students waiting for qoupl to launch. Be the first to experience the future of dating.";
+  const ctaText = data?.cta?.text || "Join the Waitlist";
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
@@ -54,16 +94,14 @@ export default function ComingSoon() {
               </motion.div>
 
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                Get{" "}
-                <span className="bg-[#662D91] bg-clip-text text-transparent">
-                  Early Access
-                </span>
+                {title}
               </h2>
 
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Be among the first college students to experience qoupl. Join our waitlist
-                and get notified when we launch on iOS and Android.
-              </p>
+              {subtitle && (
+                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                  {subtitle}
+                </p>
+              )}
 
               {/* Join Waitlist Button */}
               <div className="mb-8">
@@ -73,7 +111,7 @@ export default function ComingSoon() {
                   className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-[#662D91] hover:from-[#9333ea] hover:to-[#db2777] text-white"
                 >
                   <Sparkles className="mr-2 h-5 w-5" />
-                  Join Waitlist Now
+                  {ctaText}
                 </Button>
               </div>
 
@@ -83,7 +121,16 @@ export default function ComingSoon() {
                   whileHover={{ scale: 1.05 }}
                   className="flex items-center gap-3 px-5 py-3 rounded-lg bg-black dark:bg-white text-white dark:text-black cursor-pointer shadow-lg"
                 >
-                  <Apple className="h-6 w-6" />
+                  <div className="relative h-6 w-6 flex items-center justify-center shrink-0">
+                    <Image
+                      src={isDark ? "/images/brand-logo/apple-dark.png" : "/images/brand-logo/apple.png"}
+                      alt="Apple logo"
+                      width={24}
+                      height={24}
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
                   <div className="text-left">
                     <div className="text-xs">Coming to</div>
                     <div className="font-semibold">App Store</div>
@@ -94,7 +141,16 @@ export default function ComingSoon() {
                   whileHover={{ scale: 1.05 }}
                   className="flex items-center gap-3 px-5 py-3 rounded-lg bg-black dark:bg-white text-white dark:text-black cursor-pointer shadow-lg"
                 >
-                  <Smartphone className="h-6 w-6" />
+                  <div className="relative h-6 w-6 flex items-center justify-center shrink-0">
+                    <Image
+                      src={isDark ? "/images/brand-logo/android-dark.png" : "/images/brand-logo/android.png"}
+                      alt="Android logo"
+                      width={24}
+                      height={24}
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
                   <div className="text-left">
                     <div className="text-xs">Coming to</div>
                     <div className="font-semibold">Google Play</div>
@@ -140,7 +196,7 @@ export default function ComingSoon() {
                     {/* Purple Glow Effect */}
                     <div className="absolute inset-0 bg-[#662D91]/30 rounded-[3rem] blur-3xl scale-110 -z-10" />
                     <Image
-                      src="/qoupl/1.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_01.png")}
                       alt="App Preview"
                       fill
                       className="object-cover"
@@ -164,7 +220,7 @@ export default function ComingSoon() {
                 >
                   <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <Image
-                      src="/qoupl/2.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_02.png")}
                       alt="App Feature"
                       fill
                       className="object-cover"
@@ -188,7 +244,7 @@ export default function ComingSoon() {
                 >
                   <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <Image
-                      src="/qoupl/3.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_03.png")}
                       alt="App Feature"
                       fill
                       className="object-cover"
@@ -212,7 +268,7 @@ export default function ComingSoon() {
                 >
                   <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <Image
-                      src="/qoupl/4.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_04.png")}
                       alt="App Feature"
                       fill
                       className="object-cover"
@@ -236,7 +292,7 @@ export default function ComingSoon() {
                 >
                   <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <Image
-                      src="/qoupl/5.png"
+                      src={getStorageUrl("app-screenshots", "qoupl_screenshot_05.png")}
                       alt="App Feature"
                       fill
                       className="object-cover"

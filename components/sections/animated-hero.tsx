@@ -4,39 +4,39 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Heart } from "lucide-react";
 import Image from "next/image";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { useState, useEffect, useRef } from "react";
-import { ThemeToggle } from "@/components/theme-toggle";
 import WaitlistModal from "@/components/waitlist-modal";
 
-// All women images (10 images)
-const womenImages = [
-  "/images/women/rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg",
-  "/images/women/caique-nascimento-Ij24Uq1sMwM-unsplash.jpg",
-  "/images/women/Gemini_Generated_Image_1hrhq01hrhq01hrh.png",
-  "/images/women/Gemini_Generated_Image_34su0h34su0h34su.png",
-  "/images/women/Gemini_Generated_Image_6cx31l6cx31l6cx3.png",
-  "/images/women/Gemini_Generated_Image_civ506civ506civ5.png",
-  "/images/women/Gemini_Generated_Image_fe6txtfe6txtfe6t.png",
-  "/images/women/Gemini_Generated_Image_l957byl957byl957.png",
-  "/images/women/Gemini_Generated_Image_tyingytyingytyin.png",
-  "/images/women/Gemini_Generated_Image_v4k4z2v4k4z2v4k4.png",
+// Fallback images if data not provided
+const defaultWomenImages = [
+  getStorageUrl("hero-images", "women/qoupl_women_03.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_05.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_01.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_02.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_04.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_06.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_07.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_08.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_09.png"),
+  getStorageUrl("hero-images", "women/qoupl_women_10.png"),
 ];
 
-// All men images (6 images)
-const menImages = [
-  "/images/men/amir-esrafili-eWa7clMsowo-unsplash.jpg",
-  "/images/men/arrul-lin-sYhUhse5uT8-unsplash.jpg",
-  "/images/men/dollar-gill-LmtUqlYRJO4-unsplash.jpg",
-  "/images/men/indian-student-goes-first-lesson.jpg",
-  "/images/men/medium-shot-man-with-paperwork.jpg",
-  "/images/men/mitchell-luo-ymo_yC_N_2o-unsplash.jpg",
+const defaultMenImages = [
+  getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_02.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_03.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_04.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_05.jpg"),
+  getStorageUrl("hero-images", "men/qoupl_men_06.jpg"),
 ];
-
-// Combined array: 10 women + 6 men = 16 images
-const carouselImages = [...womenImages, ...menImages];
 
 // Modern 2025 Floating Cards with Magnetic Effect
-function ModernFloatingCards() {
+interface ModernFloatingCardsProps {
+  carouselImages: string[];
+}
+
+function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeIndex, setActiveIndex] = useState(0);
@@ -128,7 +128,7 @@ function ModernFloatingCards() {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [carouselImages.length]);
 
   // Show 5 cards at a time in a floating formation
   const visibleCards = 5;
@@ -308,46 +308,60 @@ function ModernFloatingCards() {
 }
 
 
-export default function AnimatedHero() {
-  const [showThemeToggle, setShowThemeToggle] = useState(true);
+interface AnimatedHeroProps {
+  data?: {
+    title?: string;
+    tagline?: string;
+    subtitle?: string;
+    cta?: {
+      text?: string;
+      buttonText?: string;
+      subtext?: string;
+      badge?: string;
+    };
+    images?: {
+      women?: string[];
+      men?: string[];
+    };
+  };
+}
+
+export default function AnimatedHero({ data }: AnimatedHeroProps = {}) {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
 
-  // Hide theme toggle on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setShowThemeToggle(false);
-      } else {
-        setShowThemeToggle(true);
-      }
-    };
+  // Use data from props or fallback to defaults
+  const title = data?.title || 'qoupl';
+  const tagline = data?.tagline || 'Be couple with qoupl';
+  const subtitle = data?.subtitle || 'Find your vibe. Match your energy. Connect for real.';
+  const ctaText = data?.cta?.text || data?.cta?.buttonText || 'Join the Waitlist';
+  const ctaSubtext = data?.cta?.subtext || '⚡ Limited spots for early access';
+  const ctaBadge = data?.cta?.badge || 'Free';
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Process images from data or use defaults
+  const womenImages = data?.images?.women?.map(path => {
+    // If path includes bucket, use as is, otherwise construct URL
+    if (path.includes('/')) {
+      const [bucket, ...rest] = path.split('/');
+      return getStorageUrl(bucket, rest.join('/'));
+    }
+    return getStorageUrl("hero-images", path);
+  }) || defaultWomenImages;
+
+  const menImages = data?.images?.men?.map(path => {
+    if (path.includes('/')) {
+      const [bucket, ...rest] = path.split('/');
+      return getStorageUrl(bucket, rest.join('/'));
+    }
+    return getStorageUrl("hero-images", path);
+  }) || defaultMenImages;
+
+  // Combined array: women + men images
+  const carouselImages = [...womenImages, ...menImages];
 
   return (
     <section
-      className="relative min-h-screen w-full flex flex-col overflow-hidden bg-white dark:bg-[#171717]"
+      className="relative min-h-screen w-full flex flex-col overflow-hidden bg-background"
     >
-      {/* Theme Toggle - Fixed in top right, hides when navbar appears */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{
-          opacity: showThemeToggle ? 1 : 0,
-          scale: showThemeToggle ? 1 : 0,
-          y: showThemeToggle ? 0 : -20
-        }}
-        transition={{
-          delay: showThemeToggle ? 0.3 : 0,
-          type: "spring",
-          stiffness: 200
-        }}
-        className="fixed top-6 right-6 z-50"
-      >
-        <ThemeToggle />
-      </motion.div>
-
       {/* Main Content - Split Layout with Better Alignment */}
       <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 relative z-10 w-full flex-1 flex items-center min-h-0">
         <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center w-full py-6 md:py-8 lg:py-12">
@@ -379,7 +393,7 @@ export default function AnimatedHero() {
                 transformStyle: "preserve-3d",
               }}
             >
-              qoupl
+              {title}
             </motion.h1>
 
             {/* Combined Taglines - Together, Small, Semi-Bold - Indented with Better Spacing */}
@@ -396,8 +410,17 @@ export default function AnimatedHero() {
                   fontWeight: 600,
                 }}
               >
-                Be <span className="text-[#662D91]">couple</span> with{" "}
-                <span className="text-[#662D91]">qoupl</span>
+                {tagline.split(' ').map((word, i) => {
+                  const lowerWord = word.toLowerCase();
+                  if (lowerWord.includes('qoupl') || lowerWord.includes('couple')) {
+                    return (
+                      <span key={i} className="text-[#662D91]">
+                        {word}{' '}
+                      </span>
+                    );
+                  }
+                  return <span key={i}>{word} </span>;
+                })}
               </p>
               <p
                 className="text-base md:text-lg font-semibold text-muted-foreground leading-relaxed"
@@ -406,7 +429,7 @@ export default function AnimatedHero() {
                   fontWeight: 600,
                 }}
               >
-                Find your vibe. Match your energy. Connect for real.
+                {subtitle}
               </p>
             </motion.div>
 
@@ -423,14 +446,18 @@ export default function AnimatedHero() {
                 className="group px-6 py-3 h-auto rounded-full bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <Sparkles className="mr-2 h-4 w-4" />
-                Join the Waitlist
-                <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">
-                  Free
-                </span>
+                {ctaText}
+                {ctaBadge && (
+                  <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">
+                    {ctaBadge}
+                  </span>
+                )}
               </Button>
-              <p className="text-xs text-muted-foreground text-center lg:text-left">
-                ⚡ Limited spots for early access
-              </p>
+              {ctaSubtext && (
+                <p className="text-xs text-muted-foreground text-center lg:text-left">
+                  {ctaSubtext}
+                </p>
+              )}
             </motion.div>
 
           </motion.div>
@@ -442,7 +469,7 @@ export default function AnimatedHero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex items-center justify-center lg:justify-end order-2 lg:order-2 w-full mt-4 md:mt-6 lg:mt-0 lg:-mt-16"
           >
-            <ModernFloatingCards />
+            <ModernFloatingCards carouselImages={carouselImages} />
           </motion.div>
         </div>
       </div>
