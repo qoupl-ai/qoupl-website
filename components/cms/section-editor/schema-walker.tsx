@@ -6,18 +6,16 @@
 
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React from 'react'
 import * as z from 'zod'
 import { renderField } from './field-renderers'
 import type { Control, FieldPath, FieldValues } from 'react-hook-form'
-import { Button } from '@/components/ui/button'
 
 interface SchemaWalkerProps<T extends FieldValues> {
   control: Control<T>
   schema: z.ZodSchema
   basePath: FieldPath<T>
   bucket?: string
-  pages?: Array<{ slug: string; title: string }>
 }
 
 /**
@@ -28,117 +26,60 @@ export function SchemaWalker<T extends FieldValues>({
   schema,
   basePath,
   bucket,
-  pages,
 }: SchemaWalkerProps<T>): React.ReactElement {
-  const [showAdvanced, setShowAdvanced] = useState(false)
+  const fields: React.ReactNode[] = []
 
-  const groups = useMemo(() => {
-    const grouped: Record<'content' | 'cta' | 'media' | 'advanced', Array<{ key: string; schema: z.ZodSchema }>> = {
-      content: [],
-      cta: [],
-      media: [],
-      advanced: [],
-    }
-
-    const schemaShape = extractSchemaShape(schema)
-    Object.entries(schemaShape).forEach(([key, fieldSchema]) => {
-      const group = getFieldGroup(key, fieldSchema)
-      grouped[group].push({ key, schema: fieldSchema as z.ZodSchema })
-    })
-
-    return grouped
-  }, [schema])
-
-  const renderGroup = (
-    groupLabel: string,
-    items: Array<{ key: string; schema: z.ZodSchema }>,
-    options?: { collapsible?: boolean; expanded?: boolean; onToggle?: () => void }
-  ) => {
-    if (items.length === 0) return null
-
-    const content = items.map(({ key, schema: fieldSchema }) => {
-      const fieldPath = `${basePath}.${key}` as FieldPath<T>
-
-      // CRITICAL FIX: Unwrap optional objects before passing to renderField
-      let unwrappedSchema = fieldSchema as z.ZodSchema
-      if ('_def' in fieldSchema) {
-        const def = (fieldSchema as any)._def
-        if (def.typeName === 'ZodOptional' && def.innerType && '_def' in def.innerType) {
-          const innerDef = def.innerType._def
-          if (innerDef.typeName === 'ZodObject') {
-            unwrappedSchema = def.innerType as z.ZodSchema
-            console.log('SchemaWalker: Unwrapped optional object for', key, {
-              originalType: def.typeName,
-              unwrappedType: innerDef.typeName
-            })
-          }
+  // Extract schema shape
+  const schemaShape = extractSchemaShape(schema)
+  
+  // Render each field
+  Object.entries(schemaShape).forEach(([key, fieldSchema]) => {
+    const fieldPath = `${basePath}.${key}` as FieldPath<T>
+    
+    // CRITICAL FIX: Unwrap optional objects before passing to renderField
+    // If the schema is ZodOptional wrapping ZodObject, unwrap it
+    let unwrappedSchema = fieldSchema as z.ZodSchema
+    if ('_def' in fieldSchema) {
+      const def = (fieldSchema as any)._def
+      if (def.typeName === 'ZodOptional' && def.innerType && '_def' in def.innerType) {
+        const innerDef = def.innerType._def
+        if (innerDef.typeName === 'ZodObject') {
+          // Unwrap the optional to get the object schema
+          unwrappedSchema = def.innerType as z.ZodSchema
+          console.log('SchemaWalker: Unwrapped optional object for', key, { 
+            originalType: def.typeName,
+            unwrappedType: innerDef.typeName
+          })
         }
       }
-
-      if (key === 'cta' || key === 'images') {
-        const zodType = getZodTypeForDebug(unwrappedSchema)
-        console.log('SchemaWalker: Rendering field', {
-          key,
-          fieldPath,
-          zodType,
-          schemaType: (unwrappedSchema as any)?._def?.typeName,
-          wasOptional: (fieldSchema as any)?._def?.typeName === 'ZodOptional'
-        })
-      }
-
-      return (
-        <div key={key}>
-          {renderField({
-            control,
-            name: fieldPath,
-            schema: unwrappedSchema,
-            bucket,
-            pages,
-          })}
-        </div>
-      )
-    })
-
-    const collapsible = options?.collapsible
-    const isExpanded = options?.expanded ?? true
-
-    return (
-      <div className="space-y-3 border rounded-lg p-4 cms-card-bg cms-border">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold cms-text-primary">{groupLabel}</h3>
-          {collapsible && options?.onToggle && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={options.onToggle}
-              className="h-7 px-2 text-xs cms-text-secondary"
-            >
-              {isExpanded ? 'Hide' : 'Show'}
-            </Button>
-          )}
-        </div>
-        {isExpanded && <div className="space-y-4">{content}</div>}
+    }
+    
+    // Debug logging for problematic fields
+    if (key === 'cta' || key === 'images') {
+      const zodType = getZodTypeForDebug(unwrappedSchema)
+      console.log('SchemaWalker: Rendering field', { 
+        key, 
+        fieldPath, 
+        zodType,
+        schemaType: (unwrappedSchema as any)?._def?.typeName,
+        wasOptional: (fieldSchema as any)?._def?.typeName === 'ZodOptional'
+      })
+    }
+    
+    fields.push(
+      <div key={key}>
+        {renderField({
+          control,
+          name: fieldPath,
+          schema: unwrappedSchema, // Use unwrapped schema
+          bucket,
+        })}
       </div>
     )
-  }
-
-  const contentGroup = renderGroup('Content', groups.content)
-  const ctaGroup = renderGroup('CTA / Actions', groups.cta)
-  const mediaGroup = renderGroup('Media', groups.media)
-  const advancedGroup = renderGroup('Advanced', groups.advanced, {
-    collapsible: true,
-    expanded: showAdvanced,
-    onToggle: () => setShowAdvanced((prev) => !prev),
   })
 
-  const hasAnyFields =
-    groups.content.length > 0 ||
-    groups.cta.length > 0 ||
-    groups.media.length > 0 ||
-    groups.advanced.length > 0
-
-  if (!hasAnyFields) {
+  // If no fields, show a message
+  if (fields.length === 0) {
     return (
       <div className="p-4 rounded-md border cms-card-bg cms-border">
         <p className="text-sm cms-text-secondary">
@@ -148,14 +89,7 @@ export function SchemaWalker<T extends FieldValues>({
     )
   }
 
-  return (
-    <div className="space-y-4">
-      {contentGroup}
-      {ctaGroup}
-      {mediaGroup}
-      {advancedGroup}
-    </div>
-  )
+  return <>{fields}</>
 }
 
 /**
@@ -253,28 +187,3 @@ function getZodTypeForDebug(schema: unknown): string {
   return 'unknown'
 }
 
-function getFieldGroup(
-  key: string,
-  schema: z.ZodSchema
-): 'content' | 'cta' | 'media' | 'advanced' {
-  const lowerKey = key.toLowerCase()
-  const zodType = getZodTypeForDebug(schema)
-
-  if (zodType.includes('ZodBoolean')) {
-    return 'advanced'
-  }
-
-  if (lowerKey.includes('cta') || lowerKey.includes('action') || lowerKey.includes('button') || lowerKey.includes('link') || lowerKey.includes('url') || lowerKey.includes('href') || lowerKey.includes('submit')) {
-    return 'cta'
-  }
-
-  if (lowerKey.includes('image') || lowerKey.includes('icon') || lowerKey.includes('logo') || lowerKey.includes('media') || lowerKey.includes('screenshot') || lowerKey.includes('photo') || lowerKey.includes('background')) {
-    return 'media'
-  }
-
-  if (lowerKey.startsWith('show') || lowerKey.startsWith('enable') || lowerKey.startsWith('is')) {
-    return 'advanced'
-  }
-
-  return 'content'
-}

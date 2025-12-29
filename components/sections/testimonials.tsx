@@ -2,92 +2,68 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { resolveStorageUrl } from "@/lib/supabase/storage-url";
-import { resolveLucideIcon } from "@/lib/utils/icons";
+import { Heart, Quote, Star } from "lucide-react";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 
 // No hardcoded defaults - all content must come from database
 
 interface TestimonialsProps {
   data?: {
     title?: string;
-    titleHighlight?: string;
     subtitle?: string;
     badge?: {
       icon?: string;
       text?: string;
-      show?: boolean;
     };
     testimonials?: Array<{
       name: string;
       image?: string;
-      imageAlt?: string;
       text: string;
       location?: string;
       rating?: number;
       date?: string;
-      showRating?: boolean;
     }>;
     stats?: {
       text?: string;
       icon?: string;
-      show?: boolean;
-    };
-    icons?: {
-      quote?: string;
-      heart?: string;
-      rating?: string;
     };
   };
 }
 
 export default function Testimonials({ data }: TestimonialsProps = {}) {
+  // All content must come from database - no hardcoded fallbacks
   if (!data || !data.testimonials || !Array.isArray(data.testimonials) || data.testimonials.length === 0) {
-    if (process.env.NODE_ENV !== 'production') {
-      throw new Error('Testimonials section data is missing required testimonials.')
-    }
-    return null
+    return (
+      <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-muted-foreground">Testimonials content not available. Please add content in CMS.</p>
+        </div>
+      </section>
+    )
   }
 
   // Process testimonials from data only - no defaults
   const testimonials = data.testimonials.map(item => {
-    const imageUrl = resolveStorageUrl(item.image);
+    let imageUrl = item.image;
+    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+      if (imageUrl.includes('/')) {
+        const [bucket, ...rest] = imageUrl.split('/');
+        if (bucket) {
+          imageUrl = getStorageUrl(bucket, rest.join('/'));
+        }
+      } else {
+        imageUrl = getStorageUrl("hero-images", imageUrl);
+      }
+    }
     return {
       name: item.name,
       image: imageUrl,
-      imageAlt: item.imageAlt || '',
       text: item.text,
       location: item.location || "",
-      rating: item.rating || 0,
+      rating: item.rating || 5,
       date: item.date || "",
-      showRating: item.showRating !== false,
     };
   });
-  const BadgeIcon = resolveLucideIcon(data?.badge?.icon);
-  const QuoteIcon = resolveLucideIcon(data?.icons?.quote);
-  const HeartIcon = resolveLucideIcon(data?.icons?.heart);
-  const RatingIcon = resolveLucideIcon(data?.icons?.rating);
-  const StatsIcon = resolveLucideIcon(data?.stats?.icon);
-  const showBadge = data?.badge?.show === true && (data?.badge?.text || '').length > 0;
-  const showStats = data?.stats?.show === true && (data?.stats?.text || '').length > 0;
-  const title = data?.title || '';
-  const titleHighlight = data?.titleHighlight || '';
-  const subtitle = data?.subtitle || '';
-
-  const renderTitle = () => {
-    if (!titleHighlight) return title
-    const index = title.toLowerCase().indexOf(titleHighlight.toLowerCase())
-    if (index === -1) return title
-    const before = title.slice(0, index)
-    const match = title.slice(index, index + titleHighlight.length)
-    const after = title.slice(index + titleHighlight.length)
-    return (
-      <>
-        {before}
-        <span className="bg-[#662D91] bg-clip-text text-transparent">{match}</span>
-        {after}
-      </>
-    )
-  }
   return (
     <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
       {/* Animated Background Blobs */}
@@ -113,29 +89,27 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
           transition={{ duration: 0.3 }}
           className="text-center mb-16"
         >
-          {showBadge && (
-            <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ delay: 0.1, type: "spring" }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
-            >
-              {BadgeIcon && <BadgeIcon className="h-4 w-4 fill-primary" />}
-              <span className="text-sm font-medium">{data?.badge?.text}</span>
-            </motion.div>
-          )}
+          <motion.div
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ delay: 0.1, type: "spring" }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
+          >
+            <Heart className="h-4 w-4 fill-primary" />
+            <span className="text-sm font-medium">Beta User Success Stories</span>
+          </motion.div>
 
-          {title && (
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              {renderTitle()}
-            </h2>
-          )}
-          {subtitle && (
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {subtitle}
-            </p>
-          )}
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            What Our{" "}
+            <span className="bg-[#662D91] bg-clip-text text-transparent">
+              Beta Users
+            </span>{" "}
+            Say
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Real college student couples from our exclusive beta program. See how qoupl brought them together during testing.
+          </p>
         </motion.div>
 
         {/* Testimonials Grid - Instagram Story Style */}
@@ -153,15 +127,13 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
               {/* Card Container */}
               <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl">
                 {/* Background Image */}
-                {testimonial.image && (
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.imageAlt}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                )}
+                <Image
+                  src={testimonial.image || '/placeholder.png'}
+                  alt={testimonial.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
 
                 {/* Gradient Overlays */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -171,47 +143,42 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
                 <div className="absolute inset-0 p-6 flex flex-col justify-between">
                   {/* Top - Quote Icon */}
                   <div className="flex justify-between items-start">
-                    {QuoteIcon && (
-                      <motion.div
-                        initial={{ scale: 0, rotate: -180 }}
-                        whileInView={{ scale: 1, rotate: 0 }}
-                        viewport={{ once: true, amount: 0.1 }}
-                        transition={{ delay: 0.1 + index * 0.05, type: "spring" }}
-                        className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
-                      >
-                        <QuoteIcon className="h-6 w-6 text-white" />
-                      </motion.div>
-                    )}
+                    <motion.div
+                      initial={{ scale: 0, rotate: -180 }}
+                      whileInView={{ scale: 1, rotate: 0 }}
+                      viewport={{ once: true, amount: 0.1 }}
+                      transition={{ delay: 0.1 + index * 0.05, type: "spring" }}
+                      className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
+                    >
+                      <Quote className="h-6 w-6 text-white" />
+                    </motion.div>
 
-                    {HeartIcon && (
-                      <motion.div
-                        animate={{
-                          scale: [1, 1.2, 1],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        <HeartIcon className="h-6 w-6 text-white fill-white" />
-                      </motion.div>
-                    )}
+                    {/* Heart Icon */}
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.2, 1],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    >
+                      <Heart className="h-6 w-6 text-white fill-white" />
+                    </motion.div>
                   </div>
 
                   {/* Bottom - Testimonial Details */}
                   <div className="space-y-4">
                     {/* Rating Stars */}
-                    {testimonial.showRating && testimonial.rating > 0 && RatingIcon && (
-                      <div className="flex gap-1">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <RatingIcon
-                            key={i}
-                            className="h-4 w-4 text-yellow-400 fill-yellow-400"
-                          />
-                        ))}
-                      </div>
-                    )}
+                    <div className="flex gap-1">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className="h-4 w-4 text-yellow-400 fill-yellow-400"
+                        />
+                      ))}
+                    </div>
 
                     {/* Quote Text */}
                     <p className="text-white text-base font-medium leading-relaxed">
@@ -244,22 +211,20 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
         </div>
 
         {/* Bottom Stats */}
-        {showStats && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ delay: 0.2, duration: 0.3 }}
-            className="text-center mt-16"
-          >
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 text-primary">
-              {StatsIcon && <StatsIcon className="h-5 w-5 fill-primary" />}
-              <span className="font-semibold">
-                {data?.stats?.text}
-              </span>
-            </div>
-          </motion.div>
-        )}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ delay: 0.2, duration: 0.3 }}
+          className="text-center mt-16"
+        >
+          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 text-primary">
+            <Heart className="h-5 w-5 fill-primary" />
+            <span className="font-semibold">
+              Join 10,000+ people waiting for qoupl to launch
+            </span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

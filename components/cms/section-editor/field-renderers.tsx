@@ -21,11 +21,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { ImageUploadField } from '@/components/cms/image-upload-field'
 import { MultiImageUploadField } from '@/components/cms/multi-image-upload-field'
-import { PageSelector } from '@/components/cms/page-selector'
-import { Plus, Trash2, ArrowUp, ArrowDown } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { asString, asArray, asBoolean, getFieldLabel } from './helpers'
-import { IconSelector } from '@/components/cms/icon-selector'
 import type { Control, FieldPath, FieldValues } from 'react-hook-form'
 
 interface FieldRendererProps<T extends FieldValues> {
@@ -35,7 +33,6 @@ interface FieldRendererProps<T extends FieldValues> {
   label?: string
   description?: string
   bucket?: string
-  pages?: Array<{ slug: string; title: string }>
 }
 
 /**
@@ -48,7 +45,6 @@ export function renderField<T extends FieldValues>({
   label,
   description,
   bucket,
-  pages,
 }: FieldRendererProps<T>): React.ReactNode {
   const fieldLabel = label || getFieldLabel(name as string)
   const zodType = getZodType(schema)
@@ -67,16 +63,7 @@ export function renderField<T extends FieldValues>({
     })
   }
 
-  // FIRST: Check if it's an object by structure (shape property)
-  // This works even when typeName is undefined
-  if ('shape' in schema || ('_def' in schema && (schema as any)._def?.shape)) {
-    if (fieldName.includes('cta') || fieldName.includes('images')) {
-      console.log('renderField: Detected object by shape property, routing to renderObjectFields', { fieldName })
-    }
-    return renderObjectFields(control, name, schema, bucket, pages)
-  }
-  
-  // SECOND: Check if it's an optional object BEFORE checking other types
+  // FIRST: Check if it's an optional object BEFORE checking other types
   // This is critical because getZodType returns 'ZodOptional' for optional objects
   // We need to check the actual schema structure, not rely on getZodType
   if ('_def' in schema) {
@@ -84,14 +71,7 @@ export function renderField<T extends FieldValues>({
     // Check if it's ZodOptional
     if (def.typeName === 'ZodOptional' && def.innerType) {
       const innerType = def.innerType
-      // Check if inner type is an object by structure
-      if (innerType && (('shape' in innerType) || ('_def' in innerType && innerType._def?.shape))) {
-        if (fieldName.includes('cta') || fieldName.includes('images')) {
-          console.log('renderField: Detected optional object by shape, routing to renderObjectFields', { fieldName })
-        }
-        return renderObjectFields(control, name, schema, bucket, pages)
-      }
-      // Also check by typeName
+      // Check if inner type is an object
       if (innerType && '_def' in innerType) {
         const innerDef = innerType._def
         if (innerDef?.typeName === 'ZodObject') {
@@ -100,7 +80,7 @@ export function renderField<T extends FieldValues>({
             outerType: def.typeName,
             innerType: innerDef.typeName
           })
-          return renderObjectFields(control, name, schema, bucket, pages)
+          return renderObjectFields(control, name, schema, bucket)
         }
       }
     }
@@ -109,13 +89,13 @@ export function renderField<T extends FieldValues>({
       if (fieldName.includes('cta') || fieldName.includes('images')) {
         console.log('renderField: Detected direct ZodObject, routing to renderObjectFields', { fieldName })
       }
-      return renderObjectFields(control, name, schema, bucket, pages)
+      return renderObjectFields(control, name, schema, bucket)
     }
   }
 
   // Handle arrays
   if (zodType === 'ZodArray' || zodType === 'array') {
-    return renderArrayField(control, name, schema, fieldLabel, description, bucket, pages)
+    return renderArrayField(control, name, schema, fieldLabel, description, bucket)
   }
 
   // Handle objects (nested) - check for both 'ZodObject' and 'object'
@@ -123,7 +103,7 @@ export function renderField<T extends FieldValues>({
     if (fieldName.includes('cta') || fieldName.includes('images')) {
       console.log('renderField: Routing to renderObjectFields', { fieldName, zodType })
     }
-    return renderObjectFields(control, name, schema, bucket, pages)
+    return renderObjectFields(control, name, schema, bucket)
   }
 
   // Handle primitives
@@ -138,10 +118,10 @@ export function renderField<T extends FieldValues>({
         if (def.typeName === 'ZodObject' || 
             (def.typeName === 'ZodOptional' && def.innerType && '_def' in def.innerType && def.innerType._def.typeName === 'ZodObject')) {
           console.error('renderField: String case received object schema! Routing to renderObjectFields', { fieldName, defType: def.typeName })
-          return renderObjectFields(control, name, schema, bucket, pages)
+          return renderObjectFields(control, name, schema, bucket)
         }
       }
-      return renderStringField(control, name, fieldLabel, description, bucket, schema, pages)
+      return renderStringField(control, name, fieldLabel, description, bucket, schema)
     case 'ZodNumber':
     case 'number':
       return renderNumberField(control, name, fieldLabel, description)
@@ -156,7 +136,7 @@ export function renderField<T extends FieldValues>({
           const innerDef = def.innerType._def
           if (innerDef?.typeName === 'ZodObject') {
             console.log('renderField: Found optional object in switch case, routing to renderObjectFields', { fieldName, zodType })
-            return renderObjectFields(control, name, schema, bucket, pages)
+            return renderObjectFields(control, name, schema, bucket)
           }
         }
       }
@@ -170,46 +150,27 @@ export function renderField<T extends FieldValues>({
           label: fieldLabel,
           description,
           bucket,
-          pages,
         })
       }
       // Fall through to default - return string field as fallback
       console.warn('Unknown zod type:', zodType, 'for field:', name, 'schema type:', (schema as any)?._def?.typeName)
-      return renderStringField(control, name, fieldLabel, description, bucket, schema, pages)
+      return renderStringField(control, name, fieldLabel, description, bucket, schema)
     }
     default:
       // Final check: is this an optional object that wasn't caught?
       if ('_def' in schema) {
         const def = (schema as any)._def
-        if (def.typeName === 'ZodOptional' && def.innerType) {
-          // Check by structure first
-          if (('shape' in def.innerType) || ('_def' in def.innerType && def.innerType._def?.shape)) {
-            console.log('renderField: Found optional object in default case (by shape), routing to renderObjectFields', { fieldName, zodType })
-            return renderObjectFields(control, name, schema, bucket, pages)
-          }
-          // Check by typeName
-          if ('_def' in def.innerType) {
-            const innerDef = def.innerType._def
-            if (innerDef?.typeName === 'ZodObject') {
-              console.log('renderField: Found optional object in default case, routing to renderObjectFields', { fieldName, zodType })
-              return renderObjectFields(control, name, schema, bucket, pages)
-            }
+        if (def.typeName === 'ZodOptional' && def.innerType && '_def' in def.innerType) {
+          const innerDef = def.innerType._def
+          if (innerDef?.typeName === 'ZodObject') {
+            console.log('renderField: Found optional object in default case, routing to renderObjectFields', { fieldName, zodType })
+            return renderObjectFields(control, name, schema, bucket)
           }
         }
-        // Check if def itself has shape (direct ZodObject without typeName)
-        if (def.shape || (def.typeName === undefined && 'shape' in schema)) {
-          console.log('renderField: Found object by shape in default case, routing to renderObjectFields', { fieldName, zodType })
-          return renderObjectFields(control, name, schema, bucket, pages)
-        }
-      }
-      // Check if schema itself has shape property (direct ZodObject)
-      if ('shape' in schema) {
-        console.log('renderField: Found object by direct shape property in default case, routing to renderObjectFields', { fieldName, zodType })
-        return renderObjectFields(control, name, schema, bucket, pages)
       }
       // For unknown types, try to render as string as fallback
       console.warn('Unknown zod type:', zodType, 'for field:', name, 'schema type:', (schema as any)?._def?.typeName)
-      return renderStringField(control, name, fieldLabel, description, bucket, schema, pages)
+      return renderStringField(control, name, fieldLabel, description, bucket, schema)
   }
 }
 
@@ -219,22 +180,12 @@ export function renderField<T extends FieldValues>({
 function getZodType(schema: unknown): string {
   if (!schema || typeof schema !== 'object') return 'unknown'
   
-  // Check for structural indicators first (when typeName is missing)
-  if ('shape' in schema || ('_def' in schema && (schema as any)._def?.shape)) {
-    return 'ZodObject'
-  }
-  if ('element' in schema || ('_def' in schema && (schema as any)._def?.element)) {
-    return 'ZodArray'
-  }
-  
   if ('_def' in schema) {
     const def = (schema as { 
       _def: { 
         typeName?: string
         innerType?: unknown
         schema?: unknown // For ZodEffects
-        shape?: unknown
-        element?: unknown
       } 
     })._def
     
@@ -246,14 +197,6 @@ function getZodType(schema: unknown): string {
     // Unwrap ZodEffects
     if (def.typeName === 'ZodEffects' && def.schema) {
       return getZodType(def.schema)
-    }
-    
-    // Check for structural indicators in _def
-    if (def.shape) {
-      return 'ZodObject'
-    }
-    if (def.element) {
-      return 'ZodArray'
     }
     
     return def.typeName || 'unknown'
@@ -271,29 +214,9 @@ function renderStringField<T extends FieldValues>(
   label: string,
   description?: string,
   bucket?: string,
-  schema?: z.ZodSchema,
-  pages?: Array<{ slug: string; title: string }>
+  schema?: z.ZodSchema
 ): React.ReactNode {
   const fieldName = name as string
-  
-  // CRITICAL SAFETY CHECK: If schema is actually an object, route to renderObjectFields
-  // This catches cases where getZodType returned 'unknown' but the schema is actually an object
-  if (schema) {
-    if ('shape' in schema || ('_def' in schema && (schema as any)._def?.shape)) {
-      console.warn('renderStringField: Schema is actually an object, routing to renderObjectFields', { fieldName })
-      return renderObjectFields(control, name, schema, bucket, pages)
-    }
-    // Check if it's an optional object
-    if ('_def' in schema) {
-      const def = (schema as any)._def
-      if (def.typeName === 'ZodOptional' && def.innerType) {
-        if (('shape' in def.innerType) || ('_def' in def.innerType && def.innerType._def?.shape)) {
-          console.warn('renderStringField: Schema is actually an optional object, routing to renderObjectFields', { fieldName })
-          return renderObjectFields(control, name, schema, bucket, pages)
-        }
-      }
-    }
-  }
   
   // Check if it's an image field - but only if the schema is actually a string
   // Don't treat object fields as image fields even if they have "image" in the name
@@ -351,9 +274,8 @@ function renderStringField<T extends FieldValues>(
     )
   }
 
-  const isIconField = /icon/i.test(fieldName)
-
-  if (isIconField) {
+  // Check if it's a URL/link field
+  if (fieldName.includes('link') || fieldName.includes('url') || fieldName.includes('Link') || fieldName.includes('Url')) {
     return (
       <FormField
         key={fieldName}
@@ -365,11 +287,7 @@ function renderStringField<T extends FieldValues>(
               {label}
             </FormLabel>
             <FormControl>
-              <IconSelector
-                value={asString(field.value)}
-                onChange={(value) => field.onChange(value)}
-                label={label}
-              />
+              <Input {...field} placeholder={description} value={asString(field.value)} />
             </FormControl>
             {description && (
               <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
@@ -379,56 +297,6 @@ function renderStringField<T extends FieldValues>(
             <FormMessage />
           </FormItem>
         )}
-      />
-    )
-  }
-
-  const fieldKey = fieldName.split('.').pop() || ''
-  const normalizedKey = fieldKey
-    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
-    .toLowerCase()
-  const isLinkField =
-    normalizedKey === 'href' ||
-    normalizedKey === 'url' ||
-    normalizedKey === 'link' ||
-    normalizedKey.endsWith('_link') ||
-    normalizedKey.endsWith('_url')
-
-  // Check if it's a URL/link field
-  if (isLinkField) {
-    return (
-      <FormField
-        key={fieldName}
-        control={control}
-        name={name}
-        render={({ field }) => {
-          const stringValue = asString(field.value)
-          return (
-            <FormItem>
-              <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
-                {label}
-              </FormLabel>
-              <FormControl>
-                {pages && pages.length > 0 ? (
-                  <PageSelector
-                    value={stringValue}
-                    onChange={field.onChange}
-                    pages={pages}
-                    placeholder={description}
-                  />
-                ) : (
-                  <Input {...field} placeholder={description} value={stringValue} />
-                )}
-              </FormControl>
-              {description && (
-                <FormDescription className="cms-text-secondary" style={{ fontSize: '12px' }}>
-                  {description}
-                </FormDescription>
-              )}
-              <FormMessage />
-            </FormItem>
-          )
-        }}
       />
     )
   }
@@ -579,8 +447,7 @@ function renderArrayField<T extends FieldValues>(
   schema: z.ZodSchema,
   label: string,
   description?: string,
-  bucket?: string,
-  pages?: Array<{ slug: string; title: string }>
+  bucket?: string
 ): React.ReactNode {
   const fieldName = name as string
   const arraySchema = schema as z.ZodArray<z.ZodSchema>
@@ -636,7 +503,7 @@ function renderArrayField<T extends FieldValues>(
   }
 
   // Array of objects - render as expandable list
-  return renderObjectArrayField(control, name, itemSchema as z.ZodSchema, label, description, bucket, pages)
+  return renderObjectArrayField(control, name, itemSchema as z.ZodSchema, label, description, bucket)
 }
 
 /**
@@ -663,40 +530,6 @@ function renderStringArrayField<T extends FieldValues>(
             <div className="space-y-2">
               {items.map((item, index) => (
                 <div key={index} className="flex gap-2">
-                  <div className="flex flex-col gap-1">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      disabled={index === 0}
-                      onClick={() => {
-                        if (index === 0) return
-                        const newItems = [...items]
-                        const temp = newItems[index - 1]
-                        newItems[index - 1] = newItems[index]
-                        newItems[index] = temp ?? ''
-                        field.onChange(newItems)
-                      }}
-                    >
-                      <ArrowUp className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      disabled={index === items.length - 1}
-                      onClick={() => {
-                        if (index >= items.length - 1) return
-                        const newItems = [...items]
-                        const temp = newItems[index + 1]
-                        newItems[index + 1] = newItems[index]
-                        newItems[index] = temp ?? ''
-                        field.onChange(newItems)
-                      }}
-                    >
-                      <ArrowDown className="h-3 w-3" />
-                    </Button>
-                  </div>
                   <Input
                     value={item}
                     onChange={(e) => {
@@ -750,8 +583,7 @@ function renderObjectArrayField<T extends FieldValues>(
   itemSchema: z.ZodSchema,
   label: string,
   description?: string,
-  bucket?: string,
-  pages?: Array<{ slug: string; title: string }>
+  bucket?: string
 ): React.ReactNode {
   return (
     <FormField
@@ -779,51 +611,17 @@ function renderObjectArrayField<T extends FieldValues>(
                 <div key={index} className="border-b pb-4 last:border-b-0 space-y-2">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm font-medium cms-text-primary">Item {index + 1}</span>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        disabled={index === 0}
-                        onClick={() => {
-                          if (index === 0) return
-                          const newItems = [...items]
-                          const temp = newItems[index - 1]
-                          newItems[index - 1] = newItems[index]
-                          newItems[index] = temp ?? {}
-                          field.onChange(newItems)
-                        }}
-                      >
-                        <ArrowUp className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        disabled={index === items.length - 1}
-                        onClick={() => {
-                          if (index >= items.length - 1) return
-                          const newItems = [...items]
-                          const temp = newItems[index + 1]
-                          newItems[index + 1] = newItems[index]
-                          newItems[index] = temp ?? {}
-                          field.onChange(newItems)
-                        }}
-                      >
-                        <ArrowDown className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={() => {
-                          const newItems = items.filter((_: unknown, i: number) => i !== index)
-                          field.onChange(newItems)
-                        }}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={() => {
+                        const newItems = items.filter((_: unknown, i: number) => i !== index)
+                        field.onChange(newItems)
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                   {Object.entries(shape).map(([key, schema]) => {
                     const fieldPath = `${name}.${index}.${key}` as FieldPath<T>
@@ -834,7 +632,6 @@ function renderObjectArrayField<T extends FieldValues>(
                           name: fieldPath,
                           schema: schema as z.ZodSchema,
                           bucket,
-                          pages,
                         })}
                       </div>
                     )
@@ -877,8 +674,7 @@ function renderObjectFields<T extends FieldValues>(
   control: Control<T>,
   name: FieldPath<T>,
   schema: z.ZodSchema,
-  bucket?: string,
-  pages?: Array<{ slug: string; title: string }>
+  bucket?: string
 ): React.ReactNode {
   // Unwrap optional/default/nullable/effects schema recursively
   let currentSchema: any = schema
@@ -924,6 +720,58 @@ function renderObjectFields<T extends FieldValues>(
   }
   
   const fieldName = name as string
+
+  // Special handling for hero images object
+  if (fieldName.includes('images') && !fieldName.includes('women') && !fieldName.includes('men')) {
+    return (
+      <FormField
+        key={fieldName}
+        control={control}
+        name={name}
+        render={({ field }) => {
+          const imagesValue = field.value || { women: [], men: [] }
+          // Hero section uses hero-images bucket, not couple-photos
+          const heroBucket = 'hero-images'
+          return (
+            <FormItem>
+              <FormLabel className="cms-text-primary" style={{ fontWeight: '500', fontSize: '14px' }}>
+                Images
+              </FormLabel>
+              <div className="space-y-4 border rounded-lg p-4">
+                {/* Women Images */}
+                <div>
+                  <FormLabel className="text-sm cms-text-primary mb-2 block">Women Images</FormLabel>
+                  <MultiImageUploadField
+                    value={Array.isArray(imagesValue.women) ? imagesValue.women : []}
+                    onChange={(women) => {
+                      field.onChange({ ...imagesValue, women })
+                    }}
+                    bucket={heroBucket}
+                    label=""
+                    maxImages={20}
+                  />
+                </div>
+                {/* Men Images */}
+                <div>
+                  <FormLabel className="text-sm cms-text-primary mb-2 block">Men Images</FormLabel>
+                  <MultiImageUploadField
+                    value={Array.isArray(imagesValue.men) ? imagesValue.men : []}
+                    onChange={(men) => {
+                      field.onChange({ ...imagesValue, men })
+                    }}
+                    bucket={heroBucket}
+                    label=""
+                    maxImages={20}
+                  />
+                </div>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )
+        }}
+      />
+    )
+  }
 
   // Default object rendering - wrap in FormField to properly handle the object value
   return (
@@ -981,7 +829,6 @@ function renderObjectFields<T extends FieldValues>(
                       name: fieldPath,
                       schema: unwrappedFieldSchema,
                       bucket,
-                      pages,
                     })}
                   </div>
                 )
@@ -994,3 +841,4 @@ function renderObjectFields<T extends FieldValues>(
     />
   )
 }
+

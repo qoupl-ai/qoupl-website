@@ -5,9 +5,15 @@
 import React from 'react'
 import { z } from 'zod'
 import type { SectionContract } from './types'
-import { whyJoinSectionSchema } from '@/lib/validation/section-schemas'
 
-const whyJoinDataSchema = whyJoinSectionSchema.shape.data
+// Schema for why-join section
+const whyJoinDataSchema = z.object({
+  items: z.array(z.object({
+    title: z.string(),
+    description: z.string(),
+    icon: z.string(),
+  })),
+})
 
 // Placeholder renderer
 const WhyJoinRenderer: React.ComponentType<{ data: z.infer<typeof whyJoinDataSchema> }> = () => {
@@ -27,7 +33,9 @@ const WhyJoinEditor: React.ComponentType<{
   )
 }
 
-const defaultData: z.infer<typeof whyJoinDataSchema> = whyJoinDataSchema.parse({})
+const defaultData: z.infer<typeof whyJoinDataSchema> = {
+  items: [],
+}
 
 export const whyJoinContract: SectionContract<z.infer<typeof whyJoinDataSchema>> = {
   type: 'why-join',
@@ -42,3 +50,4 @@ export const whyJoinContract: SectionContract<z.infer<typeof whyJoinDataSchema>>
     category: 'content',
   },
 }
+

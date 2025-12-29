@@ -1,54 +1,54 @@
 "use client";
 
+import { Users } from "lucide-react";
 import { LegalPageLayout, LegalSection } from "@/components/legal-page-layout";
-import { resolveLucideIcon } from "@/lib/utils/icons";
+
+interface ContentSection {
+  heading?: string;
+  content?: string;
+  items?: string[];
+}
 
 interface CommunityGuidelinesClientProps {
   content: {
     title?: string;
-    icon?: string;
-    showIcon?: boolean;
     lastUpdated?: string;
-    sections?: Array<{
-      heading?: string;
-      content?: string;
-      items?: Array<{ text?: string; icon?: string; show?: boolean }>;
-      isImportant?: boolean;
-      show?: boolean;
-    }>;
+    sections?: ContentSection[];
   };
 }
 
 export default function CommunityGuidelinesClient({ content }: CommunityGuidelinesClientProps) {
-  const PageIcon = resolveLucideIcon(content.icon);
-  const showIcon = content.showIcon !== false;
-
-  if (showIcon && !PageIcon && process.env.NODE_ENV !== "production") {
-    throw new Error("Community guidelines icon is missing or invalid in CMS.");
-  }
-
-  const sections = (content.sections || []).filter((section) => section.show !== false);
-
   return (
     <LegalPageLayout
-      title={content.title || ""}
+      title={content.title || "Community Guidelines"}
       lastUpdated={content.lastUpdated}
-      icon={
-        showIcon && PageIcon ? (
-          <PageIcon className="h-8 w-8 md:h-10 md:w-10 text-primary" />
-        ) : undefined
-      }
+      icon={<Users className="h-8 w-8 md:h-10 md:w-10 text-primary" />}
     >
-      {sections.map((section, idx) => (
-        <LegalSection
-          key={idx}
-          heading={section.heading || ""}
-          content={section.content}
-          items={section.items}
-          isImportant={section.isImportant}
-          index={idx}
-        />
-      ))}
+      {content.sections && content.sections.length > 0 ? (
+        content.sections.map((section, idx) => {
+          const isImportant = 
+            section.heading?.toLowerCase().includes('college student exclusivity') || 
+            section.heading?.toLowerCase().includes('exclusivity') ||
+            section.heading?.toLowerCase().includes('zero tolerance') ||
+            section.heading?.toLowerCase().includes("do's") ||
+            section.heading?.toLowerCase().includes("don'ts");
+          
+          return (
+            <LegalSection
+              key={idx}
+              heading={section.heading || ""}
+              content={section.content}
+              items={section.items}
+              isImportant={isImportant}
+              index={idx}
+            />
+          );
+        })
+      ) : (
+        <div className="text-center py-16">
+          <p className="text-muted-foreground">No content available at this time.</p>
+        </div>
+      )}
     </LegalPageLayout>
   );
 }

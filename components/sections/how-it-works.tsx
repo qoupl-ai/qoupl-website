@@ -3,46 +3,50 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
-import { resolveStorageUrl } from "@/lib/supabase/storage-url";
+import { getStorageUrl } from "@/lib/supabase/storage-url";
 
 // No hardcoded defaults - all content must come from database
 
 interface HowItWorksProps {
   data?: {
     title?: string;
-    titleHighlight?: string;
-    showTitle?: boolean;
     steps?: Array<{
       step: string;
       title: string;
       description: string;
       image?: string;
-      imageAlt?: string;
-      showImage?: boolean;
-      showBadge?: boolean;
     }>;
   };
 }
 
 export default function HowItWorks({ data }: HowItWorksProps = {}) {
+  // All content must come from database - no hardcoded fallbacks
   if (!data || !data.steps || !Array.isArray(data.steps) || data.steps.length === 0) {
-    if (process.env.NODE_ENV !== 'production') {
-      throw new Error('How it works section data is missing required steps.')
-    }
-    return null
+    return (
+      <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-muted-foreground">How it works content not available. Please add content in CMS.</p>
+        </div>
+      </section>
+    )
   }
 
   // Process steps from data only - no defaults
   const steps = data.steps.map(item => {
-    const imageUrl = resolveStorageUrl(item.image);
+    let imageUrl = item.image;
+    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+      if (imageUrl.includes('/')) {
+        const [bucket, ...rest] = imageUrl.split('/');
+        imageUrl = getStorageUrl(bucket ?? 'app-screenshots', rest.join('/'));
+      } else {
+        imageUrl = getStorageUrl("app-screenshots", imageUrl);
+      }
+    }
     return {
       step: item.step,
       title: item.title,
       description: item.description,
       image: imageUrl,
-      imageAlt: item.imageAlt || '',
-      showImage: item.showImage !== false,
-      showBadge: item.showBadge !== false,
     };
   });
   const containerRef = useRef<HTMLDivElement>(null);
@@ -94,27 +98,6 @@ export default function HowItWorks({ data }: HowItWorksProps = {}) {
 
   // Get the current step data
   const currentStepData = steps[currentStep] ?? steps[0]!;
-  const showTitle = data.showTitle !== false && (data.title || '').length > 0
-  const title = data.title || ''
-  const titleHighlight = data.titleHighlight || ''
-
-  const renderTitle = () => {
-    if (!titleHighlight) return title
-    const index = title.toLowerCase().indexOf(titleHighlight.toLowerCase())
-    if (index === -1) return title
-    const before = title.slice(0, index)
-    const match = title.slice(index, index + titleHighlight.length)
-    const after = title.slice(index + titleHighlight.length)
-    return (
-      <>
-        {before}
-        <span className="bg-gradient-to-r from-primary to-[#662D91] bg-clip-text text-transparent">
-          {match}
-        </span>
-        {after}
-      </>
-    )
-  }
 
   return (
     <section ref={containerRef} className="relative">
@@ -135,18 +118,20 @@ export default function HowItWorks({ data }: HowItWorksProps = {}) {
 
           <div className="container mx-auto px-4 relative z-10 w-full h-full flex flex-col pt-16 md:pt-20 pb-8 md:pb-12">
             {/* Header - Always visible, fixed position */}
-            {showTitle && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-center mb-12 md:mb-16 lg:mb-20 xl:mb-24 flex-shrink-0"
-              >
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold">
-                  {renderTitle()}
-                </h2>
-              </motion.div>
-            )}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12 md:mb-16 lg:mb-20 xl:mb-24 flex-shrink-0"
+            >
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold">
+                How{" "}
+                <span className="bg-gradient-to-r from-primary to-[#662D91] bg-clip-text text-transparent">
+                  qoupl
+                </span>{" "}
+                Works
+              </h2>
+            </motion.div>
 
             {/* Step Content - Flexible, centered with proper spacing */}
             <div className="flex-1 flex items-center justify-center min-h-0 max-w-6xl mx-auto w-full overflow-visible">
@@ -174,16 +159,14 @@ export default function HowItWorks({ data }: HowItWorksProps = {}) {
 
                         {/* Screen */}
                         <div className="absolute inset-[2px] bg-white dark:bg-gray-950 rounded-[2.3rem] overflow-hidden">
-                          {currentStepData.showImage && currentStepData.image && (
-                            <Image
-                              src={currentStepData.image}
-                              alt={currentStepData.imageAlt}
-                              fill
-                              className="object-cover"
-                              sizes="(max-width: 640px) 170px, (max-width: 768px) 190px, (max-width: 1024px) 210px, (max-width: 1280px) 240px, 260px"
-                              priority
-                            />
-                          )}
+                          <Image
+                            src={currentStepData.image || '/placeholder.png'}
+                            alt={currentStepData.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 640px) 170px, (max-width: 768px) 190px, (max-width: 1024px) 210px, (max-width: 1280px) 240px, 260px"
+                            priority
+                          />
                         </div>
 
                         {/* Screen Glare */}
@@ -191,24 +174,22 @@ export default function HowItWorks({ data }: HowItWorksProps = {}) {
                       </div>
 
                       {/* Step Badge */}
-                      {currentStepData.showBadge && currentStepData.step && (
-                        <motion.div
-                          key={`badge-${currentStep}`}
-                          initial={{ scale: 0, rotate: -180 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          transition={{
-                            delay: 0.2,
-                            type: "spring",
-                            stiffness: 200,
-                            damping: 20,
-                          }}
-                          className="absolute -top-3 -right-3 md:-top-4 md:-right-4 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-[#662D91] to-primary shadow-xl flex items-center justify-center z-10"
-                        >
-                          <span className="text-sm sm:text-base md:text-lg font-bold text-white">
-                            {currentStepData.step}
-                          </span>
-                        </motion.div>
-                      )}
+                      <motion.div
+                        key={`badge-${currentStep}`}
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{
+                          delay: 0.2,
+                          type: "spring",
+                          stiffness: 200,
+                          damping: 20,
+                        }}
+                        className="absolute -top-3 -right-3 md:-top-4 md:-right-4 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-[#662D91] to-primary shadow-xl flex items-center justify-center z-10"
+                      >
+                        <span className="text-sm sm:text-base md:text-lg font-bold text-white">
+                          {currentStepData.step}
+                        </span>
+                      </motion.div>
                     </div>
                   </motion.div>
 

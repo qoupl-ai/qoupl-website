@@ -5,14 +5,6 @@
 
 import { getPageSections } from '@/lib/supabase/content'
 import PricingClient from './pricing-client'
-import type {
-  PricingHeroSectionData,
-  PricingPlansSectionData,
-  FreeMessagesSectionData,
-  MessageBundlesSectionData,
-  PricingInfoSectionData,
-  PricingFaqSectionData,
-} from '@/types/section'
 
 export default async function Pricing() {
   // Fetch pricing sections from database
@@ -28,12 +20,12 @@ export default async function Pricing() {
 
   return (
     <PricingClient
-      hero={pricingHero?.content as PricingHeroSectionData | undefined}
-      pricingPlans={pricingPlans?.content as PricingPlansSectionData | undefined}
-      freeMessages={freeMessages?.content as FreeMessagesSectionData | undefined}
-      messageBundles={messageBundles?.content as MessageBundlesSectionData | undefined}
-      pricingInfo={pricingInfo?.content as PricingInfoSectionData | undefined}
-      faq={pricingFaq?.content as PricingFaqSectionData | undefined}
+      hero={pricingHero?.content as { title?: string; subtitle?: string; badge?: { icon?: string; text?: string } } | undefined}
+      plans={((pricingPlans?.content as { plans?: Array<{ name: string; price: number; currency?: string; billing_period?: string; features: string[]; is_popular?: boolean; order_index?: number }> } | undefined)?.plans || [])}
+      freeMessages={freeMessages?.content as { count?: number; title?: string; description?: string } | undefined}
+      messageBundles={messageBundles?.content as { price_per_message?: number; gst_rate?: number; bundles?: Array<{ messages: number; popular: boolean }>; min_messages?: number; max_messages?: number; title?: string; subtitle?: string } | undefined}
+      pricingInfo={pricingInfo?.content as { title?: string; items?: string[] } | undefined}
+      faq={pricingFaq?.content as { title?: string; faqs?: Array<{ question: string; answer: string }>; cta?: { text?: string; link?: string } } | undefined}
     />
   )
 }

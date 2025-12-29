@@ -4,7 +4,6 @@
  */
 
 import { getPageSections } from '@/lib/supabase/content'
-import type { ContentSectionData } from '@/types/section'
 import PrivacyClient from './privacy-client'
 
 export default async function PrivacyPolicy() {
@@ -13,11 +12,7 @@ export default async function PrivacyPolicy() {
 
   // Find content section
   const contentSection = sections.find(s => s.section_type === 'content')
-  const content = contentSection?.content as ContentSectionData | undefined
+  const content = (contentSection?.content || {}) as { title?: string; lastUpdated?: string; sections?: unknown[] }
 
-  if (!content && process.env.NODE_ENV !== 'production') {
-    throw new Error('Privacy page content is missing in CMS.')
-  }
-
-  return <PrivacyClient content={content || {}} />
+  return <PrivacyClient content={content} />
 }

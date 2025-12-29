@@ -1,9 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { 
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  Lock,
+  MapPin,
+  Info
+} from "lucide-react";
 import { ReactNode } from "react";
-import { resolveLucideIcon } from "@/lib/utils/icons";
-import { useGlobalContent } from "@/components/global-content-provider";
 
 interface LegalPageLayoutProps {
   title: string;
@@ -13,15 +19,6 @@ interface LegalPageLayoutProps {
 }
 
 export function LegalPageLayout({ title, lastUpdated, icon, children }: LegalPageLayoutProps) {
-  const { legalUi } = useGlobalContent();
-
-  if (!legalUi) {
-    if (process.env.NODE_ENV !== 'production') {
-      throw new Error('Legal UI content is missing in CMS.');
-    }
-    return null;
-  }
-
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section - Compact & Modern */}
@@ -50,8 +47,7 @@ export function LegalPageLayout({ title, lastUpdated, icon, children }: LegalPag
             </h1>
             {lastUpdated && (
               <p className="text-xs md:text-sm text-muted-foreground">
-                {legalUi.last_updated_label || ''}{" "}
-                <span className="text-foreground/80">{lastUpdated}</span>
+                Last Updated: <span className="text-foreground/80">{lastUpdated}</span>
               </p>
             )}
           </motion.div>
@@ -80,18 +76,47 @@ export function LegalPageLayout({ title, lastUpdated, icon, children }: LegalPag
 interface LegalSectionProps {
   heading: string;
   content?: string;
-  items?: LegalItemValue[];
+  items?: string[];
   isImportant?: boolean;
   index: number;
 }
 
 // Helper function to highlight important terms with brand color
-function highlightImportantTerms(text: string, terms: string[]): ReactNode {
+function highlightImportantTerms(text: string): ReactNode {
+  const importantTerms = [
+    'qoupl',
+    '18 to 25',
+    '18-25',
+    'government-issued ID',
+    'Aadhaar',
+    'PAN',
+    'Voter ID',
+    'Driving License',
+    'Passport',
+    'DPDPA',
+    'IT Act',
+    'Indian law',
+    'Grievance Officer',
+    'Shashank Kumar',
+    'zero tolerance',
+    'mandatory',
+    'required',
+    'prohibited',
+    'forbidden',
+    'emergency',
+    'safety',
+    'privacy',
+    'data protection',
+    'encrypted',
+    'secure',
+    'verification',
+  ];
+
   if (!text) return null;
 
   let parts: (string | ReactNode)[] = [text];
-
-  terms.forEach(term => {
+  
+  importantTerms.forEach(term => {
     const newParts: (string | ReactNode)[] = [];
     parts.forEach(part => {
       if (typeof part === 'string') {
@@ -119,58 +144,34 @@ function highlightImportantTerms(text: string, terms: string[]): ReactNode {
   return <>{parts}</>;
 }
 
+// Icon mapping for different item types
+function getItemIcon(item: string) {
+  if (item.startsWith('✅') || item.toLowerCase().includes('do') || item.toLowerCase().includes('should') || item.toLowerCase().includes('must') || item.toLowerCase().includes('be authentic') || item.toLowerCase().includes('be respectful')) {
+    return <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400 shrink-0 mt-1" />;
+  }
+  if (item.startsWith('❌') || item.toLowerCase().includes("don't") || item.toLowerCase().includes('avoid') || item.toLowerCase().includes('prohibited') || item.toLowerCase().includes('no harassment') || item.toLowerCase().includes('no ')) {
+    return <XCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0 mt-1" />;
+  }
+  if (item.startsWith('⚠️') || item.toLowerCase().includes('warning') || item.toLowerCase().includes('caution') || item.toLowerCase().includes('red flags') || item.toLowerCase().includes('asks for')) {
+    return <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-1" />;
+  }
+  if (item.startsWith('🔒') || item.toLowerCase().includes('security') || item.toLowerCase().includes('privacy') || item.toLowerCase().includes('encrypted') || item.toLowerCase().includes('keep personal') || item.toLowerCase().includes('account secure')) {
+    return <Lock className="h-4 w-4 text-primary shrink-0 mt-1" />;
+  }
+  if (item.startsWith('📍') || item.toLowerCase().includes('location') || item.toLowerCase().includes('address') || item.toLowerCase().includes('meet in') || item.toLowerCase().includes('share your location')) {
+    return <MapPin className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0 mt-1" />;
+  }
+  return <Info className="h-4 w-4 text-primary shrink-0 mt-1" />;
+}
+
 // Clean item text by removing emoji markers
 function cleanItemText(item: string): string {
   return item.replace(/^[✅❌⚠️🔒📍]/, '').trim();
 }
 
-type LegalItemValue =
-  | string
-  | {
-      text?: string
-      icon?: string
-      show?: boolean
-    }
-
-function normalizeItem(item: LegalItemValue) {
-  if (typeof item === 'string') {
-    return {
-      text: cleanItemText(item),
-      icon: undefined,
-      show: true,
-    }
-  }
-
-  return {
-    text: item?.text ?? '',
-    icon: item?.icon,
-    show: item?.show !== false,
-  }
-}
-
 export function LegalSection({ heading, content, items, isImportant, index }: LegalSectionProps) {
-  const { legalUi } = useGlobalContent();
-
-  if (!legalUi) {
-    if (process.env.NODE_ENV !== 'production') {
-      throw new Error('Legal UI content is missing in CMS.');
-    }
-    return null;
-  }
-
-  const highlightTerms = legalUi.highlight_terms || [];
-  const DefaultIcon = resolveLucideIcon(legalUi.default_item_icon);
-
-  if (!DefaultIcon && items && items.length > 0 && process.env.NODE_ENV !== 'production') {
-    throw new Error('Legal UI default item icon is missing or invalid.');
-  }
-
   const headingId = heading.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-
-  const normalizedItems = (items || [])
-    .map((item) => normalizeItem(item as LegalItemValue))
-    .filter((item) => item.show && item.text.length > 0)
-
+  
   return (
     <motion.section
       id={headingId}
@@ -186,35 +187,36 @@ export function LegalSection({ heading, content, items, isImportant, index }: Le
     >
       {/* H2: 28px (1.75rem) on desktop, 24px (1.5rem) on mobile */}
       <h2 className={`mb-4 font-bold tracking-tight ${
-        isImportant
-          ? "text-2xl md:text-3xl text-foreground"
+        isImportant 
+          ? "text-2xl md:text-3xl text-foreground" 
           : "text-xl md:text-2xl text-foreground"
       }`}>
-        {highlightImportantTerms(heading, highlightTerms)}
+        {highlightImportantTerms(heading)}
       </h2>
-
+      
       {/* Body text: 16px (1rem) on mobile, 17px (1.0625rem) on desktop */}
       {content && (
         <p className="text-[15px] md:text-base text-muted-foreground leading-[1.6] mb-5 font-normal">
-          {highlightImportantTerms(content, highlightTerms)}
+          {highlightImportantTerms(content)}
         </p>
       )}
-
-      {normalizedItems.length > 0 && (
+      
+      {items && items.length > 0 && (
         <ul className="space-y-3 mt-5">
-          {normalizedItems.map((item, i) => {
-            const ItemIcon = resolveLucideIcon(item.icon) || DefaultIcon;
-
+          {items.map((item, i) => {
+            const cleanItem = cleanItemText(item);
+            const icon = getItemIcon(item);
+            
             return (
               <li
-                key={`${item.text}-${i}`}
+                key={i}
                 className="flex items-start gap-3 text-[15px] md:text-base text-muted-foreground leading-[1.6] group"
               >
                 <span className="shrink-0">
-                  {ItemIcon && <ItemIcon className="h-4 w-4 text-primary shrink-0 mt-1" />}
+                  {icon}
                 </span>
                 <span className="flex-1 group-hover:text-foreground/90 transition-colors">
-                  {highlightImportantTerms(item.text, highlightTerms)}
+                  {highlightImportantTerms(cleanItem)}
                 </span>
               </li>
             )

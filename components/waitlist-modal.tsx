@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { X, Heart, Mail, Phone, User, Users, Sparkles, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,9 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { resolveStorageUrl } from "@/lib/supabase/storage-url";
-import { resolveLucideIcon } from "@/lib/utils/icons";
-import { useGlobalContent } from "@/components/global-content-provider";
+import { getStorageUrl } from '@/lib/supabase/storage-url';
 
 interface WaitlistModalProps {
   isOpen: boolean;
@@ -18,7 +17,6 @@ interface WaitlistModalProps {
 }
 
 export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
-  const { waitlistModal } = useGlobalContent();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,67 +29,15 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (!waitlistModal || waitlistModal.show === false) {
-    if (process.env.NODE_ENV !== "production") {
-      throw new Error("Waitlist modal content is missing in CMS.");
-    }
-    return null;
-  }
-
-  const logoSrc = resolveStorageUrl(waitlistModal.logo?.image);
-  const logoWidth = waitlistModal.logo?.width ?? 0;
-  const logoHeight = waitlistModal.logo?.height ?? 0;
-  const CloseIcon = resolveLucideIcon(waitlistModal.close_button?.icon);
-  const DecorativeIcon = resolveLucideIcon(waitlistModal.decorative?.icon);
-  const SelectIcon = resolveLucideIcon(waitlistModal.select_icon);
-
-  const NameIcon = resolveLucideIcon(waitlistModal.form?.name?.icon);
-  const EmailIcon = resolveLucideIcon(waitlistModal.form?.email?.icon);
-  const PhoneIcon = resolveLucideIcon(waitlistModal.form?.phone?.icon);
-  const LookingForIcon = resolveLucideIcon(waitlistModal.form?.looking_for?.icon);
-
-  const SubmitIcon = resolveLucideIcon(waitlistModal.submit?.icon);
-  const LoadingIcon = resolveLucideIcon(waitlistModal.submit?.loading_icon);
-  const SuccessIcon = resolveLucideIcon(waitlistModal.success?.icon);
-  const ConfettiIcon = resolveLucideIcon(waitlistModal.success?.confetti_icon);
-
-  const requiredIndicator = waitlistModal.required_indicator || "";
-  const closeLabel = waitlistModal.close_button?.aria_label || "";
-
-  const form = waitlistModal.form || {};
-  const nameField = form.name || {};
-  const emailField = form.email || {};
-  const phoneField = form.phone || {};
-  const genderField = form.gender || {};
-  const ageField = form.age || {};
-  const lookingForField = form.looking_for || {};
-
-  const genderOptions = (genderField.options || []).filter((option) => option.show !== false);
-  const lookingForOptions = (lookingForField.options || []).filter((option) => option.show !== false);
-
-  const showName = nameField.show !== false;
-  const showEmail = emailField.show !== false;
-  const showPhone = phoneField.show !== false;
-  const showGender = genderField.show !== false;
-  const showAge = ageField.show !== false;
-  const showLookingFor = lookingForField.show !== false;
-  const showPrivacyNote = waitlistModal.privacy_note?.show !== false;
-
-  if ((!logoSrc || logoWidth <= 0 || logoHeight <= 0 || !CloseIcon || !SubmitIcon || !SuccessIcon) && process.env.NODE_ENV !== "production") {
-    throw new Error("Waitlist modal is missing required media or icons.");
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
-    // Age validation from CMS configuration
+    // Age validation for 18-25 years only and college student requirement
     const age = parseInt(formData.age);
-    const minAge = ageField.min || 0;
-    const maxAge = ageField.max || 0;
-    if ((minAge > 0 && age < minAge) || (maxAge > 0 && age > maxAge)) {
-      setError(waitlistModal.validation?.age_error || "");
+    if (age < 18 || age > 25) {
+      setError('Sorry! qoupl is exclusively for college students aged 18 to 25 years. You must be a current college student to join.');
       setIsSubmitting(false);
       return;
     }
@@ -115,7 +61,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || waitlistModal.validation?.submit_error || "");
+        throw new Error(data.error || 'Failed to join waitlist');
       }
 
       // Success
@@ -137,8 +83,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       }, 5000);
     } catch (err) {
       setIsSubmitting(false);
-      const fallbackMessage = waitlistModal.validation?.submit_error || "";
-      setError(err instanceof Error ? err.message : fallbackMessage);
+      setError(err instanceof Error ? err.message : 'Failed to join waitlist. Please try again.');
     }
   };
 
@@ -181,40 +126,34 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   <button
                     onClick={onClose}
                     className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-200 z-10 group"
-                    aria-label={closeLabel}
+                    aria-label="Close modal"
                   >
-                    {CloseIcon && (
-                      <CloseIcon className="h-4 w-4 sm:h-5 sm:w-5 group-hover:rotate-90 transition-transform duration-200" />
-                    )}
+                    <X className="h-4 w-4 sm:h-5 sm:w-5 group-hover:rotate-90 transition-transform duration-200" />
                   </button>
 
                   {/* Logo Icon */}
                   <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                    {waitlistModal.logo?.show !== false && logoSrc && (
-                      <Image
-                        src={logoSrc}
-                        alt={waitlistModal.logo?.alt || ""}
-                        width={logoWidth}
-                        height={logoHeight}
-                        className="h-5 sm:h-6 w-auto brightness-0 invert"
-                      />
-                    )}
+                    <Image
+                      src={getStorageUrl("brand-assets", "quoupl.svg")}
+                      alt="qoupl"
+                      width={40}
+                      height={15}
+                      className="h-5 sm:h-6 w-auto brightness-0 invert"
+                    />
                     <div>
                       <CardTitle className="text-lg sm:text-xl font-bold text-white mb-0.5 sm:mb-1">
-                        {waitlistModal.header?.title || ""}
+                        Find Your Match
                       </CardTitle>
                       <CardDescription className="text-white/90 text-xs sm:text-sm mt-0">
-                        {waitlistModal.header?.subtitle || ""}
+                        Join thousands of college students finding love
                       </CardDescription>
                     </div>
                   </div>
 
                   {/* Decorative Elements */}
-                  {waitlistModal.decorative?.show !== false && DecorativeIcon && (
-                    <div className="absolute bottom-0 right-0 opacity-10 pointer-events-none">
-                      <DecorativeIcon className="h-20 w-20 sm:h-24 sm:w-24 fill-white" />
-                    </div>
-                  )}
+                  <div className="absolute bottom-0 right-0 opacity-10 pointer-events-none">
+                    <Heart className="h-20 w-20 sm:h-24 sm:w-24 fill-white" />
+                  </div>
                 </CardHeader>
 
                 {/* Form Content */}
@@ -235,179 +174,140 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       )}
                       
                       {/* Full Name */}
-                      {showName && (
-                        <div className="space-y-1.5">
-                          <Label htmlFor="name" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                            {nameField.label || ""}
-                            {requiredIndicator && <span className="text-red-500"> {requiredIndicator}</span>}
-                          </Label>
-                          <div className="relative">
-                            {NameIcon && (
-                              <NameIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
-                            )}
-                            <Input
-                              id="name"
-                              type="text"
-                              name="name"
-                              required
-                              value={formData.name}
-                              onChange={handleChange}
-                              placeholder={nameField.placeholder || ""}
-                              className="pl-10 h-9 text-sm bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]"
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Email */}
-                      {showEmail && (
-                        <div className="space-y-1.5">
-                          <Label htmlFor="email" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                            {emailField.label || ""}
-                            {requiredIndicator && <span className="text-red-500"> {requiredIndicator}</span>}
-                          </Label>
-                          <div className="relative">
-                            {EmailIcon && (
-                              <EmailIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
-                            )}
-                            <Input
-                              id="email"
-                              type="email"
-                              name="email"
-                              required
-                              value={formData.email}
-                              onChange={handleChange}
-                              placeholder={emailField.placeholder || ""}
-                              className="pl-10 h-9 text-sm bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]"
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Phone */}
-                      {showPhone && (
-                        <div className="space-y-1.5">
-                          <Label htmlFor="phone" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                            {phoneField.label || ""}
-                            {requiredIndicator && <span className="text-red-500"> {requiredIndicator}</span>}
-                          </Label>
-                          <div className="relative">
-                            {PhoneIcon && (
-                              <PhoneIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
-                            )}
-                            <Input
-                              id="phone"
-                              type="tel"
-                              name="phone"
-                              required
-                              value={formData.phone}
-                              onChange={handleChange}
-                              placeholder={phoneField.placeholder || ""}
-                              className="pl-10 h-9 text-sm bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]"
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Gender */}
-                      {showGender && (
-                        <div className="space-y-1.5">
-                          <Label htmlFor="gender" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                            {genderField.label || ""}
-                            {requiredIndicator && <span className="text-red-500"> {requiredIndicator}</span>}
-                          </Label>
-                          <div className="relative">
-                            <select
-                              id="gender"
-                              name="gender"
-                              required
-                              value={formData.gender}
-                              onChange={handleChange}
-                              className={cn(
-                                "flex h-9 w-full rounded-md border bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 px-3 py-2 text-sm",
-                                "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]",
-                                "disabled:cursor-not-allowed disabled:opacity-50 appearance-none",
-                                "text-gray-900 dark:text-white"
-                              )}
-                            >
-                              <option value="">{genderField.placeholder || ""}</option>
-                              {genderOptions.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                  {option.label}
-                                </option>
-                              ))}
-                            </select>
-                            {SelectIcon && (
-                              <SelectIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Age */}
-                      {showAge && (
-                        <div className="space-y-1.5">
-                          <Label htmlFor="age" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                            {ageField.label || ""}
-                            {requiredIndicator && <span className="text-red-500"> {requiredIndicator}</span>}
-                            {ageField.helper && (
-                              <span className="text-xs text-gray-500 dark:text-gray-500 font-normal">
-                                {` ${ageField.helper}`}
-                              </span>
-                            )}
-                          </Label>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="name" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                          Full Name <span className="text-red-500">*</span>
+                        </Label>
+                        <div className="relative">
+                          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
                           <Input
-                            id="age"
-                            type="number"
-                            name="age"
+                            id="name"
+                            type="text"
+                            name="name"
                             required
-                            min={ageField.min || undefined}
-                            max={ageField.max || undefined}
-                            value={formData.age}
+                            value={formData.name}
                             onChange={handleChange}
-                            placeholder={ageField.placeholder || ""}
-                            className="h-9 text-sm bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]"
+                            placeholder="Enter your full name"
+                            className="pl-10 h-9 text-sm bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]"
                           />
                         </div>
-                      )}
+                      </div>
+
+                      {/* Email */}
+                      <div className="space-y-1.5">
+                        <Label htmlFor="email" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                          Email Address <span className="text-red-500">*</span>
+                        </Label>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
+                          <Input
+                            id="email"
+                            type="email"
+                            name="email"
+                            required
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="your@email.com"
+                            className="pl-10 h-9 text-sm bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Phone */}
+                      <div className="space-y-1.5">
+                        <Label htmlFor="phone" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                          Phone Number <span className="text-red-500">*</span>
+                        </Label>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
+                          <Input
+                            id="phone"
+                            type="tel"
+                            name="phone"
+                            required
+                            value={formData.phone}
+                            onChange={handleChange}
+                            placeholder="+91 98765 43210"
+                            className="pl-10 h-9 text-sm bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Gender */}
+                      <div className="space-y-1.5">
+                        <Label htmlFor="gender" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                          Gender <span className="text-red-500">*</span>
+                        </Label>
+                        <div className="relative">
+                          <select
+                            id="gender"
+                            name="gender"
+                            required
+                            value={formData.gender}
+                            onChange={handleChange}
+                            className={cn(
+                              "flex h-9 w-full rounded-md border bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 px-3 py-2 text-sm",
+                              "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]",
+                              "disabled:cursor-not-allowed disabled:opacity-50 appearance-none",
+                              "text-gray-900 dark:text-white"
+                            )}
+                          >
+                            <option value="">Select</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                          </select>
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
+                        </div>
+                      </div>
+
+                      {/* Age */}
+                      <div className="space-y-1.5">
+                        <Label htmlFor="age" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                          Age <span className="text-red-500">*</span> <span className="text-xs text-gray-500 dark:text-gray-500 font-normal">(18-25)</span>
+                        </Label>
+                        <Input
+                          id="age"
+                          type="number"
+                          name="age"
+                          required
+                          min="18"
+                          max="25"
+                          value={formData.age}
+                          onChange={handleChange}
+                          placeholder="21"
+                          className="h-9 text-sm bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]"
+                        />
+                      </div>
 
                       {/* Looking For */}
-                      {showLookingFor && (
-                        <div className="space-y-1.5">
-                          <Label htmlFor="lookingFor" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                            {lookingForField.label || ""}
-                            {requiredIndicator && <span className="text-red-500"> {requiredIndicator}</span>}
-                          </Label>
-                          <div className="relative">
-                            {LookingForIcon && (
-                              <LookingForIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
+                      <div className="space-y-1.5">
+                        <Label htmlFor="lookingFor" className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                          Looking For <span className="text-red-500">*</span>
+                        </Label>
+                        <div className="relative">
+                          <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
+                          <select
+                            id="lookingFor"
+                            name="lookingFor"
+                            required
+                            value={formData.lookingFor}
+                            onChange={handleChange}
+                            className={cn(
+                              "flex h-9 w-full rounded-md border bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 pl-10 pr-10 py-2 text-sm",
+                              "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]",
+                              "disabled:cursor-not-allowed disabled:opacity-50 appearance-none",
+                              "text-gray-900 dark:text-white"
                             )}
-                            <select
-                              id="lookingFor"
-                              name="lookingFor"
-                              required
-                              value={formData.lookingFor}
-                              onChange={handleChange}
-                              className={cn(
-                                "flex h-9 w-full rounded-md border bg-white dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 pl-10 pr-10 py-2 text-sm",
-                                "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#662D91] focus-visible:ring-offset-0 focus-visible:border-[#662D91]",
-                                "disabled:cursor-not-allowed disabled:opacity-50 appearance-none",
-                                "text-gray-900 dark:text-white"
-                              )}
-                            >
-                              <option value="">{lookingForField.placeholder || ""}</option>
-                              {lookingForOptions.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                  {option.label}
-                                </option>
-                              ))}
-                            </select>
-                            {SelectIcon && (
-                              <SelectIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
-                            )}
-                          </div>
+                          >
+                            <option value="">Select preference</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="both">Both</option>
+                          </select>
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
                         </div>
-                      )}
+                      </div>
 
                       {/* Submit Button */}
                       <Button
@@ -418,51 +318,38 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       >
                         {isSubmitting ? (
                           <span className="flex items-center gap-2">
-                            {LoadingIcon && (
-                              <LoadingIcon className="h-5 w-5 animate-spin" />
-                            )}
-                            {waitlistModal.submit?.loading_text || ""}
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                ease: "linear",
+                              }}
+                              className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
+                            />
+                            Joining...
                           </span>
                         ) : (
                           <span className="flex items-center gap-2">
-                            {SubmitIcon && <SubmitIcon className="h-5 w-5 fill-white" />}
-                            {waitlistModal.submit?.text || ""}
+                            <Heart className="h-5 w-5 fill-white" />
+                            Join Waitlist
                           </span>
                         )}
                       </Button>
 
                       {/* Privacy Note */}
-                      {showPrivacyNote && (
-                        <p className="text-xs sm:text-sm text-center text-muted-foreground pt-2 leading-relaxed">
-                          {waitlistModal.privacy_note?.prefix || ""}
-                          {waitlistModal.privacy_note?.terms_url && waitlistModal.privacy_note?.terms_label && (
-                            <>
-                              {" "}
-                              <a
-                                href={waitlistModal.privacy_note.terms_url}
-                                className="text-[#662D91] hover:underline font-medium"
-                              >
-                                {waitlistModal.privacy_note.terms_label}
-                              </a>
-                            </>
-                          )}
-                          {waitlistModal.privacy_note?.separator || ""}
-                          {waitlistModal.privacy_note?.privacy_url && waitlistModal.privacy_note?.privacy_label && (
-                            <>
-                              {" "}
-                              <a
-                                href={waitlistModal.privacy_note.privacy_url}
-                                className="text-[#662D91] hover:underline font-medium"
-                              >
-                                {waitlistModal.privacy_note.privacy_label}
-                              </a>
-                            </>
-                          )}
-                          {waitlistModal.privacy_note?.suffix || ""}
-                        </p>
-                      )}
+                      <p className="text-xs sm:text-sm text-center text-muted-foreground pt-2 leading-relaxed">
+                        qoupl is exclusively for college students aged 18-25. By joining, you agree to our{" "}
+                        <a href="/terms" className="text-[#662D91] hover:underline font-medium">
+                          Terms
+                        </a>{" "}
+                        and{" "}
+                        <a href="/privacy" className="text-[#662D91] hover:underline font-medium">
+                          Privacy Policy
+                        </a>
+                      </p>
                     </form>
-                  ) : waitlistModal.success?.show !== false ? (
+                  ) : (
                     // Success Message
                     <motion.div
                       initial={{ scale: 0, opacity: 0 }}
@@ -499,9 +386,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                             ease: "easeInOut",
                           }}
                         >
-                          {SuccessIcon && (
-                            <SuccessIcon className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 text-white fill-white relative z-10" />
-                          )}
+                          <Heart className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 text-white fill-white relative z-10" />
                         </motion.div>
                       </motion.div>
 
@@ -512,7 +397,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         transition={{ delay: 0.3 }}
                         className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2 sm:mb-3"
                       >
-                        {waitlistModal.success?.title || ""}
+                        You're On The List!
                       </motion.h3>
 
                       {/* Success Subtitle */}
@@ -522,7 +407,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         transition={{ delay: 0.4 }}
                         className="text-base sm:text-lg md:text-xl text-muted-foreground mb-4 sm:mb-6"
                       >
-                        {waitlistModal.success?.subtitle || ""}
+                        Thank you for showing interest in qoupl
                       </motion.p>
 
                       {/* Success Details */}
@@ -533,7 +418,8 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         className="bg-gradient-to-br from-[#662D91]/10 to-[#8B3DB8]/10 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 border border-[#662D91]/20"
                       >
                         <p className="text-sm sm:text-base text-foreground leading-relaxed">
-                          {waitlistModal.success?.details || ""}
+                          We're thrilled to have you on board! You'll be among the first to know when qoupl launches.
+                          We'll send you exclusive early access and special perks.
                         </p>
                       </motion.div>
 
@@ -544,14 +430,10 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         transition={{ delay: 0.6 }}
                         className="space-y-1.5 sm:space-y-2 text-sm sm:text-base text-muted-foreground"
                       >
-                        {waitlistModal.success?.next_title && (
-                          <p className="font-semibold text-foreground">
-                            {waitlistModal.success.next_title}
-                          </p>
-                        )}
-                        {(waitlistModal.success?.next_items || []).map((item, index) => (
-                          <p key={`${item}-${index}`}>{item}</p>
-                        ))}
+                        <p className="font-semibold text-foreground">What's next?</p>
+                        <p>📧 Check your inbox for a confirmation email</p>
+                        <p>💜 Follow us on social media for updates</p>
+                        <p>🎉 Get ready to find your perfect match!</p>
                       </motion.div>
 
                       {/* Confetti-like sparkles */}
@@ -573,14 +455,12 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                             }}
                             className="absolute left-1/2 top-1/4"
                           >
-                            {ConfettiIcon && (
-                              <ConfettiIcon className="h-4 w-4 text-[#662D91]" />
-                            )}
+                            <Sparkles className="h-4 w-4 text-[#662D91]" />
                           </motion.div>
                         ))}
                       </div>
                     </motion.div>
-                  ) : null}
+                  )}
                 </CardContent>
               </Card>
             </motion.div>

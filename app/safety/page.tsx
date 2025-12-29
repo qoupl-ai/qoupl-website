@@ -4,7 +4,6 @@
  */
 
 import { getPageSections } from '@/lib/supabase/content'
-import type { ContentSectionData } from '@/types/section'
 import SafetyClient from './safety-client'
 
 export default async function SafetySecurity() {
@@ -13,11 +12,7 @@ export default async function SafetySecurity() {
 
   // Find content section
   const contentSection = sections.find(s => s.section_type === 'content')
-  const content = contentSection?.content as ContentSectionData | undefined
+  const content = (contentSection?.content || {}) as { title?: string; lastUpdated?: string; sections?: unknown[] }
 
-  if (!content && process.env.NODE_ENV !== 'production') {
-    throw new Error('Safety page content is missing in CMS.')
-  }
-
-  return <SafetyClient content={content || {}} />
+  return <SafetyClient content={content} />
 }

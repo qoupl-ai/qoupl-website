@@ -9,7 +9,6 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { assertAdmin } from '@/lib/auth/assert-admin'
-import { getGlobalContentSchema } from '@/lib/validation/global-content-schemas'
 
 export async function updateGlobalContent(
   key: string,
@@ -17,15 +16,6 @@ export async function updateGlobalContent(
 ) {
   // Assert admin access - single source of truth for authorization
   await assertAdmin()
-
-  const schema = getGlobalContentSchema(key)
-  if (schema) {
-    const parsed = schema.safeParse(content)
-    if (!parsed.success) {
-      throw new Error(`Invalid global content for "${key}": ${parsed.error.message}`)
-    }
-    content = parsed.data as Record<string, unknown>
-  }
 
   // Use regular client (RLS will enforce admin access)
   const supabase = await createClient()
@@ -45,3 +35,4 @@ export async function updateGlobalContent(
   revalidatePath('/add-content/global')
   revalidatePath('/') // Homepage uses global content
 }
+

@@ -1,54 +1,40 @@
 "use client";
 
+import { FileText } from "lucide-react";
 import { LegalPageLayout, LegalSection } from "@/components/legal-page-layout";
-import { resolveLucideIcon } from "@/lib/utils/icons";
 
 interface TermsClientProps {
   content: {
     title?: string;
-    icon?: string;
-    showIcon?: boolean;
     lastUpdated?: string;
-    sections?: Array<{
-      heading?: string;
-      content?: string;
-      items?: Array<{ text?: string; icon?: string; show?: boolean }>;
-      isImportant?: boolean;
-      show?: boolean;
-    }>;
+    sections?: any[];
   };
 }
 
 export default function TermsClient({ content }: TermsClientProps) {
-  const PageIcon = resolveLucideIcon(content.icon);
-  const showIcon = content.showIcon !== false;
-
-  if (showIcon && !PageIcon && process.env.NODE_ENV !== "production") {
-    throw new Error("Terms page icon is missing or invalid in CMS.");
-  }
-
-  const sections = (content.sections || []).filter((section) => section.show !== false);
-
   return (
     <LegalPageLayout
-      title={content.title || ""}
+      title={content.title || "Terms of Service"}
       lastUpdated={content.lastUpdated}
-      icon={
-        showIcon && PageIcon ? (
-          <PageIcon className="h-8 w-8 md:h-10 md:w-10 text-primary" />
-        ) : undefined
-      }
+      icon={<FileText className="h-8 w-8 md:h-10 md:w-10 text-primary" />}
     >
-      {sections.map((section, idx) => (
-        <LegalSection
-          key={idx}
-          heading={section.heading || ""}
-          content={section.content}
-          items={section.items}
-          isImportant={section.isImportant}
-          index={idx}
-        />
-      ))}
+      {content.sections && content.sections.length > 0 ? (
+        content.sections.map((section, idx) => (
+          <LegalSection
+            key={idx}
+            heading={section.heading || ""}
+            content={section.content}
+            items={section.items}
+            isImportant={section.heading?.toLowerCase().includes('eligibility') || 
+                        section.heading?.toLowerCase().includes('dispute')}
+            index={idx}
+          />
+        ))
+      ) : (
+        <div className="text-center py-16">
+          <p className="text-muted-foreground">No content available at this time.</p>
+        </div>
+      )}
     </LegalPageLayout>
   );
 }

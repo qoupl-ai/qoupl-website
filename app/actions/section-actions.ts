@@ -89,32 +89,15 @@ export async function updateSection(input: UpdateSectionInput) {
     throw new Error('Section ID is required for update')
   }
 
-  const supabase = await createClient()
-
-  // Validate section data whenever content is being updated
-  if (input.content) {
-    let sectionType = input.type
-    if (!sectionType) {
-      const { data: existingSection, error } = await supabase
-        .from('sections')
-        .select('section_type')
-        .eq('id', input.id)
-        .single()
-      if (error) {
-        throw new Error(`Failed to fetch section type: ${error.message}`)
-      }
-      sectionType = existingSection?.section_type
-    }
-
-    if (!sectionType) {
-      throw new Error('Section type is required for validation')
-    }
-
-    const validation = validateSectionData(sectionType, input.content)
+  // Validate section data if type or content is being updated
+  if (input.type && input.content) {
+    const validation = validateSectionData(input.type, input.content)
     if (!validation.success) {
       throw new Error(`Validation failed: ${validation.error}`)
     }
   }
+
+  const supabase = await createClient()
 
   const updateData: {
     updated_at: string
