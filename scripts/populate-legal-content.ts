@@ -645,20 +645,46 @@ async function populateLegalContent() {
         return
       }
 
-      // Check if section exists
-      const { data: existing } = await adminClient
+      // Check if section exists (try both column names)
+      const { data: existing1 } = await adminClient
         .from('sections')
         .select('id')
         .eq('page_id', pageId)
         .eq('component_type', 'content')
         .maybeSingle()
 
-      const sectionData = {
+      const { data: existing2 } = await adminClient
+        .from('sections')
+        .select('id')
+        .eq('page_id', pageId)
+        .eq('section_type', 'content')
+        .maybeSingle()
+
+      const existing = existing1 || existing2
+
+      // Check which column name the database uses
+      const { data: sample } = await adminClient
+        .from('sections')
+        .select('*')
+        .limit(1)
+        .maybeSingle()
+
+      const hasSectionType = sample && 'section_type' in sample
+      const hasComponentType = sample && 'component_type' in sample
+
+      const sectionData: any = {
         page_id: pageId,
-        component_type: 'content',
         order_index: 0,
         content: content,
         published: true,
+      }
+
+      // Set both columns if both exist, or the one that exists
+      if (hasSectionType) {
+        sectionData.section_type = 'content'
+      }
+      if (hasComponentType) {
+        sectionData.component_type = 'content'
       }
 
       if (existing) {

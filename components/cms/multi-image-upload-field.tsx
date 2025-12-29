@@ -204,29 +204,54 @@ export function MultiImageUploadField({
     onDelete: () => void
   }) {
     const [imageError, setImageError] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+
+    // Extract filename for display
+    const filename = imageUrl.split('/').pop() || 'unknown'
 
     return (
       <div className="relative group">
         <div className="relative w-full aspect-square rounded-md overflow-hidden border cms-card-bg cms-border">
           {!imageError ? (
-            <Image
-              src={imageUrl}
-              alt={`${label} ${index + 1}`}
-              fill
-              className="object-cover"
-              unoptimized
-              onError={() => {
-                console.error('Failed to load image:', imageUrl)
-                setImageError(true)
-              }}
-            />
+            <>
+              {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center cms-card-bg z-10">
+                  <Loader2 className="h-5 w-5 animate-spin cms-text-secondary" />
+                </div>
+              )}
+              <Image
+                src={imageUrl}
+                alt={`${label} ${index + 1}`}
+                fill
+                className="object-cover"
+                unoptimized
+                onLoad={() => setIsLoading(false)}
+                onError={() => {
+                  // Only log in development to avoid console spam in production
+                  if (process.env.NODE_ENV === 'development') {
+                    console.warn('Failed to load image:', imageUrl)
+                  }
+                  setImageError(true)
+                  setIsLoading(false)
+                }}
+              />
+            </>
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center p-4 cms-text-secondary">
-              <AlertCircle className="h-6 w-6 mb-2" />
-              <p className="text-xs text-center">Image not found</p>
+              <AlertCircle className="h-6 w-6 mb-2 text-yellow-500 dark:text-yellow-400" />
+              <p className="text-xs text-center font-medium">Image not found</p>
               <p className="text-[10px] text-center mt-1 opacity-75 line-clamp-2 break-all">
-                {imageUrl.split('/').pop()?.substring(0, 20)}...
+                {filename.length > 25 ? `${filename.substring(0, 25)}...` : filename}
               </p>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={onDelete}
+                className="mt-2 h-6 px-2 text-xs cms-text-secondary hover:cms-text-primary"
+              >
+                Remove
+              </Button>
             </div>
           )}
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">

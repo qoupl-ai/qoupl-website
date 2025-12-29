@@ -21,6 +21,10 @@
     "populate:legal": "ts-node --project tsconfig.node.json scripts/populate-legal-content.ts",
     "seed:pricing": "ts-node --project tsconfig.node.json scripts/seed-pricing-sections.ts",
     "seed:contact": "ts-node --project tsconfig.node.json scripts/seed-contact-sections.ts",
+    "check:homepage": "ts-node --project tsconfig.node.json scripts/check-homepage-sections.ts",
+    "fix:homepage": "ts-node --project tsconfig.node.json scripts/fix-homepage-sections.ts",
+    "seed:features": "ts-node --project tsconfig.node.json scripts/seed-features-page.ts",
+    "populate:legal": "ts-node --project tsconfig.node.json scripts/populate-legal-content.ts",
     "setup:all": "npm run setup:storage && npm run upload:images && npm run seed:content"
   },
   "dependencies": {

@@ -10,13 +10,32 @@ export default async function Pricing() {
   // Fetch pricing sections from database
   const sections = await getPageSections('pricing')
 
+  // Debug logging (remove in production)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[Pricing Page] Sections found:', sections.length)
+    console.log('[Pricing Page] Section types:', sections.map(s => s.component_type))
+  }
+
   // Extract all pricing-related sections
-  const pricingHero = sections.find(s => s.component_type === 'pricing-hero')
-  const pricingPlans = sections.find(s => s.component_type === 'pricing-plans')
-  const freeMessages = sections.find(s => s.component_type === 'free-messages')
-  const messageBundles = sections.find(s => s.component_type === 'message-bundles')
-  const pricingInfo = sections.find(s => s.component_type === 'pricing-info')
-  const pricingFaq = sections.find(s => s.component_type === 'pricing-faq')
+  const findSection = (type: string) => sections.find(s => s.component_type === type)
+  
+  const pricingHero = findSection('pricing-hero')
+  const pricingPlans = findSection('pricing-plans')
+  const freeMessages = findSection('free-messages')
+  const messageBundles = findSection('message-bundles')
+  const pricingInfo = findSection('pricing-info')
+  const pricingFaq = findSection('pricing-faq')
+
+  // Debug logging
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[Pricing Page] Found sections:')
+    console.log('  - Hero:', pricingHero ? 'Yes' : 'No')
+    console.log('  - Plans:', pricingPlans ? 'Yes' : 'No')
+    console.log('  - Free Messages:', freeMessages ? 'Yes' : 'No')
+    console.log('  - Message Bundles:', messageBundles ? 'Yes' : 'No')
+    console.log('  - Pricing Info:', pricingInfo ? 'Yes' : 'No')
+    console.log('  - FAQ:', pricingFaq ? 'Yes' : 'No')
+  }
 
   return (
     <PricingClient

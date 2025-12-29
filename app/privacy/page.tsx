@@ -10,8 +10,11 @@ export default async function PrivacyPolicy() {
   // Fetch privacy sections from database
   const sections = await getPageSections('privacy')
 
-  // Find content section
-  const contentSection = sections.find(s => s.component_type === 'content')
+  // Find content section (check both column names)
+  const contentSection = sections.find(s => 
+    (s.component_type === 'content') || 
+    ((s as any).section_type === 'content')
+  )
   const content = contentSection?.content || {}
 
   return <PrivacyClient content={content} />

@@ -27,7 +27,23 @@ export default async function Navbar() {
     },
   }
 
-  const content = navbarContent || defaultContent
+  // Merge navbar content with defaults, ensuring logo is never empty
+  const content: NavbarContent = navbarContent 
+    ? {
+        ...navbarContent,
+        logo: {
+          src: navbarContent.logo?.src && navbarContent.logo.src.trim() !== '' 
+            ? navbarContent.logo.src 
+            : defaultContent.logo.src,
+          alt: navbarContent.logo?.alt || defaultContent.logo.alt,
+          width: navbarContent.logo?.width || defaultContent.logo.width,
+          height: navbarContent.logo?.height || defaultContent.logo.height,
+        },
+        links: navbarContent.links && navbarContent.links.length > 0
+          ? navbarContent.links
+          : defaultContent.links,
+      }
+    : defaultContent
 
   return <NavbarClient content={content} />
 }

@@ -67,13 +67,17 @@ export default function NavbarClient({ content }: NavbarClientProps) {
         <div className="h-14 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center z-10">
-            <Image
-              src={content.logo.src}
-              alt={content.logo.alt}
-              width={content.logo.width}
-              height={content.logo.height}
-              className="h-8 w-auto"
-            />
+            {content.logo?.src && content.logo.src.trim() !== '' ? (
+              <Image
+                src={content.logo.src}
+                alt={content.logo.alt || 'qoupl'}
+                width={content.logo.width || 120}
+                height={content.logo.height || 40}
+                className="h-8 w-auto"
+              />
+            ) : (
+              <span className="text-xl font-bold text-[#662D91]">qoupl</span>
+            )}
           </Link>
 
           {/* Desktop Navigation */}

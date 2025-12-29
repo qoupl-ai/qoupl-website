@@ -3,29 +3,12 @@
  * Creates all necessary sections for the pricing page
  */
 
-import { config } from 'dotenv'
-import { resolve } from 'path'
-import { createClient } from '@supabase/supabase-js'
+import * as dotenv from 'dotenv'
+import * as path from 'path'
 
-// Load environment variables
-config({ path: resolve(process.cwd(), '.env.local') })
-config({ path: resolve(process.cwd(), '.env') })
+dotenv.config({ path: path.join(__dirname, '../.env.local') })
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-
-if (!supabaseUrl || !supabaseServiceKey) {
-  console.error('❌ Missing Supabase environment variables')
-  console.error('Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY')
-  process.exit(1)
-}
-
-const adminClient = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-})
+import { adminClient } from '../lib/supabase/admin'
 
 async function getPageId(slug: string): Promise<string | null> {
   const { data, error } = await adminClient
@@ -53,128 +36,129 @@ async function seedPricingSections() {
 
   console.log(`✅ Found pricing page with ID: ${pricingPageId}\n`)
 
-  // Check if sections already exist
-  const { data: existingSections } = await adminClient
+  // Check which column name the database uses
+  const { data: sample } = await adminClient
     .from('sections')
-    .select('component_type')
+    .select('*')
+    .limit(1)
+    .maybeSingle()
+
+  const hasSectionType = sample && 'section_type' in sample
+  const hasComponentType = sample && 'component_type' in sample
+  
+  console.log(`📊 Database columns: section_type=${hasSectionType}, component_type=${hasComponentType}\n`)
+
+  // Check if sections already exist (try both column names)
+  const { data: existingSections1 } = await adminClient
+    .from('sections')
+    .select('component_type, section_type')
     .eq('page_id', pricingPageId)
 
-  const existingTypes = new Set(existingSections?.map(s => s.component_type) || [])
+  const existingTypes = new Set(
+    (existingSections1 || []).map(s => s.component_type || (s as any).section_type).filter(Boolean)
+  )
   console.log(`📊 Existing sections: ${existingTypes.size > 0 ? Array.from(existingTypes).join(', ') : 'None'}\n`)
 
+  // Helper to create section with correct column names
+  const createSection = (type: string, order: number, content: any, published: boolean = true) => {
+    const section: any = {
+      page_id: pricingPageId,
+      order_index: order,
+      content: content,
+      published: published,
+    }
+    if (hasSectionType) {
+      section.section_type = type
+    }
+    if (hasComponentType) {
+      section.component_type = type
+    }
+    return section
+  }
+
   const sections = [
-    {
-      component_type: 'pricing-hero',
-      order_index: 0,
-      content: {
-        title: 'Affordable Pricing',
-        subtitle: 'Pay only for what you use. No hidden fees, no surprises.',
-        badge: {
-          icon: 'sparkles',
-          text: 'Transparent Pricing',
+    createSection('pricing-hero', 0, {
+      title: 'Affordable Pricing',
+      subtitle: 'Pay only for what you use. No hidden fees, no surprises.',
+      badge: {
+        icon: 'sparkles',
+        text: 'Transparent Pricing',
+      },
+    }, true),
+    createSection('pricing-plans', 1, {
+      plans: [
+        {
+          name: 'Platform Access',
+          price: 10,
+          currency: 'INR',
+          billing_period: 'month',
+          features: [
+            'AI-powered matching algorithm',
+            'Advanced profile customization',
+            'Photo verification',
+            'Smart conversation starters',
+            'Read receipts',
+            'Priority support',
+            'Ad-free experience',
+            'Enhanced privacy controls',
+          ],
+          is_popular: false,
+          order_index: 0,
         },
-      },
-      published: true,
-    },
-    {
-      component_type: 'pricing-plans',
-      order_index: 1,
-      content: {
-        plans: [
-          {
-            name: 'Platform Access',
-            price: 10,
-            currency: 'INR',
-            billing_period: 'month',
-            features: [
-              'AI-powered matching algorithm',
-              'Advanced profile customization',
-              'Photo verification',
-              'Smart conversation starters',
-              'Read receipts',
-              'Priority support',
-              'Ad-free experience',
-              'Enhanced privacy controls',
-            ],
-            is_popular: false,
-            order_index: 0,
-          },
-        ],
-      },
-      published: true,
-    },
-    {
-      component_type: 'free-messages',
-      order_index: 2,
-      content: {
-        title: 'First 3 Messages Free Per Match!',
-        description: 'Start conversations with your matches without any additional cost. Your first 3 messages with each match are completely free.',
-        count: 3,
-      },
-      published: true,
-    },
-    {
-      component_type: 'message-bundles',
-      order_index: 3,
-      content: {
-        title: 'Message Bundles',
-        subtitle: 'After your free messages, purchase message bundles to continue connecting',
-        price_per_message: 10,
-        gst_rate: 18,
-        min_messages: 5,
-        max_messages: 100,
-        bundles: [
-          { messages: 5, popular: false },
-          { messages: 10, popular: true },
-          { messages: 20, popular: false },
-          { messages: 50, popular: false },
-        ],
-      },
-      published: true,
-    },
-    {
-      component_type: 'pricing-info',
-      order_index: 4,
-      content: {
-        title: 'How it works',
-        items: [
-          'Pay ₹10/month for platform access',
-          'Get 3 free messages with each match',
-          'Purchase message bundles as needed (minimum 5 messages for ₹50 + GST)',
-          'Each message costs ₹10, bundles can be customized to your needs',
-          'All prices include 18% GST',
-        ],
-      },
-      published: true,
-    },
-    {
-      component_type: 'pricing-faq',
-      order_index: 5,
-      content: {
-        title: 'Frequently Asked Questions',
-        faqs: [
-          {
-            question: 'Do message bundles expire?',
-            answer: 'No, your purchased message bundles never expire. Use them whenever you\'re ready to connect!',
-          },
-          {
-            question: 'Can I cancel my subscription?',
-            answer: 'Yes, you can cancel your platform subscription anytime. Your access will continue until the end of your billing period.',
-          },
-          {
-            question: 'Are there any hidden fees?',
-            answer: 'No hidden fees! The only costs are the ₹10/month platform fee and any message bundles you choose to purchase.',
-          },
-          {
-            question: 'How do the 3 free messages work?',
-            answer: 'For each match you connect with, your first 3 messages are completely free. This applies to every new match individually.',
-          },
-        ],
-        cta_text: 'Still have questions?',
-        cta_link: '/contact',
-      },
-      published: true,
-    },
+      ],
+    }, true),
+    createSection('free-messages', 2, {
+      title: 'First 3 Messages Free Per Match!',
+      description: 'Start conversations with your matches without any additional cost. Your first 3 messages with each match are completely free.',
+      count: 3,
+    }, true),
+    createSection('message-bundles', 3, {
+      title: 'Message Bundles',
+      subtitle: 'After your free messages, purchase message bundles to continue connecting',
+      price_per_message: 10,
+      gst_rate: 18,
+      min_messages: 5,
+      max_messages: 100,
+      bundles: [
+        { messages: 5, popular: false },
+        { messages: 10, popular: true },
+        { messages: 20, popular: false },
+        { messages: 50, popular: false },
+      ],
+    }, true),
+    createSection('pricing-info', 4, {
+      title: 'How it works',
+      items: [
+        'Pay ₹10/month for platform access',
+        'Get 3 free messages with each match',
+        'Purchase message bundles as needed (minimum 5 messages for ₹50 + GST)',
+        'Each message costs ₹10, bundles can be customized to your needs',
+        'All prices include 18% GST',
+      ],
+    }, true),
+    createSection('pricing-faq', 5, {
+      title: 'Frequently Asked Questions',
+      faqs: [
+        {
+          question: 'Do message bundles expire?',
+          answer: 'No, your purchased message bundles never expire. Use them whenever you\'re ready to connect!',
+        },
+        {
+          question: 'Can I cancel my subscription?',
+          answer: 'Yes, you can cancel your platform subscription anytime. Your access will continue until the end of your billing period.',
+        },
+        {
+          question: 'Are there any hidden fees?',
+          answer: 'No hidden fees! The only costs are the ₹10/month platform fee and any message bundles you choose to purchase.',
+        },
+        {
+          question: 'How do the 3 free messages work?',
+          answer: 'For each match you connect with, your first 3 messages are completely free. This applies to every new match individually.',
+        },
+      ],
+      cta_text: 'Still have questions?',
+      cta_link: '/contact',
+    }, true),
   ]
 
   let created = 0
@@ -182,8 +166,10 @@ async function seedPricingSections() {
   let errors = 0
 
   for (const section of sections) {
-    if (existingTypes.has(section.component_type)) {
-      console.log(`⏭️  Skipping ${section.component_type} (already exists)`)
+    const sectionType = section.component_type || (section as any).section_type
+    
+    if (existingTypes.has(sectionType)) {
+      console.log(`⏭️  Skipping ${sectionType} (already exists)`)
       skipped++
       continue
     }
@@ -191,20 +177,17 @@ async function seedPricingSections() {
     try {
       const { error } = await adminClient
         .from('sections')
-        .insert({
-          page_id: pricingPageId,
-          ...section,
-        })
+        .insert(section)
 
       if (error) {
-        console.error(`❌ Failed to create ${section.component_type}:`, error.message)
+        console.error(`❌ Failed to create ${sectionType}:`, error.message)
         errors++
       } else {
-        console.log(`✅ Created ${section.component_type}`)
+        console.log(`✅ Created ${sectionType}`)
         created++
       }
     } catch (error: any) {
-      console.error(`❌ Error creating ${section.component_type}:`, error.message)
+      console.error(`❌ Error creating ${sectionType}:`, error.message)
       errors++
     }
   }
@@ -216,10 +199,4 @@ async function seedPricingSections() {
   console.log('\n🎉 Done!')
 }
 
-seedPricingSections()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error('❌ Fatal error:', error)
-    process.exit(1)
-  })
-
+seedPricingSections().catch(console.error)

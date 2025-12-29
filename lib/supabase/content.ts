@@ -128,11 +128,17 @@ export async function getPageSections(pageSlug: string) {
     // Filter by published manually as a fallback (RLS should handle this, but just in case)
     const publishedSections = (sections || []).filter(s => s.published === true)
     
-    if (publishedSections.length === 0 && (sections || []).length > 0) {
+    // Normalize component_type field (handle both column names)
+    const normalizedSections = publishedSections.map(s => ({
+      ...s,
+      component_type: s.component_type || (s as any).section_type || 'unknown',
+    }))
+    
+    if (normalizedSections.length === 0 && (sections || []).length > 0) {
       console.warn(`[getPageSections] Found ${sections?.length || 0} sections for ${pageSlug}, but none are published`)
     }
 
-    return publishedSections
+    return normalizedSections
   } catch (error) {
     console.error(`[getPageSections] Unexpected error for ${pageSlug}:`, error)
     return []
