@@ -185,11 +185,6 @@ export default function AppDownload({ data = {} }: AppDownloadProps) {
                   </div>
                 </div>
 
-                <div className="mt-6 text-center">
-                  <p className="text-sm text-muted-foreground">
-                    Join <span className="font-semibold text-primary">10,000+</span> on the waitlist
-                  </p>
-                </div>
               </motion.div>
 
               {/* Decorative Images */}

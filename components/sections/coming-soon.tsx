@@ -122,13 +122,6 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
                 </motion.div>
               </div>
 
-              {/* Stats */}
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Users className="h-4 w-4 text-primary" />
-                <span>
-                  <span className="font-semibold text-primary">10,000+</span> people already on the waitlist
-                </span>
-              </div>
             </motion.div>
 
             {/* Right Content - Phone Mockup with Floating Screenshots */}

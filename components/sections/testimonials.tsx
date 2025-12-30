@@ -211,12 +211,6 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
           transition={{ delay: 0.2, duration: 0.3 }}
           className="text-center mt-16"
         >
-          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 text-primary">
-            <Heart className="h-5 w-5 fill-primary" />
-            <span className="font-semibold">
-              Join 10,000+ people waiting for qoupl to launch
-            </span>
-          </div>
         </motion.div>
       </div>
     </section>

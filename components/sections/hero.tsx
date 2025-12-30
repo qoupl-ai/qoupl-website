@@ -113,7 +113,6 @@ export default function Hero() {
                     </div>
                   ))}
                 </div>
-                <span className="font-medium">Join 10,000+ waiting for launch</span>
               </div>
             </motion.div>
 
