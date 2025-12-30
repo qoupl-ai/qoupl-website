@@ -124,7 +124,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
         {/* Sticky Container - Full height minus navbar */}
         <div
           ref={stickyRef}
-          className="sticky top-0 h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden"
+          className="sticky top-14 h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden"
         >
           {/* Background with parallax */}
           <motion.div
@@ -133,7 +133,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
             }}
           />
 
-          <div className="container mx-auto px-4 relative z-10 w-full h-full flex flex-col pt-16 md:pt-20 pb-8 md:pb-12">
+          <div className="container mx-auto px-4 relative z-10 w-full h-full flex flex-col pt-10 md:pt-12 pb-6 md:pb-8">
             {/* Header - Always visible, fixed position */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}

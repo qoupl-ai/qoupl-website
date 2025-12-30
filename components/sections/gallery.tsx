@@ -78,7 +78,7 @@ export default function Gallery({ data = {} }: GalleryProps) {
   }, [currentIndex]);
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden">
+    <section className="py-10 md:py-14 relative overflow-hidden">
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
@@ -106,7 +106,7 @@ export default function Gallery({ data = {} }: GalleryProps) {
               Connections
             </span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Join thousands of college student couples who found their perfect match through qoupl
           </p>
         </motion.div>

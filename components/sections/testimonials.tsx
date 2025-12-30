@@ -59,7 +59,7 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
     };
   }) || defaultTestimonials;
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden">
+    <section className="py-10 md:py-14 relative overflow-hidden">
       {/* Animated Background Blobs */}
       <motion.div
         animate={{
@@ -100,7 +100,7 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
             </span>{" "}
             Say
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Real college student couples from our exclusive beta program. See how qoupl brought them together during testing.
           </p>
         </motion.div>
@@ -174,7 +174,7 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
                     </div>
 
                     {/* Quote Text */}
-                    <p className="text-white text-base font-medium leading-relaxed">
+                    <p className="text-white text-sm md:text-base font-medium leading-relaxed">
                       "{testimonial.text}"
                     </p>
 
@@ -183,10 +183,10 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
 
                     {/* Author Info */}
                     <div>
-                      <p className="text-white font-bold text-lg">
+                      <p className="text-white font-bold text-base md:text-lg">
                         {testimonial.name}
                       </p>
-                      <p className="text-white/80 text-sm">
+                      <p className="text-white/80 text-xs md:text-sm">
                         {testimonial.location}
                       </p>
                       <p className="text-white/60 text-xs mt-1">

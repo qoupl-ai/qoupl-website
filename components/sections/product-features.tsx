@@ -86,7 +86,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
     };
   }) || defaultFeatures;
   return (
-    <section className="py-12 md:py-16 relative overflow-hidden">
+    <section className="py-10 md:py-14 relative overflow-hidden">
       {/* Background Blob */}
       <motion.div
         animate={{
@@ -113,7 +113,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
             {data?.title || "Why Choose qoupl"}
           </h2>
           {data?.subtitle && (
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
               {data.subtitle}
             </p>
           )}
@@ -134,10 +134,9 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
               >
                 {/* Card Container */}
                 <motion.div
-                  className="relative h-[520px] rounded-3xl overflow-hidden shadow-xl cursor-pointer border border-white/10"
+                  className="relative h-[520px] rounded-3xl overflow-hidden cursor-pointer border border-white/10"
                   whileHover={{
                     y: -12,
-                    boxShadow: "0 25px 50px -12px rgba(168, 85, 247, 0.4)",
                     transition: { duration: 0.4, ease: "easeOut" }
                   }}
                 >
@@ -197,7 +196,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
                         viewport={{ once: true, amount: 0.1 }}
                         transition={{ delay: 0.15 + index * 0.05, duration: 0.3 }}
                       >
-                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2">
                           {feature.title}
                         </h3>
                         <div className={`h-1 w-16 bg-gradient-to-r ${feature.color} rounded-full transform group-hover:w-24 transition-all duration-500`} />
@@ -209,7 +208,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.1 }}
                         transition={{ delay: 0.2 + index * 0.05, duration: 0.3 }}
-                        className="text-white/90 leading-relaxed text-sm"
+                        className="text-white/90 leading-relaxed text-sm md:text-base"
                       >
                         {feature.description}
                       </motion.p>
@@ -241,7 +240,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
                             >
                               <Check className="h-3 w-3 text-white" strokeWidth={3} />
                             </motion.div>
-                            <span className="text-white/80 text-sm group-hover/item:text-white transition-colors">
+                            <span className="text-white/80 text-xs md:text-sm group-hover/item:text-white transition-colors">
                               {highlight}
                             </span>
                           </motion.li>

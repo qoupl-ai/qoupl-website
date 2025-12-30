@@ -101,8 +101,8 @@ export default function FooterClient({ footerContent, socialLinks }: FooterClien
         {/* Bottom Bar */}
         <div className="pt-8 border-t">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground">
-              © {currentYear} {footerContent.copyright.company}. All rights reserved.
+            <p className="text-xs text-muted-foreground">
+              © {currentYear} {footerContent.copyright.company}
             </p>
             <ThemeToggle />
           </div>
