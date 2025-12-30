@@ -76,7 +76,7 @@ export default function NavbarClient({ content }: NavbarClientProps) {
                 className="h-8 w-auto"
               />
             ) : (
-              <span className="text-xl font-bold text-[#662D91]">qoupl</span>
+              <span className="text-xl font-bold text-[#662D91]" style={{ fontFamily: "var(--font-poppins), system-ui, sans-serif" }}>qoupl</span>
             )}
           </Link>
 

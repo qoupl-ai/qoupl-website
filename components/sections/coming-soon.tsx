@@ -88,9 +88,9 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
                 <Button
                   size="lg"
                   onClick={() => setIsWaitlistModalOpen(true)}
-                  className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-[#662D91] hover:from-[#9333ea] hover:to-[#db2777] text-white"
+                  className="w-full sm:w-auto bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold"
                 >
-                  <Sparkles className="mr-2 h-5 w-5" />
+                  <Sparkles className="mr-2 h-4 w-4" />
                   {ctaText}
                 </Button>
               </div>

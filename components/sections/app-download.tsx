@@ -7,6 +7,7 @@ import { Sparkles, Heart, Bell } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import WaitlistModal from "@/components/waitlist-modal";
+import { Button } from "@/components/ui/button";
 
 interface AppDownloadProps {
   data: Record<string, any>;
@@ -86,15 +87,19 @@ export default function AppDownload({ data = {} }: AppDownloadProps) {
             </div>
 
             {/* CTA Button */}
-            <motion.button
-              onClick={() => setIsWaitlistModalOpen(true)}
+            <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#662D91] text-white shadow-lg hover:shadow-xl transition-all font-semibold text-lg"
             >
-              <Bell className="h-5 w-5" />
-              {ctaText}
-            </motion.button>
+              <Button
+                size="lg"
+                onClick={() => setIsWaitlistModalOpen(true)}
+                className="bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold shadow-lg hover:shadow-xl"
+              >
+                <Bell className="h-4 w-4" />
+                {ctaText}
+              </Button>
+            </motion.div>
 
             {ctaSubtext && (
               <p className="mt-4 text-sm text-muted-foreground">

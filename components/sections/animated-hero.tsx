@@ -429,7 +429,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
               <Button
                 size="default"
                 onClick={() => setIsWaitlistModalOpen(true)}
-                className="group px-6 py-3 h-auto rounded-full bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                className="group px-6 bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 <Sparkles className="mr-2 h-4 w-4" />
                 {ctaText}

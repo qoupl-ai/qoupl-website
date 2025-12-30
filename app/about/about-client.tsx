@@ -7,6 +7,7 @@ import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { useRef, useState } from "react";
 import WaitlistModal from "@/components/waitlist-modal";
+import { Button } from "@/components/ui/button";
 
 // Icon mapping
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -713,26 +714,35 @@ export default function AboutClient({ data }: AboutClientProps) {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <motion.button
-                onClick={() => setIsWaitlistModalOpen(true)}
+              <motion.div
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-10 py-5 bg-white text-primary rounded-full font-bold text-lg shadow-2xl hover:shadow-white/20 transition-all duration-300 group"
               >
-                <span className="flex items-center gap-2">
-                  Join the Waitlist
-                  <Heart className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
-                </span>
-              </motion.button>
+                <Button
+                  size="lg"
+                  onClick={() => setIsWaitlistModalOpen(true)}
+                  className="bg-white text-primary font-semibold shadow-2xl hover:shadow-white/20"
+                >
+                  <span className="flex items-center gap-2">
+                    Join the Waitlist
+                    <Heart className="h-4 w-4" />
+                  </span>
+                </Button>
+              </motion.div>
 
               <Link href="/community-guidelines">
-                <motion.button
+                <motion.div
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="px-10 py-5 bg-transparent border-2 border-white text-white rounded-full font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300"
                 >
-                  Learn More
-                </motion.button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="bg-transparent border-2 border-white text-white font-semibold hover:bg-white hover:text-primary"
+                  >
+                    Learn More
+                  </Button>
+                </motion.div>
               </Link>
             </div>
           </motion.div>

@@ -78,11 +78,11 @@ export default function Hero() {
               transition={{ delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
             >
-              <Button size="lg" className="text-base px-8 h-14">
-                <Sparkles className="mr-2 h-5 w-5" />
+              <Button size="lg">
+                <Sparkles className="mr-2 h-4 w-4" />
                 Join Waitlist
               </Button>
-              <Button size="lg" variant="outline" className="text-base px-8 h-14">
+              <Button size="lg" variant="outline">
                 Learn More
               </Button>
             </motion.div>
