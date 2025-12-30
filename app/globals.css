@@ -4,6 +4,40 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* Custom slider thumb styling for brand color */
+  .slider-thumb-brand::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #662D91;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .slider-thumb-brand::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #662D91;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .slider-thumb-brand::-ms-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #662D91;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
 /* Improved font rendering for better clarity and reduced blur */
 * {
   -webkit-font-smoothing: antialiased;
