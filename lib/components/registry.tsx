@@ -32,6 +32,10 @@ const AppDownloadSection = dynamic(() => import('@/components/sections/app-downl
   ssr: true,
 })
 
+const LoveStorySection = dynamic(() => import('@/components/sections/love-story'), {
+  ssr: true,
+})
+
 // Coming Soon section merged into app-download - no longer needed
 // const ComingSoonSection = dynamic(() => import('@/components/sections/coming-soon'), {
 //   ssr: true,
@@ -58,6 +62,7 @@ const componentRegistry: Record<
   'testimonials': TestimonialsSection,
   'app-download': AppDownloadSection,
   'coming-soon': AppDownloadSection, // Merged into app-download - use same component
+  'love-story': LoveStorySection,
   // Add more section types as needed
 }
 

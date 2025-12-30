@@ -13,6 +13,7 @@ const config: Config = {
         sans: ["var(--font-google-sans-flex)", "system-ui", "sans-serif"],
         brand: ["var(--font-poppins)", "system-ui", "sans-serif"],
         body: ["var(--font-dm-sans)", "system-ui", "sans-serif"],
+        caveat: ["var(--font-caveat)", "cursive"],
       },
       colors: {
         border: "hsl(var(--border))",
