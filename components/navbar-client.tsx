@@ -17,51 +17,36 @@ export default function NavbarClient({ content }: NavbarClientProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
-    return scrollY.on("change", (latest) => {
-      // Show navbar only after user starts scrolling
-      if (latest > 50) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    });
-  }, [scrollY]);
+    if (isHomePage) {
+      // On homepage, show navbar only after scrolling
+      return scrollY.on("change", (latest) => {
+        if (latest > 50) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
+      });
+    } else {
+      // On other pages, always show navbar
+      setIsVisible(true);
+    }
+  }, [scrollY, isHomePage]);
 
   const navLinks = content.links;
 
   return (
     <motion.nav
-      initial={{ y: -100, opacity: 0 }}
+      initial={{ y: isHomePage ? -100 : 0, opacity: isHomePage ? 0 : 1 }}
       animate={{
-        y: isVisible ? 0 : -100,
-        opacity: isVisible ? 1 : 0
+        y: isVisible ? 0 : (isHomePage ? -100 : 0),
+        opacity: isVisible ? 1 : (isHomePage ? 0 : 1)
       }}
       transition={{ duration: 0.3 }}
-      className="fixed top-0 left-0 right-0 z-50 glass-navbar"
+      className={`${isHomePage ? 'fixed' : 'sticky'} top-0 left-0 right-0 z-50 bg-background border-b border-border`}
     >
-      {/* Liquid Glass Reflection Layers - Light Mode Only */}
-      <div 
-        className="absolute inset-0 pointer-events-none dark:hidden"
-        style={{
-          background: "linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 30%, transparent 70%)",
-        }}
-      />
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-60 dark:hidden"
-        style={{
-          background: "radial-gradient(ellipse at top, rgba(255, 255, 255, 0.1) 0%, transparent 70%)",
-        }}
-      />
-      
-      {/* Dark Mode Reflection - Subtle */}
-      <div 
-        className="absolute inset-0 pointer-events-none hidden dark:block"
-        style={{
-          background: "linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 50%)",
-        }}
-      />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="h-14 flex items-center justify-between">
@@ -134,7 +119,7 @@ export default function NavbarClient({ content }: NavbarClientProps) {
           transition={{ duration: 0.2 }}
           className="md:hidden overflow-hidden"
         >
-          <div className="py-4 space-y-2 border-t border-white/10 dark:border-white/5">
+          <div className="py-4 space-y-2 border-t border-border">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (

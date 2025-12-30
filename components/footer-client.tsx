@@ -23,7 +23,7 @@ export default function FooterClient({ footerContent, socialLinks }: FooterClien
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="md:col-span-1">
-            <div className="flex items-center mb-4">
+            <Link href="/" className="flex items-center mb-4">
               <Image
                 src={footerContent.brand.logo.src}
                 alt={footerContent.brand.logo.alt}
@@ -31,7 +31,7 @@ export default function FooterClient({ footerContent, socialLinks }: FooterClien
                 height={footerContent.brand.logo.height}
                 className="h-10 w-auto"
               />
-            </div>
+            </Link>
             <p className="text-sm text-muted-foreground mb-4">
               {footerContent.brand.description}
             </p>
@@ -104,12 +104,7 @@ export default function FooterClient({ footerContent, socialLinks }: FooterClien
             <p className="text-sm text-muted-foreground">
               © {currentYear} {footerContent.copyright.company}. All rights reserved.
             </p>
-            <div className="flex flex-col items-center md:items-end gap-2">
-              <p className="text-sm text-muted-foreground">
-                {footerContent.copyright.text}
-              </p>
-              <ThemeToggle />
-            </div>
+            <ThemeToggle />
           </div>
         </div>
       </div>
