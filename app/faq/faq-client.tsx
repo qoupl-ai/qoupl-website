@@ -1,7 +1,9 @@
 "use client";
 
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, HelpCircle } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface FAQItem {
   q: string;
@@ -24,19 +26,19 @@ function FAQItemComponent({ question, answer }: { question: string; answer: stri
     <div className="border-b border-border last:border-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between py-5 text-left hover:text-primary transition-colors"
+        className="w-full flex items-center justify-between py-4 px-1 text-left hover:text-foreground transition-colors group"
       >
-        <span className="font-medium pr-4">{question}</span>
-        <div className="flex-shrink-0">
+        <span className="text-sm font-semibold pr-4 group-hover:text-foreground flex-1">{question}</span>
+        <div className="flex-shrink-0 ml-4">
           {isOpen ? (
-            <Minus className="h-5 w-5 text-primary" />
+            <Minus className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
           ) : (
-            <Plus className="h-5 w-5 text-muted-foreground" />
+            <Plus className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
           )}
         </div>
       </button>
       {isOpen && (
-        <div className="pb-5 pr-12 text-muted-foreground leading-relaxed animate-in fade-in-50 slide-in-from-top-2 duration-200">
+        <div className="pb-4 px-1 text-sm text-muted-foreground leading-relaxed animate-in fade-in-50 slide-in-from-top-2 duration-200">
           {answer}
         </div>
       )}
@@ -59,60 +61,74 @@ export default function FAQClient({ faqs }: FAQClientProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-16 max-w-6xl">
-
+      <div className="container mx-auto px-4 py-12 md:py-16 max-w-5xl">
+        {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-            Frequently Asked{" "}
-            <span className="bg-[#662D91] bg-clip-text text-transparent">
-              Questions
-            </span>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
+            Frequently Asked Questions
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
             Find answers to common questions about qoupl. Can&apos;t find what you&apos;re
             looking for? Contact our support team.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        {/* FAQ Categories - Grid Layout */}
+        <div className="grid lg:grid-cols-2 gap-6">
           {faqs.map((category, categoryIndex) => (
-            <div key={categoryIndex} className="space-y-4">
-              <div className="bg-primary/5 p-4 rounded-lg border-l-4 border-primary">
-                <h2 className="text-xl font-bold text-primary">
+            <div key={categoryIndex} className="space-y-3">
+              {/* Category Header */}
+              <div className="mb-1">
+                <h2 className="text-base md:text-lg font-semibold text-[#662D91]">
                   {category.category}
                 </h2>
               </div>
-              <div className="bg-card rounded-lg border p-6">
-                {category.questions.map((faq, faqIndex) => (
-                  <FAQItemComponent
-                    key={faqIndex}
-                    question={faq.q}
-                    answer={faq.a}
-                  />
-                ))}
+              
+              {/* FAQ Items */}
+              <div className="bg-card rounded-lg border border-border overflow-hidden">
+                <div className="divide-y divide-border">
+                  {category.questions.map((faq, faqIndex) => (
+                    <div key={faqIndex} className="px-5">
+                      <FAQItemComponent
+                        question={faq.q}
+                        answer={faq.a}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-16 text-center bg-[#662D91]/10 p-8 rounded-lg border border-primary/20">
-          <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
-          <p className="text-muted-foreground mb-6">
-            Our support team is here to help you 24/7
+        {/* CTA Section */}
+        <div className="mt-12 text-center">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-muted mb-4">
+            <HelpCircle className="h-6 w-6 text-muted-foreground" strokeWidth={1.5} />
+          </div>
+          <h3 className="text-lg font-bold mb-2">Still have questions?</h3>
+          <p className="text-sm text-muted-foreground mb-6">
+            Our support team is here to help you
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="mailto:support@qoupl.ai"
-              className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors font-semibold"
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              size="lg"
+              asChild
+              className="bg-[#662D91] hover:bg-[#662D91]/90 text-white"
             >
-              Email Support
-            </a>
-            <a
-              href="mailto:help@qoupl.ai"
-              className="inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary rounded-full hover:bg-primary/10 transition-colors font-semibold"
+              <a href="mailto:support@qoupl.ai">
+                Email Support
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              asChild
             >
-              Get Help
-            </a>
+              <Link href="/contact">
+                Contact Us
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
