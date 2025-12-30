@@ -363,11 +363,10 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-              className="text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] leading-none font-black mb-6 md:mb-8"
+              className="text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] leading-none font-black mb-6 md:mb-8 text-[#662D91] dark:text-[#9333ea]"
               style={{
                 fontFamily: "var(--font-poppins), system-ui, sans-serif",
                 fontWeight: 900,
-                color: "#662D91",
                 letterSpacing: "-0.02em",
                 textShadow: `
                   4px 4px 0px rgba(102, 45, 145, 0.2),

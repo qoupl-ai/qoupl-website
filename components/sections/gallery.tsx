@@ -87,7 +87,7 @@ export default function Gallery({ data = {} }: GalleryProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-6"
         >
           <motion.div
             initial={{ scale: 0 }}
