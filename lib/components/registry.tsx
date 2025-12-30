@@ -32,9 +32,10 @@ const AppDownloadSection = dynamic(() => import('@/components/sections/app-downl
   ssr: true,
 })
 
-const ComingSoonSection = dynamic(() => import('@/components/sections/coming-soon'), {
-  ssr: true,
-})
+// Coming Soon section merged into app-download - no longer needed
+// const ComingSoonSection = dynamic(() => import('@/components/sections/coming-soon'), {
+//   ssr: true,
+// })
 
 // Type definition for section data
 export interface SectionData {
@@ -56,7 +57,7 @@ const componentRegistry: Record<
   'gallery': GallerySection,
   'testimonials': TestimonialsSection,
   'app-download': AppDownloadSection,
-  'coming-soon': ComingSoonSection,
+  'coming-soon': AppDownloadSection, // Merged into app-download - use same component
   // Add more section types as needed
 }
 
@@ -103,13 +104,19 @@ export function SectionsRenderer({ sections }: { sections: SectionData[] }) {
     (a, b) => a.order_index - b.order_index
   )
 
+  // Filter out "coming-soon" sections since they're merged into "app-download"
+  const filteredSections = sortedSections.filter((s) => {
+    if (!s.published) return false;
+    // Skip "coming-soon" sections - they're merged into "app-download"
+    if (s.component_type === 'coming-soon') return false;
+    return true;
+  });
+
   return (
     <>
-      {sortedSections
-        .filter((s) => s.published)
-        .map((section) => (
-          <SectionRenderer key={section.id} section={section} />
-        ))}
+      {filteredSections.map((section) => (
+        <SectionRenderer key={section.id} section={section} />
+      ))}
     </>
   )
 }
