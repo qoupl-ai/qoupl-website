@@ -141,9 +141,6 @@ export default function PricingClient({
             </motion.div>
           </div>
 
-          {/* Decorative elements */}
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
         </section>
       )}
 
@@ -158,7 +155,6 @@ export default function PricingClient({
             transition={{ duration: 0.7 }}
             className="relative mb-20"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-3xl blur-xl" />
 
             <div className="relative bg-card/50 backdrop-blur-sm border border-primary/20 rounded-3xl p-8 md:p-12">
               <div className="text-center mb-8">
@@ -320,7 +316,6 @@ export default function PricingClient({
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-3xl blur-xl" />
 
               <div className="relative bg-card/50 backdrop-blur-sm border border-primary/20 rounded-3xl p-8 md:p-12">
                 <div className="text-center mb-8">
@@ -363,7 +358,7 @@ export default function PricingClient({
                   </div>
 
                   {/* Price Breakdown */}
-                  <div className="bg-gradient-to-br from-primary/5 to-purple-600/5 rounded-2xl p-6 mb-6">
+                  <div className="rounded-2xl p-6 mb-6 border border-border">
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Base Price ({messageBundle} × ₹{pricePerMessage})</span>
@@ -429,7 +424,7 @@ export default function PricingClient({
 
       {/* FAQ Section */}
       {faq && (
-        <section className="py-20 bg-gradient-to-br from-primary/5 to-purple-500/5">
+        <section className="py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -37,8 +37,6 @@ export default function AppDownload({ data = {} }: AppDownloadProps) {
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-[#662D91]/5 to-background" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">

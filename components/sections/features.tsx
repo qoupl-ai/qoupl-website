@@ -75,7 +75,6 @@ export default function Features() {
   return (
     <section className="py-20 md:py-32 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-[#662D91]/5 dark:bg-[#662D91]/5" />
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div

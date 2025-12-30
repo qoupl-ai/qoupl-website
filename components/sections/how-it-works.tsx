@@ -131,7 +131,6 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
             style={{
               opacity: useTransform(scrollYProgress, [0, 1], [0.3, 0.1]),
             }}
-            className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background"
           />
 
           <div className="container mx-auto px-4 relative z-10 w-full h-full flex flex-col pt-16 md:pt-20 pb-8 md:pb-12">

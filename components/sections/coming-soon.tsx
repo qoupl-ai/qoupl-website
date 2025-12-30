@@ -32,22 +32,6 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-[#662D91]/5 to-background" />
-
-      {/* Animated Gradient Orbs */}
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute top-20 -left-32 w-64 h-64 bg-primary/20 rounded-full blur-3xl"
-      />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-6xl mx-auto">

@@ -721,7 +721,7 @@ export default function AboutClient({ data }: AboutClientProps) {
                 <Button
                   size="lg"
                   onClick={() => setIsWaitlistModalOpen(true)}
-                  className="bg-white text-primary font-semibold shadow-2xl hover:shadow-white/20"
+                  className="bg-white text-primary hover:bg-white/90 hover:text-primary font-semibold shadow-2xl hover:shadow-white/20"
                 >
                   <span className="flex items-center gap-2">
                     Join the Waitlist
@@ -738,7 +738,7 @@ export default function AboutClient({ data }: AboutClientProps) {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="bg-transparent border-2 border-white text-white font-semibold hover:bg-white hover:text-primary"
+                    className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-semibold"
                   >
                     Learn More
                   </Button>

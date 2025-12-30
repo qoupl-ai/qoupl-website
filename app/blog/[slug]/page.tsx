@@ -59,7 +59,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <Navbar />
 
       {/* Hero Section with Featured Image */}
-      <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10">
+      <section className="relative overflow-hidden">
         <div className="container mx-auto px-4 py-12">
           <Link
             href="/blog"

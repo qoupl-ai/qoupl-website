@@ -78,33 +78,7 @@ export default function Gallery({ data = {} }: GalleryProps) {
   }, [currentIndex]);
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
-      {/* Animated Background Elements */}
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
-      />
-      <motion.div
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-        className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#662D91]/20 rounded-full blur-3xl"
-      />
+    <section className="py-16 md:py-24 relative overflow-hidden">
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}

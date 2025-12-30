@@ -16,7 +16,7 @@
 @layer base {
   :root {
     --font-google-sans-flex: 'Google Sans Flex', system-ui, sans-serif;
-    --background: 0 0% 100%;
+    --background: 0 0% 99%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -39,10 +39,10 @@
   }
 
   .dark {
-    /* Dark background set to #171717 */
-    --background: 0 0% 9%;
+    /* Dark background set to #0F0F0F */
+    --background: 0 0% 6%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 9%;
+    --card: 0 0% 6%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 9%;
     --popover-foreground: 0 0% 98%;

@@ -80,7 +80,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10 py-20">
+      <section className="relative overflow-hidden py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -111,8 +111,6 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
         </div>
 
         {/* Decorative elements */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#662D91]/10 rounded-full blur-3xl" />
       </section>
 
       {/* Category Filter */}
@@ -245,7 +243,6 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
 
       {/* Newsletter Section */}
       <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-[#662D91]/10 to-[#662D91]/10" />
 
         <div className="container mx-auto px-4 max-w-4xl relative">
           <motion.div

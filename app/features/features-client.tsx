@@ -93,7 +93,7 @@ export default function FeaturesClient({ categories }: FeaturesClientProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section - Compact */}
-      <section className="relative overflow-hidden border-b border-border/40 bg-gradient-to-b from-primary/3 via-transparent to-transparent dark:from-primary/5 py-12 md:py-16">
+      <section className="relative overflow-hidden border-b border-border/40 py-12 md:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <motion.div
@@ -220,7 +220,7 @@ export default function FeaturesClient({ categories }: FeaturesClientProps) {
       )}
 
       {/* CTA Section - Compact */}
-      <section className="py-12 md:py-16 border-t border-border/40 bg-gradient-to-b from-primary/3 via-transparent to-transparent dark:from-primary/5">
+      <section className="py-12 md:py-16 border-t border-border/40">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

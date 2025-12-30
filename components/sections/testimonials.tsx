@@ -59,7 +59,7 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
     };
   }) || defaultTestimonials;
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+    <section className="py-16 md:py-24 relative overflow-hidden">
       {/* Animated Background Blobs */}
       <motion.div
         animate={{
@@ -71,7 +71,6 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-1/4 -right-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
       />
 
       <div className="container mx-auto px-4 relative z-10">

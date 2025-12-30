@@ -9,8 +9,6 @@ import { getStorageUrl } from "@/lib/supabase/storage-url";
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-[#662D91]/5 dark:bg-[#662D91]/10" />
 
       {/* Background Images - Subtle */}
       <div className="absolute inset-0 opacity-10 dark:opacity-5">

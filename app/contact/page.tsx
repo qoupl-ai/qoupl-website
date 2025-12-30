@@ -87,7 +87,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10 py-20">
+      <section className="relative overflow-hidden py-20">
         <div className="container mx-auto px-4">
 
           <motion.div
@@ -119,8 +119,6 @@ export default function Contact() {
         </div>
 
         {/* Decorative elements */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#662D91]/10 rounded-full blur-3xl" />
       </section>
 
       {/* Contact Info Cards */}
@@ -176,7 +174,6 @@ export default function Contact() {
               transition={{ duration: 0.7 }}
               className="relative"
             >
-              <div className="absolute inset-0 bg-[#662D91]/10 rounded-3xl blur-xl" />
 
               <form
                 onSubmit={handleSubmit}
@@ -354,7 +351,7 @@ export default function Contact() {
               </div>
 
               {/* FAQ Link */}
-              <div className="bg-[#662D91]/5 rounded-2xl p-6 border border-primary/20">
+              <div className="rounded-2xl p-6 border border-border">
                 <h3 className="font-bold mb-2">Looking for quick answers?</h3>
                 <p className="text-muted-foreground mb-4">
                   Check out our FAQ page for instant answers to common questions.
