@@ -109,8 +109,22 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
           transition={{ duration: 0.3 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            {data?.title || "Why Choose qoupl"}
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
+            {(() => {
+              const title = data?.title || "Why Choose qoupl";
+              const words = title.split(' ');
+              return words.map((word: string, i: number) => {
+                const lowerWord = word.toLowerCase();
+                if (lowerWord.includes('qoupl')) {
+                  return (
+                    <span key={i} className="text-[#662D91] dark:text-[#9333ea]">
+                      {word}{' '}
+                    </span>
+                  );
+                }
+                return <span key={i}>{word} </span>;
+              });
+            })()}
           </h2>
           {data?.subtitle && (
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">

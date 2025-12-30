@@ -11,35 +11,35 @@ const defaultSteps = [
     step: "01",
     title: "Create Your Profile",
     description:
-      "Sign up in seconds as a college student and create a profile that showcases the real you. Verify with your college ID, add photos, interests, and what makes you unique.",
+      "Sign up in seconds as a college student and create a profile that showcases the real you. Verify with your college ID, add photos, interests, and what makes you unique.\n\nOur verification process ensures a safe and authentic community where you can be yourself. Share your passions, hobbies, and what you're looking for in a meaningful connection.",
     image: getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
   },
   {
     step: "02",
     title: "Smart AI Matching",
     description:
-      "Our advanced AI algorithm analyzes compatibility factors and suggests the most suitable matches for you.",
+      "Our advanced AI algorithm analyzes compatibility factors and suggests the most suitable matches for you.\n\nThe system learns from your preferences, interactions, and behavior to continuously improve match quality. Every swipe and conversation helps refine your future suggestions for better compatibility.",
     image: getStorageUrl("app-screenshots", "qoupl_screenshot_03.png"),
   },
   {
     step: "03",
     title: "Start Conversations",
     description:
-      "Break the ice with our conversation starters and build meaningful connections through authentic chats.",
+      "Break the ice with our conversation starters and build meaningful connections through authentic chats.\n\nEngage in genuine conversations that go beyond surface-level small talk. Our platform encourages thoughtful interactions that help you discover shared values, interests, and life goals with potential matches.",
     image: getStorageUrl("app-screenshots", "qoupl_screenshot_04.png"),
   },
   {
     step: "04",
     title: "Plan Your Date",
     description:
-      "Use our date planning features to find the perfect spot and make your first meeting memorable.",
+      "Use our date planning features to find the perfect spot and make your first meeting memorable.\n\nDiscover local venues, activities, and events that match both your interests. Get suggestions for date ideas that create the perfect atmosphere for getting to know each other better.",
     image: getStorageUrl("app-screenshots", "qoupl_screenshot_06.png"),
   },
   {
     step: "05",
     title: "Find True Love",
     description:
-      "Build lasting relationships with people who truly understand and complement you. Your perfect match awaits!",
+      "Build lasting relationships with people who truly understand and complement you. Your perfect match awaits!\n\nExperience the joy of finding someone who shares your values, supports your dreams, and grows with you. Join thousands of college students who have found their perfect match on qoupl.",
     image: getStorageUrl("app-screenshots", "qoupl_screenshot_07.png"),
   },
 ];
@@ -141,7 +141,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
               viewport={{ once: true }}
               className="text-center mb-12 md:mb-16 lg:mb-20 xl:mb-24 flex-shrink-0"
             >
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold">
                 How{" "}
                 <span className="bg-gradient-to-r from-primary to-[#662D91] bg-clip-text text-transparent">
                   qoupl
@@ -229,20 +229,24 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
                       transition={{ delay: 0.1, duration: 0.6 }}
                     >
                       <div className="inline-block h-1 w-10 sm:w-12 md:w-16 bg-gradient-to-r from-[#662D91] to-primary rounded-full mb-3 md:mb-4" />
-                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2 md:mb-3">
+                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 md:mb-6">
                         {currentStepData.title}
                       </h3>
                     </motion.div>
 
-                    <motion.p
+                    <motion.div
                       key={`desc-${currentStep}`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2, duration: 0.6 }}
                       className="text-muted-foreground text-sm sm:text-base md:text-lg leading-relaxed max-w-md"
                     >
-                      {currentStepData.description}
-                    </motion.p>
+                      {currentStepData.description.split(/\n\n+/).filter((p: string) => p.trim().length > 0).map((paragraph: string, index: number) => (
+                        <p key={index} className={index > 0 ? "mt-4" : ""}>
+                          {paragraph.trim()}
+                        </p>
+                      ))}
+                    </motion.div>
                   </motion.div>
                 </div>
               </div>

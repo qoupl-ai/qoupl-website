@@ -93,9 +93,9 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
             <span className="text-sm font-medium">Beta User Success Stories</span>
           </motion.div>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
             What Our{" "}
-            <span className="bg-[#662D91] bg-clip-text text-transparent">
+            <span className="text-[#662D91] dark:text-[#9333ea]">
               Beta Users
             </span>{" "}
             Say
