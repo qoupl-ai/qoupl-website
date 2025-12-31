@@ -30,6 +30,11 @@
     "fix:homepage": "ts-node --project tsconfig.node.json scripts/fix-homepage-sections.ts",
     "seed:features": "ts-node --project tsconfig.node.json scripts/seed-features-page.ts",
     "verify:db": "ts-node --project tsconfig.node.json scripts/verify-db-structure.ts",
+    "migrate:db": "ts-node --project tsconfig.node.json scripts/run-db-migration.ts",
+    "migrate:db:execute": "ts-node --project tsconfig.node.json scripts/execute-migration-via-api.ts",
+    "migrate:db:psql": "ts-node --project tsconfig.node.json scripts/execute-migration-psql.ts",
+    "migrate:db:direct": "ts-node --project tsconfig.node.json scripts/execute-migration-direct.ts",
+    "check:supabase": "npm outdated @supabase/supabase-js @supabase/ssr @supabase/auth-ui-react",
     "setup:all": "npm run setup:storage && npm run upload:images && npm run seed:content"
   },
   "dependencies": {
