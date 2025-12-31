@@ -7,38 +7,37 @@
 
 import dynamic from 'next/dynamic'
 
-// Import section components (lazy-loaded for performance)
-const HeroSection = dynamic(() => import('@/components/sections/animated-hero'), {
-  ssr: true,
-})
+// Above-fold: Server-rendered for instant LCP
+const HeroSection = dynamic(() => import('@/components/sections/animated-hero'))
 
+// Below-fold: Lazy-loaded for performance (reduces initial bundle by ~120KB)
 const HowItWorksSection = dynamic(() => import('@/components/sections/how-it-works'), {
-  ssr: true,
+  loading: () => <div className="h-96 animate-pulse bg-muted/10" />
 })
 
 const ProductFeaturesSection = dynamic(() => import('@/components/sections/product-features'), {
-  ssr: true,
+  loading: () => <div className="h-96 animate-pulse bg-muted/10" />
 })
 
 const GallerySection = dynamic(() => import('@/components/sections/gallery'), {
-  ssr: true,
+  loading: () => <div className="h-96 animate-pulse bg-muted/10" />
 })
 
 const TestimonialsSection = dynamic(() => import('@/components/sections/testimonials'), {
-  ssr: true,
+  loading: () => <div className="h-96 animate-pulse bg-muted/10" />
 })
 
 const AppDownloadSection = dynamic(() => import('@/components/sections/app-download'), {
-  ssr: true,
+  loading: () => <div className="h-96 animate-pulse bg-muted/10" />
 })
 
 const LoveStorySection = dynamic(() => import('@/components/sections/love-story'), {
-  ssr: true,
+  loading: () => <div className="h-96 animate-pulse bg-muted/10" />
 })
 
 // Coming Soon section merged into app-download - no longer needed
 // const ComingSoonSection = dynamic(() => import('@/components/sections/coming-soon'), {
-//   ssr: true,
+//   ssr: false,
 // })
 
 // Type definition for section data

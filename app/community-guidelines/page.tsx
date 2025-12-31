@@ -6,6 +6,9 @@
 import { getPageSections } from '@/lib/supabase/content'
 import CommunityGuidelinesClient from './community-guidelines-client'
 
+// Enable ISR with 3-hour revalidation
+export const revalidate = 10800;
+
 export default async function CommunityGuidelines() {
   // Fetch community guidelines sections from database
   const sections = await getPageSections('community-guidelines')

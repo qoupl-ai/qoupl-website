@@ -27,14 +27,37 @@ interface TimelineItem {
   description: string;
 }
 
+interface HeroSection {
+  badge?: string;
+  title?: string;
+  description?: string;
+  locationBadge?: { flag?: string; text?: string };
+  images?: string[];
+}
+
+interface MissionVisionSection {
+  mission?: { badge?: string; title?: string; content?: string[] };
+  vision?: { badge?: string; title?: string; content?: string[] };
+}
+
+interface WhyChooseUsSection {
+  badge?: string;
+  title?: string;
+  features?: Array<{ icon?: string; title: string; description: string }>;
+}
+
+interface CTASection {
+  badge?: string;
+  title?: string;
+  description?: string;
+  buttons?: Array<{ text: string; type: string; href?: string }>;
+}
+
 interface AboutClientProps {
   data: {
     sections: Array<{
       type: string;
-      content: {
-        values?: ValueItem[];
-        timeline?: TimelineItem[];
-      };
+      content: any;
     }>;
   };
 }
@@ -45,11 +68,71 @@ export default function AboutClient({ data }: AboutClientProps) {
   const heroRef = useRef(null);
 
   // Extract data from sections
+  const heroSection = data.sections.find(s => s.type === 'hero');
   const valuesSection = data.sections.find(s => s.type === 'values');
   const timelineSection = data.sections.find(s => s.type === 'timeline');
-  
+  const missionVisionSection = data.sections.find(s => s.type === 'mission-vision');
+  const whyChooseUsSection = data.sections.find(s => s.type === 'why-choose-us');
+  const ctaSection = data.sections.find(s => s.type === 'cta');
+
+  // Default fallbacks
+  const hero: HeroSection = heroSection?.content || {
+    badge: 'Our Story',
+    title: 'Building the Future of Love',
+    description:
+      'qoupl is revolutionizing how people connect. Through advanced AI matching and a commitment to authentic relationships, we\'re creating a platform where meaningful connections happen naturally.',
+    locationBadge: { flag: '🇮🇳', text: 'Launching in India' },
+    images: [
+      'couple-photos/qoupl_couple_01.jpg',
+      'couple-photos/qoupl_couple_02.jpg',
+      'couple-photos/qoupl_couple_03.jpg',
+    ],
+  };
+
   const values = valuesSection?.content?.values || [];
   const timeline = timelineSection?.content?.timeline || [];
+
+  const missionVision: MissionVisionSection = missionVisionSection?.content || {
+    mission: {
+      badge: 'Our Mission',
+      title: 'Bringing People Together',
+      content: [
+        'At qoupl, we believe that everyone deserves to find love and meaningful connections. Our mission is to leverage cutting-edge AI technology to match compatible people while maintaining the authenticity and magic of human connection.',
+        'We\'re committed to creating a safe, inclusive, and trustworthy platform where people can be themselves and find their perfect match.',
+      ],
+    },
+    vision: {
+      badge: 'Our Vision',
+      title: 'The Future of Dating',
+      content: [
+        'We envision a world where finding love is accessible, safe, and enjoyable for everyone, regardless of their background or location. Through continuous innovation and user-centric design, we\'re building the world\'s most trusted dating platform.',
+        'Our vision extends beyond just matching—we want to foster lasting relationships that enrich lives and create countless success stories.',
+      ],
+    },
+  };
+
+  const whyChooseUs: WhyChooseUsSection = whyChooseUsSection?.content || {
+    badge: 'What Makes Us Different',
+    title: 'Why Choose qoupl?',
+    features: [
+      { icon: 'Sparkles', title: 'AI-Powered Matching', description: 'Our advanced algorithm learns your preferences and suggests highly compatible matches.' },
+      { icon: 'Shield', title: 'Verified Profiles', description: 'Photo verification and ID checks ensure you\'re talking to real people.' },
+      { icon: 'Shield', title: 'Safe & Secure', description: 'End-to-end encryption and 24/7 moderation keep your data and conversations private.' },
+      { icon: 'Users', title: 'Inclusive Platform', description: 'Everyone is welcome. We celebrate diversity and promote inclusivity.' },
+      { icon: 'Zap', title: 'Smart Features', description: 'Smart conversation starters, messaging tools, and date planning features make connecting easy.' },
+      { icon: 'Heart', title: 'Love Stories', description: 'Join thousands of couples who found love through qoupl.' },
+    ],
+  };
+
+  const cta: CTASection = ctaSection?.content || {
+    badge: 'Join Our Community',
+    title: 'Ready to Find Your Perfect Match?',
+    description: 'Be part of the next generation of dating and find meaningful connections',
+    buttons: [
+      { text: 'Join the Waitlist', type: 'primary' },
+      { text: 'Learn More', type: 'outline', href: '/community-guidelines' },
+    ],
+  };
 
   // Process values to include icon components
   type ProcessedValue = {
@@ -57,12 +140,22 @@ export default function AboutClient({ data }: AboutClientProps) {
     title: string;
     description: string;
   };
-  
+
   const processedValues: ProcessedValue[] = (values as ValueItem[]).map((item) => ({
     title: item.title,
     description: item.description,
     icon: item.icon ? iconMap[item.icon] || Heart : Heart,
   }));
+
+  // Process hero images
+  const heroImages = (hero.images || []).map((path) => {
+    if (path.startsWith('http') || path.startsWith('/')) return path;
+    if (path.includes('/')) {
+      const [bucket, ...rest] = path.split('/');
+      return getStorageUrl(bucket, rest.join('/'));
+    }
+    return getStorageUrl('couple-photos', path);
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -85,34 +178,30 @@ export default function AboutClient({ data }: AboutClientProps) {
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20"
               >
                 <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
-                <span className="text-xs font-medium">Our Story</span>
+                <span className="text-xs font-medium">{hero.badge || 'Our Story'}</span>
               </motion.div>
 
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                Building the{" "}
-                <span className="text-[#662D91]">
-                  Future
-                </span>{" "}
-                of Love
+                {hero.title || 'Building the Future of Love'}
               </h1>
-              
+
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                qoupl is revolutionizing how people connect. Through advanced AI matching 
-                and a commitment to authentic relationships, we&apos;re creating a platform 
-                where meaningful connections happen naturally.
+                {hero.description || 'qoupl is revolutionizing how people connect. Through advanced AI matching and a commitment to authentic relationships, we\'re creating a platform where meaningful connections happen naturally.'}
               </p>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="flex flex-wrap gap-3 pt-2"
-              >
-                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#662D91]/10 border border-[#662D91]/20">
-                  <span className="text-lg leading-none">🇮🇳</span>
-                  <span className="text-sm font-medium text-foreground">Launching in India</span>
-                </div>
-              </motion.div>
+              {hero.locationBadge && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="flex flex-wrap gap-3 pt-2"
+                >
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#662D91]/10 border border-[#662D91]/20">
+                    <span className="text-lg leading-none">{hero.locationBadge.flag || '🇮🇳'}</span>
+                    <span className="text-sm font-medium text-foreground">{hero.locationBadge.text || 'Launching in India'}</span>
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
 
             {/* Right Side - Modern Image Grid */}
@@ -124,56 +213,62 @@ export default function AboutClient({ data }: AboutClientProps) {
             >
               <div className="grid grid-cols-2 gap-3 md:gap-4">
                 {/* Large Image - Top Left */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5, duration: 0.6 }}
-                  whileHover={{ scale: 1.02, zIndex: 10 }}
-                  className="col-span-2 row-span-2 relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg group"
-                >
-                  <Image
-                    src={getStorageUrl("couple-photos", "qoupl_couple_01.jpg")}
-                    alt="Happy couple"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority
-                  />
-                </motion.div>
+                {heroImages[0] && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 0.6 }}
+                    whileHover={{ scale: 1.02, zIndex: 10 }}
+                    className="col-span-2 row-span-2 relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg group"
+                  >
+                    <Image
+                      src={heroImages[0]}
+                      alt="Happy couple"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority
+                    />
+                  </motion.div>
+                )}
 
                 {/* Small Image - Bottom Left */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6, duration: 0.6 }}
-                  whileHover={{ scale: 1.05, zIndex: 10 }}
-                  className="relative aspect-square rounded-xl overflow-hidden shadow-lg group"
-                >
-                  <Image
-                    src={getStorageUrl("couple-photos", "qoupl_couple_02.jpg")}
-                    alt="Couple together"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </motion.div>
+                {heroImages[1] && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6, duration: 0.6 }}
+                    whileHover={{ scale: 1.05, zIndex: 10 }}
+                    className="relative aspect-square rounded-xl overflow-hidden shadow-lg group"
+                  >
+                    <Image
+                      src={heroImages[1]}
+                      alt="Couple together"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                  </motion.div>
+                )}
 
                 {/* Small Image - Bottom Right */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7, duration: 0.6 }}
-                  whileHover={{ scale: 1.05, zIndex: 10 }}
-                  className="relative aspect-square rounded-xl overflow-hidden shadow-lg group"
-                >
-                  <Image
-                    src={getStorageUrl("couple-photos", "qoupl_couple_03.jpg")}
-                    alt="Smiling couple"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </motion.div>
+                {heroImages[2] && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7, duration: 0.6 }}
+                    whileHover={{ scale: 1.05, zIndex: 10 }}
+                    className="relative aspect-square rounded-xl overflow-hidden shadow-lg group"
+                  >
+                    <Image
+                      src={heroImages[2]}
+                      alt="Smiling couple"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                  </motion.div>
+                )}
               </div>
             </motion.div>
           </div>
@@ -196,24 +291,17 @@ export default function AboutClient({ data }: AboutClientProps) {
               <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-[#662D91] transition-all duration-300">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4">
                   <Target className="h-3.5 w-3.5" strokeWidth={1.5} />
-                  <span className="text-xs font-medium">Our Mission</span>
+                  <span className="text-xs font-medium">{missionVision.mission?.badge || 'Our Mission'}</span>
                 </div>
 
                 <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
-                  Bringing People Together
+                  {missionVision.mission?.title || 'Bringing People Together'}
                 </h2>
 
                 <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
-                  <p>
-                    At qoupl, we believe that everyone deserves to find love and meaningful
-                    connections. Our mission is to leverage cutting-edge AI technology to
-                    match compatible people while maintaining the authenticity and magic of
-                    human connection.
-                  </p>
-                  <p>
-                    We&apos;re committed to creating a safe, inclusive, and trustworthy platform
-                    where people can be themselves and find their perfect match.
-                  </p>
+                  {missionVision.mission?.content?.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
                 </div>
 
               </div>
@@ -230,24 +318,17 @@ export default function AboutClient({ data }: AboutClientProps) {
               <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-[#662D91] transition-all duration-300">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4">
                   <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
-                  <span className="text-xs font-medium">Our Vision</span>
+                  <span className="text-xs font-medium">{missionVision.vision?.badge || 'Our Vision'}</span>
                 </div>
 
                 <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
-                  The Future of Dating
+                  {missionVision.vision?.title || 'The Future of Dating'}
                 </h2>
 
                 <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
-                  <p>
-                    We envision a world where finding love is accessible, safe, and enjoyable
-                    for everyone, regardless of their background or location. Through
-                    continuous innovation and user-centric design, we&apos;re building the
-                    world&apos;s most trusted dating platform.
-                  </p>
-                  <p>
-                    Our vision extends beyond just matching—we want to foster lasting
-                    relationships that enrich lives and create countless success stories.
-                  </p>
+                  {missionVision.vision?.content?.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
                 </div>
 
               </div>

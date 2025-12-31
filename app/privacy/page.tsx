@@ -6,6 +6,9 @@
 import { getPageSections } from '@/lib/supabase/content'
 import PrivacyClient from './privacy-client'
 
+// Enable ISR with 3-hour revalidation
+export const revalidate = 10800;
+
 export default async function PrivacyPolicy() {
   // Fetch privacy sections from database
   const sections = await getPageSections('privacy')

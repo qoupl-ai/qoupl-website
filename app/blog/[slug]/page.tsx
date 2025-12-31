@@ -7,8 +7,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { parseBlogContent } from "@/lib/utils/blog-content-parser";
 
-// Force dynamic rendering for blog posts
-export const dynamic = 'force-dynamic';
+// Enable ISR with 3-hour revalidation (blog posts are stable content)
+export const revalidate = 10800;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

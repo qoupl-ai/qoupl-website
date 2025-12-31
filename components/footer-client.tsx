@@ -1,10 +1,20 @@
 "use client";
 
-import * as LucideIcons from "lucide-react";
+import { Linkedin, Instagram, Twitter, Facebook, Youtube, Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { FooterContent, SocialLinks } from "@/lib/supabase/content";
+
+// Icon mapping for social links
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Linkedin,
+  Instagram,
+  Twitter,
+  Facebook,
+  Youtube,
+  Globe,
+};
 
 interface FooterClientProps {
   footerContent: FooterContent;
@@ -13,7 +23,7 @@ interface FooterClientProps {
 
 export default function FooterClient({ footerContent, socialLinks }: FooterClientProps) {
   const currentYear = new Date().getFullYear();
-  
+
   // Ensure socialLinks has the correct structure
   const socialLinksArray = socialLinks?.links || []
 
@@ -37,8 +47,8 @@ export default function FooterClient({ footerContent, socialLinks }: FooterClien
             </p>
             <div className="flex gap-4">
               {socialLinksArray.map((socialLink, index) => {
-                // Safely get the icon component
-                const IconComponent = (LucideIcons as any)[socialLink.icon] || LucideIcons.Globe
+                // Get icon component from map
+                const IconComponent = iconMap[socialLink.icon] || Globe;
                 return (
                   <Link
                     key={index}

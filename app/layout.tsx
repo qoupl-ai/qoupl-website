@@ -1,39 +1,51 @@
 import type { Metadata } from "next";
-import { Poppins, DM_Sans, Source_Code_Pro, Caveat } from "next/font/google";
+import { Inter, Poppins, DM_Sans, Source_Code_Pro, Caveat } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
+
+// Inter as replacement for Google Sans Flex (closest alternative)
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-google-sans-flex",
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'sans-serif'],
+});
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-poppins",
+  display: 'swap',
+  preload: true,
 });
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
   variable: "--font-dm-sans",
+  display: 'swap',
+  preload: true,
 });
 
 const sourceCodePro = Source_Code_Pro({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-source-code-pro",
+  display: 'swap',
 });
 
 const caveat = Caveat({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-caveat",
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://qoupl.ai'),
-  other: {
-    'google-fonts': 'https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap',
-  },
   title: {
     default: 'qoupl - Be couple with qoupl | Dating App for College Students',
     template: '%s | qoupl'
@@ -195,7 +207,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} ${dmSans.variable} ${sourceCodePro.variable} ${caveat.variable} font-sans antialiased`} style={{ fontFamily: 'var(--font-google-sans-flex)' }} suppressHydrationWarning>
+      <body className={`${inter.variable} ${poppins.variable} ${dmSans.variable} ${sourceCodePro.variable} ${caveat.variable} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -204,8 +216,15 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
-        <SpeedInsights />
-        <Analytics />
+        {/* Lazy load analytics scripts after page is interactive */}
+        <Script
+          src="/_vercel/speed-insights/script.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="/_vercel/insights/script.js"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );

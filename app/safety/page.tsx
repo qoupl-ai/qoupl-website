@@ -6,6 +6,9 @@
 import { getPageSections } from '@/lib/supabase/content'
 import SafetyClient from './safety-client'
 
+// Enable ISR with 3-hour revalidation
+export const revalidate = 10800;
+
 export default async function SafetySecurity() {
   // Fetch safety sections from database
   const sections = await getPageSections('safety')

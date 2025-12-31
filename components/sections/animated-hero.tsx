@@ -215,8 +215,10 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
                 alt={`Profile ${index + 1}`}
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 240px, (max-width: 1024px) 280px, 300px"
+                sizes="(max-width: 768px) 280px, 360px"
+                quality={85}
                 priority={index < 2}
+                loading={index < 2 ? undefined : "lazy"}
               />
 
               {/* Modern Gradient Overlay */}

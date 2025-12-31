@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import BlogClient from './blog-client'
 import { Suspense } from 'react'
 
+// Enable ISR with 3-hour revalidation
+export const revalidate = 10800;
+
 async function getBlogData() {
   const supabase = await createClient()
 
