@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Use regular client - RLS policies should allow anonymous inserts
     const supabase = await createClient()
 
     // Check if email already exists
