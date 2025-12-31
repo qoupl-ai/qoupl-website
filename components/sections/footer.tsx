@@ -12,7 +12,7 @@ export default async function Footer() {
 
   // Ensure waitlist link is always /waitlist (not /#waitlist)
   if (footerContent?.columns?.product?.links) {
-    footerContent.columns.product.links = footerContent.columns.product.links.map(link => 
+    footerContent.columns.product.links = footerContent.columns.product.links.map((link: { href: string; label: string }) => 
       link.label === 'Join Waitlist' ? { ...link, href: '/waitlist' } : link
     )
   }
