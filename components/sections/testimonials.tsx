@@ -59,7 +59,7 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
     };
   }) || defaultTestimonials;
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+    <section className="py-10 md:py-14 relative overflow-hidden">
       {/* Animated Background Blobs */}
       <motion.div
         animate={{
@@ -71,7 +71,6 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-1/4 -right-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
       />
 
       <div className="container mx-auto px-4 relative z-10">
@@ -94,14 +93,14 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
             <span className="text-sm font-medium">Beta User Success Stories</span>
           </motion.div>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
             What Our{" "}
-            <span className="bg-[#662D91] bg-clip-text text-transparent">
+            <span className="text-[#662D91] dark:text-[#9333ea]">
               Beta Users
             </span>{" "}
             Say
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Real college student couples from our exclusive beta program. See how qoupl brought them together during testing.
           </p>
         </motion.div>
@@ -175,7 +174,7 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
                     </div>
 
                     {/* Quote Text */}
-                    <p className="text-white text-base font-medium leading-relaxed">
+                    <p className="text-white text-sm md:text-base font-medium leading-relaxed">
                       "{testimonial.text}"
                     </p>
 
@@ -184,10 +183,10 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
 
                     {/* Author Info */}
                     <div>
-                      <p className="text-white font-bold text-lg">
+                      <p className="text-white font-bold text-base md:text-lg">
                         {testimonial.name}
                       </p>
-                      <p className="text-white/80 text-sm">
+                      <p className="text-white/80 text-xs md:text-sm">
                         {testimonial.location}
                       </p>
                       <p className="text-white/60 text-xs mt-1">
@@ -212,12 +211,6 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
           transition={{ delay: 0.2, duration: 0.3 }}
           className="text-center mt-16"
         >
-          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 text-primary">
-            <Heart className="h-5 w-5 fill-primary" />
-            <span className="font-semibold">
-              Join 10,000+ people waiting for qoupl to launch
-            </span>
-          </div>
         </motion.div>
       </div>
     </section>

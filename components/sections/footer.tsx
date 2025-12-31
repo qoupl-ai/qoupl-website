@@ -7,8 +7,15 @@ import { getFooterContent, getSocialLinks, type FooterContent, type SocialLinks 
 import FooterClient from '../footer-client'
 
 export default async function Footer() {
-  const footerContent = await getFooterContent()
+  let footerContent = await getFooterContent()
   const socialLinks = await getSocialLinks()
+
+  // Ensure waitlist link is always /waitlist (not /#waitlist)
+  if (footerContent?.columns?.product?.links) {
+    footerContent.columns.product.links = footerContent.columns.product.links.map(link => 
+      link.label === 'Join Waitlist' ? { ...link, href: '/waitlist' } : link
+    )
+  }
 
   // Fallback to default content if not found in database
   const defaultFooterContent: FooterContent = {
@@ -28,7 +35,7 @@ export default async function Footer() {
           { href: '/features', label: 'Features' },
           { href: '/pricing', label: 'Pricing' },
           { href: '/faq', label: 'FAQ' },
-          { href: '/#waitlist', label: 'Join Waitlist' },
+          { href: '/waitlist', label: 'Join Waitlist' },
         ],
       },
       company: {

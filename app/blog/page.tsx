@@ -52,7 +52,7 @@ async function getBlogData() {
 function BlogLoading() {
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative overflow-hidden bg-[#662D91]/5 dark:bg-[#662D91]/10 py-20">
+      <section className="relative overflow-hidden py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto mb-4"></div>

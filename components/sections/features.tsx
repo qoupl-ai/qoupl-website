@@ -73,9 +73,8 @@ const item = {
 
 export default function Features() {
   return (
-    <section className="py-20 md:py-32 relative overflow-hidden">
+    <section className="py-10 md:py-14 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-[#662D91]/5 dark:bg-[#662D91]/5" />
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -85,14 +84,14 @@ export default function Features() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
             Why Choose{" "}
             <span className="text-[#662D91]">
               qoupl
             </span>
             ?
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Experience the future of dating for college students with features designed to help you
             find genuine connections with your peers.
           </p>
@@ -109,21 +108,21 @@ export default function Features() {
             const Icon = feature.icon;
             return (
               <motion.div key={index} variants={item}>
-                <Card className="h-full border-2 hover:border-primary/50 transition-all duration-300 group hover:shadow-xl">
-                  <CardContent className="p-6">
+                <div className="h-full rounded-lg border-2 border-border bg-card hover:border-primary/50 dark:hover:border-primary/30 transition-all duration-300 group">
+                  <div className="p-6">
                     <div
                       className={`w-12 h-12 rounded-lg ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
                     >
-                      <Icon className="h-6 w-6 text-white" />
+                      <Icon className="h-6 w-6 text-white" strokeWidth={1} />
                     </div>
-                    <h3 className="text-xl font-semibold mb-2">
+                    <h3 className="text-lg md:text-xl font-semibold mb-2">
                       {feature.title}
                     </h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-sm md:text-base text-muted-foreground">
                       {feature.description}
                     </p>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </motion.div>
             );
           })}

@@ -32,22 +32,6 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-[#662D91]/5 to-background" />
-
-      {/* Animated Gradient Orbs */}
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute top-20 -left-32 w-64 h-64 bg-primary/20 rounded-full blur-3xl"
-      />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
@@ -88,9 +72,9 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
                 <Button
                   size="lg"
                   onClick={() => setIsWaitlistModalOpen(true)}
-                  className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-[#662D91] hover:from-[#9333ea] hover:to-[#db2777] text-white"
+                  className="w-full sm:w-auto bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold"
                 >
-                  <Sparkles className="mr-2 h-5 w-5" />
+                  <Sparkles className="mr-2 h-4 w-4" />
                   {ctaText}
                 </Button>
               </div>
@@ -138,13 +122,6 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
                 </motion.div>
               </div>
 
-              {/* Stats */}
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Users className="h-4 w-4 text-primary" />
-                <span>
-                  <span className="font-semibold text-primary">10,000+</span> people already on the waitlist
-                </span>
-              </div>
             </motion.div>
 
             {/* Right Content - Phone Mockup with Floating Screenshots */}

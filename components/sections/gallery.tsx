@@ -78,33 +78,7 @@ export default function Gallery({ data = {} }: GalleryProps) {
   }, [currentIndex]);
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
-      {/* Animated Background Elements */}
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
-      />
-      <motion.div
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-        className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#662D91]/20 rounded-full blur-3xl"
-      />
+    <section className="py-10 md:py-14 relative overflow-hidden">
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
@@ -113,7 +87,7 @@ export default function Gallery({ data = {} }: GalleryProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-6"
         >
           <motion.div
             initial={{ scale: 0 }}
@@ -126,13 +100,13 @@ export default function Gallery({ data = {} }: GalleryProps) {
             <span className="text-sm font-medium">Love Stories</span>
           </motion.div>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
             Real{" "}
-            <span className="bg-[#662D91] bg-clip-text text-transparent">
+            <span className="text-[#662D91] dark:text-[#9333ea]">
               Connections
             </span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Join thousands of college student couples who found their perfect match through qoupl
           </p>
         </motion.div>
@@ -287,7 +261,7 @@ export default function Gallery({ data = {} }: GalleryProps) {
                         >
                           {/* Animated Heart */}
                           <motion.div
-                            className="absolute top-6 right-6"
+                            className="absolute top-4 right-4 md:top-6 md:right-6"
                             initial={{ scale: 0 }}
                             animate={{ 
                               scale: [1, 1.3, 1],
@@ -298,20 +272,20 @@ export default function Gallery({ data = {} }: GalleryProps) {
                               ease: "easeInOut",
                             }}
                           >
-                            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl border border-white/30">
-                              <Heart className="h-7 w-7 text-white fill-white" />
+                            <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl border border-white/30">
+                              <Heart className="h-5 w-5 md:h-7 md:w-7 text-white fill-white" />
                             </div>
                           </motion.div>
 
-                          <h3 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">{image.title}</h3>
-                          <p className="text-white/95 text-base md:text-lg drop-shadow-md">{image.story}</p>
+                          <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 drop-shadow-lg pr-12 md:pr-16">{image.title}</h3>
+                          <p className="text-white/95 text-sm md:text-base lg:text-lg drop-shadow-md">{image.story}</p>
                           
                           {/* Beta User Badge */}
                           <motion.div 
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#662D91]/30 to-[#662D91]/30 backdrop-blur-md border border-white/30"
+                            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#662D91] dark:bg-[#9333ea] text-white"
                           >
                             <span className="text-sm font-semibold">Beta Success Story</span>
                           </motion.div>

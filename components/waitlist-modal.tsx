@@ -313,7 +313,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         type="submit"
                         disabled={isSubmitting}
                         size="lg"
-                        className="w-full h-12 sm:h-14 text-base sm:text-lg font-semibold bg-gradient-to-r from-[#662D91] to-[#8B3DB8] hover:from-[#662D91]/90 hover:to-[#8B3DB8]/90 text-white shadow-lg hover:shadow-xl transition-all duration-300 mt-2 sm:mt-4"
+                        className="w-full font-semibold bg-gradient-to-r from-[#662D91] to-[#8B3DB8] hover:from-[#662D91]/90 hover:to-[#8B3DB8]/90 text-white shadow-lg hover:shadow-xl transition-all duration-300 mt-2 sm:mt-4"
                       >
                         {isSubmitting ? (
                           <span className="flex items-center gap-2">
@@ -324,13 +324,13 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                                 repeat: Infinity,
                                 ease: "linear",
                               }}
-                              className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
+                              className="h-4 w-4 border-2 border-white border-t-transparent rounded-full"
                             />
                             Joining...
                           </span>
                         ) : (
                           <span className="flex items-center gap-2">
-                            <Heart className="h-5 w-5 fill-white" />
+                            <Heart className="h-4 w-4 fill-white" />
                             Join Waitlist
                           </span>
                         )}
