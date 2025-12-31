@@ -1,122 +1,136 @@
-# qoupl - AI-Powered Dating Platform
+# qoupl Website
 
-> **Revolutionizing connections through intelligent matchmaking**
+> **AI-Powered Dating Platform for College Students**
 
-qoupl is an AI-based dating application that uses advanced algorithms to create meaningful connections between people. This repository contains the official marketing website and landing page for the qoupl platform.
+Official marketing website and landing page for qoupl, an AI-based dating application designed for college students aged 18-25.
 
-## 🚀 About qoupl
+## 🚀 Overview
 
-qoupl is a next-generation dating platform designed to help people aged 18-25 find genuine connections through:
+This is the **public-facing website** for qoupl. It's a Next.js application that displays dynamic content managed through a separate CMS system. The website fetches all content (sections, blog posts, FAQs, etc.) from Supabase, allowing content updates without code deployments.
 
-- **Smart AI Matching**: Advanced compatibility algorithms that analyze personality, interests, values, and lifestyle
-- **Safety First**: Multi-layered verification system with 24/7 AI moderation and encrypted messaging
-- **Real-Time Connections**: Instant matching and conversation starters for meaningful interactions
-- **Premium Experience**: Beautiful, intuitive interface designed for the modern generation
+### Key Features
 
-## 📱 Platform Status
+- **Dynamic Content Management**: All page content is stored in Supabase and rendered dynamically
+- **Server-Side Rendering**: Built with Next.js App Router for optimal SEO and performance
+- **Headless CMS Architecture**: Content is managed via a separate CMS repository
+- **Real-time Updates**: Content changes in CMS instantly reflect on the website
+- **Blog System**: Full-featured blog with categories, featured images, and SEO optimization
+- **Waitlist System**: User registration and email collection
+- **Contact Forms**: Integrated contact form with email notifications
+- **Dark/Light Mode**: Theme switching with persistent user preferences
+- **Responsive Design**: Mobile-first design with Tailwind CSS
 
-**Currently in Development** - The mobile apps (iOS & Android) are being built. This website serves as:
-- Marketing landing page
-- Waitlist registration system
-- Brand presence and information hub
-- Future user onboarding portal
+## 🏗️ Architecture
+
+### Content Flow
+
+```
+┌─────────────────┐         ┌──────────────┐         ┌─────────────┐
+│   CMS Repo      │────────▶│   Supabase   │◀────────│  Website    │
+│  (Separate)     │  Writes │   Database   │  Reads  │  (This Repo)│
+└─────────────────┘         └──────────────┘         └─────────────┘
+```
+
+1. **CMS Repository** (`qoupl-website-cms`): Admin interface for content management
+2. **Supabase Database**: Stores all content (pages, sections, blog posts, FAQs, etc.)
+3. **This Website**: Fetches and displays content from Supabase
+
+### Database Tables
+
+- `pages`: Page metadata (slug, title, published status)
+- `sections`: Dynamic page sections/components with content
+- `global_content`: Navbar, footer, and site-wide settings
+- `blog_posts`: Blog articles with categories
+- `blog_categories`: Blog category taxonomy
+- `faqs`: Frequently asked questions
+- `waitlist`: User waitlist registrations
+- `contact_submissions`: Contact form submissions
 
 ## 🛠️ Technology Stack
 
-### Frontend
-- **Framework**: Next.js 16.0.3 with App Router (React 19.2.0)
-- **Language**: TypeScript
+### Core
+- **Framework**: Next.js 16.0.10 (App Router)
+- **Language**: TypeScript 5.9.3
+- **React**: 19.2.0
 - **Styling**: Tailwind CSS 3.4.18
 - **UI Components**: Shadcn UI (Radix UI primitives)
-- **Animations**: Framer Motion 12.23.24
-- **Theme**: next-themes (Dark/Light mode support)
-- **Icons**: Lucide React
-- **Fonts**: Poppins & DM Sans (Google Fonts)
 
-### Backend (Planned)
+### Backend & Database
 - **Database**: Supabase (PostgreSQL)
-- **Authentication**: Supabase Auth
-- **Storage**: Supabase Storage
-- **API**: REST/GraphQL endpoints (in development)
+- **Authentication**: Supabase Auth (via `@supabase/ssr`)
+- **Storage**: Supabase Storage (for images and media)
+- **API Routes**: Next.js API routes
 
-### Infrastructure
-- **Hosting**: Vercel
-- **CDN**: Vercel Edge Network
-- **Analytics**: Vercel Analytics (planned)
-- **Domain**: qoupl.ai / qoupl.com
+### Key Libraries
+- `@supabase/ssr`: Server-side Supabase client
+- `@supabase/supabase-js`: Supabase JavaScript client
+- `framer-motion`: Animations
+- `next-themes`: Theme management
+- `react-hook-form` + `zod`: Form validation
+- `date-fns`: Date formatting
+- `@vercel/analytics`: Analytics
+- `@vercel/speed-insights`: Performance monitoring
 
-## 📂 Project Structure
+## 📁 Project Structure
 
 ```
 qoupl-website/
-├── app/                          # Next.js App Router
-│   ├── page.tsx                  # Homepage with all sections
-│   ├── layout.tsx                # Root layout with theme provider
-│   ├── globals.css               # Global styles & CSS variables
-│   ├── about/                    # About page
-│   ├── features/                 # Features page
-│   ├── pricing/                  # Pricing page
-│   ├── blog/                     # Blog (planned)
-│   ├── careers/                  # Careers page
-│   ├── contact/                  # Contact page
-│   ├── faq/                      # FAQ page
-│   ├── privacy/                  # Privacy Policy
-│   ├── terms/                    # Terms of Service
-│   ├── safety/                   # Safety & Security info
-│   └── community-guidelines/     # Community Guidelines
-│
-├── components/
-│   ├── navbar.tsx                # Main navigation
-│   ├── splash-screen.tsx         # Animated loading screen
-│   ├── waitlist-modal.tsx        # Waitlist signup form
-│   ├── theme-toggle.tsx          # Dark/Light mode toggle
-│   ├── theme-provider.tsx        # Theme context provider
-│   ├── sections/                 # Homepage sections
-│   │   ├── animated-hero.tsx     # Hero with glassmorphism
-│   │   ├── how-it-works.tsx      # 5-step user journey
-│   │   ├── product-features.tsx  # Feature cards
-│   │   ├── gallery.tsx           # Image gallery
-│   │   ├── testimonials.tsx      # Beta user testimonials
-│   │   ├── app-download.tsx      # App launch CTA
-│   │   ├── coming-soon.tsx       # Waitlist section
-│   │   └── footer.tsx            # Footer with links
-│   └── ui/                       # Shadcn UI components
-│       ├── button.tsx
-│       └── card.tsx
-│
-├── lib/
-│   ├── utils.ts                  # Utility functions
-│   └── supabase/                 # Supabase client config
-│       ├── client.ts             # Browser client
-│       ├── server.ts             # Server client
-│       ├── queries.ts            # Database queries (planned)
-│       └── types.ts              # TypeScript types
-│
-├── public/
-│   ├── images/
-│   │   ├── women/                # User images (women)
-│   │   ├── men/                  # User images (men)
-│   │   ├── coupl/                # Couple images
-│   │   └── quoupl.svg            # Brand logo
-│   └── qoupl/                    # App screenshots
-│       ├── 1.png - 7.png         # Mobile app preview images
-│
-└── supabase/
-    └── schema.sql                # Database schema (planned)
+├── app/                      # Next.js App Router pages
+│   ├── page.tsx             # Homepage
+│   ├── layout.tsx           # Root layout
+│   ├── about/               # About page
+│   ├── blog/                # Blog listing & posts
+│   ├── careers/             # Careers page
+│   ├── contact/             # Contact page
+│   ├── faq/                 # FAQ page
+│   ├── features/            # Features page
+│   ├── pricing/             # Pricing page
+│   ├── api/                 # API routes
+│   │   ├── contact/         # Contact form handler
+│   │   ├── waitlist/        # Waitlist registration
+│   │   └── media/           # Media upload handler
+│   └── ...
+├── components/              # React components
+│   ├── sections/            # Page section components
+│   ├── ui/                  # Shadcn UI components
+│   ├── navbar.tsx           # Navigation bar
+│   ├── footer-client.tsx    # Footer component
+│   └── ...
+├── lib/                     # Utility libraries
+│   ├── supabase/            # Supabase clients & helpers
+│   │   ├── server.ts        # Server-side client
+│   │   ├── client.ts        # Client-side client
+│   │   ├── content.ts       # Content fetching functions
+│   │   └── storage-url.ts   # Storage URL helpers
+│   ├── components/          # Component registry
+│   ├── validation/          # Zod schemas
+│   └── utils.ts             # Utility functions
+├── public/                   # Static assets
+│   ├── images/              # Local images
+│   └── ...
+├── scripts/                 # Utility scripts
+│   ├── migrate-content-to-supabase.ts
+│   ├── seed-content.ts
+│   └── ...
+├── supabase/                # Supabase migrations
+│   └── migrations/          # SQL migration files
+├── middleware.ts            # Next.js middleware (auth)
+└── package.json
 ```
 
-## 🚦 Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ and npm
-- Git
+- Supabase project (shared with CMS)
+- Environment variables configured
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/qoupl/qoupl-website.git
+   git clone https://github.com/qoupl-ai/qoupl-website.git
    cd qoupl-website
    ```
 
@@ -125,153 +139,184 @@ qoupl-website/
    npm install
    ```
 
-3. **Set up environment variables** (Optional for local development)
-   ```bash
-   cp .env.example .env.local
-   ```
-   Add your Supabase credentials (if working with backend):
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+3. **Set up environment variables**
+   
+   Create a `.env.local` file in the root directory:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
+
+   **Note**: These are the same values used in the CMS repository. The website only needs read access (anon key), while the CMS needs write access (service role key).
 
 4. **Run the development server**
    ```bash
    npm run dev
    ```
 
-5. **Open in browser**
+5. **Open your browser**
+   
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 🏗️ Build & Deploy
+## 🔧 Environment Variables
 
-### Local Build
-```bash
-npm run build
-npm start
-```
+### Required
 
-### Deploy to Vercel
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL | `https://xxxxx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous/public key | `eyJhbGc...` |
 
-#### Via Vercel Dashboard (Recommended)
-1. Push your changes to GitHub
-2. Go to [vercel.com](https://vercel.com) and sign in
-3. Import the `qoupl-website` repository
-4. Vercel auto-detects Next.js and configures everything
-5. Click "Deploy"
+### Optional
 
-#### Via Vercel CLI
-```bash
-npm install -g vercel
-vercel
-```
+These are typically set in Vercel for production:
+- `VERCEL_ANALYTICS_ID`: Vercel Analytics (auto-configured)
+- `VERCEL_SPEED_INSIGHTS_ID`: Speed Insights (auto-configured)
 
-### Environment Variables for Production
-Set these in your Vercel project settings:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+## 📝 Development Workflow
 
-## 🎨 Design System
+### Content Management
 
-### Brand Colors
-- **Primary Purple**: `#a855f7` (HSL: 271, 91%, 65%)
-- **Secondary Pink**: `#ec4899`
-- **Dark Mode**: Full support with automatic theme switching
+**Important**: Content is managed through the separate CMS repository, not this website repo.
 
-### Typography
-- **Headings**: Poppins (300-800 weights)
-- **Body**: DM Sans (400-700 weights)
+1. **To update content**: Use the CMS at `qoupl-website-cms` repository
+2. **Content changes**: Automatically reflect on the website (no deployment needed)
+3. **Code changes**: Require deployment to update the website
 
-### Breakpoints
-- Mobile: `< 640px`
-- Tablet: `640px - 1023px`
-- Desktop: `≥ 1024px`
+### Adding New Pages
 
-## 🔑 Key Features
+1. Create a new folder in `app/` (e.g., `app/new-page/`)
+2. Add `page.tsx` that fetches sections:
+   ```tsx
+   import { getPageSections } from '@/lib/supabase/content'
+   import { SectionsRenderer } from '@/lib/components/registry'
+   
+   export default async function NewPage() {
+     const sections = await getPageSections('new-page-slug')
+     return <SectionsRenderer sections={sections} />
+   }
+   ```
+3. Create the page in CMS with matching slug
+4. Add sections through CMS
 
-### Implemented
-✅ Responsive landing page with all sections  
-✅ Splash screen with animated logo fill  
-✅ Waitlist modal with age validation (18-25 only)  
-✅ Dark/Light theme toggle  
-✅ Multiple static pages (About, FAQ, Privacy, etc.)  
-✅ Mobile-optimized design  
-✅ Framer Motion animations throughout  
+### Adding New Section Types
 
-### In Development
-🚧 Supabase backend integration  
-🚧 Waitlist data persistence  
-🚧 Email confirmation system  
-🚧 Admin dashboard for waitlist management  
-🚧 Blog CMS integration  
-🚧 Analytics tracking  
+1. Create component in `components/sections/`
+2. Add to registry in `lib/components/registry.tsx`
+3. Update validation schema in `lib/validation/section-schemas.ts`
+4. Deploy website changes
 
-## 📱 Mobile Apps
+### API Routes
 
-The iOS and Android apps are being developed separately and will integrate with:
-- Supabase backend for user data
-- AI matching algorithms (proprietary)
-- Real-time messaging system
-- Photo verification system
-- Location-based matching
+- `/api/contact`: Handles contact form submissions
+- `/api/waitlist`: Handles waitlist registrations
+- `/api/media/upload`: Handles media uploads (if needed)
 
-**Repositories** (Private):
-- `qoupl-mobile-ios` - Native iOS app (Swift/SwiftUI)
-- `qoupl-mobile-android` - Native Android app (Kotlin)
-- `qoupl-backend` - API and AI services (Node.js/Python)
+## 🗄️ Database Schema
 
-## 🤝 Contributing
+### Key Tables
 
-This is a startup project with a growing team. If you're interested in contributing:
+**pages**
+- `id` (uuid)
+- `slug` (text, unique)
+- `title` (text)
+- `published` (boolean)
+- `created_at`, `updated_at`
 
-1. **Internal Team**: Check Notion workspace for tasks and sprint planning
-2. **External Contributors**: Please reach out to [careers@qoupl.ai](mailto:careers@qoupl.ai) first
-3. **Bug Reports**: Open an issue with detailed description and screenshots
+**sections**
+- `id` (uuid)
+- `page_id` (uuid, foreign key)
+- `component_type` (text) - e.g., 'hero', 'features', 'testimonials'
+- `content` (jsonb) - Section-specific data
+- `order_index` (integer)
+- `published` (boolean)
 
-### Development Workflow
-1. Create a feature branch from `main`
-2. Make your changes
-3. Test thoroughly (mobile + desktop + dark mode)
-4. Submit PR with clear description
-5. Wait for code review
+**blog_posts**
+- `id` (uuid)
+- `title`, `slug`, `excerpt`, `content`
+- `featured_image` (text)
+- `category_id` (uuid)
+- `published` (boolean)
+- `publish_date` (timestamp)
 
-## 📊 Analytics & Monitoring
+**global_content**
+- `key` (text, unique) - e.g., 'navbar', 'footer'
+- `content` (jsonb) - Content data
 
-- **Vercel Analytics**: Page views and performance metrics
-- **Error Tracking**: Sentry (planned)
-- **User Behavior**: PostHog or Mixpanel (planned)
+## 🚢 Deployment
 
-## 🔒 Security & Privacy
+### Vercel (Recommended)
 
-qoupl takes user privacy seriously:
-- Age-restricted access (18-25 years only)
-- All personal data encrypted
-- GDPR compliant (in progress)
-- Regular security audits
-- See [Privacy Policy](/privacy) and [Safety Guidelines](/safety)
+1. **Connect repository** to Vercel
+2. **Set environment variables**:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+3. **Deploy**: Vercel auto-deploys on push to main branch
+
+### Build Commands
+
+- **Development**: `npm run dev`
+- **Production Build**: `npm run build`
+- **Start Production**: `npm start`
+
+## 🔗 Related Repositories
+
+- **CMS Repository**: [qoupl-website-cms](https://github.com/qoupl-ai/qoupl-website-cms)
+  - Separate repository for content management
+  - Admin interface for editing website content
+  - Deployed separately on Vercel
+
+## 📚 Key Concepts
+
+### Server Components vs Client Components
+
+- **Server Components** (default): Fetch data, render on server
+- **Client Components** (`'use client'`): Interactive UI, browser-only
+
+### Content Fetching
+
+All content is fetched server-side using:
+- `getPageSections(slug)`: Get sections for a page
+- `getGlobalContent(key)`: Get global content (navbar, footer)
+- Direct Supabase queries for blog posts, FAQs, etc.
+
+### Image Handling
+
+- **Supabase Storage**: Images stored in Supabase Storage buckets
+- **URL Generation**: `getStorageUrl(bucket, path)` helper function
+- **Next.js Image**: Optimized image component with remote patterns configured
+
+## 🐛 Troubleshooting
+
+### Content Not Showing
+
+1. Check if page exists in Supabase `pages` table
+2. Verify sections are `published = true`
+3. Check browser console for errors
+4. Verify environment variables are set correctly
+
+### Images Not Loading
+
+1. Check Supabase Storage bucket exists
+2. Verify image paths in database
+3. Check `next.config.js` remote patterns
+4. Ensure storage bucket is public
+
+### Build Errors
+
+1. Run `npm install` to ensure dependencies are up to date
+2. Check TypeScript errors: `npm run build`
+3. Verify all environment variables are set
 
 ## 📄 License
 
-Copyright © 2024-2025 Xencus Technologies Private Limited. All rights reserved.
+Private repository - All rights reserved
 
-This is proprietary software for the qoupl dating platform. Unauthorized copying, distribution, or modification is prohibited.
+## 👥 Contributing
 
-## 📞 Contact
-
-- **Website**: [qoupl.ai](https://qoupl.ai)
-- **Email**: [hello@qoupl.ai](mailto:hello@qoupl.ai)
-- **Support**: [support@qoupl.ai](mailto:support@qoupl.ai)
-- **Careers**: [careers@qoupl.ai](mailto:careers@qoupl.ai)
-
-## 🙏 Acknowledgments
-
-- Design inspiration from modern dating platforms
-- UI components from [Shadcn UI](https://ui.shadcn.com/)
-- Animations powered by [Framer Motion](https://www.framer.com/motion/)
-- Icons from [Lucide](https://lucide.dev/)
+This is a private repository. For content updates, use the CMS repository.
 
 ---
 
-**Built with ❤️ by the qoupl team**
+**Built with ❤️ for qoupl**
 
-*Helping people find meaningful connections through intelligent technology*

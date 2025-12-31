@@ -48,14 +48,8 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Protect /add-content route (CMS)
-  if (request.nextUrl.pathname.startsWith('/add-content') && !user) {
-    // Redirect to login page
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    url.searchParams.set('redirect', request.nextUrl.pathname)
-    return NextResponse.redirect(url)
-  }
+  // CMS routes have been moved to a separate repository
+  // No CMS route protection needed here anymore
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
