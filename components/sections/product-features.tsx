@@ -6,7 +6,8 @@ import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { Heart, Shield, Zap, Check } from "lucide-react";
 
 // Icon mapping
-const iconMap: Record<string, any> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const iconMap: Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>> = {
   Heart,
   Shield,
   Zap,

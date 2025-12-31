@@ -52,35 +52,31 @@ const defaultSteps: Step[] = [
 ];
 
 interface HowItWorksProps {
-  data?: {
-    steps?: Array<{
-      step: string;
-      title: string;
-      description: string;
-      image?: string;
-    }>;
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: Record<string, any>;
 }
 
 export default function HowItWorks({ data = {} }: HowItWorksProps) {
   // Process steps from data or use defaults
-  const steps: Step[] = data?.steps?.map((item) => {
-    let imageUrl = item.image;
-    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-      if (imageUrl.includes('/')) {
-        const [bucket, ...rest] = imageUrl.split('/');
-        imageUrl = getStorageUrl(bucket, rest.join('/'));
-      } else {
-        imageUrl = getStorageUrl("app-screenshots", imageUrl);
-      }
-    }
-    return {
-      step: item.step,
-      title: item.title,
-      description: item.description,
-      image: imageUrl || getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
-    };
-  }) || defaultSteps;
+  const steps: Step[] = (data?.steps && Array.isArray(data.steps)) 
+    ? data.steps.map((item: { step?: string; title?: string; description?: string; image?: string }) => {
+        let imageUrl = item.image;
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+          if (imageUrl.includes('/')) {
+            const [bucket, ...rest] = imageUrl.split('/');
+            imageUrl = getStorageUrl(bucket, rest.join('/'));
+          } else {
+            imageUrl = getStorageUrl("app-screenshots", imageUrl);
+          }
+        }
+        return {
+          step: item.step || '',
+          title: item.title || '',
+          description: item.description || '',
+          image: imageUrl || getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
+        };
+      })
+    : defaultSteps;
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const [currentStep, setCurrentStep] = useState(0);
