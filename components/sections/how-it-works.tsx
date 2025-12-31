@@ -5,8 +5,15 @@ import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
+interface Step {
+  step: string;
+  title: string;
+  description: string;
+  image: string;
+}
+
 // Fallback steps
-const defaultSteps = [
+const defaultSteps: Step[] = [
   {
     step: "01",
     title: "Create Your Profile",
@@ -45,12 +52,19 @@ const defaultSteps = [
 ];
 
 interface HowItWorksProps {
-  data: Record<string, any>;
+  data?: {
+    steps?: Array<{
+      step: string;
+      title: string;
+      description: string;
+      image?: string;
+    }>;
+  };
 }
 
 export default function HowItWorks({ data = {} }: HowItWorksProps) {
   // Process steps from data or use defaults
-  const steps = data?.steps?.map((item: any) => {
+  const steps: Step[] = data?.steps?.map((item) => {
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
       if (imageUrl.includes('/')) {
@@ -112,7 +126,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
     });
 
     return () => unsubscribe();
-  }, [smoothStep]);
+  }, [smoothStep, steps.length]);
 
   // Get the current step data
   const currentStepData = steps[currentStep];
@@ -259,7 +273,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              {steps.map((_: any, index: number) => (
+              {steps.map((_, index: number) => (
                 <motion.div
                   key={index}
                   className="h-1.5 rounded-full transition-all duration-500"

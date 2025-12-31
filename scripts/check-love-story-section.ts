@@ -12,6 +12,12 @@ const supabase = createClient(
 
 async function check() {
   const { data: page } = await supabase.from('pages').select('id').eq('slug', 'home').single()
+  
+  if (!page) {
+    console.error('Page not found')
+    return
+  }
+  
   const { data: sections } = await supabase
     .from('sections')
     .select('*')
