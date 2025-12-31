@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAnonymousClient } from '@/lib/supabase/anonymous'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
@@ -32,8 +32,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Use regular client - RLS policies allow anonymous inserts
-    const supabase = await createClient()
+    // Use anonymous client for truly anonymous operations (no cookies)
+    // This ensures RLS policies work correctly for anonymous users
+    const supabase = createAnonymousClient()
 
     // Check if email already exists
     const { data: existing } = await supabase
