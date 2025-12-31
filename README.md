@@ -169,7 +169,7 @@ qoupl-website/
 
 ### Optional
 
-These are typically set in Vercel for production:
+- `SUPABASE_SERVICE_ROLE_KEY`: Only needed if running admin scripts (not required for website to function)
 - `VERCEL_ANALYTICS_ID`: Vercel Analytics (auto-configured)
 - `VERCEL_SPEED_INSIGHTS_ID`: Speed Insights (auto-configured)
 
@@ -208,9 +208,10 @@ These are typically set in Vercel for production:
 
 ### API Routes
 
-- `/api/contact`: Handles contact form submissions
-- `/api/waitlist`: Handles waitlist registrations
-- `/api/media/upload`: Handles media uploads (if needed)
+- `/api/contact`: Handles contact form submissions (public, uses anon key)
+- `/api/waitlist`: Handles waitlist registrations (public, uses anon key)
+
+**Note**: Media uploads are handled by the CMS repository, not this website.
 
 ## 🗄️ Database Schema
 

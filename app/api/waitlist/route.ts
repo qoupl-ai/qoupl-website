@@ -1,4 +1,4 @@
-import { adminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
@@ -32,13 +32,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Use admin client for public waitlist signups
-    // This is safe because:
-    // 1. It's server-side only (never exposed to client)
-    // 2. We have strict validation above
-    // 3. Public forms commonly use service role for reliability
-    // 4. RLS can be complex for anonymous inserts in API routes
-    const supabase = adminClient
+    // Use regular client - RLS policies allow anonymous inserts
+    const supabase = await createClient()
 
     // Check if email already exists
     const { data: existing } = await supabase
