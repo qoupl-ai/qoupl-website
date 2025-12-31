@@ -10,7 +10,7 @@ import WaitlistModal from "@/components/waitlist-modal";
 import { Button } from "@/components/ui/button";
 
 // Icon mapping
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+const iconMap: Record<string, React.ComponentType<{ className?: string; strokeWidth?: number }>> = {
   Heart, Shield, Sparkles, Users, Zap, Target, Eye, TrendingUp, Globe, Rocket
 };
 
@@ -53,7 +53,7 @@ export default function AboutClient({ data }: AboutClientProps) {
 
   // Process values to include icon components
   type ProcessedValue = {
-    icon: React.ComponentType<{ className?: string }>;
+    icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
     title: string;
     description: string;
   };
