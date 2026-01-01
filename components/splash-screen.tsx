@@ -48,8 +48,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     return () => clearTimeout(startDelay);
   }, [onComplete]);
 
-  // Determine theme - default to dark if not mounted yet
-  const isDark = mounted ? resolvedTheme === 'dark' : true;
+  // Determine theme - default to light if not mounted yet
+  const isDark = mounted ? resolvedTheme === 'dark' : false;
   
   // Clean solid background based on theme
   const backgroundColor = isDark ? '#171717' : '#ffffff';
