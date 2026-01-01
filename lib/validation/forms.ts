@@ -108,10 +108,10 @@ export type ContactFormData = z.infer<typeof contactSchema>
 /**
  * Helper function to safely parse form data
  */
-export function parseFormData<T>(
+export const parseFormData = <T>(
   schema: z.ZodSchema<T>,
   data: unknown
-): { success: true; data: T } | { success: false; errors: Record<string, string[]> } {
+): { success: true; data: T } | { success: false; errors: Record<string, string[]> } => {
   const result = schema.safeParse(data)
 
   if (result.success) {
@@ -136,7 +136,7 @@ export function parseFormData<T>(
  *
  * Basic sanitization - for production, consider using DOMPurify
  */
-export function sanitizeInput(input: string): string {
+export const sanitizeInput = (input: string): string => {
   return input
     .replace(/[<>]/g, '') // Remove < and >
     .trim()
@@ -145,10 +145,10 @@ export function sanitizeInput(input: string): string {
 /**
  * Validate and sanitize form data in one step
  */
-export function validateAndSanitize<T extends Record<string, unknown>>(
+export const validateAndSanitize = <T extends Record<string, unknown>>(
   schema: z.ZodSchema<T>,
   data: unknown
-): { success: true; data: T } | { success: false; errors: Record<string, string[]> } {
+): { success: true; data: T } | { success: false; errors: Record<string, string[]> } => {
   const result = parseFormData(schema, data)
 
   if (!result.success) {

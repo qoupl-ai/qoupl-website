@@ -13,7 +13,7 @@ import { getStorageUrl } from '@/lib/supabase/storage-url'
 // Global Content Helpers
 // ============================================================================
 
-export async function getGlobalContent(key: string): Promise<any> {
+export const getGlobalContent = async (key: string): Promise<any> => {
   const supabase = await createClient()
   
   try {
@@ -43,7 +43,7 @@ export async function getGlobalContent(key: string): Promise<any> {
   }
 }
 
-export async function getNavbarContent(): Promise<NavbarContent | null> {
+export const getNavbarContent = async (): Promise<NavbarContent | null> => {
   const content = await getGlobalContent('navbar')
   // Ensure content matches NavbarContent structure
   if (content && typeof content === 'object' && 'links' in content) {
@@ -52,11 +52,11 @@ export async function getNavbarContent(): Promise<NavbarContent | null> {
   return null
 }
 
-export async function getFooterContent() {
+export const getFooterContent = async () => {
   return await getGlobalContent('footer')
 }
 
-export async function getSocialLinks(): Promise<SocialLinks | null> {
+export const getSocialLinks = async (): Promise<SocialLinks | null> => {
   const content = await getGlobalContent('social_links')
   if (!content) return null
   
@@ -80,11 +80,11 @@ export async function getSocialLinks(): Promise<SocialLinks | null> {
   return null
 }
 
-export async function getContactInfo() {
+export const getContactInfo = async () => {
   return await getGlobalContent('contact_info')
 }
 
-export async function getSiteConfig() {
+export const getSiteConfig = async () => {
   return await getGlobalContent('site_config')
 }
 
@@ -92,7 +92,7 @@ export async function getSiteConfig() {
 // Section Helpers
 // ============================================================================
 
-export async function getPageSections(pageSlug: string) {
+export const getPageSections = async (pageSlug: string) => {
   const supabase = await createClient()
 
   try {
@@ -126,16 +126,16 @@ export async function getPageSections(pageSlug: string) {
     }
 
     // Filter by published manually as a fallback (RLS should handle this, but just in case)
-    const publishedSections = (sections || []).filter(s => s.published === true)
-    
+    const publishedSections = (sections ?? []).filter(s => s.published === true)
+
     // Normalize component_type field (handle both column names)
     const normalizedSections = publishedSections.map(s => ({
       ...s,
-      component_type: s.component_type || (s as any).section_type || 'unknown',
+      component_type: s.component_type ?? (s as any).section_type ?? 'unknown',
     }))
-    
-    if (normalizedSections.length === 0 && (sections || []).length > 0) {
-      console.warn(`[getPageSections] Found ${sections?.length || 0} sections for ${pageSlug}, but none are published`)
+
+    if (normalizedSections.length === 0 && (sections ?? []).length > 0) {
+      console.warn(`[getPageSections] Found ${sections?.length ?? 0} sections for ${pageSlug}, but none are published`)
     }
 
     return normalizedSections
@@ -145,7 +145,7 @@ export async function getPageSections(pageSlug: string) {
   }
 }
 
-export async function getSectionByType(pageSlug: string, componentType: string) {
+export const getSectionByType = async (pageSlug: string, componentType: string) => {
   const sections = await getPageSections(pageSlug)
   return sections.find((s) => s.component_type === componentType)
 }
@@ -154,7 +154,7 @@ export async function getSectionByType(pageSlug: string, componentType: string) 
 // Helper: Process image paths to full URLs
 // ============================================================================
 
-export function processImagePath(path: string, bucket?: string): string {
+export const processImagePath = (path: string, bucket?: string): string => {
   if (!path) return ''
   
   // If already a full URL, return as is
@@ -165,13 +165,13 @@ export function processImagePath(path: string, bucket?: string): string {
   // If path includes bucket, extract it
   if (path.includes('/')) {
     const parts = path.split('/')
-    const bucketName = bucket || parts[0]
+    const bucketName = bucket ?? parts[0]
     const imagePath = parts.slice(1).join('/')
     return getStorageUrl(bucketName, imagePath)
   }
 
   // Default bucket if not specified
-  const defaultBucket = bucket || 'hero-images'
+  const defaultBucket = bucket ?? 'hero-images'
   return getStorageUrl(defaultBucket, path)
 }
 

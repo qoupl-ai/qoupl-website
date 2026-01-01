@@ -37,10 +37,10 @@ export async function submitWaitlist(formData: FormData): Promise<WaitlistAction
     // 1. Get client identifier from headers
     const headersList = await headers()
     const ipAddress =
-      headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      headersList.get('x-real-ip') ||
+      headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+      headersList.get('x-real-ip') ??
       'unknown'
-    const userAgent = headersList.get('user-agent') || 'unknown'
+    const userAgent = headersList.get('user-agent') ?? 'unknown'
 
     logger.apiRequest('Server Action', 'submitWaitlist', { ip: ipAddress })
 

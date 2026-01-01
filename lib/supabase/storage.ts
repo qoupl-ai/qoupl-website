@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server"
  * Get public URL for a file in Supabase Storage
  * This is a pure function that works in both client and server components
  */
-export function getStorageUrl(bucket: string, path: string): string {
+export const getStorageUrl = (bucket: string, path: string): string => {
   // Use environment variable that's available on both client and server
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   if (!supabaseUrl) {
@@ -18,7 +18,7 @@ export function getStorageUrl(bucket: string, path: string): string {
 /**
  * Get all files from a storage bucket (server-side only)
  */
-export async function listStorageFiles(bucket: string, folder: string = '') {
+export const listStorageFiles = async (bucket: string, folder: string = '') => {
   
   const supabase = await createClient()
 
@@ -36,13 +36,13 @@ export async function listStorageFiles(bucket: string, folder: string = '') {
     return []
   }
 
-  return data || []
+  return data ?? []
 }
 
 /**
  * Get media records from database with storage URLs (server-side only)
  */
-export async function getMediaWithUrls() {
+export const getMediaWithUrls = async () => {
   
   const supabase = await createClient()
 

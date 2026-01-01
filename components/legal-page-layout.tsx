@@ -105,8 +105,8 @@ function highlightImportantTerms(text: string): ReactNode {
         splitParts.forEach((splitPart, i) => {
           if (i % 2 === 1) {
             // Check if this match is part of an email or URL
-            const beforeMatch = splitParts[i - 1] || '';
-            const afterMatch = splitParts[i + 1] || '';
+            const beforeMatch = splitParts[i - 1] ?? '';
+            const afterMatch = splitParts[i + 1] ?? '';
             
             // Check for email pattern (text before @ or @ after)
             const isInEmail = beforeMatch.endsWith('@') || 

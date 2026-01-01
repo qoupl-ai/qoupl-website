@@ -51,22 +51,22 @@ export default function AppDownload({ data = {} }: AppDownloadProps) {
     return () => clearInterval(interval);
   }, [launchDate]);
 
-  const title = data?.title || "qoupl is Launching Soon";
-  const subtitle = data?.subtitle || "Be among the first college students to experience the future of dating! Join our waitlist today and get exclusive early access when we launch on iOS and Android.";
-  
+  const title = data?.title ?? "qoupl is Launching Soon";
+  const subtitle = data?.subtitle ?? "Be among the first college students to experience the future of dating! Join our waitlist today and get exclusive early access when we launch on iOS and Android.";
+
   // Handle benefits - can be array of strings or array of objects
-  const benefitsRaw = data?.benefits || [
+  const benefitsRaw = data?.benefits ?? [
     "Get notified before official launch",
     "Exclusive early access to the app",
     "Special perks for early members",
     "Help shape the future of qoupl"
   ];
-  const benefits = benefitsRaw.map((benefit: string | { text?: string; icon?: string; showIcon?: boolean }) => 
-    typeof benefit === 'string' ? benefit : (benefit.text || '')
+  const benefits = benefitsRaw.map((benefit: string | { text?: string; icon?: string; showIcon?: boolean }) =>
+    typeof benefit === 'string' ? benefit : (benefit.text ?? '')
   ).filter(Boolean);
-  
-  const ctaText = data?.cta?.text || "Join the Waitlist";
-  const ctaSubtext = data?.cta?.subtext || "Limited spots available for early access";
+
+  const ctaText = data?.cta?.text ?? "Join the Waitlist";
+  const ctaSubtext = data?.cta?.subtext ?? "Limited spots available for early access";
 
   return (
     <section className="py-10 md:py-14 relative overflow-hidden">
@@ -88,7 +88,7 @@ export default function AppDownload({ data = {} }: AppDownloadProps) {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
             >
               <Sparkles className="h-4 w-4" strokeWidth={1.5} />
-              <span className="text-sm font-semibold">{data?.badge?.text || "Coming Soon"}</span>
+              <span className="text-sm font-semibold">{data?.badge?.text ?? "Coming Soon"}</span>
             </motion.div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
@@ -238,18 +238,18 @@ export default function AppDownload({ data = {} }: AppDownloadProps) {
               {/* Decorative Images */}
               {(() => {
                 // Handle both old format (array of strings) and new format (array of objects)
-                const decorativeImages = data?.images?.decorative || [];
+                const decorativeImages = data?.images?.decorative ?? [];
                 const image1 = decorativeImages[0];
                 const image2 = decorativeImages[1];
-                
+
                 const getImagePath = (img: string | { image?: string; alt?: string }) => {
                   if (typeof img === 'string') return img;
-                  return img?.image || '';
+                  return img?.image ?? '';
                 };
-                
+
                 const getImageAlt = (img: string | { image?: string; alt?: string }, defaultAlt: string) => {
                   if (typeof img === 'string') return defaultAlt;
-                  return img?.alt || defaultAlt;
+                  return img?.alt ?? defaultAlt;
                 };
                 
                 return (

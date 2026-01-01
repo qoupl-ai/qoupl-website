@@ -16,10 +16,10 @@ export async function POST(request: NextRequest) {
   try {
     // 1. Get client identifier (IP address)
     const ipAddress =
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      request.headers.get('x-real-ip') ||
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+      request.headers.get('x-real-ip') ??
       'unknown'
-    const userAgent = request.headers.get('user-agent') || 'unknown'
+    const userAgent = request.headers.get('user-agent') ?? 'unknown'
 
     logger.apiRequest('POST', '/api/waitlist', { ip: ipAddress })
 

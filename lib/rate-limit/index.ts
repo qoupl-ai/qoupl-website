@@ -20,7 +20,7 @@ export interface RateLimitResult {
 /**
  * Creates a rate limiter instance
  */
-export function createRateLimiter(config: RateLimitConfig) {
+export const createRateLimiter = (config: RateLimitConfig) => {
   const tokenCache = new LRUCache<string, number[]>({
     max: config.uniqueTokenPerInterval,
     ttl: config.interval,
@@ -35,7 +35,7 @@ export function createRateLimiter(config: RateLimitConfig) {
      */
     check: async (token: string): Promise<RateLimitResult> => {
       const now = Date.now()
-      const tokenCount = tokenCache.get(token) || [0, now]
+      const tokenCount = tokenCache.get(token) ?? [0, now]
 
       // Reset count if interval has passed
       if (now - tokenCount[1] > config.interval) {

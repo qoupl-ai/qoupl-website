@@ -3,7 +3,7 @@
  * This is a pure function that works in both client and server components
  * Safe to import in client components
  */
-export function getStorageUrl(bucket: string, path: string): string {
+export const getStorageUrl = (bucket: string, path: string): string => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 
   if (!supabaseUrl) {

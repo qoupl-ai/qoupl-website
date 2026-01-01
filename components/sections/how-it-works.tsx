@@ -70,10 +70,10 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
           }
         }
         return {
-          step: item.step || '',
-          title: item.title || '',
-          description: item.description || '',
-          image: imageUrl || getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
+          step: item.step ?? '',
+          title: item.title ?? '',
+          description: item.description ?? '',
+          image: imageUrl ?? getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
         };
       })
     : defaultSteps;

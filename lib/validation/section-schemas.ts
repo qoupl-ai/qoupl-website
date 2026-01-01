@@ -329,8 +329,8 @@ export const sectionSchemas: Record<string, z.ZodSchema> = {
 /**
  * Get schema for a section type
  */
-export function getSectionSchema(type: string): z.ZodSchema {
-  return sectionSchemas[type] || baseSectionSchema.extend({
+export const getSectionSchema = (type: string): z.ZodSchema => {
+  return sectionSchemas[type] ?? baseSectionSchema.extend({
     data: z.record(z.string(), z.any()),
   })
 }
@@ -338,7 +338,7 @@ export function getSectionSchema(type: string): z.ZodSchema {
 /**
  * Validate section data
  */
-export function validateSectionData(type: string, data: any): { success: boolean; error?: string } {
+export const validateSectionData = (type: string, data: any): { success: boolean; error?: string } => {
   try {
     const schema = getSectionSchema(type)
     schema.parse({ type, data, order_index: 0, published: false })

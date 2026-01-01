@@ -60,7 +60,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to join waitlist');
+        throw new Error(data.error ?? 'Failed to join waitlist');
       }
 
       // Success

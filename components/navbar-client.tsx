@@ -55,9 +55,9 @@ export default function NavbarClient({ content }: NavbarClientProps) {
             {content.logo?.src && content.logo.src.trim() !== '' ? (
               <Image
                 src={content.logo.src}
-                alt={content.logo.alt || 'qoupl'}
-                width={content.logo.width || 120}
-                height={content.logo.height || 40}
+                alt={content.logo.alt ?? 'qoupl'}
+                width={content.logo.width ?? 120}
+                height={content.logo.height ?? 40}
                 className="h-8 w-auto"
               />
             ) : (
