@@ -75,29 +75,10 @@ export default function AboutClient({ data }: AboutClientProps) {
   const timelineSection = data.sections.find(s => s.type === 'timeline');
   const missionVisionSection = data.sections.find(s => s.type === 'mission-vision');
 
-  // Default fallbacks
-  const hero: HeroSection = (heroSection?.content as HeroSection) || {
-    badge: 'Our Story',
-    title: 'Building the Future of Love',
-    description:
-      'qoupl is revolutionizing how people connect. Through advanced AI matching and a commitment to authentic relationships, we\'re creating a platform where meaningful connections happen naturally.',
-    locationBadge: { flag: '🇮🇳', text: 'Launching in India' },
-    images: [
-      'couple-photos/qoupl_couple_01.jpg',
-      'couple-photos/qoupl_couple_02.jpg',
-      'couple-photos/qoupl_couple_03.jpg',
-    ],
-  };
-
+  const hero: HeroSection = (heroSection?.content as HeroSection) || {};
   const values = (valuesSection?.content as { values?: ValueItem[] })?.values || [];
   const timeline = (timelineSection?.content as { timeline?: TimelineItem[] })?.timeline || [];
-
-  const missionVision: MissionVisionSection = (missionVisionSection?.content as MissionVisionSection) || {
-    mission: {
-      badge: 'Our Mission',
-      title: 'Bringing People Together',
-      content: [
-        'At qoupl, we believe that everyone deserves to find love and meaningful connections. Our mission is to leverage cutting-edge AI technology to match compatible people while maintaining the authenticity and magic of human connection.',
+  const missionVision: MissionVisionSection = (missionVisionSection?.content as MissionVisionSection) || {};
         'We\'re committed to creating a safe, inclusive, and trustworthy platform where people can be themselves and find their perfect match.',
       ],
     },

@@ -65,8 +65,12 @@ interface ProductFeaturesProps {
 }
 
 export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
-  // Process features from data or use defaults
-  const features = data?.features?.map((item: any) => {
+  // Process features from data
+  if (!data?.features || !Array.isArray(data.features) || data.features.length === 0) {
+    return null;
+  }
+
+  const features = data.features.map((item: any) => {
     const IconComponent = item.icon ? iconMap[item.icon] || Heart : Heart;
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
@@ -85,7 +89,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
       image: imageUrl || getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
       color: item.color || "bg-[#662D91]",
     };
-  }) || defaultFeatures;
+  });
   return (
     <section className="py-10 md:py-14 relative overflow-hidden">
       {/* Background Blob */}

@@ -32,7 +32,6 @@ export default async function Footer() {
       product: {
         title: 'Product',
         links: [
-          { href: '/features', label: 'Features' },
           { href: '/pricing', label: 'Pricing' },
           { href: '/faq', label: 'FAQ' },
           { href: '/waitlist', label: 'Join Waitlist' },
