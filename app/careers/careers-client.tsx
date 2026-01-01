@@ -1,16 +1,16 @@
 "use client";
 
-import { Heart, Users, Zap, Code, Rocket, Mail, Sparkles, Briefcase, TrendingUp, Lightbulb, Target, Award, Globe, Coffee } from "lucide-react";
+import { Heart, Users, Zap, Code, Rocket, Mail, Sparkles, Briefcase, TrendingUp, Lightbulb, Target, Award, Globe, Coffee, LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 // Icon mapping for values
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   Heart, Users, Zap, Code, Rocket, Mail, Sparkles
 };
 
 // Icon mapping for why join items (replacing emojis)
-const whyJoinIconMap: Record<string, any> = {
+const whyJoinIconMap: Record<string, LucideIcon> = {
   '💼': Briefcase,
   '🚀': Rocket,
   '💡': Lightbulb,
@@ -24,11 +24,32 @@ const whyJoinIconMap: Record<string, any> = {
   '⚡': Zap,
 };
 
+interface ValueItem {
+  icon?: string
+  title?: string
+  description?: string
+}
+
+interface WhyJoinItem {
+  icon?: string
+  title?: string
+  description?: string
+}
+
+interface SectionContent {
+  title?: string
+  subtitle?: string
+  description?: string
+  email?: string
+  values?: ValueItem[]
+  items?: WhyJoinItem[]
+}
+
 interface CareersClientProps {
   data: {
     sections: Array<{
       type: string;
-      content: any;
+      content: SectionContent;
     }>;
   };
 }
@@ -45,17 +66,17 @@ export default function CareersClient({ data }: CareersClientProps) {
   const comingSoonTitle = comingSoonSection?.content?.title;
   const comingSoonDescription = comingSoonSection?.content?.description;
   const comingSoonEmail = comingSoonSection?.content?.email;
-  const values = valuesSection?.content?.values || [];
-  const whyJoin = whyJoinSection?.content?.items || [];
+  const values = valuesSection?.content?.values ?? [];
+  const whyJoin = whyJoinSection?.content?.items ?? [];
 
   // Process values to include icon components
-  const processedValues = values.map((item: any) => ({
+  const processedValues = values.map((item: ValueItem) => ({
     ...item,
-    icon: item.icon ? iconMap[item.icon] || Heart : Heart,
+    icon: item.icon ? iconMap[item.icon] ?? Heart : Heart,
   }));
 
   // Process why join items to replace emojis with icons
-  const processedWhyJoin = whyJoin.map((item: any) => {
+  const processedWhyJoin = whyJoin.map((item: WhyJoinItem) => {
     const emoji = item.icon;
     const IconComponent = emoji && whyJoinIconMap[emoji] ? whyJoinIconMap[emoji] : Briefcase;
     return {
@@ -129,8 +150,8 @@ export default function CareersClient({ data }: CareersClientProps) {
             <div className="bg-muted rounded-xl p-6 mb-6">
               <h3 className="text-lg font-bold mb-3">Be in Touch</h3>
               <p className="text-sm text-muted-foreground mb-6">
-                Send us your resume and a note about why you'd like to join qoupl.
-                We'll reach out when positions become available.
+                Send us your resume and a note about why you&apos;d like to join qoupl.
+                We&apos;ll reach out when positions become available.
               </p>
 
               {comingSoonEmail && (
@@ -148,7 +169,7 @@ export default function CareersClient({ data }: CareersClientProps) {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              We're an equal opportunity employer and value diversity at our company.
+              We&apos;re an equal opportunity employer and value diversity at our company.
             </p>
           </motion.div>
         </div>
@@ -173,7 +194,7 @@ export default function CareersClient({ data }: CareersClientProps) {
 
           {values.length > 0 && (
             <div className="grid md:grid-cols-2 gap-5">
-              {processedValues.map((value: any, index: number) => {
+              {processedValues.map((value: ValueItem & { icon: LucideIcon }, index: number) => {
               const Icon = value.icon;
               return (
                 <motion.div
@@ -222,7 +243,7 @@ export default function CareersClient({ data }: CareersClientProps) {
 
           {processedWhyJoin.length > 0 && (
             <div className="grid md:grid-cols-3 gap-5">
-              {processedWhyJoin.map((item: any, index: number) => {
+              {processedWhyJoin.map((item: WhyJoinItem & { iconComponent: LucideIcon }, index: number) => {
                 const IconComponent = item.iconComponent;
                 return (
                   <motion.div

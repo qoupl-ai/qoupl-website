@@ -13,11 +13,11 @@ interface NavbarClientProps {
 }
 
 export default function NavbarClient({ content }: NavbarClientProps) {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { scrollY } = useScroll();
   const pathname = usePathname();
   const isHomePage = pathname === '/';
+  const [isVisible, setIsVisible] = useState(!isHomePage); // Show by default on non-home pages
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { scrollY } = useScroll();
 
   useEffect(() => {
     if (isHomePage) {
@@ -29,10 +29,8 @@ export default function NavbarClient({ content }: NavbarClientProps) {
           setIsVisible(false);
         }
       });
-    } else {
-      // On other pages, always show navbar
-      setIsVisible(true);
     }
+    // No else needed - initial state handles non-home pages
   }, [scrollY, isHomePage]);
 
   const navLinks = content.links;

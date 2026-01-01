@@ -74,8 +74,6 @@ export default function AboutClient({ data }: AboutClientProps) {
   const valuesSection = data.sections.find(s => s.type === 'values');
   const timelineSection = data.sections.find(s => s.type === 'timeline');
   const missionVisionSection = data.sections.find(s => s.type === 'mission-vision');
-  const whyChooseUsSection = data.sections.find(s => s.type === 'why-choose-us');
-  const ctaSection = data.sections.find(s => s.type === 'cta');
 
   // Default fallbacks
   const hero: HeroSection = (heroSection?.content as HeroSection) || {

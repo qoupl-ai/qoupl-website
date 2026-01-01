@@ -1,11 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  Shield, 
-  FileText, 
-  Users, 
-  AlertTriangle,
+import {
   CheckCircle2,
   XCircle,
   AlertCircle,

@@ -429,7 +429,7 @@ export default function PricingClient({
           </motion.div>
 
           <div className="space-y-4">
-            {faq?.faqs && faq.faqs.length > 0 ? faq.faqs.map((faqItem: any, index: number) => (
+            {faq?.faqs && faq.faqs.length > 0 ? faq.faqs.map((faqItem: { question: string; answer: string }, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}

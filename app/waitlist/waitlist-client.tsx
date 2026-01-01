@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Mail, Phone, User, Users, Sparkles, ChevronDown, CheckCircle2, Zap, Star, Shield, Lock, Sparkles as SparklesIcon, MessageCircle, TrendingUp } from "lucide-react";
-import Image from "next/image";
+import { Heart, Mail, Phone, User, Users, Sparkles, ChevronDown, Zap, Star, Shield, Lock, Sparkles as SparklesIcon, MessageCircle, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -292,7 +291,7 @@ export default function WaitlistPageClient() {
                 {
                   step: "4",
                   title: "Early Access",
-                  description: "When we launch, you'll be among the first to access qoupl with special perks and priority features.",
+                  description: "When we launch, you&apos;ll be among the first to access qoupl with special perks and priority features.",
                 },
               ].map((item, idx) => (
                 <motion.div

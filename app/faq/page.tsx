@@ -9,12 +9,6 @@ import FAQClient from './faq-client'
 // Enable ISR with 3-hour revalidation
 export const revalidate = 10800;
 
-interface DatabaseSection {
-  component_type?: string
-  section_type?: string
-  content?: Record<string, unknown>
-}
-
 // Category ID to display name mapping
 const categoryNameMap: Record<string, string> = {
   'getting-started': 'Getting Started',
@@ -35,12 +29,12 @@ export default async function FAQ() {
   const faqs = sections
     .filter(section => section.component_type === 'faq-category')
     .map(section => {
-      const categoryId = section.content.category_id || 'general'
+      const categoryId = section.content.category_id ?? 'general'
       return {
-        category: categoryNameMap[categoryId] || categoryId,
-        questions: (section.content.faqs || []).map((faq: any) => ({
-          q: faq.question || faq.q,
-          a: faq.answer || faq.a,
+        category: categoryNameMap[categoryId] ?? categoryId,
+        questions: (section.content.faqs ?? []).map((faq: { question?: string; q?: string; answer?: string; a?: string }) => ({
+          q: faq.question ?? faq.q ?? '',
+          a: faq.answer ?? faq.a ?? '',
         })),
       }
     })

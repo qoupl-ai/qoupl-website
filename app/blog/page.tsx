@@ -5,6 +5,21 @@ import { Suspense } from 'react'
 // Enable ISR with 3-hour revalidation
 export const revalidate = 10800;
 
+interface BlogPost {
+  id: string
+  title: string
+  excerpt: string
+  slug: string
+  publish_date: string
+  read_time: number
+  featured_image: string
+  category: {
+    id: string
+    name: string
+    slug: string
+  } | null
+}
+
 async function getBlogData() {
   const supabase = await createClient()
 
@@ -72,7 +87,7 @@ export default async function Blog() {
 
   return (
     <Suspense fallback={<BlogLoading />}>
-      <BlogClient posts={posts as any} categories={categories} />
+      <BlogClient posts={posts as BlogPost[]} categories={categories} />
     </Suspense>
   )
 }

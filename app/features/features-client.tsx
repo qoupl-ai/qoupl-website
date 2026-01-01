@@ -184,7 +184,7 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
       return true;
     }
     
-    // Check 4: Check if it's the first category (Smart Matching should be first)
+    // Check 4: Check if it&apos;s the first category (Smart Matching should be first)
     const isFirstCategory = featureCategories.length > 0 && featureCategories[0]?.id === category.id;
     if (isFirstCategory && (titleLower.includes('smart') || titleLower.includes('matching'))) {
       return true;
@@ -271,7 +271,7 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                       {activeCategory.title === 'Safety & Trust' && (
                         <>
                           <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                            Your safety isn't negotiable—it's our foundation. We've built multiple layers of verification and protection to ensure qoupl remains a secure space exclusively for verified college students. Every user must complete college ID verification and photo verification before they can start matching.
+                            Your safety isn&apos;t negotiable—it&apos;s our foundation. We've built multiple layers of verification and protection to ensure qoupl remains a secure space exclusively for verified college students. Every user must complete college ID verification and photo verification before they can start matching.
                           </p>
                           <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                             Our AI-powered moderation system works 24/7 to detect and remove inappropriate content, fake profiles, and suspicious behavior. Combined with end-to-end encryption for all messages and comprehensive privacy controls, you can focus on building connections without worrying about your safety.
@@ -284,17 +284,17 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                             Great relationships start with great conversations. qoupl provides rich communication tools that go beyond simple text messages. Share photos from your day, send voice messages to add personality to your conversations, and use smart conversation starters to break the ice naturally.
                           </p>
                           <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                            Our messaging platform is designed to help you express yourself authentically and build deeper connections. With read receipts, typing indicators, and message reactions, you'll never wonder if someone is interested. All conversations are encrypted end-to-end, so your private messages stay private.
+                            Our messaging platform is designed to help you express yourself authentically and build deeper connections. With read receipts, typing indicators, and message reactions, you&apos;ll never wonder if someone is interested. All conversations are encrypted end-to-end, so your private messages stay private.
                           </p>
                         </>
                       )}
                       {activeCategory.title === 'Discovery' && (
                         <>
                           <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                            Discover people who share your interests, values, and lifestyle within your college community. Our discovery features help you find connections beyond your immediate social circle, whether you're looking for someone in your major, someone who shares your hobbies, or someone who aligns with your relationship goals.
+                            Discover people who share your interests, values, and lifestyle within your college community. Our discovery features help you find connections beyond your immediate social circle, whether you&apos;re looking for someone in your major, someone who shares your hobbies, or someone who aligns with your relationship goals.
                           </p>
                           <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                            With smart filters, location-based matching, and detailed profile insights, you can explore profiles that truly resonate with you. See who's online, discover mutual connections, and find people who are looking for the same type of relationship you are—all within your verified college community.
+                            With smart filters, location-based matching, and detailed profile insights, you can explore profiles that truly resonate with you. See who&apos;s online, discover mutual connections, and find people who are looking for the same type of relationship you are—all within your verified college community.
                           </p>
                         </>
                       )}
@@ -345,7 +345,7 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                         <h3 className="text-xl font-bold">AI-Powered Algorithm</h3>
                       </div>
                       <p className="text-base text-muted-foreground leading-relaxed mb-6">
-                        Our advanced machine learning system continuously analyzes your swiping patterns, conversation engagement, and profile interactions to understand your preferences. Unlike traditional dating apps that rely on simple filters, qoupl's AI algorithm learns from your behavior and gets smarter over time.
+                        Our advanced machine learning system continuously analyzes your swiping patterns, conversation engagement, and profile interactions to understand your preferences. Unlike traditional dating apps that rely on simple filters, qoupl&apos;s AI algorithm learns from your behavior and gets smarter over time.
                       </p>
                       
                       {/* List with Icons - Single Column */}
@@ -481,7 +481,7 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                         </div>
                       </div>
                       <p className="text-base text-muted-foreground leading-relaxed">
-                        The more you use qoupl, the smarter our matching becomes. Every interaction helps refine your compatibility scores, ensuring you're connected with people who truly align with what you're looking for in a relationship.
+                        The more you use qoupl, the smarter our matching becomes. Every interaction helps refine your compatibility scores, ensuring you&apos;re connected with people who truly align with what you&apos;re looking for in a relationship.
                       </p>
                     </div>
                   )}
@@ -533,10 +533,10 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                         <h3 className="text-xl font-bold">Smart Filters</h3>
                       </div>
                       <p className="text-base text-muted-foreground leading-relaxed mb-4">
-                        Find exactly what you're looking for with our comprehensive filtering system. Filter by major, interests, relationship goals, location, and more. Our smart discovery algorithm learns your preferences and surfaces profiles that match what you're seeking.
+                        Find exactly what you&apos;re looking for with our comprehensive filtering system. Filter by major, interests, relationship goals, location, and more. Our smart discovery algorithm learns your preferences and surfaces profiles that match what you&apos;re seeking.
                       </p>
                       <p className="text-base text-muted-foreground leading-relaxed mb-6">
-                        Whether you're looking for someone in your major, someone who shares your hobbies, or someone with similar relationship goals, our filters help you discover the right people efficiently. Save time by focusing on profiles that truly align with your preferences.
+                        Whether you&apos;re looking for someone in your major, someone who shares your hobbies, or someone with similar relationship goals, our filters help you discover the right people efficiently. Save time by focusing on profiles that truly align with your preferences.
                       </p>
                       <div className="grid md:grid-cols-2 gap-4 mt-6">
                         <div className="flex gap-3">
@@ -564,13 +564,13 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                           <Check className="h-5 w-5 text-[#662D91] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                           <div>
                             <h4 className="font-semibold text-base mb-1">Activity Status</h4>
-                            <p className="text-sm text-muted-foreground">See who's online and actively using the app</p>
+                            <p className="text-sm text-muted-foreground">See who&apos;s online and actively using the app</p>
                           </div>
                         </div>
                       </div>
                       <div className="mt-6 p-5 bg-muted dark:bg-[#161616] rounded-lg border border-border">
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                          <strong className="text-foreground">How it works:</strong> Set your preferences once, and our smart filters will automatically show you profiles that match. You can combine multiple filters to narrow down your search, or let our AI suggest matches based on your filter preferences. The more you use filters, the better our system understands what you're looking for.
+                          <strong className="text-foreground">How it works:</strong> Set your preferences once, and our smart filters will automatically show you profiles that match. You can combine multiple filters to narrow down your search, or let our AI suggest matches based on your filter preferences. The more you use filters, the better our system understands what you&apos;re looking for.
                         </p>
                       </div>
                     </div>
@@ -685,10 +685,10 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                         <h3 className="text-xl font-bold">Rich Messaging Features</h3>
                       </div>
                       <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                        Express yourself beyond words. Share photos from your day, send voice messages to add personality to your conversations, and use emojis and reactions to show how you're feeling. Our messaging platform is designed to help you build deeper connections through authentic communication.
+                        Express yourself beyond words. Share photos from your day, send voice messages to add personality to your conversations, and use emojis and reactions to show how you&apos;re feeling. Our messaging platform is designed to help you build deeper connections through authentic communication.
                       </p>
                       <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                        With read receipts and typing indicators, you'll always know when someone is engaged in the conversation. Message reactions let you respond quickly without typing, and our smart conversation starters help break the ice when you're not sure what to say.
+                        With read receipts and typing indicators, you&apos;ll always know when someone is engaged in the conversation. Message reactions let you respond quickly without typing, and our smart conversation starters help break the ice when you&apos;re not sure what to say.
                       </p>
                       <div className="grid md:grid-cols-2 gap-4 mt-6">
                         <div className="flex gap-3">
@@ -754,10 +754,10 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                         <h3 className="text-xl font-bold">Smart Discovery & Filters</h3>
                       </div>
                       <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                        Find exactly what you're looking for with our comprehensive filtering system. Filter by major, interests, relationship goals, location, and more. Our smart discovery algorithm learns your preferences and surfaces profiles that match what you're seeking.
+                        Find exactly what you&apos;re looking for with our comprehensive filtering system. Filter by major, interests, relationship goals, location, and more. Our smart discovery algorithm learns your preferences and surfaces profiles that match what you&apos;re seeking.
                       </p>
                       <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                        Whether you're looking for someone in your major, someone who shares your hobbies, or someone with similar relationship goals, our filters help you discover the right people efficiently. Save time by focusing on profiles that truly align with your preferences.
+                        Whether you&apos;re looking for someone in your major, someone who shares your hobbies, or someone with similar relationship goals, our filters help you discover the right people efficiently. Save time by focusing on profiles that truly align with your preferences.
                       </p>
                       <div className="grid md:grid-cols-2 gap-4 mt-6">
                         <div className="flex gap-3">
@@ -785,7 +785,7 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                           <Check className="h-5 w-5 text-[#662D91] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                           <div>
                             <h4 className="font-semibold text-sm mb-1">Activity Status</h4>
-                            <p className="text-xs text-muted-foreground">See who's online and actively using the app</p>
+                            <p className="text-xs text-muted-foreground">See who&apos;s online and actively using the app</p>
                           </div>
                         </div>
                       </div>
@@ -804,7 +804,7 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                       </p>
                       <div className="bg-muted rounded-lg p-4 border border-border mt-6">
                         <p className="text-xs text-muted-foreground leading-relaxed">
-                          <strong className="text-foreground">What you'll see:</strong> Compatibility percentage, shared interests and hobbies, mutual friends, relationship goals, lifestyle preferences, and detailed profile information. All designed to help you find people who truly align with what you're looking for.
+                          <strong className="text-foreground">What you&apos;ll see:</strong> Compatibility percentage, shared interests and hobbies, mutual friends, relationship goals, lifestyle preferences, and detailed profile information. All designed to help you find people who truly align with what you&apos;re looking for.
                         </p>
                       </div>
                     </div>
@@ -912,7 +912,7 @@ function FeaturesContent({ categories }: FeaturesClientProps) {
                 Join thousands of college students who are already on the qoupl waitlist. Be among the first to experience our revolutionary dating platform when we launch.
               </p>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                Early access members will get priority access to all features, exclusive updates about our launch, and the opportunity to help shape the future of college dating. Don't miss out on being part of the qoupl community from day one.
+                Early access members will get priority access to all features, exclusive updates about our launch, and the opportunity to help shape the future of college dating. Don&apos;t miss out on being part of the qoupl community from day one.
               </p>
             </div>
             <Button

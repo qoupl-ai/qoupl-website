@@ -103,14 +103,14 @@ export default function Contact() {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#662D91] bg-[#662D91]/10 border border-[#662D91]/20 mb-6"
             >
               <Heart className="h-3.5 w-3.5" strokeWidth={1.5} />
-              <span>We're Here to Help</span>
+              <span>We&apos;re Here to Help</span>
             </motion.div>
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
               Get in Touch
             </h1>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Have questions about qoupl? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+              Have questions about qoupl? We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
             </p>
           </motion.div>
         </div>
@@ -188,7 +188,7 @@ export default function Contact() {
                     </motion.div>
                     <h3 className="text-xl font-bold mb-2">Message Sent!</h3>
                     <p className="text-sm text-muted-foreground">
-                      Thank you for contacting us. We'll get back to you soon.
+                      Thank you for contacting us. We&apos;ll get back to you soon.
                     </p>
                   </div>
                 ) : (
@@ -289,9 +289,9 @@ export default function Contact() {
               className="space-y-6"
             >
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">Let's Connect</h2>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">Let&apos;s Connect</h2>
                 <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                  Whether you have questions about features, need technical support, or just want to say hello, we're here for you.
+                  Whether you have questions about features, need technical support, or just want to say hello, we&apos;re here for you.
                 </p>
               </div>
 

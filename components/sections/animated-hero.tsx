@@ -57,6 +57,7 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
 
   // Generate particle positions only on client side to avoid hydration mismatch
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
     const positions = Array.from({ length: 8 }, (_, i) => ({
       initialX: Math.random() * 100 - 50,
