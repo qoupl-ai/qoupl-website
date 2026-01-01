@@ -77,6 +77,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
             transition={{ duration: 0.6 }}
             className="max-w-3xl mx-auto text-center"
           >
+            {/* Hero content should come from database sections - keeping fallback for now */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}

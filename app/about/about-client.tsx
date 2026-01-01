@@ -79,18 +79,10 @@ export default function AboutClient({ data }: AboutClientProps) {
   const values = (valuesSection?.content as { values?: ValueItem[] })?.values || [];
   const timeline = (timelineSection?.content as { timeline?: TimelineItem[] })?.timeline || [];
   const missionVision: MissionVisionSection = (missionVisionSection?.content as MissionVisionSection) || {};
-        'We\'re committed to creating a safe, inclusive, and trustworthy platform where people can be themselves and find their perfect match.',
-      ],
-    },
-    vision: {
-      badge: 'Our Vision',
-      title: 'The Future of Dating',
-      content: [
-        'We envision a world where finding love is accessible, safe, and enjoyable for everyone, regardless of their background or location. Through continuous innovation and user-centric design, we\'re building the world\'s most trusted dating platform.',
-        'Our vision extends beyond just matching—we want to foster lasting relationships that enrich lives and create countless success stories.',
-      ],
-    },
-  };
+  const whyChooseUsSection = data.sections.find(s => s.type === 'why-choose-us');
+  const whyChooseUs: WhyChooseUsSection = (whyChooseUsSection?.content as WhyChooseUsSection) || {};
+  const ctaSection = data.sections.find(s => s.type === 'cta');
+  const cta: CTASection = (ctaSection?.content as CTASection) || {};
 
 
   // Process values to include icon components
@@ -451,162 +443,151 @@ export default function AboutClient({ data }: AboutClientProps) {
       </section>
 
       {/* Why Choose Us - Modern Clean Design */}
-      <section className="py-16 md:py-20 bg-background relative overflow-hidden">
-
-        <div className="container mx-auto px-4 max-w-7xl relative">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12 md:mb-16"
-          >
+      {whyChooseUs.features && whyChooseUs.features.length > 0 && (
+        <section className="py-16 md:py-20 bg-background relative overflow-hidden">
+          <div className="container mx-auto px-4 max-w-7xl relative">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+              className="text-center mb-12 md:mb-16"
             >
-              <Zap className="h-3.5 w-3.5" strokeWidth={1.5} />
-              <span className="text-xs font-medium">What Makes Us Different</span>
+              {whyChooseUs.badge && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+                >
+                  <Zap className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  <span className="text-xs font-medium">{whyChooseUs.badge}</span>
+                </motion.div>
+              )}
+
+              {whyChooseUs.title && (
+                <h2 className="text-3xl md:text-4xl font-bold mb-3">
+                  {whyChooseUs.title}
+                </h2>
+              )}
             </motion.div>
 
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
-              Why Choose{" "}
-              <span className="text-[#662D91]">
-                qoupl?
-              </span>
-            </h2>
-          </motion.div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {whyChooseUs.features.map((feature, index) => {
+                const Icon = feature.icon ? iconMap[feature.icon] || Heart : Heart;
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.08, duration: 0.5 }}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="group relative"
+                  >
+                    {/* Card */}
+                    <div className="relative h-full bg-card border border-border rounded-lg p-5 hover:border-[#662D91] transition-all duration-300">
+                      <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
+                        <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
+                      </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              {
-                title: "AI-Powered Matching",
-                description: "Our advanced algorithm learns your preferences and suggests highly compatible matches.",
-                icon: Sparkles
-              },
-              {
-                title: "Verified Profiles",
-                description: "Photo verification and ID checks ensure you're talking to real people.",
-                icon: Shield
-              },
-              {
-                title: "Safe & Secure",
-                description: "End-to-end encryption and 24/7 moderation keep your data and conversations private.",
-                icon: Shield
-              },
-              {
-                title: "Inclusive Platform",
-                description: "Everyone is welcome. We celebrate diversity and promote inclusivity.",
-                icon: Users
-              },
-              {
-                title: "Smart Features",
-                description: "Smart conversation starters, messaging tools, and date planning features make connecting easy.",
-                icon: Zap
-              },
-              {
-                title: "Love Stories",
-                description: "Join thousands of couples who found love through qoupl.",
-                icon: Heart
-              }
-            ].map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08, duration: 0.5 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="group relative"
-                >
-                  {/* Card */}
-                  <div className="relative h-full bg-card border border-border rounded-lg p-5 hover:border-[#662D91] transition-all duration-300">
-                    <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
-                      <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
+                      <h3 className="text-base font-bold mb-2 group-hover:text-[#662D91] transition-colors duration-300">
+                        {feature.title}
+                      </h3>
+
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {feature.description}
+                      </p>
                     </div>
-
-                    <h3 className="text-base font-bold mb-2 group-hover:text-[#662D91] transition-colors duration-300">
-                      {feature.title}
-                    </h3>
-
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* CTA Section - Modern Clean Design */}
-      <section className="py-16 md:py-20 relative overflow-hidden bg-[#662D91]">
-
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto"
-          >
+      {(cta.badge || cta.title || cta.description || cta.buttons) && (
+        <section className="py-16 md:py-20 relative overflow-hidden bg-[#662D91]">
+          <div className="container mx-auto px-4 text-center relative z-10">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/20 border border-white/30 text-white mb-6"
+              transition={{ duration: 0.8 }}
+              className="max-w-4xl mx-auto"
             >
-              <Heart className="h-3.5 w-3.5" strokeWidth={1.5} />
-              <span className="text-xs font-medium">Join Our Community</span>
-            </motion.div>
-
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
-              Ready to Find Your Perfect Match?
-            </h2>
-
-            <p className="text-base md:text-lg text-white/90 mb-8 leading-relaxed max-w-2xl mx-auto">
-              Be part of the next generation of dating and find meaningful connections
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <motion.div
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Button
-                  size="lg"
-                  onClick={() => setIsWaitlistModalOpen(true)}
-                  className="bg-white text-primary hover:bg-white/90 hover:text-primary font-semibold shadow-2xl hover:shadow-white/20"
-                >
-                  <span className="flex items-center gap-2">
-                    Join the Waitlist
-                    <Heart className="h-4 w-4" />
-                  </span>
-                </Button>
-              </motion.div>
-
-              <Link href="/community-guidelines">
+              {cta.badge && (
                 <motion.div
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/20 border border-white/30 text-white mb-6"
                 >
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-semibold"
-                  >
-                    Learn More
-                  </Button>
+                  <Heart className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  <span className="text-xs font-medium">{cta.badge}</span>
                 </motion.div>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+              )}
+
+              {cta.title && (
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
+                  {cta.title}
+                </h2>
+              )}
+
+              {cta.description && (
+                <p className="text-base md:text-lg text-white/90 mb-8 leading-relaxed max-w-2xl mx-auto">
+                  {cta.description}
+                </p>
+              )}
+
+              {cta.buttons && cta.buttons.length > 0 && (
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  {cta.buttons.map((button, index) => {
+                    if (button.type === 'waitlist') {
+                      return (
+                        <motion.div
+                          key={index}
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <Button
+                            size="lg"
+                            onClick={() => setIsWaitlistModalOpen(true)}
+                            className="bg-white text-primary hover:bg-white/90 hover:text-primary font-semibold shadow-2xl hover:shadow-white/20"
+                          >
+                            <span className="flex items-center gap-2">
+                              {button.text}
+                              <Heart className="h-4 w-4" />
+                            </span>
+                          </Button>
+                        </motion.div>
+                      );
+                    } else {
+                      return (
+                        <Link key={index} href={button.href || '#'}>
+                          <motion.div
+                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <Button
+                              size="lg"
+                              variant="outline"
+                              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-semibold"
+                            >
+                              {button.text}
+                            </Button>
+                          </motion.div>
+                        </Link>
+                      );
+                    }
+                  })}
+                </div>
+              )}
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       <WaitlistModal
         isOpen={isWaitlistModalOpen}

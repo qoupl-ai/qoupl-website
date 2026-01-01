@@ -8,7 +8,30 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-export default function WaitlistPageClient() {
+interface WaitlistPageData {
+  sections: Array<{
+    type: string;
+    content: Record<string, any>;
+  }>;
+}
+
+interface WaitlistPageClientProps {
+  data?: WaitlistPageData;
+}
+
+export default function WaitlistPageClient({ data }: WaitlistPageClientProps = { data: { sections: [] } }) {
+  // Extract sections from data
+  const heroSection = data?.sections?.find(s => s.type === 'hero');
+  const benefitsSection = data?.sections?.find(s => s.type === 'benefits');
+  const whyJoinSection = data?.sections?.find(s => s.type === 'why-join');
+  const whatToExpectSection = data?.sections?.find(s => s.type === 'what-to-expect');
+  const successSection = data?.sections?.find(s => s.type === 'success-message');
+
+  const hero = heroSection?.content || {};
+  const benefits = benefitsSection?.content?.items || [];
+  const whyJoin = whyJoinSection?.content || {};
+  const whatToExpect = whatToExpectSection?.content?.steps || [];
+  const successContent = successSection?.content || {};
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -108,50 +131,42 @@ export default function WaitlistPageClient() {
             </motion.div>
             
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight text-foreground">
-              Join the Waitlist
+              {hero.title || "Join the Waitlist"}
             </h1>
             
             <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Be among the first to find your perfect match on qoupl. Get exclusive early access, special perks, and be part of a community built exclusively for college students.
+              {hero.description || "Be among the first to find your perfect match on qoupl. Get exclusive early access, special perks, and be part of a community built exclusively for college students."}
             </p>
 
             {/* Benefits Grid */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8"
-            >
-              <div className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
-                <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <Zap className="h-5 w-5 text-[#662D91]" />
-                </div>
-                <div className="text-left">
-                  <h3 className="font-semibold text-sm mb-1">Early Access</h3>
-                  <p className="text-xs text-muted-foreground">Be among the first to experience qoupl when we launch</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
-                <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <Star className="h-5 w-5 text-[#662D91]" />
-                </div>
-                <div className="text-left">
-                  <h3 className="font-semibold text-sm mb-1">Exclusive Perks</h3>
-                  <p className="text-xs text-muted-foreground">Get special benefits and priority features</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
-                <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <Shield className="h-5 w-5 text-[#662D91]" />
-                </div>
-                <div className="text-left">
-                  <h3 className="font-semibold text-sm mb-1">Verified Community</h3>
-                  <p className="text-xs text-muted-foreground">Connect with verified college students only</p>
-                </div>
-              </div>
-            </motion.div>
+            {benefits.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8"
+              >
+                {benefits.map((benefit: any, index: number) => {
+                  const IconMap: Record<string, any> = {
+                    'zap': Zap,
+                    'star': Star,
+                    'shield': Shield,
+                  };
+                  const Icon = IconMap[benefit.icon?.toLowerCase()] || Zap;
+                  return (
+                    <div key={index} className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
+                      <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="h-5 w-5 text-[#662D91]" />
+                      </div>
+                      <div className="text-left">
+                        <h3 className="font-semibold text-sm mb-1">{benefit.title}</h3>
+                        <p className="text-xs text-muted-foreground">{benefit.description}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </section>
@@ -160,94 +175,58 @@ export default function WaitlistPageClient() {
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
-                Why Join qoupl?
-              </h2>
-              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
-                qoupl is the only dating app built exclusively for college students. We understand the unique challenges and opportunities of dating in college, and we've designed every feature with your needs in mind.
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {whyJoin.title && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="flex gap-4 p-6 bg-card border border-border rounded-xl"
+                transition={{ duration: 0.5 }}
+                className="text-center mb-12"
               >
-                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <SparklesIcon className="h-6 w-6 text-[#662D91]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-base mb-2">AI-Powered Matching</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Our advanced algorithm learns your preferences and suggests better matches over time. Find people who truly align with your values and interests.
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+                  {whyJoin.title}
+                </h2>
+                {whyJoin.description && (
+                  <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+                    {whyJoin.description}
                   </p>
-                </div>
+                )}
               </motion.div>
+            )}
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex gap-4 p-6 bg-card border border-border rounded-xl"
-              >
-                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <Lock className="h-6 w-6 text-[#662D91]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-base mb-2">Verified & Safe</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Mandatory college ID and photo verification ensures everyone is who they say they are. Your safety and privacy are our top priorities.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex gap-4 p-6 bg-card border border-border rounded-xl"
-              >
-                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <MessageCircle className="h-6 w-6 text-[#662D91]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-base mb-2">Rich Communication</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Express yourself with photos, voice messages, and more. Build deeper connections through authentic communication.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="flex gap-4 p-6 bg-card border border-border rounded-xl"
-              >
-                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="h-6 w-6 text-[#662D91]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-base mb-2">Meaningful Connections</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Focus on building real relationships, not just casual swiping. Quality over quantity in a community of like-minded college students.
-                  </p>
-                </div>
-              </motion.div>
-            </div>
+            {whyJoin.features && whyJoin.features.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {whyJoin.features.map((feature: any, index: number) => {
+                  const IconMap: Record<string, any> = {
+                    'sparkles': SparklesIcon,
+                    'lock': Lock,
+                    'message-circle': MessageCircle,
+                    'trending-up': TrendingUp,
+                  };
+                  const Icon = IconMap[feature.icon?.toLowerCase()] || SparklesIcon;
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: (index + 1) * 0.1 }}
+                      className="flex gap-4 p-6 bg-card border border-border rounded-xl"
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="h-6 w-6 text-[#662D91]" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-base mb-2">{feature.title}</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -256,23 +235,27 @@ export default function WaitlistPageClient() {
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-center mb-8"
-            >
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
-                What to Expect
-              </h2>
-              <p className="text-base text-muted-foreground">
-                Here's what happens after you join the waitlist
-              </p>
-            </motion.div>
+            {whatToExpectSection?.content?.title && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="text-center mb-8"
+              >
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+                  {whatToExpectSection.content.title}
+                </h2>
+                {whatToExpectSection.content.description && (
+                  <p className="text-base text-muted-foreground">
+                    {whatToExpectSection.content.description}
+                  </p>
+                )}
+              </motion.div>
+            )}
 
             <div className="space-y-6">
-              {[
+              {(whatToExpect.length > 0 ? whatToExpect : [
                 {
                   step: "1",
                   title: "Join the Waitlist",
@@ -291,9 +274,9 @@ export default function WaitlistPageClient() {
                 {
                   step: "4",
                   title: "Early Access",
-                  description: "When we launch, you&apos;ll be among the first to access qoupl with special perks and priority features.",
+                  description: "When we launch, you'll be among the first to access qoupl with special perks and priority features.",
                 },
-              ].map((item, idx) => (
+              ]).map((item: any, idx: number) => (
                 <motion.div
                   key={idx}
                   initial={{ opacity: 0, x: -20 }}
@@ -303,7 +286,7 @@ export default function WaitlistPageClient() {
                   className="flex gap-4 items-start"
                 >
                   <div className="w-8 h-8 rounded-full bg-[#662D91] flex items-center justify-center flex-shrink-0">
-                    <span className="text-sm font-bold text-white">{item.step}</span>
+                    <span className="text-sm font-bold text-white">{item.step || (idx + 1).toString()}</span>
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-base mb-1">{item.title}</h3>

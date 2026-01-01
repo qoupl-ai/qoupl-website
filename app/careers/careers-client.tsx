@@ -96,15 +96,17 @@ export default function CareersClient({ data }: CareersClientProps) {
             transition={{ duration: 0.6 }}
             className="max-w-3xl mx-auto text-center"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#662D91] bg-[#662D91]/10 border border-[#662D91]/20 mb-6"
-            >
-              <Rocket className="h-3.5 w-3.5" strokeWidth={1.5} />
-              <span>Join Our Team</span>
-            </motion.div>
+            {heroSection?.content?.badge && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#662D91] bg-[#662D91]/10 border border-[#662D91]/20 mb-6"
+              >
+                <Rocket className="h-3.5 w-3.5" strokeWidth={1.5} />
+                <span>{heroSection.content.badge}</span>
+              </motion.div>
+            )}
 
             {heroTitle && (
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
@@ -147,30 +149,35 @@ export default function CareersClient({ data }: CareersClientProps) {
               </p>
             )}
 
-            <div className="bg-muted rounded-xl p-6 mb-6">
-              <h3 className="text-lg font-bold mb-3">Be in Touch</h3>
-              <p className="text-sm text-muted-foreground mb-6">
-                Send us your resume and a note about why you&apos;d like to join qoupl.
-                We&apos;ll reach out when positions become available.
+            {comingSoonSection?.content?.contactTitle && (
+              <div className="bg-muted rounded-xl p-6 mb-6">
+                <h3 className="text-lg font-bold mb-3">{comingSoonSection.content.contactTitle}</h3>
+                {comingSoonSection.content.contactDescription && (
+                  <p className="text-sm text-muted-foreground mb-6">
+                    {comingSoonSection.content.contactDescription}
+                  </p>
+                )}
+
+                {comingSoonEmail && (
+                  <Button
+                    asChild
+                    size="lg"
+                    className="w-full sm:w-auto"
+                  >
+                    <a href={`mailto:${comingSoonEmail}`}>
+                      <Mail className="h-4 w-4 mr-2" strokeWidth={1.5} />
+                      {comingSoonEmail}
+                    </a>
+                  </Button>
+                )}
+              </div>
+            )}
+
+            {comingSoonSection?.content?.footerText && (
+              <p className="text-xs text-muted-foreground">
+                {comingSoonSection.content.footerText}
               </p>
-
-              {comingSoonEmail && (
-                <Button
-                  asChild
-                  size="lg"
-                  className="w-full sm:w-auto"
-                >
-                  <a href={`mailto:${comingSoonEmail}`}>
-                    <Mail className="h-4 w-4 mr-2" strokeWidth={1.5} />
-                    {comingSoonEmail}
-                  </a>
-                </Button>
-              )}
-            </div>
-
-            <p className="text-xs text-muted-foreground">
-              We&apos;re an equal opportunity employer and value diversity at our company.
-            </p>
+            )}
           </motion.div>
         </div>
       </section>
@@ -184,12 +191,16 @@ export default function CareersClient({ data }: CareersClientProps) {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              What We Value
-            </h2>
-            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
-              These principles guide how we work and build together
-            </p>
+            {valuesSection?.content?.title && (
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                {valuesSection.content.title}
+              </h2>
+            )}
+            {valuesSection?.content?.description && (
+              <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+                {valuesSection.content.description}
+              </p>
+            )}
           </motion.div>
 
           {values.length > 0 && (
@@ -236,9 +247,16 @@ export default function CareersClient({ data }: CareersClientProps) {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Join qoupl?
-            </h2>
+            {whyJoinSection?.content?.title && (
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                {whyJoinSection.content.title}
+              </h2>
+            )}
+            {whyJoinSection?.content?.description && (
+              <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+                {whyJoinSection.content.description}
+              </p>
+            )}
           </motion.div>
 
           {processedWhyJoin.length > 0 && (

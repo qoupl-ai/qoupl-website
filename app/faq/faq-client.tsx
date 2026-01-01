@@ -17,6 +17,17 @@ interface FAQCategory {
 
 interface FAQClientProps {
   faqs: FAQCategory[];
+  pageContent?: {
+    title?: string;
+    description?: string;
+    cta?: {
+      title?: string;
+      description?: string;
+      email?: string;
+      emailText?: string;
+      contactText?: string;
+    };
+  };
 }
 
 function FAQItemComponent({ question, answer }: { question: string; answer: string }) {
@@ -46,7 +57,7 @@ function FAQItemComponent({ question, answer }: { question: string; answer: stri
   );
 }
 
-export default function FAQClient({ faqs }: FAQClientProps) {
+export default function FAQClient({ faqs, pageContent }: FAQClientProps) {
   if (!faqs || faqs.length === 0) {
     return (
       <div className="min-h-screen bg-background">
@@ -65,11 +76,10 @@ export default function FAQClient({ faqs }: FAQClientProps) {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
-            Frequently Asked Questions
+            {pageContent?.title || "Frequently Asked Questions"}
           </h1>
           <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
-            Find answers to common questions about qoupl. Can&apos;t find what you&apos;re
-            looking for? Contact our support team.
+            {pageContent?.description || "Find answers to common questions about qoupl. Can't find what you're looking for? Contact our support team."}
           </p>
         </div>
 
@@ -102,35 +112,43 @@ export default function FAQClient({ faqs }: FAQClientProps) {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-muted mb-4">
-            <HelpCircle className="h-6 w-6 text-muted-foreground" strokeWidth={1.5} />
+        {pageContent?.cta && (
+          <div className="mt-12 text-center">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-muted mb-4">
+              <HelpCircle className="h-6 w-6 text-muted-foreground" strokeWidth={1.5} />
+            </div>
+            {pageContent.cta.title && (
+              <h3 className="text-lg font-bold mb-2">{pageContent.cta.title}</h3>
+            )}
+            {pageContent.cta.description && (
+              <p className="text-sm text-muted-foreground mb-6">
+                {pageContent.cta.description}
+              </p>
+            )}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              {pageContent.cta.email && (
+                <Button
+                  size="lg"
+                  asChild
+                  className="bg-[#662D91] hover:bg-[#662D91]/90 text-white"
+                >
+                  <a href={`mailto:${pageContent.cta.email}`}>
+                    {pageContent.cta.emailText || "Email Support"}
+                  </a>
+                </Button>
+              )}
+              <Button
+                size="lg"
+                variant="outline"
+                asChild
+              >
+                <Link href="/contact">
+                  {pageContent.cta.contactText || "Contact Us"}
+                </Link>
+              </Button>
+            </div>
           </div>
-          <h3 className="text-lg font-bold mb-2">Still have questions?</h3>
-          <p className="text-sm text-muted-foreground mb-6">
-            Our support team is here to help you
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              size="lg"
-              asChild
-              className="bg-[#662D91] hover:bg-[#662D91]/90 text-white"
-            >
-              <a href="mailto:support@qoupl.ai">
-                Email Support
-              </a>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              asChild
-            >
-              <Link href="/contact">
-                Contact Us
-              </Link>
-            </Button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

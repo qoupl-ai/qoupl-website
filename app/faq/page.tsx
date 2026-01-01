@@ -42,5 +42,9 @@ export default async function FAQ() {
   // Fallback to empty array if no FAQs found
   const faqData = faqs.length > 0 ? faqs : []
 
-  return <FAQClient faqs={faqData} />
+  // Get hero/content section for page title and CTA
+  const heroSection = sections.find(s => s.component_type === 'hero' || s.component_type === 'content')
+  const pageContent = heroSection?.content || {}
+
+  return <FAQClient faqs={faqData} pageContent={pageContent} />
 }
