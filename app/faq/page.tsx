@@ -9,6 +9,12 @@ import FAQClient from './faq-client'
 // Enable ISR with 3-hour revalidation
 export const revalidate = 10800;
 
+interface DatabaseSection {
+  component_type?: string
+  section_type?: string
+  content?: Record<string, unknown>
+}
+
 // Category ID to display name mapping
 const categoryNameMap: Record<string, string> = {
   'getting-started': 'Getting Started',

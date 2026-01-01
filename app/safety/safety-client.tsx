@@ -1,14 +1,20 @@
 "use client";
 
-import { Shield, AlertTriangle } from "lucide-react";
+import { Shield } from "lucide-react";
 import { LegalPageLayout, LegalSection } from "@/components/legal-page-layout";
+
+interface LegalSectionData {
+  heading: string
+  content?: string
+  items?: string[]
+}
 
 interface SafetyClientProps {
   content: {
-    title?: string;
-    lastUpdated?: string;
-    sections?: any[];
-  };
+    title?: string
+    lastUpdated?: string
+    sections?: LegalSectionData[]
+  }
 }
 
 export default function SafetyClient({ content }: SafetyClientProps) {

@@ -9,6 +9,12 @@ import FeaturesClient from './features-client'
 // Enable ISR with 3-hour revalidation
 export const revalidate = 10800;
 
+interface DatabaseSection {
+  component_type?: string
+  section_type?: string
+  content?: Record<string, unknown>
+}
+
 export default async function Features() {
   // Fetch feature sections from database
   const sections = await getPageSections('features')
@@ -16,7 +22,7 @@ export default async function Features() {
   // Find feature categories section (check both column names)
   const featuresSection = sections.find(s => 
     (s.component_type === 'feature-category') || 
-    ((s as any).section_type === 'feature-category')
+    ((s as DatabaseSection).section_type === 'feature-category')
   )
   const categories = featuresSection?.content?.features || []
 

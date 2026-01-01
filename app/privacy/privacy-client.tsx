@@ -3,12 +3,18 @@
 import { FileText } from "lucide-react";
 import { LegalPageLayout, LegalSection } from "@/components/legal-page-layout";
 
+interface LegalSectionData {
+  heading: string
+  content?: string
+  items?: string[]
+}
+
 interface PrivacyClientProps {
   content: {
-    title?: string;
-    lastUpdated?: string;
-    sections?: any[];
-  };
+    title?: string
+    lastUpdated?: string
+    sections?: LegalSectionData[]
+  }
 }
 
 export default function PrivacyClient({ content }: PrivacyClientProps) {

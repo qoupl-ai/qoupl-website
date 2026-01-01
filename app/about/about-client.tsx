@@ -53,13 +53,15 @@ interface CTASection {
   buttons?: Array<{ text: string; type: string; href?: string }>;
 }
 
+type SectionContent = HeroSection | MissionVisionSection | ValueItem[] | WhyChooseUsSection | CTASection | TimelineItem[] | Record<string, unknown>
+
 interface AboutClientProps {
   data: {
     sections: Array<{
-      type: string;
-      content: any;
-    }>;
-  };
+      type: string
+      content: SectionContent
+    }>
+  }
 }
 
 export default function AboutClient({ data }: AboutClientProps) {
@@ -76,7 +78,7 @@ export default function AboutClient({ data }: AboutClientProps) {
   const ctaSection = data.sections.find(s => s.type === 'cta');
 
   // Default fallbacks
-  const hero: HeroSection = heroSection?.content || {
+  const hero: HeroSection = (heroSection?.content as HeroSection) || {
     badge: 'Our Story',
     title: 'Building the Future of Love',
     description:
@@ -89,10 +91,10 @@ export default function AboutClient({ data }: AboutClientProps) {
     ],
   };
 
-  const values = valuesSection?.content?.values || [];
-  const timeline = timelineSection?.content?.timeline || [];
+  const values = (valuesSection?.content as { values?: ValueItem[] })?.values || [];
+  const timeline = (timelineSection?.content as { timeline?: TimelineItem[] })?.timeline || [];
 
-  const missionVision: MissionVisionSection = missionVisionSection?.content || {
+  const missionVision: MissionVisionSection = (missionVisionSection?.content as MissionVisionSection) || {
     mission: {
       badge: 'Our Mission',
       title: 'Bringing People Together',
@@ -111,28 +113,6 @@ export default function AboutClient({ data }: AboutClientProps) {
     },
   };
 
-  const whyChooseUs: WhyChooseUsSection = whyChooseUsSection?.content || {
-    badge: 'What Makes Us Different',
-    title: 'Why Choose qoupl?',
-    features: [
-      { icon: 'Sparkles', title: 'AI-Powered Matching', description: 'Our advanced algorithm learns your preferences and suggests highly compatible matches.' },
-      { icon: 'Shield', title: 'Verified Profiles', description: 'Photo verification and ID checks ensure you\'re talking to real people.' },
-      { icon: 'Shield', title: 'Safe & Secure', description: 'End-to-end encryption and 24/7 moderation keep your data and conversations private.' },
-      { icon: 'Users', title: 'Inclusive Platform', description: 'Everyone is welcome. We celebrate diversity and promote inclusivity.' },
-      { icon: 'Zap', title: 'Smart Features', description: 'Smart conversation starters, messaging tools, and date planning features make connecting easy.' },
-      { icon: 'Heart', title: 'Love Stories', description: 'Join thousands of couples who found love through qoupl.' },
-    ],
-  };
-
-  const cta: CTASection = ctaSection?.content || {
-    badge: 'Join Our Community',
-    title: 'Ready to Find Your Perfect Match?',
-    description: 'Be part of the next generation of dating and find meaningful connections',
-    buttons: [
-      { text: 'Join the Waitlist', type: 'primary' },
-      { text: 'Learn More', type: 'outline', href: '/community-guidelines' },
-    ],
-  };
 
   // Process values to include icon components
   type ProcessedValue = {

@@ -2,7 +2,6 @@
 
 import { Heart, Shield, Zap, MessageCircle, Sparkles, Check, Lock, Eye, Star, Filter, Bell, Users, MapPin, Camera, Phone, ArrowRight, TrendingUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { useState, useEffect } from "react";
 import WaitlistModal from "@/components/waitlist-modal";
@@ -34,9 +33,7 @@ interface FeaturesClientProps {
 }
 
 export default function FeaturesClient({ categories }: FeaturesClientProps) {
-  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>("");
-
+  // Early return BEFORE hooks
   if (!categories || categories.length === 0) {
     return (
       <div className="min-h-screen bg-background">
@@ -48,6 +45,15 @@ export default function FeaturesClient({ categories }: FeaturesClientProps) {
       </div>
     );
   }
+
+  // Now render the main content component
+  return <FeaturesContent categories={categories} />;
+}
+
+// Extracted component to fix Rules of Hooks violation
+function FeaturesContent({ categories }: FeaturesClientProps) {
+  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("");
 
   // Process categories from database
   const featureCategories = categories.map(cat => {
@@ -100,18 +106,19 @@ export default function FeaturesClient({ categories }: FeaturesClientProps) {
     };
   });
 
-  // Set initial active tab to first category if not set
+  // Set initial active tab to first category - use useMemo to derive initial state
+  const initialTab = featureCategories.length > 0 ? featureCategories[0].id || "" : "";
+
+  // Initialize activeTab only once when component mounts
   useEffect(() => {
-    if (featureCategories.length > 0) {
-      const firstCategoryId = featureCategories[0].id || "";
-      if (!activeTab || activeTab === "") {
-        setActiveTab(firstCategoryId);
-        if (process.env.NODE_ENV === 'development') {
-          console.log('[FeaturesClient] Setting initial tab to:', firstCategoryId, featureCategories[0].title);
-        }
+    if (!activeTab || activeTab === "") {
+      setActiveTab(initialTab);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[FeaturesClient] Setting initial tab to:', initialTab, featureCategories[0]?.title);
       }
     }
-  }, [featureCategories]); // Remove activeTab from dependencies to avoid loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run on mount
 
   const activeCategory = featureCategories.find(cat => cat.id === activeTab) || featureCategories[0] || null;
 
@@ -186,14 +193,15 @@ export default function FeaturesClient({ categories }: FeaturesClientProps) {
     return false;
   };
 
-  // Debug logging in development
+  // Debug logging in development - run only when activeCategory changes
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       console.log('[FeaturesClient] Active Category:', activeCategory?.title, 'ID:', activeCategory?.id);
       console.log('[FeaturesClient] Is Smart Matching:', isSmartMatching(activeCategory));
       console.log('[FeaturesClient] All Categories:', featureCategories.map(c => ({ title: c.title, id: c.id })));
     }
-  }, [activeCategory, featureCategories]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCategory]); // Only log when active category changes
 
   return (
     <div className="min-h-screen bg-background">
