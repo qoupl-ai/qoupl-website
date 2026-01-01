@@ -5,10 +5,23 @@ import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { Heart } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
+
+interface LoveStory {
+  image: string;
+  couple: string;
+  story: string;
+}
 
 interface LoveStoryProps {
-  data: Record<string, any>;
+  data: {
+    title?: string;
+    subtitle?: string;
+    stories?: LoveStory[];
+    content?: {
+      stories?: LoveStory[];
+    };
+  };
 }
 
 // Fallback love stories with Indian names - mix of letters from boys and girls
@@ -59,45 +72,47 @@ Vikram`,
 
 export default function LoveStory({ data = {} }: LoveStoryProps) {
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  // Use lazy initializer to avoid calling Math.random during render
+  const [heartAnimations] = useState<Array<{ duration: number; rotation: number }>>(() => {
+    return Array.from({ length: 12 }).map(() => ({
+      duration: 3 + Math.random() * 2,
+      rotation: -15 + Math.random() * 30,
+    }));
+  });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  const [mounted] = useState(() => true);
   const isDark = mounted && resolvedTheme === 'dark';
-
-  // Debug: Log received data
-  if (process.env.NODE_ENV === 'development') {
-    console.log('[LoveStory] Received data:', data)
-    console.log('[LoveStory] Stories from data:', data?.stories || data?.content?.stories)
-  }
 
   // Process stories from data or use defaults
   // Check both data.stories and data.content.stories for flexibility
   const storiesData = data?.stories || data?.content?.stories;
-  const stories = storiesData?.map((item: any) => {
-    let imageUrl = item.image;
-    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-      if (imageUrl.includes('/')) {
-        const [bucket, ...rest] = imageUrl.split('/');
-        imageUrl = getStorageUrl(bucket, rest.join('/'));
-      } else {
-        imageUrl = getStorageUrl("love-story", imageUrl);
-      }
+  const stories: LoveStory[] = useMemo(() => {
+    if (storiesData && Array.isArray(storiesData) && storiesData.length > 0) {
+      return storiesData.map((item: LoveStory) => {
+        let imageUrl = item.image;
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+          if (imageUrl.includes('/')) {
+            const [bucket, ...rest] = imageUrl.split('/');
+            imageUrl = getStorageUrl(bucket, rest.join('/'));
+          } else {
+            imageUrl = getStorageUrl("love-story", imageUrl);
+          }
+        }
+        return {
+          image: imageUrl || getStorageUrl("love-story", "qoupl_love_story_1.jpg"),
+          couple: item.couple || "",
+          story: item.story || "",
+        };
+      });
     }
-    return {
-      image: imageUrl || getStorageUrl("love-story", "qoupl_love_story_1.jpg"),
-      couple: item.couple || "",
-      story: item.story || "",
-    };
-  }) || defaultLoveStories;
+    return defaultLoveStories;
+  }, [storiesData]);
 
   return (
     <section className="min-h-[calc(100vh-3.5rem)] flex items-center relative overflow-hidden py-10 md:py-14">
       {/* Decorative Hearts Background */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.08] dark:opacity-[0.05] z-0">
-        {Array.from({ length: 12 }).map((_, i) => (
+        {heartAnimations.map((anim, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, scale: 0 }}
@@ -106,7 +121,7 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
               scale: [0, 1, 0.8],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: anim.duration,
               delay: i * 0.3,
               repeat: Infinity,
               repeatType: "reverse",
@@ -115,7 +130,7 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
             style={{
               left: `${10 + (i * 7.5)}%`,
               top: `${15 + (i % 3) * 25}%`,
-              transform: `rotate(${-15 + Math.random() * 30}deg)`,
+              transform: `rotate(${anim.rotation}deg)`,
             }}
           >
             <Heart className="h-12 w-12 md:h-16 md:w-16 text-primary fill-primary" strokeWidth={0.5} />
@@ -144,20 +159,16 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
           </motion.div>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
-            Love{" "}
-            <span className="text-[#662D91] dark:text-[#9333ea]">
-              Letters
-            </span>{" "}
-            from Our Couples
+            {data?.title || "Love Letters from Our Couples"}
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Read heartfelt stories from college students who found their perfect match on qoupl
+            {data?.subtitle || "Read heartfelt stories from college students who found their perfect match on qoupl"}
           </p>
         </motion.div>
 
         {/* Love Stories Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 max-w-7xl mx-auto">
-          {stories.map((story: any, index: number) => (
+          {stories.map((story: LoveStory, index: number) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}

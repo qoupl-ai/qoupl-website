@@ -2,9 +2,9 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 /**
- * Supabase Auth Middleware
+ * Supabase Auth Proxy
  *
- * This middleware:
+ * This proxy:
  * 1. Refreshes auth tokens automatically
  * 2. Maintains user sessions across requests
  * 3. Protects routes that require authentication
@@ -12,7 +12,7 @@ import { NextResponse, type NextRequest } from 'next/server'
  * IMPORTANT: This runs on every request before reaching your pages/APIs
  */
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // OPTIMIZATION: Skip auth check for public website routes
   // This is a public website - no authentication needed
   // Only refresh auth session cookies if they exist (for potential future features)
@@ -73,3 +73,4 @@ export const config = {
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
+
