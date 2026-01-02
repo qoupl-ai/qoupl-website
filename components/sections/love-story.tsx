@@ -89,20 +89,20 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
   const stories: LoveStory[] = useMemo(() => {
     if (storiesData && Array.isArray(storiesData) && storiesData.length > 0) {
       return storiesData.map((item: LoveStory) => {
-        let imageUrl = item.image;
-        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-          if (imageUrl.includes('/')) {
-            const [bucket, ...rest] = imageUrl.split('/');
-            imageUrl = getStorageUrl(bucket, rest.join('/'));
-          } else {
-            imageUrl = getStorageUrl("love-story", imageUrl);
-          }
-        }
-        return {
-          image: imageUrl || getStorageUrl("love-story", "qoupl_love_story_1.jpg"),
-          couple: item.couple || "",
-          story: item.story || "",
-        };
+    let imageUrl = item.image;
+    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+      if (imageUrl.includes('/')) {
+        const [bucket, ...rest] = imageUrl.split('/');
+        imageUrl = getStorageUrl(bucket, rest.join('/'));
+      } else {
+        imageUrl = getStorageUrl("love-story", imageUrl);
+      }
+    }
+    return {
+      image: imageUrl || getStorageUrl("love-story", "qoupl_love_story_1.jpg"),
+      couple: item.couple || "",
+      story: item.story || "",
+    };
       });
     }
     return defaultLoveStories;

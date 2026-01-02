@@ -444,149 +444,149 @@ export default function AboutClient({ data }: AboutClientProps) {
 
       {/* Why Choose Us - Modern Clean Design */}
       {whyChooseUs.features && whyChooseUs.features.length > 0 && (
-        <section className="py-16 md:py-20 bg-background relative overflow-hidden">
-          <div className="container mx-auto px-4 max-w-7xl relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-12 md:mb-16"
-            >
+      <section className="py-16 md:py-20 bg-background relative overflow-hidden">
+        <div className="container mx-auto px-4 max-w-7xl relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12 md:mb-16"
+          >
               {whyChooseUs.badge && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
-                >
-                  <Zap className="h-3.5 w-3.5" strokeWidth={1.5} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+            >
+              <Zap className="h-3.5 w-3.5" strokeWidth={1.5} />
                   <span className="text-xs font-medium">{whyChooseUs.badge}</span>
-                </motion.div>
+            </motion.div>
               )}
 
               {whyChooseUs.title && (
-                <h2 className="text-3xl md:text-4xl font-bold mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">
                   {whyChooseUs.title}
-                </h2>
+            </h2>
               )}
-            </motion.div>
+          </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {whyChooseUs.features.map((feature, index) => {
                 const Icon = feature.icon ? iconMap[feature.icon] || Heart : Heart;
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.08, duration: 0.5 }}
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    className="group relative"
-                  >
-                    {/* Card */}
-                    <div className="relative h-full bg-card border border-border rounded-lg p-5 hover:border-[#662D91] transition-all duration-300">
-                      <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
-                        <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
-                      </div>
-
-                      <h3 className="text-base font-bold mb-2 group-hover:text-[#662D91] transition-colors duration-300">
-                        {feature.title}
-                      </h3>
-
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {feature.description}
-                      </p>
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.08, duration: 0.5 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="group relative"
+                >
+                  {/* Card */}
+                  <div className="relative h-full bg-card border border-border rounded-lg p-5 hover:border-[#662D91] transition-all duration-300">
+                    <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
+                      <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
                     </div>
-                  </motion.div>
-                );
-              })}
-            </div>
+
+                    <h3 className="text-base font-bold mb-2 group-hover:text-[#662D91] transition-colors duration-300">
+                      {feature.title}
+                    </h3>
+
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
-        </section>
+        </div>
+      </section>
       )}
 
       {/* CTA Section - Modern Clean Design */}
       {(cta.badge || cta.title || cta.description || cta.buttons) && (
-        <section className="py-16 md:py-20 relative overflow-hidden bg-[#662D91]">
-          <div className="container mx-auto px-4 text-center relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="max-w-4xl mx-auto"
-            >
+      <section className="py-16 md:py-20 relative overflow-hidden bg-[#662D91]">
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl mx-auto"
+          >
               {cta.badge && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/20 border border-white/30 text-white mb-6"
-                >
-                  <Heart className="h-3.5 w-3.5" strokeWidth={1.5} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/20 border border-white/30 text-white mb-6"
+            >
+              <Heart className="h-3.5 w-3.5" strokeWidth={1.5} />
                   <span className="text-xs font-medium">{cta.badge}</span>
-                </motion.div>
+            </motion.div>
               )}
 
               {cta.title && (
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
                   {cta.title}
-                </h2>
+            </h2>
               )}
 
               {cta.description && (
-                <p className="text-base md:text-lg text-white/90 mb-8 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-white/90 mb-8 leading-relaxed max-w-2xl mx-auto">
                   {cta.description}
-                </p>
+            </p>
               )}
 
               {cta.buttons && cta.buttons.length > 0 && (
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                   {cta.buttons.map((button, index) => {
                     if (button.type === 'waitlist') {
                       return (
-                        <motion.div
+              <motion.div
                           key={index}
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
-                          <Button
-                            size="lg"
-                            onClick={() => setIsWaitlistModalOpen(true)}
-                            className="bg-white text-primary hover:bg-white/90 hover:text-primary font-semibold shadow-2xl hover:shadow-white/20"
-                          >
-                            <span className="flex items-center gap-2">
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button
+                  size="lg"
+                  onClick={() => setIsWaitlistModalOpen(true)}
+                  className="bg-white text-primary hover:bg-white/90 hover:text-primary font-semibold shadow-2xl hover:shadow-white/20"
+                >
+                  <span className="flex items-center gap-2">
                               {button.text}
-                              <Heart className="h-4 w-4" />
-                            </span>
-                          </Button>
-                        </motion.div>
+                    <Heart className="h-4 w-4" />
+                  </span>
+                </Button>
+              </motion.div>
                       );
                     } else {
                       return (
                         <Link key={index} href={button.href || '#'}>
-                          <motion.div
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            <Button
-                              size="lg"
-                              variant="outline"
-                              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-semibold"
-                            >
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-semibold"
+                  >
                               {button.text}
-                            </Button>
-                          </motion.div>
-                        </Link>
+                  </Button>
+                </motion.div>
+              </Link>
                       );
                     }
                   })}
-                </div>
+            </div>
               )}
-            </motion.div>
-          </div>
-        </section>
+          </motion.div>
+        </div>
+      </section>
       )}
 
       <WaitlistModal

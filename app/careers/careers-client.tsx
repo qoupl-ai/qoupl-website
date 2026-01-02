@@ -97,15 +97,15 @@ export default function CareersClient({ data }: CareersClientProps) {
             className="max-w-3xl mx-auto text-center"
           >
             {heroSection?.content?.badge && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#662D91] bg-[#662D91]/10 border border-[#662D91]/20 mb-6"
-              >
-                <Rocket className="h-3.5 w-3.5" strokeWidth={1.5} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#662D91] bg-[#662D91]/10 border border-[#662D91]/20 mb-6"
+            >
+              <Rocket className="h-3.5 w-3.5" strokeWidth={1.5} />
                 <span>{heroSection.content.badge}</span>
-              </motion.div>
+            </motion.div>
             )}
 
             {heroTitle && (
@@ -150,33 +150,33 @@ export default function CareersClient({ data }: CareersClientProps) {
             )}
 
             {comingSoonSection?.content?.contactTitle && (
-              <div className="bg-muted rounded-xl p-6 mb-6">
+            <div className="bg-muted rounded-xl p-6 mb-6">
                 <h3 className="text-lg font-bold mb-3">{comingSoonSection.content.contactTitle}</h3>
                 {comingSoonSection.content.contactDescription && (
-                  <p className="text-sm text-muted-foreground mb-6">
+              <p className="text-sm text-muted-foreground mb-6">
                     {comingSoonSection.content.contactDescription}
-                  </p>
+              </p>
                 )}
 
-                {comingSoonEmail && (
-                  <Button
-                    asChild
-                    size="lg"
-                    className="w-full sm:w-auto"
-                  >
-                    <a href={`mailto:${comingSoonEmail}`}>
-                      <Mail className="h-4 w-4 mr-2" strokeWidth={1.5} />
-                      {comingSoonEmail}
-                    </a>
-                  </Button>
-                )}
-              </div>
+              {comingSoonEmail && (
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  <a href={`mailto:${comingSoonEmail}`}>
+                    <Mail className="h-4 w-4 mr-2" strokeWidth={1.5} />
+                    {comingSoonEmail}
+                  </a>
+                </Button>
+              )}
+            </div>
             )}
 
             {comingSoonSection?.content?.footerText && (
-              <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
                 {comingSoonSection.content.footerText}
-              </p>
+            </p>
             )}
           </motion.div>
         </div>
@@ -192,14 +192,14 @@ export default function CareersClient({ data }: CareersClientProps) {
             className="text-center mb-10"
           >
             {valuesSection?.content?.title && (
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 {valuesSection.content.title}
-              </h2>
+            </h2>
             )}
             {valuesSection?.content?.description && (
-              <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
                 {valuesSection.content.description}
-              </p>
+            </p>
             )}
           </motion.div>
 
@@ -248,9 +248,9 @@ export default function CareersClient({ data }: CareersClientProps) {
             className="text-center mb-10"
           >
             {whyJoinSection?.content?.title && (
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 {whyJoinSection.content.title}
-              </h2>
+            </h2>
             )}
             {whyJoinSection?.content?.description && (
               <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">

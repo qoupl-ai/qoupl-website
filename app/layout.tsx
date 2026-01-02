@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Poppins, DM_Sans, Source_Code_Pro, Caveat } from "next/font/google";
+import { Poppins, DM_Sans, Source_Code_Pro, Caveat } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-// Inter as replacement for Google Sans Flex (closest alternative)
-const inter = Inter({
+// Poppins - used as the main font (same as testimonials cards)
+const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-google-sans-flex",
   display: 'swap',
   preload: true,
   fallback: ['system-ui', 'sans-serif'],
 });
 
-const poppins = Poppins({
+const poppinsBrand = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-poppins",
@@ -207,7 +207,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${poppins.variable} ${dmSans.variable} ${sourceCodePro.variable} ${caveat.variable} font-sans antialiased`} suppressHydrationWarning>
+      <body className={`${poppins.variable} ${poppinsBrand.variable} ${dmSans.variable} ${sourceCodePro.variable} ${caveat.variable} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

@@ -113,41 +113,41 @@ export default function FAQClient({ faqs, pageContent }: FAQClientProps) {
 
         {/* CTA Section */}
         {pageContent?.cta && (
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-muted mb-4">
-              <HelpCircle className="h-6 w-6 text-muted-foreground" strokeWidth={1.5} />
-            </div>
+        <div className="mt-12 text-center">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-muted mb-4">
+            <HelpCircle className="h-6 w-6 text-muted-foreground" strokeWidth={1.5} />
+          </div>
             {pageContent.cta.title && (
               <h3 className="text-lg font-bold mb-2">{pageContent.cta.title}</h3>
             )}
             {pageContent.cta.description && (
-              <p className="text-sm text-muted-foreground mb-6">
+          <p className="text-sm text-muted-foreground mb-6">
                 {pageContent.cta.description}
-              </p>
+          </p>
             )}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
               {pageContent.cta.email && (
-                <Button
-                  size="lg"
-                  asChild
-                  className="bg-[#662D91] hover:bg-[#662D91]/90 text-white"
-                >
+            <Button
+              size="lg"
+              asChild
+              className="bg-[#662D91] hover:bg-[#662D91]/90 text-white"
+            >
                   <a href={`mailto:${pageContent.cta.email}`}>
                     {pageContent.cta.emailText || "Email Support"}
-                  </a>
-                </Button>
+              </a>
+            </Button>
               )}
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-              >
-                <Link href="/contact">
+            <Button
+              size="lg"
+              variant="outline"
+              asChild
+            >
+              <Link href="/contact">
                   {pageContent.cta.contactText || "Contact Us"}
-                </Link>
-              </Button>
-            </div>
+              </Link>
+            </Button>
           </div>
+        </div>
         )}
       </div>
     </div>

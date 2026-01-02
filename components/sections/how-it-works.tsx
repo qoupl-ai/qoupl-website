@@ -134,7 +134,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
         {/* Sticky Container - Full height minus navbar */}
         <div
           ref={stickyRef}
-          className="sticky top-14 h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden"
+          className="sticky top-14 h-[calc(100vh-3.5rem)] flex items-start md:items-center justify-center overflow-y-auto md:overflow-hidden"
         >
           {/* Background with parallax */}
           <motion.div
@@ -143,13 +143,13 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
             }}
           />
 
-          <div className="container mx-auto px-4 relative z-10 w-full h-full flex flex-col pt-10 md:pt-12 pb-6 md:pb-8">
+          <div className="container mx-auto px-4 sm:px-6 md:px-8 relative z-10 w-full min-h-full flex flex-col pt-4 sm:pt-6 md:pt-12 pb-4 sm:pb-6 md:pb-8">
             {/* Header - Always visible, fixed position */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-12 md:mb-16 lg:mb-20 xl:mb-24 flex-shrink-0"
+              className="text-center mb-6 sm:mb-8 md:mb-16 lg:mb-20 xl:mb-24 flex-shrink-0"
             >
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold">
                 How{" "}
@@ -161,9 +161,9 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
             </motion.div>
 
             {/* Step Content - Flexible, centered with proper spacing */}
-            <div className="flex-1 flex items-center justify-center min-h-0 max-w-6xl mx-auto w-full overflow-visible">
-              <div className="w-full h-full flex items-center py-4">
-                <div className="grid md:grid-cols-2 gap-4 md:gap-4 lg:gap-4 xl:gap-6 items-center w-full">
+            <div className="flex-1 flex items-start md:items-center justify-center min-h-0 max-w-6xl mx-auto w-full overflow-visible">
+              <div className="w-full flex items-start md:items-center py-2 sm:py-4">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-4 lg:gap-4 xl:gap-6 items-start md:items-center w-full">
                   {/* Phone Preview - Left Side */}
                   <motion.div
                     key={`phone-${currentStep}`}
@@ -176,7 +176,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
                     }}
                     className="relative mx-auto md:mx-0 flex justify-center md:justify-start"
                   >
-                    <div className="relative w-[170px] sm:w-[190px] md:w-[210px] lg:w-[240px] xl:w-[260px] aspect-[9/19] mb-4">
+                    <div className="relative w-[170px] sm:w-[190px] md:w-[210px] lg:w-[240px] xl:w-[260px] aspect-[9/19] mb-4 sm:mb-6 md:mb-0">
                       {/* Phone Frame */}
                       <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden shadow-lg border-2 border-border/50 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-900 dark:to-gray-800">
                         {/* Notch */}
@@ -211,7 +211,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
                           stiffness: 200,
                           damping: 20,
                         }}
-                        className="absolute -top-3 -right-3 md:-top-4 md:-right-4 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-[#662D91] to-primary shadow-xl flex items-center justify-center z-10"
+                        className="absolute top-2 -right-2 sm:-top-3 sm:-right-3 md:-top-4 md:-right-4 w-10 h-10 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-[#662D91] to-primary shadow-xl flex items-center justify-center z-10"
                       >
                         <span className="text-sm sm:text-base md:text-lg font-bold text-white">
                           {currentStepData.step}
@@ -230,7 +230,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
                       duration: 0.8,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="text-center md:text-left flex-shrink-0"
+                    className="text-center md:text-left flex-shrink-0 w-full"
                   >
                     <motion.div
                       key={`title-${currentStep}`}
@@ -238,8 +238,8 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.1, duration: 0.6 }}
                     >
-                      <div className="inline-block h-1 w-10 sm:w-12 md:w-16 bg-gradient-to-r from-[#662D91] to-primary rounded-full mb-3 md:mb-4" />
-                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 md:mb-6">
+                      <div className="inline-block h-1 w-10 sm:w-12 md:w-16 bg-gradient-to-r from-[#662D91] to-primary rounded-full mb-2 sm:mb-3 md:mb-4" />
+                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 leading-tight" style={{ color: '#171717' }}>
                         {currentStepData.title}
                       </h3>
                     </motion.div>
@@ -249,10 +249,11 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2, duration: 0.6 }}
-                      className="text-muted-foreground text-sm sm:text-base md:text-lg leading-relaxed max-w-md"
+                      className="text-sm sm:text-base md:text-base lg:text-[18px] leading-normal max-w-full md:max-w-md mx-auto md:mx-0 px-4 sm:px-6 md:px-0"
+                      style={{ color: '#707070' }}
                     >
                       {currentStepData.description.split(/\n\n+/).filter((p: string) => p.trim().length > 0).map((paragraph: string, index: number) => (
-                        <p key={index} className={index > 0 ? "mt-4" : ""}>
+                        <p key={index} className={`text-left ${index > 0 ? "mt-3 sm:mt-4 md:mt-4" : ""}`}>
                           {paragraph.trim()}
                         </p>
                       ))}
@@ -264,7 +265,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
 
             {/* Step Indicators - Bottom aligned, always visible */}
             <motion.div
-              className="flex justify-center gap-2 mt-6 md:mt-8 flex-shrink-0"
+              className="flex justify-center gap-2 mt-4 sm:mt-6 md:mt-8 flex-shrink-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}

@@ -140,12 +140,12 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
 
             {/* Benefits Grid */}
             {benefits.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8"
-              >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8"
+            >
                 {benefits.map((benefit: any, index: number) => {
                   const IconMap: Record<string, any> = {
                     'zap': Zap,
@@ -155,17 +155,17 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   const Icon = IconMap[benefit.icon?.toLowerCase()] || Zap;
                   return (
                     <div key={index} className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
-                      <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
                         <Icon className="h-5 w-5 text-[#662D91]" />
-                      </div>
-                      <div className="text-left">
+                </div>
+                <div className="text-left">
                         <h3 className="font-semibold text-sm mb-1">{benefit.title}</h3>
                         <p className="text-xs text-muted-foreground">{benefit.description}</p>
-                      </div>
-                    </div>
+                </div>
+              </div>
                   );
                 })}
-              </motion.div>
+            </motion.div>
             )}
           </motion.div>
         </div>
@@ -176,18 +176,18 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             {whyJoin.title && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="text-center mb-12"
-              >
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
                   {whyJoin.title}
-                </h2>
+              </h2>
                 {whyJoin.description && (
-                  <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
                     {whyJoin.description}
                   </p>
                 )}
@@ -205,27 +205,27 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   };
                   const Icon = IconMap[feature.icon?.toLowerCase()] || SparklesIcon;
                   return (
-                    <motion.div
+              <motion.div
                       key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: (index + 1) * 0.1 }}
-                      className="flex gap-4 p-6 bg-card border border-border rounded-xl"
-                    >
-                      <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
+                className="flex gap-4 p-6 bg-card border border-border rounded-xl"
+              >
+                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
                         <Icon className="h-6 w-6 text-[#662D91]" />
-                      </div>
-                      <div>
+                </div>
+                <div>
                         <h3 className="font-semibold text-base mb-2">{feature.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                           {feature.description}
-                        </p>
-                      </div>
-                    </motion.div>
+                  </p>
+                </div>
+              </motion.div>
                   );
                 })}
-              </div>
+                </div>
             )}
           </div>
         </div>
@@ -236,22 +236,22 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
             {whatToExpectSection?.content?.title && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="text-center mb-8"
-              >
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center mb-8"
+            >
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
                   {whatToExpectSection.content.title}
-                </h2>
+              </h2>
                 {whatToExpectSection.content.description && (
-                  <p className="text-base text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                     {whatToExpectSection.content.description}
-                  </p>
+              </p>
                 )}
-              </motion.div>
+            </motion.div>
             )}
 
             <div className="space-y-6">
