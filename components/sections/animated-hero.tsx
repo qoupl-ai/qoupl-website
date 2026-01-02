@@ -394,7 +394,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
               <p
                 className="text-base md:text-lg font-semibold text-foreground leading-relaxed"
                 style={{
-                  fontFamily: "var(--font-poppins), system-ui, sans-serif",
+                  fontFamily: "var(--font-qoupl), system-ui, sans-serif",
                   fontWeight: 600,
                 }}
               >
@@ -413,7 +413,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
               <p
                 className="text-base md:text-lg font-semibold text-muted-foreground leading-relaxed"
                 style={{
-                  fontFamily: "var(--font-poppins), system-ui, sans-serif",
+                  fontFamily: "var(--font-qoupl), system-ui, sans-serif",
                   fontWeight: 600,
                 }}
               >

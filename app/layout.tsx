@@ -1,42 +1,29 @@
 import type { Metadata } from "next";
-import { Poppins, DM_Sans, Source_Code_Pro, Caveat } from "next/font/google";
+import localFont from "next/font/local";
+import { Poppins, Caveat } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-// Poppins - used as the main font (same as testimonials cards)
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-google-sans-flex",
+// qoupl font (Google Sans Flex) - local font (used as default for entire website)
+const qouplFont = localFont({
+  src: "../Google_Sans_Flex/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf",
+  variable: "--font-qoupl",
   display: 'swap',
-  preload: true,
   fallback: ['system-ui', 'sans-serif'],
+  weight: '100 900', // Variable font supports all weights
 });
 
-const poppinsBrand = Poppins({
+// Poppins - only for brand name "qoupl" in animated-hero.tsx
+const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-poppins",
   display: 'swap',
   preload: true,
 });
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
-  display: 'swap',
-  preload: true,
-});
-
-const sourceCodePro = Source_Code_Pro({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-source-code-pro",
-  display: 'swap',
-});
-
+// Caveat - only for "Love Letters from Our Couples" section
 const caveat = Caveat({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -207,7 +194,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} ${poppinsBrand.variable} ${dmSans.variable} ${sourceCodePro.variable} ${caveat.variable} font-sans antialiased`} suppressHydrationWarning>
+      <body className={`${qouplFont.variable} ${poppins.variable} ${caveat.variable} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

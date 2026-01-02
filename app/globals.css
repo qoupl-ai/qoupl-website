@@ -47,7 +47,7 @@
 
 @layer base {
   :root {
-    --font-google-sans-flex: 'Google Sans Flex', system-ui, sans-serif;
+    --font-qoupl: 'Google Sans Flex', system-ui, sans-serif;
     --background: 0 0% 99%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;

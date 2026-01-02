@@ -261,7 +261,7 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
                 >
                   {/* Letter Text with Caveat Font */}
                   <div 
-                    className="whitespace-pre-line font-caveat relative z-10"
+                    className="whitespace-pre-line relative z-10"
                     style={{ 
                       fontFamily: 'var(--font-caveat), cursive',
                       fontSize: '1.25rem',

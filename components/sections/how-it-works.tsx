@@ -253,7 +253,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
                       style={{ color: '#707070' }}
                     >
                       {currentStepData.description.split(/\n\n+/).filter((p: string) => p.trim().length > 0).map((paragraph: string, index: number) => (
-                        <p key={index} className={`text-left ${index > 0 ? "mt-3 sm:mt-4 md:mt-4" : ""}`}>
+                        <p key={index} className={`text-left font-medium ${index > 0 ? "mt-3 sm:mt-4 md:mt-4" : ""}`}>
                           {paragraph.trim()}
                         </p>
                       ))}
