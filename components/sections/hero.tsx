@@ -51,10 +51,10 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+              className="text-fluid-6xl font-bold mb-6 leading-tight text-title"
             >
               Find Your Perfect{" "}
-              <span className="text-[#662D91]">
+              <span className="text-primary">
                 Match
               </span>
             </motion.h1>
@@ -63,7 +63,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
+              className="text-fluid-lg text-paragraph mb-8 max-w-prose mx-auto leading-relaxed"
             >
               The exclusive dating app for college students that helps you connect with peers
               who truly matter. Built with love, designed for meaningful
@@ -89,7 +89,7 @@ export default function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
-              className="flex items-center gap-6 justify-center text-sm text-muted-foreground mb-16"
+              className="flex items-center gap-6 justify-center text-sm text-paragraph mb-16"
             >
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">

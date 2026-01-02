@@ -151,7 +151,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
               viewport={{ once: true }}
               className="text-center mb-6 sm:mb-8 md:mb-16 lg:mb-20 xl:mb-24 flex-shrink-0"
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold">
+              <h2 className="text-fluid-5xl leading-tight font-bold text-title">
                 How{" "}
                 <span className="bg-gradient-to-r from-primary to-[#662D91] bg-clip-text text-transparent">
                   qoupl
@@ -239,7 +239,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
                       transition={{ delay: 0.1, duration: 0.6 }}
                     >
                       <div className="inline-block h-1 w-10 sm:w-12 md:w-16 bg-gradient-to-r from-[#662D91] to-primary rounded-full mb-2 sm:mb-3 md:mb-4" />
-                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 leading-tight" style={{ color: '#171717' }}>
+                      <h3 className="text-fluid-2xl leading-snug font-bold mb-3 sm:mb-4 md:mb-6 text-title">
                         {currentStepData.title}
                       </h3>
                     </motion.div>
@@ -249,8 +249,7 @@ export default function HowItWorks({ data = {} }: HowItWorksProps) {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2, duration: 0.6 }}
-                      className="text-sm sm:text-base md:text-base lg:text-[18px] leading-normal max-w-full md:max-w-md mx-auto md:mx-0 px-4 sm:px-6 md:px-0"
-                      style={{ color: '#707070' }}
+                      className="text-fluid-base leading-relaxed max-w-prose mx-auto md:mx-0 px-4 sm:px-6 md:px-0 text-paragraph"
                     >
                       {currentStepData.description.split(/\n\n+/).filter((p: string) => p.trim().length > 0).map((paragraph: string, index: number) => (
                         <p key={index} className={`text-left font-medium ${index > 0 ? "mt-3 sm:mt-4 md:mt-4" : ""}`}>

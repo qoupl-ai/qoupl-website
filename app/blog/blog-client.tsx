@@ -82,16 +82,16 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4"
             >
               <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
               <span className="text-xs font-medium">Insights & Stories</span>
             </motion.div>
 
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            <h1 className="text-fluid-6xl font-bold leading-tight mb-4 text-title">
               qoupl Blog
             </h1>
-            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+            <p className="text-fluid-lg text-paragraph leading-relaxed max-w-prose mx-auto">
               Discover insights on dating for college students, relationships, and technology
             </p>
           </motion.div>
@@ -111,10 +111,10 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
                 onClick={() => setSelectedCategory(category)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all duration-300 cursor-pointer text-sm font-medium ${
+                className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all duration-300 cursor-pointer text-fluid-sm font-medium ${
                   selectedCategory === category
-                    ? "bg-[#662D91] text-white"
-                    : "bg-card border border-border hover:border-[#662D91]/50 hover:bg-[#662D91]/5"
+                    ? "bg-primary text-white"
+                    : "bg-card border border-border hover:border-primary/50 hover:bg-primary/5"
                 }`}
               >
                 {category}
@@ -145,7 +145,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
                     <motion.div
                       whileHover={{ y: -4 }}
                       transition={{ duration: 0.3 }}
-                      className="relative h-full bg-card border border-border rounded-xl overflow-hidden hover:border-[#662D91] transition-all duration-300"
+                      className="relative h-full bg-card border border-border rounded-xl overflow-hidden hover:border-primary transition-all duration-300"
                     >
                       {/* Image */}
                       <div className="relative h-48 overflow-hidden">
@@ -160,7 +160,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
 
                         {/* Category badge */}
                         <div className="absolute top-3 left-3">
-                          <span className="px-3 py-1 rounded-lg text-xs font-semibold text-white bg-[#662D91]">
+                          <span className="px-3 py-1 rounded-lg text-xs font-semibold text-white bg-primary">
                             {categoryName}
                           </span>
                         </div>
@@ -168,7 +168,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
 
                       {/* Content */}
                       <div className="p-5">
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
+                        <div className="flex items-center gap-3 text-fluid-sm text-secondary-text mb-3">
                           <div className="flex items-center gap-1">
                             <Calendar className="h-3.5 w-3.5" strokeWidth={1.5} />
                             <span>{formatDate(post.publish_date)}</span>
@@ -181,19 +181,19 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
                           )}
                         </div>
 
-                        <h2 className="text-lg font-bold mb-2 group-hover:text-[#662D91] transition-colors duration-300 line-clamp-2">
+                        <h2 className="text-fluid-2xl font-bold leading-snug mb-2 text-title group-hover:text-primary transition-colors duration-300 line-clamp-2">
                           {post.title}
                         </h2>
 
                         {post.excerpt && (
-                          <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-3">
+                          <p className="text-fluid-sm text-paragraph leading-relaxed mb-4 line-clamp-3">
                             {post.excerpt}
                           </p>
                         )}
 
                         <Link
                           href={`/blog/${post.slug}`}
-                          className="flex items-center gap-2 text-sm font-semibold text-[#662D91] group-hover:gap-3 transition-all duration-300"
+                          className="flex items-center gap-2 text-fluid-sm font-semibold text-primary group-hover:gap-3 transition-all duration-300"
                         >
                           <span>Read More</span>
                           <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" strokeWidth={1.5} />
@@ -211,10 +211,10 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
               className="text-center py-16"
             >
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-muted mb-4">
-                <Heart className="h-6 w-6 text-muted-foreground" strokeWidth={1.5} />
+                <Heart className="h-6 w-6 text-secondary-text" strokeWidth={1.5} />
               </div>
-              <h3 className="text-lg font-bold mb-2">No posts found</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-fluid-2xl font-bold leading-snug mb-2 text-title">No posts found</h3>
+              <p className="text-fluid-sm text-paragraph leading-relaxed">
                 No articles available in this category yet. Check back soon!
               </p>
             </motion.div>
@@ -231,14 +231,14 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
             viewport={{ once: true }}
             className="bg-card border border-border rounded-xl p-6 md:p-8 text-center"
           >
-            <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[#662D91] mb-4">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary mb-4">
               <Heart className="h-5 w-5 text-white" strokeWidth={1.5} />
             </div>
 
-            <h2 className="text-xl md:text-2xl font-bold mb-3">
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-3 text-title">
               Stay Updated
             </h2>
-            <p className="text-sm md:text-base text-muted-foreground mb-6 max-w-2xl mx-auto">
+            <p className="text-fluid-base text-paragraph leading-relaxed mb-6 max-w-prose mx-auto">
               Subscribe to our newsletter for the latest insights on dating, relationships, and the future of human connections
             </p>
 
@@ -246,11 +246,11 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-[#662D91]/50"
+                className="flex-1 px-4 py-3 rounded-lg border border-border bg-background text-fluid-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
               <Button
                 size="lg"
-                className="bg-[#662D91] hover:bg-[#662D91]/90 text-white"
+                className="bg-primary hover:bg-primary/90 text-white"
               >
                 Subscribe
               </Button>

@@ -52,17 +52,17 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
               >
                 <Sparkles className="h-4 w-4" />
-                <span className="text-sm font-medium">
+                <span className="text-fluid-sm font-medium tracking-functional">
                   Launching Soon
                 </span>
               </motion.div>
 
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+              <h2 className="text-fluid-5xl font-bold mb-4 leading-tight text-title">
                 {title}
               </h2>
 
               {subtitle && (
-                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                <p className="text-fluid-lg text-paragraph mb-8 leading-relaxed max-w-prose">
                   {subtitle}
                 </p>
               )}
@@ -72,7 +72,7 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
                 <Button
                   size="lg"
                   onClick={() => setIsWaitlistModalOpen(true)}
-                  className="w-full sm:w-auto bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold"
+                  className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-semibold"
                 >
                   <Sparkles className="mr-2 h-4 w-4" />
                   {ctaText}

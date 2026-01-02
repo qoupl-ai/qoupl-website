@@ -392,7 +392,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
               className="space-y-1 mb-6 md:mb-8 pl-0 md:pl-4 lg:pl-8 xl:pl-12"
             >
               <p
-                className="text-base md:text-lg font-semibold text-foreground leading-relaxed"
+                className="text-fluid-lg font-semibold text-title leading-relaxed"
                 style={{
                   fontFamily: "var(--font-qoupl), system-ui, sans-serif",
                   fontWeight: 600,
@@ -402,7 +402,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
                   const lowerWord = word.toLowerCase();
                   if (lowerWord.includes('qoupl') || lowerWord.includes('couple')) {
                     return (
-                      <span key={i} className="text-[#662D91]">
+                      <span key={i} className="text-primary">
                         {word}{' '}
                       </span>
                     );
@@ -411,7 +411,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
                 })}
               </p>
               <p
-                className="text-base md:text-lg font-semibold text-muted-foreground leading-relaxed"
+                className="text-fluid-lg font-semibold text-paragraph leading-relaxed max-w-prose"
                 style={{
                   fontFamily: "var(--font-qoupl), system-ui, sans-serif",
                   fontWeight: 600,
@@ -442,7 +442,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
                 )}
               </Button>
               {ctaSubtext && (
-                <p className="text-xs text-muted-foreground text-center lg:text-left">
+                <p className="text-xs text-paragraph text-center lg:text-left">
                   {ctaSubtext}
                 </p>
               )}

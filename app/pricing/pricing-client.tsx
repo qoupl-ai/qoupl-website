@@ -46,7 +46,7 @@ interface PricingClientProps {
   };
   faq?: {
     title?: string;
-    faqs?: Array<{ question: string; answer: string }>;
+    faqs?: Array<{ question?: string; answer?: string; q?: string; a?: string }>;
     cta?: {
       text?: string;
       link?: string;
@@ -125,17 +125,17 @@ export default function PricingClient({
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2, duration: 0.6 }}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4"
                 >
                   <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
                   <span className="text-xs font-medium">{hero.badge.text}</span>
                 </motion.div>
               )}
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+              <h1 className="text-fluid-6xl font-bold leading-tight mb-4 text-title">
                 {hero?.title || "Affordable Pricing"}
               </h1>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              <p className="text-fluid-lg text-paragraph leading-relaxed max-w-prose mx-auto">
                 {hero?.subtitle || "Pay only for what you use. No hidden fees, no surprises."}
               </p>
             </motion.div>
@@ -156,24 +156,24 @@ export default function PricingClient({
           >
             <div className="relative bg-card border border-border rounded-xl p-8 md:p-10">
               <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-[#662D91] mb-4">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary mb-4">
                   <Zap className="h-6 w-6 text-white" strokeWidth={1.5} />
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
                   {plans.length > 0 ? plans[0].name || "Platform Access" : "Platform Access"}
                 </h2>
 
                 {plans.length > 0 && (
                   <div className="flex items-baseline justify-center gap-2 mb-4">
-                    <span className="text-4xl md:text-5xl font-bold text-[#662D91]">
+                    <span className="text-fluid-6xl font-bold leading-tight text-primary">
                       ₹{plans[0].price}
                     </span>
-                    <span className="text-lg text-muted-foreground">/{plans[0].billing_period || "month"}</span>
+                    <span className="text-fluid-lg text-secondary-text">/{plans[0].billing_period || "month"}</span>
                   </div>
                 )}
 
-                <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-fluid-base text-paragraph leading-relaxed max-w-prose mx-auto">
                   Get access to the qoupl platform and unlock all features
                 </p>
               </div>
@@ -189,10 +189,10 @@ export default function PricingClient({
                     transition={{ delay: index * 0.05, duration: 0.3 }}
                     className="flex items-center gap-2"
                   >
-                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#662D91]/20 flex items-center justify-center">
-                      <Check className="h-3 w-3 text-[#662D91]" strokeWidth={2} />
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center">
+                      <Check className="h-3 w-3 text-primary" strokeWidth={2} />
                     </div>
-                    <span className="text-sm text-muted-foreground">{feature}</span>
+                    <span className="text-fluid-sm text-paragraph">{feature}</span>
                   </motion.div>
                   ))}
                 </div>
@@ -210,15 +210,15 @@ export default function PricingClient({
           >
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0">
-                <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
                   <Heart className="h-5 w-5 text-white" strokeWidth={1.5} />
                 </div>
               </div>
               <div>
-                <h3 className="text-lg md:text-xl font-bold mb-2">
+                <h3 className="text-fluid-2xl font-bold leading-snug mb-2 text-title">
                   {freeMessages?.title || `First ${freeMessages?.count || 3} Messages Free Per Match!`}
                 </h3>
-                <p className="text-sm md:text-base text-muted-foreground">
+                <p className="text-fluid-base text-paragraph leading-relaxed">
                   {freeMessages?.description || "Start conversations with your matches without any additional cost. Your first 3 messages with each match are completely free."}
                 </p>
               </div>
@@ -235,10 +235,10 @@ export default function PricingClient({
               viewport={{ once: true }}
               className="text-center mb-8"
             >
-              <h2 className="text-2xl md:text-3xl font-bold mb-3">
+              <h2 className="text-fluid-5xl font-bold leading-tight mb-3 text-title">
                 {messageBundlesData?.title || "Message Bundles"}
               </h2>
-              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-fluid-base text-paragraph leading-relaxed max-w-prose mx-auto">
                 {messageBundlesData?.subtitle || "After your free messages, purchase message bundles to continue connecting"}
               </p>
             </motion.div>
@@ -262,7 +262,7 @@ export default function PricingClient({
                   >
                     {bundle.popular && (
                       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                        <span className="px-3 py-1 bg-[#662D91] text-white text-xs font-semibold rounded-lg shadow-md">
+                        <span className="px-3 py-1 bg-primary text-white text-xs font-semibold rounded-lg shadow-md">
                           Popular
                         </span>
                       </div>
@@ -270,23 +270,23 @@ export default function PricingClient({
 
                     <div className={`relative h-full bg-card border ${
                       messageBundle === bundle.messages
-                        ? 'border-[#662D91]'
+                        ? 'border-primary'
                         : 'border-border'
-                    } rounded-xl p-5 hover:border-[#662D91] transition-all duration-300 ${
+                    } rounded-xl p-5 hover:border-primary transition-all duration-300 ${
                       bundle.popular ? 'pt-7' : ''
                     }`}>
                       <div className="text-center">
-                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[#662D91] mb-3">
+                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary mb-3">
                           <MessageSquare className="h-5 w-5 text-white" strokeWidth={1.5} />
                         </div>
 
-                        <h3 className="text-2xl font-bold mb-1">{bundle.messages}</h3>
-                        <p className="text-xs text-muted-foreground mb-3">Messages</p>
+                        <h3 className="text-fluid-2xl font-bold leading-snug mb-1 text-title">{bundle.messages}</h3>
+                        <p className="text-fluid-sm text-secondary-text mb-3">Messages</p>
 
-                        <div className="text-xl font-bold text-[#662D91] mb-1">
+                        <div className="text-fluid-xl font-bold leading-snug text-primary mb-1">
                           ₹{bundlePrice.total.toFixed(2)}
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-fluid-sm text-secondary-text">
                           ₹{bundlePrice.base} + ₹{bundlePrice.gst.toFixed(2)} GST ({gstRate}%)
                         </p>
                       </div>
@@ -311,8 +311,8 @@ export default function PricingClient({
 
               <div className="relative bg-card border border-border rounded-xl p-6 md:p-8">
                 <div className="text-center mb-6">
-                  <h3 className="text-xl md:text-2xl font-bold mb-2">Custom Bundle</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <h3 className="text-fluid-2xl font-bold leading-snug mb-2 text-title">Custom Bundle</h3>
+                  <p className="text-fluid-sm text-paragraph leading-relaxed">
                     Choose your own message bundle size (minimum 5 messages)
                   </p>
                 </div>
@@ -320,8 +320,8 @@ export default function PricingClient({
                 <div className="max-w-2xl mx-auto">
                   <div className="mb-8">
                     <div className="flex items-center justify-between mb-4">
-                      <label className="text-base font-semibold">Number of Messages</label>
-                      <span className="text-2xl font-bold text-[#662D91]">
+                      <label className="text-fluid-base font-semibold text-title">Number of Messages</label>
+                      <span className="text-fluid-5xl font-bold leading-tight text-primary">
                         {messageBundle}
                       </span>
                     </div>
@@ -343,7 +343,7 @@ export default function PricingClient({
                       }}
                     />
 
-                    <div className="flex justify-between text-sm text-muted-foreground mt-2">
+                    <div className="flex justify-between text-fluid-sm text-secondary-text mt-2">
                       <span>{minMessages} messages</span>
                       <span>{maxMessages} messages</span>
                     </div>
@@ -353,16 +353,16 @@ export default function PricingClient({
                   <div className="rounded-lg p-5 mb-6 border border-border">
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">Base Price ({messageBundle} × ₹{pricePerMessage})</span>
-                        <span className="text-sm font-semibold">₹{price.base}</span>
+                        <span className="text-fluid-sm text-paragraph">Base Price ({messageBundle} × ₹{pricePerMessage})</span>
+                        <span className="text-fluid-sm font-semibold text-title">₹{price.base}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">GST ({gstRate}%)</span>
-                        <span className="text-sm font-semibold">₹{price.gst.toFixed(2)}</span>
+                        <span className="text-fluid-sm text-paragraph">GST ({gstRate}%)</span>
+                        <span className="text-fluid-sm font-semibold text-title">₹{price.gst.toFixed(2)}</span>
                       </div>
                       <div className="border-t border-border pt-3 flex justify-between items-center">
-                        <span className="text-base font-bold">Total Amount</span>
-                        <span className="text-2xl font-bold text-[#662D91]">
+                        <span className="text-fluid-base font-bold text-title">Total Amount</span>
+                        <span className="text-fluid-5xl font-bold leading-tight text-primary">
                           ₹{price.total.toFixed(2)}
                         </span>
                       </div>
@@ -371,7 +371,7 @@ export default function PricingClient({
 
                   <Button
                     size="lg"
-                    className="w-full bg-[#662D91] hover:bg-[#662D91]/90 text-white"
+                    className="w-full bg-primary hover:bg-primary/90 text-white"
                   >
                     Purchase {messageBundle} Messages
                   </Button>
@@ -391,15 +391,15 @@ export default function PricingClient({
             >
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <Info className="h-5 w-5 text-[#662D91]" strokeWidth={1.5} />
+                  <Info className="h-5 w-5 text-primary" strokeWidth={1.5} />
                 </div>
                 <div className="space-y-2">
-                  <h4 className="font-bold text-base">{pricingInfo?.title || "How it works"}</h4>
+                  <h4 className="font-bold text-fluid-xl leading-snug text-title">{pricingInfo?.title || "How it works"}</h4>
                   {pricingInfo?.items && pricingInfo.items.length > 0 ? (
-                    <ul className="space-y-2 text-sm text-muted-foreground">
+                    <ul className="space-y-2 text-fluid-sm text-paragraph">
                       {pricingInfo.items.map((item, index) => (
                         <li key={index} className="flex items-start gap-2">
-                          <Check className="h-4 w-4 text-[#662D91] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                          <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -423,13 +423,13 @@ export default function PricingClient({
             viewport={{ once: true }}
             className="text-center mb-8"
           >
-            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-3 text-title">
               {faq?.title || "Frequently Asked Questions"}
             </h2>
           </motion.div>
 
           <div className="space-y-4">
-            {faq?.faqs && faq.faqs.length > 0 ? faq.faqs.map((faqItem: { question: string; answer: string }, index: number) => (
+            {faq?.faqs && faq.faqs.length > 0 ? faq.faqs.map((faqItem, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -438,21 +438,21 @@ export default function PricingClient({
                 transition={{ delay: index * 0.05 }}
                 className="bg-card border border-border rounded-lg p-5"
               >
-                <h3 className="font-bold text-base mb-2">{faqItem.question || faqItem.q}</h3>
-                <p className="text-sm text-muted-foreground">{faqItem.answer || faqItem.a}</p>
+                <h3 className="font-bold text-fluid-xl leading-snug mb-2 text-title">{faqItem.question || faqItem.q}</h3>
+                <p className="text-fluid-sm text-paragraph leading-relaxed">{faqItem.answer || faqItem.a}</p>
               </motion.div>
             )) : (
-              <div className="text-center py-8 text-muted-foreground">
-                <p className="text-sm">No FAQs available. Add FAQs in the CMS to display them here.</p>
+              <div className="text-center py-8 text-paragraph">
+                <p className="text-fluid-sm">No FAQs available. Add FAQs in the CMS to display them here.</p>
               </div>
             )}
           </div>
 
           {(faq?.cta?.text || faq?.cta?.link) && (
             <div className="text-center mt-8">
-              <p className="text-sm text-muted-foreground mb-4">{faq.cta.text || "Still have questions?"}</p>
+              <p className="text-fluid-sm text-paragraph leading-relaxed mb-4">{faq.cta.text || "Still have questions?"}</p>
               <Link href={faq.cta.link || "/contact"}>
-                <Button size="lg" variant="outline" className="border-[#662D91] text-[#662D91] hover:bg-[#662D91] hover:text-white">
+                <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
                   Contact Support
                 </Button>
               </Link>

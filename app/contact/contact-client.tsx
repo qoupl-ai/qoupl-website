@@ -105,21 +105,21 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
       title: "Email Us",
       details: contactInfo?.email || "support@qoupl.ai",
       link: contactInfo?.email ? `mailto:${contactInfo.email}` : "mailto:support@qoupl.ai",
-      color: "bg-[#662D91]"
+      color: "bg-primary"
     },
     {
       icon: Phone,
       title: "Call Us",
       details: contactInfo?.phone || "+91 9103732229",
       link: contactInfo?.phone ? `tel:${contactInfo.phone.replace(/\s/g, '')}` : "tel:+919103732229",
-      color: "bg-[#662D91]"
+      color: "bg-primary"
     },
     {
       icon: MapPin,
       title: "Location",
       details: contactInfo?.address || "B-98, Sector-2, Noida, UP 201301",
       link: null,
-      color: "bg-[#662D91]"
+      color: "bg-primary"
     }
   ];
 
@@ -139,17 +139,17 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#662D91] bg-[#662D91]/10 border border-[#662D91]/20 mb-6"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-primary bg-primary/10 border border-primary/20 mb-6"
               >
                 <Heart className="h-3.5 w-3.5" strokeWidth={1.5} />
                 <span>{pageContent.badge}</span>
               </motion.div>
             )}
 
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+            <h1 className="text-fluid-6xl font-bold leading-tight mb-4 text-title">
               {pageContent?.title || "Get in Touch"}
             </h1>
-            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+            <p className="text-fluid-lg text-paragraph leading-relaxed max-w-prose mx-auto">
               {pageContent?.description || "Have questions about qoupl? We'd love to hear from you. Send us a message and we'll respond as soon as possible."}
             </p>
           </motion.div>
@@ -172,22 +172,22 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
                   whileHover={{ y: -4 }}
                   className="group"
                 >
-                  <div className="relative h-full bg-card border border-border rounded-xl p-6 text-center hover:border-[#662D91]/30 transition-all duration-300">
+                  <div className="relative h-full bg-card border border-border rounded-xl p-6 text-center hover:border-primary/30 transition-all duration-300">
                     <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg ${info.color} mb-4 group-hover:scale-105 transition-transform duration-300`}>
                       <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
                     </div>
 
-                    <h3 className="text-lg font-bold mb-2">{info.title}</h3>
+                    <h3 className="text-fluid-2xl font-bold leading-snug mb-2 text-title">{info.title}</h3>
 
                     {info.link ? (
                       <a
                         href={info.link}
-                        className="text-sm text-muted-foreground hover:text-[#662D91] transition-colors duration-300"
+                        className="text-fluid-sm text-paragraph hover:text-primary transition-colors duration-300"
                       >
                         {info.details}
                       </a>
                     ) : (
-                      <p className="text-sm text-muted-foreground">{info.details}</p>
+                      <p className="text-fluid-sm text-paragraph">{info.details}</p>
                     )}
                   </div>
                 </motion.div>
@@ -209,7 +209,7 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
                 onSubmit={handleSubmit}
                 className="relative bg-card border border-border rounded-xl p-6 md:p-8"
               >
-                <h2 className="text-2xl md:text-3xl font-bold mb-6">{pageContent?.formTitle || "Send us a Message"}</h2>
+                <h2 className="text-fluid-5xl font-bold leading-tight mb-6 text-title">{pageContent?.formTitle || "Send us a Message"}</h2>
 
                 {error && (
                   <div className="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
@@ -226,15 +226,15 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
                     >
                       <CheckCircle className="h-7 w-7 text-white" strokeWidth={1.5} />
                     </motion.div>
-                    <h3 className="text-xl font-bold mb-2">Message Sent!</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="text-fluid-2xl font-bold leading-snug mb-2 text-title">Message Sent!</h3>
+                    <p className="text-fluid-sm text-paragraph leading-relaxed">
                       Thank you for contacting us. We&apos;ll get back to you soon.
                     </p>
                   </div>
                 ) : (
                 <div className="space-y-5">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-semibold mb-2">
+                    <label htmlFor="name" className="block text-fluid-sm font-semibold mb-2 text-title">
                       Your Name
                     </label>
                     <input
@@ -329,8 +329,8 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
               className="space-y-6"
             >
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">{pageContent?.infoTitle || "Let's Connect"}</h2>
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">{pageContent?.infoTitle || "Let's Connect"}</h2>
+                <p className="text-fluid-base text-paragraph leading-relaxed max-w-prose">
                   {pageContent?.infoDescription || "Whether you have questions about features, need technical support, or just want to say hello, we're here for you."}
                 </p>
               </div>
@@ -339,13 +339,13 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
                 {pageContent?.responseTime && (
                   <div className="flex gap-4">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
                         <Clock className="h-5 w-5 text-white" strokeWidth={1.5} />
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-base font-bold mb-1">{pageContent.responseTime.title || "Response Time"}</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="text-fluid-xl font-bold leading-snug mb-1 text-title">{pageContent.responseTime.title || "Response Time"}</h3>
+                      <p className="text-fluid-sm text-paragraph leading-relaxed">
                         {pageContent.responseTime.description || "We typically respond within 24-48 hours during business days."}
                       </p>
                     </div>
@@ -355,13 +355,13 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
                 {pageContent?.support && (
                   <div className="flex gap-4">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
                         <Heart className="h-5 w-5 text-white" strokeWidth={1.5} />
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-base font-bold mb-1">{pageContent.support.title || "Support"}</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="text-fluid-xl font-bold leading-snug mb-1 text-title">{pageContent.support.title || "Support"}</h3>
+                      <p className="text-fluid-sm text-paragraph leading-relaxed">
                         {pageContent.support.description || "Our team is dedicated to providing you with the best possible experience."}
                       </p>
                     </div>
@@ -371,13 +371,13 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
                 {pageContent?.feedback && (
                   <div className="flex gap-4">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
                         <MessageSquare className="h-5 w-5 text-white" strokeWidth={1.5} />
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-base font-bold mb-1">{pageContent.feedback.title || "Feedback"}</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="text-fluid-xl font-bold leading-snug mb-1 text-title">{pageContent.feedback.title || "Feedback"}</h3>
+                      <p className="text-fluid-sm text-paragraph leading-relaxed">
                         {pageContent.feedback.description || "We value your feedback and are constantly working to improve qoupl."}
                       </p>
                     </div>
@@ -388,13 +388,13 @@ export default function ContactClient({ contactInfo, pageContent }: ContactClien
               {/* FAQ Link */}
               {pageContent?.faqSection && (
                 <div className="rounded-xl p-5 border border-border">
-                  <h3 className="text-base font-bold mb-2">{pageContent.faqSection.title || "Looking for quick answers?"}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
+                  <h3 className="text-fluid-xl font-bold leading-snug mb-2 text-title">{pageContent.faqSection.title || "Looking for quick answers?"}</h3>
+                  <p className="text-fluid-sm text-paragraph leading-relaxed mb-4">
                     {pageContent.faqSection.description || "Check out our FAQ page for instant answers to common questions."}
                   </p>
                   <Link
                     href="/faq"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#662D91] hover:underline"
+                    className="inline-flex items-center gap-2 text-fluid-sm font-semibold text-primary hover:underline"
                   >
                     {pageContent.faqSection.linkText || "Visit FAQ"}
                     <ArrowLeft className="h-3.5 w-3.5 rotate-180" strokeWidth={1.5} />

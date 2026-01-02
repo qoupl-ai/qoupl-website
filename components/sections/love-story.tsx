@@ -158,10 +158,10 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
             <span className="text-sm font-medium">Real Love Stories</span>
           </motion.div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
+          <h2 className="text-fluid-5xl leading-tight font-bold mb-4 text-title">
             {data?.title || "Love Letters from Our Couples"}
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-fluid-lg leading-relaxed text-paragraph max-w-2xl mx-auto">
             {data?.subtitle || "Read heartfelt stories from college students who found their perfect match on qoupl"}
           </p>
         </motion.div>

@@ -28,6 +28,7 @@
     "seed:contact": "ts-node --project tsconfig.node.json scripts/seed-contact-sections.ts",
     "check:homepage": "ts-node --project tsconfig.node.json scripts/check-homepage-sections.ts",
     "fix:homepage": "ts-node --project tsconfig.node.json scripts/fix-homepage-sections.ts",
+    "update:timeline": "ts-node --project tsconfig.node.json scripts/update-timeline-content.ts",
     "verify:db": "ts-node --project tsconfig.node.json scripts/verify-db-structure.ts",
     "migrate:db": "ts-node --project tsconfig.node.json scripts/run-db-migration.ts",
     "migrate:db:execute": "ts-node --project tsconfig.node.json scripts/execute-migration-via-api.ts",

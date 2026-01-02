@@ -58,9 +58,41 @@ export type WaitlistFormData = z.infer<typeof waitlistSchema>
  *
  * Used for parsing FormData where age comes as string
  */
-export const waitlistInputSchema = waitlistSchema.extend({
-  age: z.coerce.number().int().min(18).max(25),
-})
+export const waitlistInputSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, 'Name must be at least 2 characters')
+      .max(100, 'Name must be less than 100 characters')
+      .regex(/^[a-zA-Z\s'-]+$/, 'Name contains invalid characters'),
+
+    email: z
+      .string()
+      .email('Invalid email address')
+      .toLowerCase()
+      .max(255, 'Email is too long'),
+
+    phone: z
+      .string()
+      .regex(
+        /^\+?[1-9]\d{1,14}$/,
+        'Invalid phone number. Use international format (e.g., +1234567890)'
+      )
+      .min(10, 'Phone number is too short')
+      .max(15, 'Phone number is too long'),
+
+    gender: z.enum(['male', 'female', 'other']),
+
+    age: z.coerce.number().int().min(18).max(25),
+
+    lookingFor: z.enum(['friendship', 'dating', 'serious']),
+
+    website: z.string().optional(),
+  })
+  .refine((data) => !data.website, {
+    message: 'Invalid submission detected',
+    path: ['website'],
+  })
 
 /**
  * Contact Form Schema

@@ -126,17 +126,17 @@ export default function AboutClient({ data }: AboutClientProps) {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20"
               >
                 <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
                 <span className="text-xs font-medium">{hero.badge || 'Our Story'}</span>
               </motion.div>
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+              <h1 className="text-fluid-6xl font-bold leading-tight text-title">
                 {hero.title || 'Building the Future of Love'}
               </h1>
 
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              <p className="text-fluid-lg text-paragraph leading-relaxed max-w-prose">
                 {hero.description || 'qoupl is revolutionizing how people connect. Through advanced AI matching and a commitment to authentic relationships, we\'re creating a platform where meaningful connections happen naturally.'}
               </p>
 
@@ -147,9 +147,9 @@ export default function AboutClient({ data }: AboutClientProps) {
                   transition={{ delay: 0.4, duration: 0.6 }}
                   className="flex flex-wrap gap-3 pt-2"
                 >
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#662D91]/10 border border-[#662D91]/20">
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/20">
                     <span className="text-lg leading-none">{hero.locationBadge.flag || '🇮🇳'}</span>
-                    <span className="text-sm font-medium text-foreground">{hero.locationBadge.text || 'Launching in India'}</span>
+                    <span className="text-fluid-sm font-medium text-title">{hero.locationBadge.text || 'Launching in India'}</span>
                   </div>
                 </motion.div>
               )}
@@ -239,17 +239,17 @@ export default function AboutClient({ data }: AboutClientProps) {
               transition={{ duration: 0.7 }}
               className="relative group"
             >
-              <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-[#662D91] transition-all duration-300">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4">
+              <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-primary transition-all duration-300">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4">
                   <Target className="h-3.5 w-3.5" strokeWidth={1.5} />
                   <span className="text-xs font-medium">{missionVision.mission?.badge || 'Our Mission'}</span>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+                <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
                   {missionVision.mission?.title || 'Bringing People Together'}
                 </h2>
 
-                <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+                <div className="space-y-3 text-fluid-base text-paragraph leading-relaxed max-w-prose">
                   {missionVision.mission?.content?.map((paragraph, index) => (
                     <p key={index}>{paragraph}</p>
                   ))}
@@ -266,17 +266,17 @@ export default function AboutClient({ data }: AboutClientProps) {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="relative group"
             >
-              <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-[#662D91] transition-all duration-300">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4">
+              <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-primary transition-all duration-300">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4">
                   <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
                   <span className="text-xs font-medium">{missionVision.vision?.badge || 'Our Vision'}</span>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+                <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
                   {missionVision.vision?.title || 'The Future of Dating'}
                 </h2>
 
-                <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+                <div className="space-y-3 text-fluid-base text-paragraph leading-relaxed max-w-prose">
                   {missionVision.vision?.content?.map((paragraph, index) => (
                     <p key={index}>{paragraph}</p>
                   ))}
@@ -302,19 +302,19 @@ export default function AboutClient({ data }: AboutClientProps) {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4"
             >
               <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
               <span className="text-xs font-medium">What Drives Us</span>
             </motion.div>
 
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-3 text-title">
               Our Core{" "}
-              <span className="text-[#662D91]">
+              <span className="text-primary">
                 Values
               </span>
             </h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-fluid-base text-paragraph max-w-prose mx-auto leading-relaxed">
               These principles guide everything we do at qoupl
             </p>
           </motion.div>
@@ -336,18 +336,18 @@ export default function AboutClient({ data }: AboutClientProps) {
                   <motion.div
                     whileHover={{ y: -4 }}
                     transition={{ duration: 0.3 }}
-                    className="relative h-full p-6 rounded-xl bg-card border border-border hover:border-[#662D91] transition-all duration-300"
+                    className="relative h-full p-6 rounded-xl bg-card border border-border hover:border-primary transition-all duration-300"
                   >
                     <div className="relative">
-                      <div className="w-12 h-12 rounded-lg bg-[#662D91] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+                      <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
                         <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
                       </div>
 
-                      <h3 className="text-lg md:text-xl font-bold mb-2 group-hover:text-[#662D91] transition-colors duration-300">
+                      <h3 className="text-fluid-2xl font-bold leading-snug mb-2 text-title group-hover:text-primary transition-colors duration-300">
                         {value.title}
                       </h3>
 
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-fluid-sm text-paragraph leading-relaxed">
                         {value.description}
                       </p>
                     </div>
@@ -374,19 +374,19 @@ export default function AboutClient({ data }: AboutClientProps) {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4"
             >
               <Rocket className="h-3.5 w-3.5" strokeWidth={1.5} />
               <span className="text-xs font-medium">Our Journey</span>
             </motion.div>
 
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-3 text-title">
               From Idea to{" "}
-              <span className="text-[#662D91]">
+              <span className="text-primary">
                 Reality
               </span>
             </h2>
-            <p className="text-base text-muted-foreground">
+            <p className="text-fluid-base text-paragraph leading-relaxed">
               Transforming the way people connect and find love
             </p>
           </motion.div>
@@ -410,12 +410,12 @@ export default function AboutClient({ data }: AboutClientProps) {
                   >
                     {/* Timeline dot */}
                     <div className="absolute left-4 md:left-6 top-1.5 z-10">
-                      <div className="w-3 h-3 rounded-full bg-[#662D91] border-2 border-background" />
+                      <div className="w-3 h-3 rounded-full bg-primary border-2 border-background" />
                     </div>
 
                     {/* Year badge */}
                     <div className="mb-3">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#662D91] text-white font-semibold text-xs">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-primary text-white font-semibold text-xs">
                         <TrendingUp className="h-3 w-3" strokeWidth={1.5} />
                         {item.year}
                       </span>
@@ -425,12 +425,12 @@ export default function AboutClient({ data }: AboutClientProps) {
                     <motion.div
                       whileHover={{ x: 4 }}
                       transition={{ duration: 0.2 }}
-                      className="bg-card border border-border rounded-lg p-5 hover:border-[#662D91] transition-all duration-300"
+                      className="bg-card border border-border rounded-lg p-5 hover:border-primary transition-all duration-300"
                     >
-                      <h3 className="text-lg md:text-xl font-bold mb-2 text-foreground">
+                      <h3 className="text-fluid-xl font-bold leading-snug mb-2 text-title">
                         {item.event}
                       </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-fluid-sm text-paragraph leading-relaxed">
                         {item.description}
                       </p>
                     </motion.div>
@@ -457,7 +457,7 @@ export default function AboutClient({ data }: AboutClientProps) {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4"
             >
               <Zap className="h-3.5 w-3.5" strokeWidth={1.5} />
                   <span className="text-xs font-medium">{whyChooseUs.badge}</span>
@@ -465,7 +465,7 @@ export default function AboutClient({ data }: AboutClientProps) {
               )}
 
               {whyChooseUs.title && (
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-3 text-title">
                   {whyChooseUs.title}
             </h2>
               )}
@@ -485,16 +485,16 @@ export default function AboutClient({ data }: AboutClientProps) {
                   className="group relative"
                 >
                   {/* Card */}
-                  <div className="relative h-full bg-card border border-border rounded-lg p-5 hover:border-[#662D91] transition-all duration-300">
-                    <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
+                  <div className="relative h-full bg-card border border-border rounded-lg p-5 hover:border-primary transition-all duration-300">
+                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
                       <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
                     </div>
 
-                    <h3 className="text-base font-bold mb-2 group-hover:text-[#662D91] transition-colors duration-300">
+                    <h3 className="text-fluid-xl font-bold leading-snug mb-2 text-title group-hover:text-primary transition-colors duration-300">
                       {feature.title}
                     </h3>
 
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-fluid-sm text-paragraph leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
@@ -508,7 +508,7 @@ export default function AboutClient({ data }: AboutClientProps) {
 
       {/* CTA Section - Modern Clean Design */}
       {(cta.badge || cta.title || cta.description || cta.buttons) && (
-      <section className="py-16 md:py-20 relative overflow-hidden bg-[#662D91]">
+      <section className="py-16 md:py-20 relative overflow-hidden bg-primary">
         <div className="container mx-auto px-4 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -530,13 +530,13 @@ export default function AboutClient({ data }: AboutClientProps) {
               )}
 
               {cta.title && (
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
+            <h2 className="text-fluid-5xl font-bold leading-tight text-white mb-4">
                   {cta.title}
             </h2>
               )}
 
               {cta.description && (
-            <p className="text-base md:text-lg text-white/90 mb-8 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-fluid-lg text-white/90 leading-relaxed mb-8 max-w-prose mx-auto">
                   {cta.description}
             </p>
               )}

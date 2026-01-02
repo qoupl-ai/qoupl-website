@@ -50,12 +50,22 @@
     --font-qoupl: 'Google Sans Flex', system-ui, sans-serif;
     --background: 0 0% 99%;
     --foreground: 240 10% 3.9%;
+
+    /* Typography Colors - Light Mode */
+    --title: 0 0% 9%; /* #171717 */
+    --paragraph: 0 0% 44%; /* #707070 */
+    --secondary-text: 0 0% 32%; /* #525252 */
+
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 275 56% 38%;
+
+    /* Brand color with fallback for better device compatibility */
+    --primary: 275 56% 38%; /* #662D91 */
+    --primary-rgb: 102 45 145;
     --primary-foreground: 0 0% 100%;
+
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
@@ -74,12 +84,22 @@
     /* Dark background set to #0F0F0F */
     --background: 0 0% 6%;
     --foreground: 0 0% 98%;
+
+    /* Typography Colors - Dark Mode */
+    --title: 0 0% 98%; /* #FAFAFA */
+    --paragraph: 0 0% 54%; /* #898989 */
+    --secondary-text: 0 0% 54%; /* #898989 - same as paragraph in dark mode */
+
     --card: 0 0% 6%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 275 56% 38%;
+
+    /* Brand color remains consistent in dark mode */
+    --primary: 275 56% 38%; /* #662D91 */
+    --primary-rgb: 102 45 145;
     --primary-foreground: 0 0% 100%;
+
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
@@ -91,6 +111,15 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 275 56% 38%;
+  }
+
+  /* Color gamut support for better brand color rendering on all devices */
+  @supports (color: color(display-p3 1 1 1)) {
+    @media (color-gamut: p3) {
+      :root, .dark {
+        --primary-rgb: 102 45 145;
+      }
+    }
   }
 }
 

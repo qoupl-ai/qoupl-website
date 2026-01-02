@@ -41,6 +41,10 @@ interface SectionContent {
   subtitle?: string
   description?: string
   email?: string
+  badge?: string
+  contactTitle?: string
+  contactDescription?: string
+  footerText?: string
   values?: ValueItem[]
   items?: WhyJoinItem[]
 }
@@ -101,7 +105,7 @@ export default function CareersClient({ data }: CareersClientProps) {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#662D91] bg-[#662D91]/10 border border-[#662D91]/20 mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-primary bg-primary/10 border border-primary/20 mb-6"
             >
               <Rocket className="h-3.5 w-3.5" strokeWidth={1.5} />
                 <span>{heroSection.content.badge}</span>
@@ -109,13 +113,13 @@ export default function CareersClient({ data }: CareersClientProps) {
             )}
 
             {heroTitle && (
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+              <h1 className="text-fluid-6xl font-bold leading-tight mb-4 text-title">
                 {heroTitle}
               </h1>
             )}
 
             {heroSubtitle && (
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              <p className="text-fluid-lg text-paragraph leading-relaxed max-w-prose mx-auto">
                 {heroSubtitle}
               </p>
             )}
@@ -133,27 +137,27 @@ export default function CareersClient({ data }: CareersClientProps) {
             transition={{ duration: 0.6 }}
             className="relative bg-card border border-border rounded-xl p-8 md:p-10 text-center"
           >
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-lg bg-[#662D91] mb-6">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-lg bg-primary mb-6">
               <Sparkles className="h-7 w-7 text-white" strokeWidth={1.5} />
             </div>
 
             {comingSoonTitle && (
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
                 {comingSoonTitle}
               </h2>
             )}
 
             {comingSoonDescription && (
-              <p className="text-sm md:text-base text-muted-foreground mb-8 leading-relaxed">
+              <p className="text-fluid-base text-paragraph leading-relaxed mb-8 max-w-prose mx-auto">
                 {comingSoonDescription}
               </p>
             )}
 
             {comingSoonSection?.content?.contactTitle && (
             <div className="bg-muted rounded-xl p-6 mb-6">
-                <h3 className="text-lg font-bold mb-3">{comingSoonSection.content.contactTitle}</h3>
+                <h3 className="text-fluid-2xl font-bold leading-snug mb-3 text-title">{comingSoonSection.content.contactTitle}</h3>
                 {comingSoonSection.content.contactDescription && (
-              <p className="text-sm text-muted-foreground mb-6">
+              <p className="text-fluid-sm text-paragraph leading-relaxed mb-6">
                     {comingSoonSection.content.contactDescription}
               </p>
                 )}
@@ -192,12 +196,12 @@ export default function CareersClient({ data }: CareersClientProps) {
             className="text-center mb-10"
           >
             {valuesSection?.content?.title && (
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
                 {valuesSection.content.title}
             </h2>
             )}
             {valuesSection?.content?.description && (
-            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-fluid-base text-paragraph leading-relaxed max-w-prose mx-auto">
                 {valuesSection.content.description}
             </p>
             )}
@@ -205,7 +209,7 @@ export default function CareersClient({ data }: CareersClientProps) {
 
           {values.length > 0 && (
             <div className="grid md:grid-cols-2 gap-5">
-              {processedValues.map((value: ValueItem & { icon: LucideIcon }, index: number) => {
+              {processedValues.map((value, index) => {
               const Icon = value.icon;
               return (
                 <motion.div
@@ -217,16 +221,16 @@ export default function CareersClient({ data }: CareersClientProps) {
                   whileHover={{ y: -4 }}
                   className="group"
                 >
-                  <div className="relative h-full bg-card border border-border rounded-xl p-6 hover:border-[#662D91]/30 transition-all duration-300">
-                    <div className={`w-12 h-12 rounded-lg bg-[#662D91] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300`}>
+                  <div className="relative h-full bg-card border border-border rounded-xl p-6 hover:border-primary/30 transition-all duration-300">
+                    <div className={`w-12 h-12 rounded-lg bg-primary flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300`}>
                       <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
                     </div>
 
-                    <h3 className="text-lg font-bold mb-2">
+                    <h3 className="text-fluid-2xl font-bold leading-snug mb-2 text-title">
                       {value.title}
                     </h3>
 
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-fluid-sm text-paragraph leading-relaxed">
                       {value.description}
                     </p>
                   </div>
@@ -248,12 +252,12 @@ export default function CareersClient({ data }: CareersClientProps) {
             className="text-center mb-10"
           >
             {whyJoinSection?.content?.title && (
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
                 {whyJoinSection.content.title}
             </h2>
             )}
             {whyJoinSection?.content?.description && (
-              <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-fluid-base text-paragraph leading-relaxed max-w-prose mx-auto">
                 {whyJoinSection.content.description}
               </p>
             )}
@@ -261,7 +265,7 @@ export default function CareersClient({ data }: CareersClientProps) {
 
           {processedWhyJoin.length > 0 && (
             <div className="grid md:grid-cols-3 gap-5">
-              {processedWhyJoin.map((item: WhyJoinItem & { iconComponent: LucideIcon }, index: number) => {
+              {processedWhyJoin.map((item, index) => {
                 const IconComponent = item.iconComponent;
                 return (
                   <motion.div
@@ -273,12 +277,12 @@ export default function CareersClient({ data }: CareersClientProps) {
                     whileHover={{ y: -4 }}
                     className="group"
                   >
-                    <div className="h-full bg-card border border-border rounded-xl p-6 text-center hover:border-[#662D91]/30 transition-all duration-300">
-                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-[#662D91] mb-4 group-hover:scale-105 transition-transform duration-300">
+                    <div className="h-full bg-card border border-border rounded-xl p-6 text-center hover:border-primary/30 transition-all duration-300">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary mb-4 group-hover:scale-105 transition-transform duration-300">
                         <IconComponent className="h-5 w-5 text-white" strokeWidth={1.5} />
                       </div>
-                      <h3 className="text-base font-bold mb-2">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <h3 className="text-fluid-xl font-bold leading-snug mb-2 text-title">{item.title}</h3>
+                      <p className="text-fluid-sm text-paragraph leading-relaxed">
                         {item.description}
                       </p>
                     </div>

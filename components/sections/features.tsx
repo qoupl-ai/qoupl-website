@@ -84,14 +84,14 @@ export default function Features() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
+          <h2 className="text-fluid-5xl leading-tight font-bold mb-4 text-title">
             Why Choose{" "}
             <span className="text-[#662D91]">
               qoupl
             </span>
             ?
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-fluid-base leading-relaxed text-paragraph max-w-prose mx-auto">
             Experience the future of dating for college students with features designed to help you
             find genuine connections with your peers.
           </p>
@@ -115,10 +115,10 @@ export default function Features() {
                     >
                       <Icon className="h-6 w-6 text-white" strokeWidth={1} />
                     </div>
-                    <h3 className="text-lg md:text-xl font-semibold mb-2">
+                    <h3 className="text-fluid-xl leading-snug font-semibold mb-2 text-title">
                       {feature.title}
                     </h3>
-                    <p className="text-sm md:text-base text-muted-foreground">
+                    <p className="text-fluid-base leading-relaxed text-paragraph max-w-prose">
                       {feature.description}
                     </p>
                   </div>

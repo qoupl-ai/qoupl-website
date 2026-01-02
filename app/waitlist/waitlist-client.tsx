@@ -125,16 +125,16 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-              className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#662D91]/10 dark:bg-[#662D91]/15 mb-6 text-[#662D91]"
+              className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-primary/10 dark:bg-primary/15 mb-6 text-primary"
             >
-              <Heart className="h-8 w-8 md:h-10 md:w-10 fill-[#662D91]" />
+              <Heart className="h-8 w-8 md:h-10 md:w-10 fill-primary" />
             </motion.div>
-            
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight text-foreground">
+
+            <h1 className="text-fluid-6xl font-bold leading-tight mb-4 text-title">
               {hero.title || "Join the Waitlist"}
             </h1>
-            
-            <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+
+            <p className="text-fluid-lg text-paragraph leading-relaxed mb-8 max-w-prose mx-auto">
               {hero.description || "Be among the first to find your perfect match on qoupl. Get exclusive early access, special perks, and be part of a community built exclusively for college students."}
             </p>
 
@@ -155,12 +155,12 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   const Icon = IconMap[benefit.icon?.toLowerCase()] || Zap;
                   return (
                     <div key={index} className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
-                <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                        <Icon className="h-5 w-5 text-[#662D91]" />
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="h-5 w-5 text-primary" />
                 </div>
                 <div className="text-left">
-                        <h3 className="font-semibold text-sm mb-1">{benefit.title}</h3>
-                        <p className="text-xs text-muted-foreground">{benefit.description}</p>
+                        <h3 className="font-semibold text-fluid-sm leading-snug mb-1 text-title">{benefit.title}</h3>
+                        <p className="text-fluid-sm text-paragraph leading-relaxed">{benefit.description}</p>
                 </div>
               </div>
                   );
@@ -183,11 +183,11 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
               transition={{ duration: 0.5 }}
               className="text-center mb-12"
             >
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+              <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
                   {whyJoin.title}
               </h2>
                 {whyJoin.description && (
-              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-fluid-base text-paragraph leading-relaxed max-w-prose mx-auto">
                     {whyJoin.description}
                   </p>
                 )}
@@ -213,12 +213,12 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                       transition={{ duration: 0.5, delay: (index + 1) * 0.1 }}
                 className="flex gap-4 p-6 bg-card border border-border rounded-xl"
               >
-                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                        <Icon className="h-6 w-6 text-[#662D91]" />
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                        <h3 className="font-semibold text-base mb-2">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                        <h3 className="font-semibold text-fluid-xl leading-snug mb-2 text-title">{feature.title}</h3>
+                  <p className="text-fluid-sm text-paragraph leading-relaxed">
                           {feature.description}
                   </p>
                 </div>
@@ -243,11 +243,11 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
               transition={{ duration: 0.5 }}
               className="text-center mb-8"
             >
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+              <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
                   {whatToExpectSection.content.title}
               </h2>
                 {whatToExpectSection.content.description && (
-              <p className="text-base text-muted-foreground">
+              <p className="text-fluid-base text-paragraph leading-relaxed">
                     {whatToExpectSection.content.description}
               </p>
                 )}
@@ -285,12 +285,12 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
                   className="flex gap-4 items-start"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#662D91] flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
                     <span className="text-sm font-bold text-white">{item.step || (idx + 1).toString()}</span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-base mb-1">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                    <h3 className="font-semibold text-fluid-xl leading-snug mb-1 text-title">{item.title}</h3>
+                    <p className="text-fluid-sm text-paragraph leading-relaxed">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -463,7 +463,7 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                     type="submit"
                     disabled={isSubmitting}
                     size="lg"
-                    className="w-full font-semibold bg-[#662D91] hover:bg-[#662D91]/90 text-white mt-4"
+                    className="w-full font-semibold bg-primary hover:bg-primary/90 text-white mt-4"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-2">
@@ -487,13 +487,13 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   </Button>
 
                   {/* Privacy Note */}
-                  <p className="text-xs text-center text-muted-foreground pt-2 leading-relaxed">
+                  <p className="text-fluid-sm text-center text-secondary-text pt-2 leading-relaxed">
                     qoupl is exclusively for college students aged 18-25. By joining, you agree to our{" "}
-                    <a href="/terms" className="text-[#662D91] hover:underline font-medium">
+                    <a href="/terms" className="text-primary hover:underline font-medium">
                       Terms
                     </a>{" "}
                     and{" "}
-                    <a href="/privacy" className="text-[#662D91] hover:underline font-medium">
+                    <a href="/privacy" className="text-primary hover:underline font-medium">
                       Privacy Policy
                     </a>
                   </p>
@@ -511,7 +511,7 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-                  className="mb-6 inline-flex items-center justify-center w-24 h-24 md:w-28 md:h-28 bg-[#662D91] rounded-full relative"
+                  className="mb-6 inline-flex items-center justify-center w-24 h-24 md:w-28 md:h-28 bg-primary rounded-full relative"
                 >
                   {/* Pulsing ring effect */}
                   <motion.div
@@ -524,7 +524,7 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
-                    className="absolute inset-0 bg-[#662D91] rounded-full"
+                    className="absolute inset-0 bg-primary rounded-full"
                   />
                   <motion.div
                     animate={{
@@ -545,7 +545,7 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="text-3xl md:text-4xl font-bold text-foreground mb-3"
+                  className="text-fluid-6xl font-bold leading-tight text-title mb-3"
                 >
                   You're On The List!
                 </motion.h3>
@@ -555,7 +555,7 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="text-lg md:text-xl text-muted-foreground mb-6"
+                  className="text-fluid-2xl text-paragraph leading-relaxed mb-6"
                 >
                   Thank you for showing interest in qoupl
                 </motion.p>
@@ -565,9 +565,9 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="bg-[#662D91]/10 rounded-xl p-6 mb-6 border border-[#662D91]/20"
+                  className="bg-primary/10 rounded-xl p-6 mb-6 border border-primary/20"
                 >
-                  <p className="text-base text-foreground leading-relaxed">
+                  <p className="text-fluid-base text-paragraph leading-relaxed">
                     We're thrilled to have you on board! You'll be among the first to know when qoupl launches.
                     We'll send you exclusive early access and special perks.
                   </p>
@@ -578,9 +578,9 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
-                  className="space-y-2 text-sm md:text-base text-muted-foreground"
+                  className="space-y-2 text-fluid-base text-paragraph leading-relaxed"
                 >
-                  <p className="font-semibold text-foreground">What's next?</p>
+                  <p className="font-semibold text-title">What's next?</p>
                   <p>📧 Check your inbox for a confirmation email</p>
                   <p>💜 Follow us on social media for updates</p>
                   <p>🎉 Get ready to find your perfect match!</p>
@@ -605,7 +605,7 @@ export default function WaitlistPageClient({ data }: WaitlistPageClientProps = {
                       }}
                       className="absolute left-1/2 top-1/4"
                     >
-                      <Sparkles className="h-4 w-4 text-[#662D91]" />
+                      <Sparkles className="h-4 w-4 text-primary" />
                     </motion.div>
                   ))}
                 </div>
