@@ -12,44 +12,6 @@ interface Step {
   image: string;
 }
 
-// Fallback steps
-const defaultSteps: Step[] = [
-  {
-    step: "01",
-    title: "Create Your Profile",
-    description:
-      "Sign up in seconds as a college student and create a profile that showcases the real you. Verify with your college ID, add photos, interests, and what makes you unique.\n\nOur verification process ensures a safe and authentic community where you can be yourself. Share your passions, hobbies, and what you're looking for in a meaningful connection.",
-    image: getStorageUrl("app-screenshots", "qoupl_screenshot_01.png"),
-  },
-  {
-    step: "02",
-    title: "Smart AI Matching",
-    description:
-      "Our advanced AI algorithm analyzes compatibility factors and suggests the most suitable matches for you.\n\nThe system learns from your preferences, interactions, and behavior to continuously improve match quality. Every swipe and conversation helps refine your future suggestions for better compatibility.",
-    image: getStorageUrl("app-screenshots", "qoupl_screenshot_03.png"),
-  },
-  {
-    step: "03",
-    title: "Start Conversations",
-    description:
-      "Break the ice with our conversation starters and build meaningful connections through authentic chats.\n\nEngage in genuine conversations that go beyond surface-level small talk. Our platform encourages thoughtful interactions that help you discover shared values, interests, and life goals with potential matches.",
-    image: getStorageUrl("app-screenshots", "qoupl_screenshot_04.png"),
-  },
-  {
-    step: "04",
-    title: "Plan Your Date",
-    description:
-      "Use our date planning features to find the perfect spot and make your first meeting memorable.\n\nDiscover local venues, activities, and events that match both your interests. Get suggestions for date ideas that create the perfect atmosphere for getting to know each other better.",
-    image: getStorageUrl("app-screenshots", "qoupl_screenshot_06.png"),
-  },
-  {
-    step: "05",
-    title: "Find True Love",
-    description:
-      "Build lasting relationships with people who truly understand and complement you. Your perfect match awaits!\n\nExperience the joy of finding someone who shares your values, supports your dreams, and grows with you. Join thousands of college students who have found their perfect match on qoupl.",
-    image: getStorageUrl("app-screenshots", "qoupl_screenshot_07.png"),
-  },
-];
 
 interface HowItWorksProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -5,33 +5,6 @@ import Image from "next/image";
 import { Heart, Quote, Star } from "lucide-react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-// Fallback testimonials
-const defaultTestimonials = [
-  {
-    name: "Arjun",
-    image: getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
-    text: "We matched on qoupl during beta testing and instantly connected. Three months later, we're inseparable!",
-    location: "Mumbai, Maharashtra",
-    rating: 5,
-    date: "Beta User",
-  },
-  {
-    name: "Ananya",
-    image: getStorageUrl("hero-images", "women/qoupl_women_03.png"),
-    text: "Being part of the beta program was amazing! The matching algorithm really works and I can't wait for everyone to experience it.",
-    location: "Bangalore, Karnataka",
-    rating: 4,
-    date: "Beta User",
-  },
-  {
-    name: "Kavya",
-    image: getStorageUrl("hero-images", "women/qoupl_women_05.png"),
-    text: "Found my soulmate during the beta phase. qoupl changed my life forever and I'm excited for the public launch!",
-    location: "Delhi, India",
-    rating: 4,
-    date: "Beta User",
-  },
-];
 
 interface TestimonialsProps {
   data: Record<string, any>;

@@ -24,51 +24,6 @@ interface LoveStoryProps {
   };
 }
 
-// Fallback love stories with Indian names - mix of letters from boys and girls
-const defaultLoveStories = [
-  {
-    image: getStorageUrl("love-story", "qoupl_love_story_1.jpg"),
-    couple: "Priya & Arjun",
-    story: `My Dearest Arjun,
-
-From the moment we matched on qoupl, I knew something special was happening. Your profile showed a love for books and coffee, just like me. When you sent that first message asking about my favorite author, I couldn't help but smile.
-
-Our first date at the campus library turned into hours of conversation. You made me laugh with your jokes, and I felt comfortable being myself around you. That evening, I knew I had found someone who truly understood me.
-
-Now, three months later, we're planning our future together. Thank you, qoupl, for bringing us together. Thank you, Arjun, for being you.
-
-Forever yours,
-Priya`,
-  },
-  {
-    image: getStorageUrl("love-story", "qoupl_love_story_2.jpg"),
-    couple: "Ananya & Rohan",
-    story: `My Beautiful Ananya,
-
-I still remember the day we matched on qoupl. Your smile in your photos was so genuine, and your bio about loving music and poetry caught my attention immediately. I knew I had to message you.
-
-Our first date at the music café was perfect. You were even more beautiful in person, and your laugh is something I'll never forget. We talked for hours, and I didn't want the evening to end.
-
-Now, every day with you feels like a gift. You've become my best friend, my confidant, and the person I want to share everything with. Thank you, qoupl, for bringing you into my life.
-
-With all my love,
-Rohan`,
-  },
-  {
-    image: getStorageUrl("love-story", "qoupl_love_story_3.jpg"),
-    couple: "Kavya & Vikram",
-    story: `My Dearest Kavya,
-
-When I first saw your profile on qoupl, I was immediately drawn to your warmth and intelligence. Your passion for making a difference in the world and your dedication to your studies showed me that you were someone special.
-
-Our first date at the college café was unforgettable. You were even more beautiful in person, and your smile made my heart skip a beat. The way you listened to me and shared your thoughts made me feel like I had found my perfect match.
-
-Now, months later, I can't imagine my life without you. You've become my best friend, my partner, and the person I want to build my future with. Thank you, qoupl, for bringing you into my life.
-
-Forever yours,
-Vikram`,
-  },
-];
 
 export default function LoveStory({ data = {} }: LoveStoryProps) {
   const { resolvedTheme } = useTheme();

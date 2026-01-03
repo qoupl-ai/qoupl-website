@@ -6,39 +6,6 @@ import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-// Fallback images
-const defaultGalleryImages = [
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_01.jpg'),
-    alt: "Happy couple outdoors",
-    title: "Sarah & Raj",
-    story: "Met through qoupl, now planning their future together"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_02.jpg'),
-    alt: "Couple enjoying time together",
-    title: "Priya & Arjun",
-    story: "Found love in unexpected places"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_05.jpg'),
-    alt: "Romantic moment",
-    title: "Anjali & Vikram",
-    story: "Book lovers united by their passion"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_03.jpg'),
-    alt: "Couple smiling",
-    title: "Neha & Karan",
-    story: "Perfect match from day one"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_04.jpg'),
-    alt: "Dating couple",
-    title: "Maya & Rohan",
-    story: "Adventure seekers finding love together"
-  },
-];
 
 interface GalleryProps {
   data: Record<string, any>;

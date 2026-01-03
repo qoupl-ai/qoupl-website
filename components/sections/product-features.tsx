@@ -14,52 +14,6 @@ const iconMap: Record<string, React.ComponentType<{ className?: string; strokeWi
   Check,
 };
 
-// Fallback features
-const defaultFeatures = [
-  {
-    icon: Heart,
-    title: "Smart AI Matching",
-    description:
-      "Our advanced AI algorithm analyzes compatibility factors including personality, interests, values, and lifestyle to suggest highly compatible matches tailored just for you.",
-    highlights: [
-      "Deep compatibility analysis",
-      "Personalized suggestions",
-      "Values-based matching",
-      "Learning preferences",
-    ],
-    image: getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
-    color: "bg-[#662D91]",
-  },
-  {
-    icon: Shield,
-    title: "Safe & Verified",
-    description:
-      "Multi-layered verification system with mandatory college ID verification, 24/7 AI moderation, photo verification, and encrypted messaging to keep college students safe while finding love.",
-    highlights: [
-      "College ID verification",
-      "Photo verification",
-      "24/7 AI moderation",
-      "Encrypted messaging",
-    ],
-    image: getStorageUrl("couple-photos", "qoupl_couple_02.jpg"),
-    color: "bg-[#662D91]",
-  },
-  {
-    icon: Zap,
-    title: "Instant Connections",
-    description:
-      "Connect with compatible matches instantly through our real-time matching system. Start meaningful conversations with smart conversation starters.",
-    highlights: [
-      "Real-time matching",
-      "Smart conversation starters",
-      "Meaningful connections",
-      "Instant notifications",
-    ],
-    image: getStorageUrl("couple-photos", "qoupl_couple_04.jpg"),
-    color: "bg-[#662D91]",
-  },
-];
-
 interface ProductFeaturesProps {
   data: Record<string, any>;
 }

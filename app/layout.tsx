@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 // qoupl font (Google Sans Flex) - local font (used as default for entire website)
 const qouplFont = localFont({
-  src: "../Google_Sans_Flex/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf",
+  src: "../qoupl_sans/qoupl_sans-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf",
   variable: "--font-qoupl",
   display: 'swap',
   fallback: ['system-ui', 'sans-serif'],

@@ -26,9 +26,9 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
   // Default to light mode during SSR to match server render
   const isDark = mounted && resolvedTheme === 'dark';
 
-  const title = data?.title || "Get Early Access";
-  const subtitle = data?.subtitle || "Join thousands of college students waiting for qoupl to launch. Be the first to experience the future of dating.";
-  const ctaText = data?.cta?.text || "Join the Waitlist";
+  const title = data?.title || "";
+  const subtitle = data?.subtitle || "";
+  const ctaText = data?.cta?.text || "";
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
