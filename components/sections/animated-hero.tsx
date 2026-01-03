@@ -182,8 +182,7 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
                 border: "1px solid rgba(255, 255, 255, 0.18)",
                 boxShadow: `
                   0 8px 32px 0 rgba(0, 0, 0, 0.37),
-                  0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-                  ${depth > 0.5 ? "0 0 60px rgba(168, 85, 247, 0.3)" : "0 0 30px rgba(168, 85, 247, 0.15)"}
+                  0 0 0 1px rgba(255, 255, 255, 0.1) inset
                 `,
               }}
             >
@@ -224,22 +223,6 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
                 }}
               />
 
-              {/* Glow Border */}
-              <motion.div
-                className="absolute inset-0 rounded-3xl"
-                animate={{
-                  boxShadow: [
-                    "inset 0 0 20px rgba(168, 85, 247, 0.2)",
-                    "inset 0 0 40px rgba(236, 72, 153, 0.3)",
-                    "inset 0 0 20px rgba(168, 85, 247, 0.2)",
-                  ],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
 
               {/* Heart Badge - Only on front card */}
               {depth > 0.7 && (
@@ -346,7 +329,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
               style={{
                 fontFamily: "var(--font-poppins), system-ui, sans-serif",
                 fontWeight: 900,
-                letterSpacing: "-0.02em",
+                letterSpacing: "0.01em",
                 textShadow: `
                   4px 4px 0px rgba(102, 45, 145, 0.2),
                   8px 8px 0px rgba(102, 45, 145, 0.15),
