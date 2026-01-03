@@ -45,7 +45,7 @@ export function BlogGrid({ posts, categories }: BlogGridProps) {
       'Tips & Tricks': 'from-orange-500 to-amber-500',
       'Dating Tips': 'from-green-500 to-emerald-500',
     };
-    return gradients[categoryName] || 'from-[#662D91] to-[#8B3DB8]';
+    return gradients[categoryName] ?? 'from-[#662D91] to-[#8B3DB8]';
   };
 
   return (

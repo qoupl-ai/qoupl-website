@@ -5,33 +5,6 @@ import Image from "next/image";
 import { Heart, Quote, Star } from "lucide-react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-// Fallback testimonials
-const defaultTestimonials = [
-  {
-    name: "Arjun",
-    image: getStorageUrl("hero-images", "men/qoupl_men_01.jpg"),
-    text: "We matched on qoupl during beta testing and instantly connected. Three months later, we're inseparable!",
-    location: "Mumbai, Maharashtra",
-    rating: 5,
-    date: "Beta User",
-  },
-  {
-    name: "Ananya",
-    image: getStorageUrl("hero-images", "women/qoupl_women_03.png"),
-    text: "Being part of the beta program was amazing! The matching algorithm really works and I can't wait for everyone to experience it.",
-    location: "Bangalore, Karnataka",
-    rating: 4,
-    date: "Beta User",
-  },
-  {
-    name: "Kavya",
-    image: getStorageUrl("hero-images", "women/qoupl_women_05.png"),
-    text: "Found my soulmate during the beta phase. qoupl changed my life forever and I'm excited for the public launch!",
-    location: "Delhi, India",
-    rating: 4,
-    date: "Beta User",
-  },
-];
 
 interface TestimonialsProps {
   data: Record<string, any>;
@@ -93,14 +66,14 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
             <span className="text-sm font-medium">Beta User Success Stories</span>
           </motion.div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
+          <h2 className="text-fluid-5xl leading-tight font-bold mb-4 text-title">
             What Our{" "}
             <span className="text-[#662D91] dark:text-[#9333ea]">
               Beta Users
             </span>{" "}
             Say
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-fluid-lg leading-relaxed text-paragraph max-w-2xl mx-auto">
             Real college student couples from our exclusive beta program. See how qoupl brought them together during testing.
           </p>
         </motion.div>
@@ -174,7 +147,7 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
                     </div>
 
                     {/* Quote Text */}
-                    <p className="text-white text-sm md:text-base font-medium leading-relaxed">
+                    <p className="text-fluid-lg leading-relaxed text-paragraph font-medium text-white">
                       "{testimonial.text}"
                     </p>
 
@@ -183,13 +156,13 @@ export default function Testimonials({ data = {} }: TestimonialsProps) {
 
                     {/* Author Info */}
                     <div>
-                      <p className="text-white font-bold text-base md:text-lg">
+                      <p className="text-fluid-base font-semibold text-title text-white">
                         {testimonial.name}
                       </p>
-                      <p className="text-white/80 text-xs md:text-sm">
+                      <p className="text-fluid-sm text-secondary-text text-white/80">
                         {testimonial.location}
                       </p>
-                      <p className="text-white/60 text-xs mt-1">
+                      <p className="text-fluid-sm text-secondary-text text-white/60 mt-1">
                         {testimonial.date}
                       </p>
                     </div>

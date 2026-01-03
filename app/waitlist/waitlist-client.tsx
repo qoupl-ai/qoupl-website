@@ -1,15 +1,37 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Mail, Phone, User, Users, Sparkles, ChevronDown, CheckCircle2, Zap, Star, Shield, Lock, Sparkles as SparklesIcon, MessageCircle, TrendingUp } from "lucide-react";
-import Image from "next/image";
+import { Heart, Mail, Phone, User, Users, Sparkles, ChevronDown, Zap, Star, Shield, Lock, Sparkles as SparklesIcon, MessageCircle, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-export default function WaitlistPageClient() {
+interface WaitlistPageData {
+  sections: Array<{
+    type: string;
+    content: Record<string, any>;
+  }>;
+}
+
+interface WaitlistPageClientProps {
+  data?: WaitlistPageData;
+}
+
+export default function WaitlistPageClient({ data }: WaitlistPageClientProps = { data: { sections: [] } }) {
+  // Extract sections from data
+  const heroSection = data?.sections?.find(s => s.type === 'hero');
+  const benefitsSection = data?.sections?.find(s => s.type === 'benefits');
+  const whyJoinSection = data?.sections?.find(s => s.type === 'why-join');
+  const whatToExpectSection = data?.sections?.find(s => s.type === 'what-to-expect');
+  const successSection = data?.sections?.find(s => s.type === 'success-message');
+
+  const hero = heroSection?.content || {};
+  const benefits = benefitsSection?.content?.items || [];
+  const whyJoin = whyJoinSection?.content || {};
+  const whatToExpect = whatToExpectSection?.content?.steps || [];
+  const successContent = successSection?.content || {};
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -103,56 +125,48 @@ export default function WaitlistPageClient() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-              className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#662D91]/10 dark:bg-[#662D91]/15 mb-6 text-[#662D91]"
+              className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-primary/10 dark:bg-primary/15 mb-6 text-primary"
             >
-              <Heart className="h-8 w-8 md:h-10 md:w-10 fill-[#662D91]" />
+              <Heart className="h-8 w-8 md:h-10 md:w-10 fill-primary" />
             </motion.div>
-            
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight text-foreground">
-              Join the Waitlist
+
+            <h1 className="text-fluid-6xl font-bold leading-tight mb-4 text-title">
+              {hero.title || "Join the Waitlist"}
             </h1>
-            
-            <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Be among the first to find your perfect match on qoupl. Get exclusive early access, special perks, and be part of a community built exclusively for college students.
+
+            <p className="text-fluid-lg text-paragraph leading-relaxed mb-8 max-w-prose mx-auto">
+              {hero.description || "Be among the first to find your perfect match on qoupl. Get exclusive early access, special perks, and be part of a community built exclusively for college students."}
             </p>
 
             {/* Benefits Grid */}
+            {benefits.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8"
             >
-              <div className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
-                <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <Zap className="h-5 w-5 text-[#662D91]" />
+                {benefits.map((benefit: any, index: number) => {
+                  const IconMap: Record<string, any> = {
+                    'zap': Zap,
+                    'star': Star,
+                    'shield': Shield,
+                  };
+                  const Icon = IconMap[benefit.icon?.toLowerCase()] || Zap;
+                  return (
+                    <div key={index} className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="h-5 w-5 text-primary" />
                 </div>
                 <div className="text-left">
-                  <h3 className="font-semibold text-sm mb-1">Early Access</h3>
-                  <p className="text-xs text-muted-foreground">Be among the first to experience qoupl when we launch</p>
+                        <h3 className="font-semibold text-fluid-sm leading-snug mb-1 text-title">{benefit.title}</h3>
+                        <p className="text-fluid-sm text-paragraph leading-relaxed">{benefit.description}</p>
                 </div>
               </div>
-
-              <div className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
-                <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <Star className="h-5 w-5 text-[#662D91]" />
-                </div>
-                <div className="text-left">
-                  <h3 className="font-semibold text-sm mb-1">Exclusive Perks</h3>
-                  <p className="text-xs text-muted-foreground">Get special benefits and priority features</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
-                <div className="w-10 h-10 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <Shield className="h-5 w-5 text-[#662D91]" />
-                </div>
-                <div className="text-left">
-                  <h3 className="font-semibold text-sm mb-1">Verified Community</h3>
-                  <p className="text-xs text-muted-foreground">Connect with verified college students only</p>
-                </div>
-              </div>
+                  );
+                })}
             </motion.div>
+            )}
           </motion.div>
         </div>
       </section>
@@ -161,6 +175,7 @@ export default function WaitlistPageClient() {
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
+            {whyJoin.title && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -168,87 +183,50 @@ export default function WaitlistPageClient() {
               transition={{ duration: 0.5 }}
               className="text-center mb-12"
             >
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
-                Why Join qoupl?
+              <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
+                  {whyJoin.title}
               </h2>
-              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
-                qoupl is the only dating app built exclusively for college students. We understand the unique challenges and opportunities of dating in college, and we've designed every feature with your needs in mind.
-              </p>
-            </motion.div>
+                {whyJoin.description && (
+              <p className="text-fluid-base text-paragraph leading-relaxed max-w-prose mx-auto">
+                    {whyJoin.description}
+                  </p>
+                )}
+              </motion.div>
+            )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {whyJoin.features && whyJoin.features.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {whyJoin.features.map((feature: any, index: number) => {
+                  const IconMap: Record<string, any> = {
+                    'sparkles': SparklesIcon,
+                    'lock': Lock,
+                    'message-circle': MessageCircle,
+                    'trending-up': TrendingUp,
+                  };
+                  const Icon = IconMap[feature.icon?.toLowerCase()] || SparklesIcon;
+                  return (
               <motion.div
+                      key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+                      transition={{ duration: 0.5, delay: (index + 1) * 0.1 }}
                 className="flex gap-4 p-6 bg-card border border-border rounded-xl"
               >
-                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <SparklesIcon className="h-6 w-6 text-[#662D91]" />
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-base mb-2">AI-Powered Matching</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Our advanced algorithm learns your preferences and suggests better matches over time. Find people who truly align with your values and interests.
+                        <h3 className="font-semibold text-fluid-xl leading-snug mb-2 text-title">{feature.title}</h3>
+                  <p className="text-fluid-sm text-paragraph leading-relaxed">
+                          {feature.description}
                   </p>
                 </div>
               </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex gap-4 p-6 bg-card border border-border rounded-xl"
-              >
-                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <Lock className="h-6 w-6 text-[#662D91]" />
+                  );
+                })}
                 </div>
-                <div>
-                  <h3 className="font-semibold text-base mb-2">Verified & Safe</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Mandatory college ID and photo verification ensures everyone is who they say they are. Your safety and privacy are our top priorities.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex gap-4 p-6 bg-card border border-border rounded-xl"
-              >
-                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <MessageCircle className="h-6 w-6 text-[#662D91]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-base mb-2">Rich Communication</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Express yourself with photos, voice messages, and more. Build deeper connections through authentic communication.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="flex gap-4 p-6 bg-card border border-border rounded-xl"
-              >
-                <div className="w-12 h-12 rounded-lg bg-[#662D91]/10 flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="h-6 w-6 text-[#662D91]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-base mb-2">Meaningful Connections</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Focus on building real relationships, not just casual swiping. Quality over quantity in a community of like-minded college students.
-                  </p>
-                </div>
-              </motion.div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -257,6 +235,7 @@ export default function WaitlistPageClient() {
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
+            {whatToExpectSection?.content?.title && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -264,16 +243,19 @@ export default function WaitlistPageClient() {
               transition={{ duration: 0.5 }}
               className="text-center mb-8"
             >
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
-                What to Expect
+              <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
+                  {whatToExpectSection.content.title}
               </h2>
-              <p className="text-base text-muted-foreground">
-                Here's what happens after you join the waitlist
+                {whatToExpectSection.content.description && (
+              <p className="text-fluid-base text-paragraph leading-relaxed">
+                    {whatToExpectSection.content.description}
               </p>
+                )}
             </motion.div>
+            )}
 
             <div className="space-y-6">
-              {[
+              {(whatToExpect.length > 0 ? whatToExpect : [
                 {
                   step: "1",
                   title: "Join the Waitlist",
@@ -294,7 +276,7 @@ export default function WaitlistPageClient() {
                   title: "Early Access",
                   description: "When we launch, you'll be among the first to access qoupl with special perks and priority features.",
                 },
-              ].map((item, idx) => (
+              ]).map((item: any, idx: number) => (
                 <motion.div
                   key={idx}
                   initial={{ opacity: 0, x: -20 }}
@@ -303,12 +285,12 @@ export default function WaitlistPageClient() {
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
                   className="flex gap-4 items-start"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#662D91] flex items-center justify-center flex-shrink-0">
-                    <span className="text-sm font-bold text-white">{item.step}</span>
+                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-bold text-white">{item.step || (idx + 1).toString()}</span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-base mb-1">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                    <h3 className="font-semibold text-fluid-xl leading-snug mb-1 text-title">{item.title}</h3>
+                    <p className="text-fluid-sm text-paragraph leading-relaxed">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -481,7 +463,7 @@ export default function WaitlistPageClient() {
                     type="submit"
                     disabled={isSubmitting}
                     size="lg"
-                    className="w-full font-semibold bg-[#662D91] hover:bg-[#662D91]/90 text-white mt-4"
+                    className="w-full font-semibold bg-primary hover:bg-primary/90 text-white mt-4"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-2">
@@ -505,13 +487,13 @@ export default function WaitlistPageClient() {
                   </Button>
 
                   {/* Privacy Note */}
-                  <p className="text-xs text-center text-muted-foreground pt-2 leading-relaxed">
+                  <p className="text-fluid-sm text-center text-secondary-text pt-2 leading-relaxed">
                     qoupl is exclusively for college students aged 18-25. By joining, you agree to our{" "}
-                    <a href="/terms" className="text-[#662D91] hover:underline font-medium">
+                    <a href="/terms" className="text-primary hover:underline font-medium">
                       Terms
                     </a>{" "}
                     and{" "}
-                    <a href="/privacy" className="text-[#662D91] hover:underline font-medium">
+                    <a href="/privacy" className="text-primary hover:underline font-medium">
                       Privacy Policy
                     </a>
                   </p>
@@ -529,7 +511,7 @@ export default function WaitlistPageClient() {
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-                  className="mb-6 inline-flex items-center justify-center w-24 h-24 md:w-28 md:h-28 bg-[#662D91] rounded-full relative"
+                  className="mb-6 inline-flex items-center justify-center w-24 h-24 md:w-28 md:h-28 bg-primary rounded-full relative"
                 >
                   {/* Pulsing ring effect */}
                   <motion.div
@@ -542,7 +524,7 @@ export default function WaitlistPageClient() {
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
-                    className="absolute inset-0 bg-[#662D91] rounded-full"
+                    className="absolute inset-0 bg-primary rounded-full"
                   />
                   <motion.div
                     animate={{
@@ -563,7 +545,7 @@ export default function WaitlistPageClient() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="text-3xl md:text-4xl font-bold text-foreground mb-3"
+                  className="text-fluid-6xl font-bold leading-tight text-title mb-3"
                 >
                   You're On The List!
                 </motion.h3>
@@ -573,7 +555,7 @@ export default function WaitlistPageClient() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="text-lg md:text-xl text-muted-foreground mb-6"
+                  className="text-fluid-2xl text-paragraph leading-relaxed mb-6"
                 >
                   Thank you for showing interest in qoupl
                 </motion.p>
@@ -583,9 +565,9 @@ export default function WaitlistPageClient() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="bg-[#662D91]/10 rounded-xl p-6 mb-6 border border-[#662D91]/20"
+                  className="bg-primary/10 rounded-xl p-6 mb-6 border border-primary/20"
                 >
-                  <p className="text-base text-foreground leading-relaxed">
+                  <p className="text-fluid-base text-paragraph leading-relaxed">
                     We're thrilled to have you on board! You'll be among the first to know when qoupl launches.
                     We'll send you exclusive early access and special perks.
                   </p>
@@ -596,9 +578,9 @@ export default function WaitlistPageClient() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
-                  className="space-y-2 text-sm md:text-base text-muted-foreground"
+                  className="space-y-2 text-fluid-base text-paragraph leading-relaxed"
                 >
-                  <p className="font-semibold text-foreground">What's next?</p>
+                  <p className="font-semibold text-title">What's next?</p>
                   <p>📧 Check your inbox for a confirmation email</p>
                   <p>💜 Follow us on social media for updates</p>
                   <p>🎉 Get ready to find your perfect match!</p>
@@ -623,7 +605,7 @@ export default function WaitlistPageClient() {
                       }}
                       className="absolute left-1/2 top-1/4"
                     >
-                      <Sparkles className="h-4 w-4 text-[#662D91]" />
+                      <Sparkles className="h-4 w-4 text-primary" />
                     </motion.div>
                   ))}
                 </div>

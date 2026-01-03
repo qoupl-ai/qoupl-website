@@ -1,16 +1,16 @@
 "use client";
 
-import { Heart, Users, Zap, Code, Rocket, Mail, Sparkles, Briefcase, TrendingUp, Lightbulb, Target, Award, Globe, Coffee } from "lucide-react";
+import { Heart, Users, Zap, Code, Rocket, Mail, Sparkles, Briefcase, TrendingUp, Lightbulb, Target, Award, Globe, Coffee, LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 // Icon mapping for values
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   Heart, Users, Zap, Code, Rocket, Mail, Sparkles
 };
 
 // Icon mapping for why join items (replacing emojis)
-const whyJoinIconMap: Record<string, any> = {
+const whyJoinIconMap: Record<string, LucideIcon> = {
   '💼': Briefcase,
   '🚀': Rocket,
   '💡': Lightbulb,
@@ -24,11 +24,36 @@ const whyJoinIconMap: Record<string, any> = {
   '⚡': Zap,
 };
 
+interface ValueItem {
+  icon?: string
+  title?: string
+  description?: string
+}
+
+interface WhyJoinItem {
+  icon?: string
+  title?: string
+  description?: string
+}
+
+interface SectionContent {
+  title?: string
+  subtitle?: string
+  description?: string
+  email?: string
+  badge?: string
+  contactTitle?: string
+  contactDescription?: string
+  footerText?: string
+  values?: ValueItem[]
+  items?: WhyJoinItem[]
+}
+
 interface CareersClientProps {
   data: {
     sections: Array<{
       type: string;
-      content: any;
+      content: SectionContent;
     }>;
   };
 }
@@ -45,17 +70,17 @@ export default function CareersClient({ data }: CareersClientProps) {
   const comingSoonTitle = comingSoonSection?.content?.title;
   const comingSoonDescription = comingSoonSection?.content?.description;
   const comingSoonEmail = comingSoonSection?.content?.email;
-  const values = valuesSection?.content?.values || [];
-  const whyJoin = whyJoinSection?.content?.items || [];
+  const values = valuesSection?.content?.values ?? [];
+  const whyJoin = whyJoinSection?.content?.items ?? [];
 
   // Process values to include icon components
-  const processedValues = values.map((item: any) => ({
+  const processedValues = values.map((item: ValueItem) => ({
     ...item,
-    icon: item.icon ? iconMap[item.icon] || Heart : Heart,
+    icon: item.icon ? iconMap[item.icon] ?? Heart : Heart,
   }));
 
   // Process why join items to replace emojis with icons
-  const processedWhyJoin = whyJoin.map((item: any) => {
+  const processedWhyJoin = whyJoin.map((item: WhyJoinItem) => {
     const emoji = item.icon;
     const IconComponent = emoji && whyJoinIconMap[emoji] ? whyJoinIconMap[emoji] : Briefcase;
     return {
@@ -75,24 +100,26 @@ export default function CareersClient({ data }: CareersClientProps) {
             transition={{ duration: 0.6 }}
             className="max-w-3xl mx-auto text-center"
           >
+            {heroSection?.content?.badge && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#662D91] bg-[#662D91]/10 border border-[#662D91]/20 mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-primary bg-primary/10 border border-primary/20 mb-6"
             >
               <Rocket className="h-3.5 w-3.5" strokeWidth={1.5} />
-              <span>Join Our Team</span>
+                <span>{heroSection.content.badge}</span>
             </motion.div>
+            )}
 
             {heroTitle && (
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+              <h1 className="text-fluid-6xl font-bold leading-tight mb-4 text-title">
                 {heroTitle}
               </h1>
             )}
 
             {heroSubtitle && (
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              <p className="text-fluid-lg text-paragraph leading-relaxed max-w-prose mx-auto">
                 {heroSubtitle}
               </p>
             )}
@@ -110,28 +137,30 @@ export default function CareersClient({ data }: CareersClientProps) {
             transition={{ duration: 0.6 }}
             className="relative bg-card border border-border rounded-xl p-8 md:p-10 text-center"
           >
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-lg bg-[#662D91] mb-6">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-lg bg-primary mb-6">
               <Sparkles className="h-7 w-7 text-white" strokeWidth={1.5} />
             </div>
 
             {comingSoonTitle && (
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
                 {comingSoonTitle}
               </h2>
             )}
 
             {comingSoonDescription && (
-              <p className="text-sm md:text-base text-muted-foreground mb-8 leading-relaxed">
+              <p className="text-fluid-base text-paragraph leading-relaxed mb-8 max-w-prose mx-auto">
                 {comingSoonDescription}
               </p>
             )}
 
+            {comingSoonSection?.content?.contactTitle && (
             <div className="bg-muted rounded-xl p-6 mb-6">
-              <h3 className="text-lg font-bold mb-3">Be in Touch</h3>
-              <p className="text-sm text-muted-foreground mb-6">
-                Send us your resume and a note about why you'd like to join qoupl.
-                We'll reach out when positions become available.
+                <h3 className="text-fluid-2xl font-bold leading-snug mb-3 text-title">{comingSoonSection.content.contactTitle}</h3>
+                {comingSoonSection.content.contactDescription && (
+              <p className="text-fluid-sm text-paragraph leading-relaxed mb-6">
+                    {comingSoonSection.content.contactDescription}
               </p>
+                )}
 
               {comingSoonEmail && (
                 <Button
@@ -146,10 +175,13 @@ export default function CareersClient({ data }: CareersClientProps) {
                 </Button>
               )}
             </div>
+            )}
 
+            {comingSoonSection?.content?.footerText && (
             <p className="text-xs text-muted-foreground">
-              We're an equal opportunity employer and value diversity at our company.
+                {comingSoonSection.content.footerText}
             </p>
+            )}
           </motion.div>
         </div>
       </section>
@@ -163,17 +195,21 @@ export default function CareersClient({ data }: CareersClientProps) {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              What We Value
+            {valuesSection?.content?.title && (
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
+                {valuesSection.content.title}
             </h2>
-            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
-              These principles guide how we work and build together
+            )}
+            {valuesSection?.content?.description && (
+            <p className="text-fluid-base text-paragraph leading-relaxed max-w-prose mx-auto">
+                {valuesSection.content.description}
             </p>
+            )}
           </motion.div>
 
           {values.length > 0 && (
             <div className="grid md:grid-cols-2 gap-5">
-              {processedValues.map((value: any, index: number) => {
+              {processedValues.map((value, index) => {
               const Icon = value.icon;
               return (
                 <motion.div
@@ -185,16 +221,16 @@ export default function CareersClient({ data }: CareersClientProps) {
                   whileHover={{ y: -4 }}
                   className="group"
                 >
-                  <div className="relative h-full bg-card border border-border rounded-xl p-6 hover:border-[#662D91]/30 transition-all duration-300">
-                    <div className={`w-12 h-12 rounded-lg bg-[#662D91] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300`}>
+                  <div className="relative h-full bg-card border border-border rounded-xl p-6 hover:border-primary/30 transition-all duration-300">
+                    <div className={`w-12 h-12 rounded-lg bg-primary flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300`}>
                       <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
                     </div>
 
-                    <h3 className="text-lg font-bold mb-2">
+                    <h3 className="text-fluid-2xl font-bold leading-snug mb-2 text-title">
                       {value.title}
                     </h3>
 
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-fluid-sm text-paragraph leading-relaxed">
                       {value.description}
                     </p>
                   </div>
@@ -215,14 +251,21 @@ export default function CareersClient({ data }: CareersClientProps) {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Join qoupl?
+            {whyJoinSection?.content?.title && (
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
+                {whyJoinSection.content.title}
             </h2>
+            )}
+            {whyJoinSection?.content?.description && (
+              <p className="text-fluid-base text-paragraph leading-relaxed max-w-prose mx-auto">
+                {whyJoinSection.content.description}
+              </p>
+            )}
           </motion.div>
 
           {processedWhyJoin.length > 0 && (
             <div className="grid md:grid-cols-3 gap-5">
-              {processedWhyJoin.map((item: any, index: number) => {
+              {processedWhyJoin.map((item, index) => {
                 const IconComponent = item.iconComponent;
                 return (
                   <motion.div
@@ -234,12 +277,12 @@ export default function CareersClient({ data }: CareersClientProps) {
                     whileHover={{ y: -4 }}
                     className="group"
                   >
-                    <div className="h-full bg-card border border-border rounded-xl p-6 text-center hover:border-[#662D91]/30 transition-all duration-300">
-                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-[#662D91] mb-4 group-hover:scale-105 transition-transform duration-300">
+                    <div className="h-full bg-card border border-border rounded-xl p-6 text-center hover:border-primary/30 transition-all duration-300">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary mb-4 group-hover:scale-105 transition-transform duration-300">
                         <IconComponent className="h-5 w-5 text-white" strokeWidth={1.5} />
                       </div>
-                      <h3 className="text-base font-bold mb-2">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <h3 className="text-fluid-xl font-bold leading-snug mb-2 text-title">{item.title}</h3>
+                      <p className="text-fluid-sm text-paragraph leading-relaxed">
                         {item.description}
                       </p>
                     </div>

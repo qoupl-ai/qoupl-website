@@ -6,39 +6,6 @@ import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 
-// Fallback images
-const defaultGalleryImages = [
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_01.jpg'),
-    alt: "Happy couple outdoors",
-    title: "Sarah & Raj",
-    story: "Met through qoupl, now planning their future together"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_02.jpg'),
-    alt: "Couple enjoying time together",
-    title: "Priya & Arjun",
-    story: "Found love in unexpected places"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_05.jpg'),
-    alt: "Romantic moment",
-    title: "Anjali & Vikram",
-    story: "Book lovers united by their passion"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_03.jpg'),
-    alt: "Couple smiling",
-    title: "Neha & Karan",
-    story: "Perfect match from day one"
-  },
-  {
-    src: getStorageUrl('couple-photos', 'qoupl_couple_04.jpg'),
-    alt: "Dating couple",
-    title: "Maya & Rohan",
-    story: "Adventure seekers finding love together"
-  },
-];
 
 interface GalleryProps {
   data: Record<string, any>;
@@ -97,16 +64,16 @@ export default function Gallery({ data = {} }: GalleryProps) {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
           >
             <Heart className="h-4 w-4 fill-primary" />
-            <span className="text-sm font-medium">Love Stories</span>
+            <span className="text-fluid-sm font-medium tracking-functional">Love Stories</span>
           </motion.div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
+          <h2 className="text-fluid-5xl font-bold mb-4 leading-tight text-title">
             Real{" "}
-            <span className="text-[#662D91] dark:text-[#9333ea]">
+            <span className="text-primary">
               Connections
             </span>
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-fluid-lg text-paragraph max-w-prose mx-auto leading-relaxed">
             Join thousands of college student couples who found their perfect match through qoupl
           </p>
         </motion.div>
@@ -277,17 +244,17 @@ export default function Gallery({ data = {} }: GalleryProps) {
                             </div>
                           </motion.div>
 
-                          <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 drop-shadow-lg pr-12 md:pr-16">{image.title}</h3>
-                          <p className="text-white/95 text-sm md:text-base lg:text-lg drop-shadow-md">{image.story}</p>
+                          <h3 className="text-fluid-3xl font-bold mb-2 leading-tight drop-shadow-lg pr-12 md:pr-16 text-white">{image.title}</h3>
+                          <p className="text-white/95 text-fluid-base leading-relaxed drop-shadow-md">{image.story}</p>
                           
                           {/* Beta User Badge */}
                           <motion.div 
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#662D91] dark:bg-[#9333ea] text-white"
+                            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white"
                           >
-                            <span className="text-sm font-semibold">Beta Success Story</span>
+                            <span className="text-fluid-sm font-semibold tracking-functional">Beta Success Story</span>
                           </motion.div>
                         </motion.div>
                       )}
@@ -336,7 +303,7 @@ export default function Gallery({ data = {} }: GalleryProps) {
         >
           <motion.p
             whileHover={{ scale: 1.05 }}
-            className="text-lg md:text-xl text-muted-foreground"
+            className="text-fluid-lg text-paragraph leading-relaxed"
           >
             Be part of something beautiful.{" "}
             <span className="text-primary font-semibold">

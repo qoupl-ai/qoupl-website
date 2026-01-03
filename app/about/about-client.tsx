@@ -27,16 +27,41 @@ interface TimelineItem {
   description: string;
 }
 
+interface HeroSection {
+  badge?: string;
+  title?: string;
+  description?: string;
+  locationBadge?: { flag?: string; text?: string };
+  images?: string[];
+}
+
+interface MissionVisionSection {
+  mission?: { badge?: string; title?: string; content?: string[] };
+  vision?: { badge?: string; title?: string; content?: string[] };
+}
+
+interface WhyChooseUsSection {
+  badge?: string;
+  title?: string;
+  features?: Array<{ icon?: string; title: string; description: string }>;
+}
+
+interface CTASection {
+  badge?: string;
+  title?: string;
+  description?: string;
+  buttons?: Array<{ text: string; type: string; href?: string }>;
+}
+
+type SectionContent = HeroSection | MissionVisionSection | ValueItem[] | WhyChooseUsSection | CTASection | TimelineItem[] | Record<string, unknown>
+
 interface AboutClientProps {
   data: {
     sections: Array<{
-      type: string;
-      content: {
-        values?: ValueItem[];
-        timeline?: TimelineItem[];
-      };
-    }>;
-  };
+      type: string
+      content: SectionContent
+    }>
+  }
 }
 
 export default function AboutClient({ data }: AboutClientProps) {
@@ -45,11 +70,20 @@ export default function AboutClient({ data }: AboutClientProps) {
   const heroRef = useRef(null);
 
   // Extract data from sections
+  const heroSection = data.sections.find(s => s.type === 'hero');
   const valuesSection = data.sections.find(s => s.type === 'values');
   const timelineSection = data.sections.find(s => s.type === 'timeline');
-  
-  const values = valuesSection?.content?.values || [];
-  const timeline = timelineSection?.content?.timeline || [];
+  const missionVisionSection = data.sections.find(s => s.type === 'mission-vision');
+
+  const hero: HeroSection = (heroSection?.content as HeroSection) || {};
+  const values = (valuesSection?.content as { values?: ValueItem[] })?.values || [];
+  const timeline = (timelineSection?.content as { timeline?: TimelineItem[] })?.timeline || [];
+  const missionVision: MissionVisionSection = (missionVisionSection?.content as MissionVisionSection) || {};
+  const whyChooseUsSection = data.sections.find(s => s.type === 'why-choose-us');
+  const whyChooseUs: WhyChooseUsSection = (whyChooseUsSection?.content as WhyChooseUsSection) || {};
+  const ctaSection = data.sections.find(s => s.type === 'cta');
+  const cta: CTASection = (ctaSection?.content as CTASection) || {};
+
 
   // Process values to include icon components
   type ProcessedValue = {
@@ -57,12 +91,22 @@ export default function AboutClient({ data }: AboutClientProps) {
     title: string;
     description: string;
   };
-  
+
   const processedValues: ProcessedValue[] = (values as ValueItem[]).map((item) => ({
     title: item.title,
     description: item.description,
     icon: item.icon ? iconMap[item.icon] || Heart : Heart,
   }));
+
+  // Process hero images
+  const heroImages = (hero.images || []).map((path) => {
+    if (path.startsWith('http') || path.startsWith('/')) return path;
+    if (path.includes('/')) {
+      const [bucket, ...rest] = path.split('/');
+      return getStorageUrl(bucket, rest.join('/'));
+    }
+    return getStorageUrl('couple-photos', path);
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -82,37 +126,33 @@ export default function AboutClient({ data }: AboutClientProps) {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20"
               >
                 <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
-                <span className="text-xs font-medium">Our Story</span>
+                <span className="text-xs font-medium">{hero.badge || 'Our Story'}</span>
               </motion.div>
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                Building the{" "}
-                <span className="text-[#662D91]">
-                  Future
-                </span>{" "}
-                of Love
+              <h1 className="text-fluid-6xl font-bold leading-tight text-title">
+                {hero.title || 'Building the Future of Love'}
               </h1>
-              
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                qoupl is revolutionizing how people connect. Through advanced AI matching 
-                and a commitment to authentic relationships, we&apos;re creating a platform 
-                where meaningful connections happen naturally.
+
+              <p className="text-fluid-lg text-paragraph leading-relaxed max-w-prose">
+                {hero.description || 'qoupl is revolutionizing how people connect. Through advanced AI matching and a commitment to authentic relationships, we\'re creating a platform where meaningful connections happen naturally.'}
               </p>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="flex flex-wrap gap-3 pt-2"
-              >
-                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#662D91]/10 border border-[#662D91]/20">
-                  <span className="text-lg leading-none">🇮🇳</span>
-                  <span className="text-sm font-medium text-foreground">Launching in India</span>
-                </div>
-              </motion.div>
+              {hero.locationBadge && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="flex flex-wrap gap-3 pt-2"
+                >
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/20">
+                    <span className="text-lg leading-none">{hero.locationBadge.flag || '🇮🇳'}</span>
+                    <span className="text-fluid-sm font-medium text-title">{hero.locationBadge.text || 'Launching in India'}</span>
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
 
             {/* Right Side - Modern Image Grid */}
@@ -124,56 +164,62 @@ export default function AboutClient({ data }: AboutClientProps) {
             >
               <div className="grid grid-cols-2 gap-3 md:gap-4">
                 {/* Large Image - Top Left */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5, duration: 0.6 }}
-                  whileHover={{ scale: 1.02, zIndex: 10 }}
-                  className="col-span-2 row-span-2 relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg group"
-                >
-                  <Image
-                    src={getStorageUrl("couple-photos", "qoupl_couple_01.jpg")}
-                    alt="Happy couple"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority
-                  />
-                </motion.div>
+                {heroImages[0] && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 0.6 }}
+                    whileHover={{ scale: 1.02, zIndex: 10 }}
+                    className="col-span-2 row-span-2 relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg group"
+                  >
+                    <Image
+                      src={heroImages[0]}
+                      alt="Happy couple"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority
+                    />
+                  </motion.div>
+                )}
 
                 {/* Small Image - Bottom Left */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6, duration: 0.6 }}
-                  whileHover={{ scale: 1.05, zIndex: 10 }}
-                  className="relative aspect-square rounded-xl overflow-hidden shadow-lg group"
-                >
-                  <Image
-                    src={getStorageUrl("couple-photos", "qoupl_couple_02.jpg")}
-                    alt="Couple together"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </motion.div>
+                {heroImages[1] && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6, duration: 0.6 }}
+                    whileHover={{ scale: 1.05, zIndex: 10 }}
+                    className="relative aspect-square rounded-xl overflow-hidden shadow-lg group"
+                  >
+                    <Image
+                      src={heroImages[1]}
+                      alt="Couple together"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                  </motion.div>
+                )}
 
                 {/* Small Image - Bottom Right */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7, duration: 0.6 }}
-                  whileHover={{ scale: 1.05, zIndex: 10 }}
-                  className="relative aspect-square rounded-xl overflow-hidden shadow-lg group"
-                >
-                  <Image
-                    src={getStorageUrl("couple-photos", "qoupl_couple_03.jpg")}
-                    alt="Smiling couple"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </motion.div>
+                {heroImages[2] && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7, duration: 0.6 }}
+                    whileHover={{ scale: 1.05, zIndex: 10 }}
+                    className="relative aspect-square rounded-xl overflow-hidden shadow-lg group"
+                  >
+                    <Image
+                      src={heroImages[2]}
+                      alt="Smiling couple"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                  </motion.div>
+                )}
               </div>
             </motion.div>
           </div>
@@ -193,27 +239,20 @@ export default function AboutClient({ data }: AboutClientProps) {
               transition={{ duration: 0.7 }}
               className="relative group"
             >
-              <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-[#662D91] transition-all duration-300">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4">
+              <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-primary transition-all duration-300">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4">
                   <Target className="h-3.5 w-3.5" strokeWidth={1.5} />
-                  <span className="text-xs font-medium">Our Mission</span>
+                  <span className="text-xs font-medium">{missionVision.mission?.badge || 'Our Mission'}</span>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
-                  Bringing People Together
+                <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
+                  {missionVision.mission?.title || 'Bringing People Together'}
                 </h2>
 
-                <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
-                  <p>
-                    At qoupl, we believe that everyone deserves to find love and meaningful
-                    connections. Our mission is to leverage cutting-edge AI technology to
-                    match compatible people while maintaining the authenticity and magic of
-                    human connection.
-                  </p>
-                  <p>
-                    We&apos;re committed to creating a safe, inclusive, and trustworthy platform
-                    where people can be themselves and find their perfect match.
-                  </p>
+                <div className="space-y-3 text-fluid-base text-paragraph leading-relaxed max-w-prose">
+                  {missionVision.mission?.content?.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
                 </div>
 
               </div>
@@ -227,27 +266,20 @@ export default function AboutClient({ data }: AboutClientProps) {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="relative group"
             >
-              <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-[#662D91] transition-all duration-300">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4">
+              <div className="relative h-full bg-card border border-border rounded-xl p-6 md:p-8 hover:border-primary transition-all duration-300">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4">
                   <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
-                  <span className="text-xs font-medium">Our Vision</span>
+                  <span className="text-xs font-medium">{missionVision.vision?.badge || 'Our Vision'}</span>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
-                  The Future of Dating
+                <h2 className="text-fluid-5xl font-bold leading-tight mb-4 text-title">
+                  {missionVision.vision?.title || 'The Future of Dating'}
                 </h2>
 
-                <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
-                  <p>
-                    We envision a world where finding love is accessible, safe, and enjoyable
-                    for everyone, regardless of their background or location. Through
-                    continuous innovation and user-centric design, we&apos;re building the
-                    world&apos;s most trusted dating platform.
-                  </p>
-                  <p>
-                    Our vision extends beyond just matching—we want to foster lasting
-                    relationships that enrich lives and create countless success stories.
-                  </p>
+                <div className="space-y-3 text-fluid-base text-paragraph leading-relaxed max-w-prose">
+                  {missionVision.vision?.content?.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
                 </div>
 
               </div>
@@ -270,19 +302,19 @@ export default function AboutClient({ data }: AboutClientProps) {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4"
             >
               <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
               <span className="text-xs font-medium">What Drives Us</span>
             </motion.div>
 
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-3 text-title">
               Our Core{" "}
-              <span className="text-[#662D91]">
+              <span className="text-primary">
                 Values
               </span>
             </h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-fluid-base text-paragraph max-w-prose mx-auto leading-relaxed">
               These principles guide everything we do at qoupl
             </p>
           </motion.div>
@@ -304,18 +336,18 @@ export default function AboutClient({ data }: AboutClientProps) {
                   <motion.div
                     whileHover={{ y: -4 }}
                     transition={{ duration: 0.3 }}
-                    className="relative h-full p-6 rounded-xl bg-card border border-border hover:border-[#662D91] transition-all duration-300"
+                    className="relative h-full p-6 rounded-xl bg-card border border-border hover:border-primary transition-all duration-300"
                   >
                     <div className="relative">
-                      <div className="w-12 h-12 rounded-lg bg-[#662D91] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+                      <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
                         <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
                       </div>
 
-                      <h3 className="text-lg md:text-xl font-bold mb-2 group-hover:text-[#662D91] transition-colors duration-300">
+                      <h3 className="text-fluid-2xl font-bold leading-snug mb-2 text-title group-hover:text-primary transition-colors duration-300">
                         {value.title}
                       </h3>
 
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-fluid-sm text-paragraph leading-relaxed">
                         {value.description}
                       </p>
                     </div>
@@ -342,19 +374,19 @@ export default function AboutClient({ data }: AboutClientProps) {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4"
             >
               <Rocket className="h-3.5 w-3.5" strokeWidth={1.5} />
               <span className="text-xs font-medium">Our Journey</span>
             </motion.div>
 
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-3 text-title">
               From Idea to{" "}
-              <span className="text-[#662D91]">
+              <span className="text-primary">
                 Reality
               </span>
             </h2>
-            <p className="text-base text-muted-foreground">
+            <p className="text-fluid-base text-paragraph leading-relaxed">
               Transforming the way people connect and find love
             </p>
           </motion.div>
@@ -378,12 +410,12 @@ export default function AboutClient({ data }: AboutClientProps) {
                   >
                     {/* Timeline dot */}
                     <div className="absolute left-4 md:left-6 top-1.5 z-10">
-                      <div className="w-3 h-3 rounded-full bg-[#662D91] border-2 border-background" />
+                      <div className="w-3 h-3 rounded-full bg-primary border-2 border-background" />
                     </div>
 
                     {/* Year badge */}
                     <div className="mb-3">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#662D91] text-white font-semibold text-xs">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-primary text-white font-semibold text-xs">
                         <TrendingUp className="h-3 w-3" strokeWidth={1.5} />
                         {item.year}
                       </span>
@@ -393,12 +425,12 @@ export default function AboutClient({ data }: AboutClientProps) {
                     <motion.div
                       whileHover={{ x: 4 }}
                       transition={{ duration: 0.2 }}
-                      className="bg-card border border-border rounded-lg p-5 hover:border-[#662D91] transition-all duration-300"
+                      className="bg-card border border-border rounded-lg p-5 hover:border-primary transition-all duration-300"
                     >
-                      <h3 className="text-lg md:text-xl font-bold mb-2 text-foreground">
+                      <h3 className="text-fluid-xl font-bold leading-snug mb-2 text-title">
                         {item.event}
                       </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-fluid-sm text-paragraph leading-relaxed">
                         {item.description}
                       </p>
                     </motion.div>
@@ -411,8 +443,8 @@ export default function AboutClient({ data }: AboutClientProps) {
       </section>
 
       {/* Why Choose Us - Modern Clean Design */}
+      {whyChooseUs.features && whyChooseUs.features.length > 0 && (
       <section className="py-16 md:py-20 bg-background relative overflow-hidden">
-
         <div className="container mx-auto px-4 max-w-7xl relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -420,58 +452,28 @@ export default function AboutClient({ data }: AboutClientProps) {
             viewport={{ once: true }}
             className="text-center mb-12 md:mb-16"
           >
+              {whyChooseUs.badge && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#662D91]/10 text-[#662D91] border border-[#662D91]/20 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 mb-4"
             >
               <Zap className="h-3.5 w-3.5" strokeWidth={1.5} />
-              <span className="text-xs font-medium">What Makes Us Different</span>
+                  <span className="text-xs font-medium">{whyChooseUs.badge}</span>
             </motion.div>
+              )}
 
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
-              Why Choose{" "}
-              <span className="text-[#662D91]">
-                qoupl?
-              </span>
+              {whyChooseUs.title && (
+            <h2 className="text-fluid-5xl font-bold leading-tight mb-3 text-title">
+                  {whyChooseUs.title}
             </h2>
+              )}
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              {
-                title: "AI-Powered Matching",
-                description: "Our advanced algorithm learns your preferences and suggests highly compatible matches.",
-                icon: Sparkles
-              },
-              {
-                title: "Verified Profiles",
-                description: "Photo verification and ID checks ensure you're talking to real people.",
-                icon: Shield
-              },
-              {
-                title: "Safe & Secure",
-                description: "End-to-end encryption and 24/7 moderation keep your data and conversations private.",
-                icon: Shield
-              },
-              {
-                title: "Inclusive Platform",
-                description: "Everyone is welcome. We celebrate diversity and promote inclusivity.",
-                icon: Users
-              },
-              {
-                title: "Smart Features",
-                description: "Smart conversation starters, messaging tools, and date planning features make connecting easy.",
-                icon: Zap
-              },
-              {
-                title: "Love Stories",
-                description: "Join thousands of couples who found love through qoupl.",
-                icon: Heart
-              }
-            ].map((feature, index) => {
-              const Icon = feature.icon;
+              {whyChooseUs.features.map((feature, index) => {
+                const Icon = feature.icon ? iconMap[feature.icon] || Heart : Heart;
               return (
                 <motion.div
                   key={index}
@@ -483,16 +485,16 @@ export default function AboutClient({ data }: AboutClientProps) {
                   className="group relative"
                 >
                   {/* Card */}
-                  <div className="relative h-full bg-card border border-border rounded-lg p-5 hover:border-[#662D91] transition-all duration-300">
-                    <div className="w-10 h-10 rounded-lg bg-[#662D91] flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
+                  <div className="relative h-full bg-card border border-border rounded-lg p-5 hover:border-primary transition-all duration-300">
+                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
                       <Icon className="h-5 w-5 text-white" strokeWidth={1.5} />
                     </div>
 
-                    <h3 className="text-base font-bold mb-2 group-hover:text-[#662D91] transition-colors duration-300">
+                    <h3 className="text-fluid-xl font-bold leading-snug mb-2 text-title group-hover:text-primary transition-colors duration-300">
                       {feature.title}
                     </h3>
 
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-fluid-sm text-paragraph leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
@@ -502,10 +504,11 @@ export default function AboutClient({ data }: AboutClientProps) {
           </div>
         </div>
       </section>
+      )}
 
       {/* CTA Section - Modern Clean Design */}
-      <section className="py-16 md:py-20 relative overflow-hidden bg-[#662D91]">
-
+      {(cta.badge || cta.title || cta.description || cta.buttons) && (
+      <section className="py-16 md:py-20 relative overflow-hidden bg-primary">
         <div className="container mx-auto px-4 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -514,6 +517,7 @@ export default function AboutClient({ data }: AboutClientProps) {
             transition={{ duration: 0.8 }}
             className="max-w-4xl mx-auto"
           >
+              {cta.badge && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -521,19 +525,29 @@ export default function AboutClient({ data }: AboutClientProps) {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/20 border border-white/30 text-white mb-6"
             >
               <Heart className="h-3.5 w-3.5" strokeWidth={1.5} />
-              <span className="text-xs font-medium">Join Our Community</span>
+                  <span className="text-xs font-medium">{cta.badge}</span>
             </motion.div>
+              )}
 
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
-              Ready to Find Your Perfect Match?
+              {cta.title && (
+            <h2 className="text-fluid-5xl font-bold leading-tight text-white mb-4">
+                  {cta.title}
             </h2>
+              )}
 
-            <p className="text-base md:text-lg text-white/90 mb-8 leading-relaxed max-w-2xl mx-auto">
-              Be part of the next generation of dating and find meaningful connections
+              {cta.description && (
+            <p className="text-fluid-lg text-white/90 leading-relaxed mb-8 max-w-prose mx-auto">
+                  {cta.description}
             </p>
+              )}
 
+              {cta.buttons && cta.buttons.length > 0 && (
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  {cta.buttons.map((button, index) => {
+                    if (button.type === 'waitlist') {
+                      return (
               <motion.div
+                          key={index}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -543,13 +557,15 @@ export default function AboutClient({ data }: AboutClientProps) {
                   className="bg-white text-primary hover:bg-white/90 hover:text-primary font-semibold shadow-2xl hover:shadow-white/20"
                 >
                   <span className="flex items-center gap-2">
-                    Join the Waitlist
+                              {button.text}
                     <Heart className="h-4 w-4" />
                   </span>
                 </Button>
               </motion.div>
-
-              <Link href="/community-guidelines">
+                      );
+                    } else {
+                      return (
+                        <Link key={index} href={button.href || '#'}>
                 <motion.div
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.98 }}
@@ -559,14 +575,19 @@ export default function AboutClient({ data }: AboutClientProps) {
                     variant="outline"
                     className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-semibold"
                   >
-                    Learn More
+                              {button.text}
                   </Button>
                 </motion.div>
               </Link>
+                      );
+                    }
+                  })}
             </div>
+              )}
           </motion.div>
         </div>
       </section>
+      )}
 
       <WaitlistModal
         isOpen={isWaitlistModalOpen}

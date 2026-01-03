@@ -26,9 +26,9 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
   // Default to light mode during SSR to match server render
   const isDark = mounted && resolvedTheme === 'dark';
 
-  const title = data?.title || "Get Early Access";
-  const subtitle = data?.subtitle || "Join thousands of college students waiting for qoupl to launch. Be the first to experience the future of dating.";
-  const ctaText = data?.cta?.text || "Join the Waitlist";
+  const title = data?.title || "";
+  const subtitle = data?.subtitle || "";
+  const ctaText = data?.cta?.text || "";
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
@@ -52,17 +52,17 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
               >
                 <Sparkles className="h-4 w-4" />
-                <span className="text-sm font-medium">
+                <span className="text-fluid-sm font-medium tracking-functional">
                   Launching Soon
                 </span>
               </motion.div>
 
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+              <h2 className="text-fluid-5xl font-bold mb-4 leading-tight text-title">
                 {title}
               </h2>
 
               {subtitle && (
-                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                <p className="text-fluid-lg text-paragraph mb-8 leading-relaxed max-w-prose">
                   {subtitle}
                 </p>
               )}
@@ -72,7 +72,7 @@ export default function ComingSoon({ data = {} }: ComingSoonProps) {
                 <Button
                   size="lg"
                   onClick={() => setIsWaitlistModalOpen(true)}
-                  className="w-full sm:w-auto bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold"
+                  className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-semibold"
                 >
                   <Sparkles className="mr-2 h-4 w-4" />
                   {ctaText}

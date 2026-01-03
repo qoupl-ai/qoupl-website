@@ -12,6 +12,9 @@ import Footer from '@/components/sections/footer'
 import SplashScreenClient from '@/components/splash-screen-client'
 import { StructuredData, organizationSchema, websiteSchema, webApplicationSchema } from '@/components/structured-data'
 
+// Enable ISR with 3-hour revalidation (content stable for 3 months)
+export const revalidate = 10800; // 3 hours in seconds
+
 export default async function Home() {
   // Fetch sections for home page
   const sections = await getPageSections('home')

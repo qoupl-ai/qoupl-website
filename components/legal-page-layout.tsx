@@ -1,11 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  Shield, 
-  FileText, 
-  Users, 
-  AlertTriangle,
+import {
   CheckCircle2,
   XCircle,
   AlertCircle,
@@ -39,17 +35,17 @@ export function LegalPageLayout({ title, lastUpdated, icon, children }: LegalPag
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-                className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-lg bg-[#662D91]/10 dark:bg-[#662D91]/15 mb-4 text-[#662D91]"
+                className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-lg bg-primary/10 dark:bg-primary/15 mb-4 text-primary"
               >
                 {icon}
               </motion.div>
             )}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 tracking-tight text-foreground">
+            <h1 className="text-fluid-6xl font-bold leading-tight mb-3 text-title">
               {title}
             </h1>
             {lastUpdated && (
-              <p className="text-sm text-muted-foreground">
-                Last Updated: <span className="text-foreground/80">{lastUpdated}</span>
+              <p className="text-fluid-sm text-secondary-text">
+                Last Updated: <span className="text-paragraph">{lastUpdated}</span>
               </p>
             )}
           </motion.div>
@@ -105,8 +101,8 @@ function highlightImportantTerms(text: string): ReactNode {
         splitParts.forEach((splitPart, i) => {
           if (i % 2 === 1) {
             // Check if this match is part of an email or URL
-            const beforeMatch = splitParts[i - 1] || '';
-            const afterMatch = splitParts[i + 1] || '';
+            const beforeMatch = splitParts[i - 1] ?? '';
+            const afterMatch = splitParts[i + 1] ?? '';
             
             // Check for email pattern (text before @ or @ after)
             const isInEmail = beforeMatch.endsWith('@') || 
@@ -122,7 +118,7 @@ function highlightImportantTerms(text: string): ReactNode {
             // Only highlight if not part of email/URL
             if (!isInEmail && !isInUrl) {
               newParts.push(
-                <span key={`${term}-${i}`} className="font-semibold text-[#662D91]">
+                <span key={`${term}-${i}`} className="font-semibold text-primary">
                   {splitPart}
                 </span>
               );
@@ -155,12 +151,12 @@ function getItemIcon(item: string) {
     return <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-1" />;
   }
   if (item.startsWith('🔒') || item.toLowerCase().includes('security') || item.toLowerCase().includes('privacy') || item.toLowerCase().includes('encrypted') || item.toLowerCase().includes('keep personal') || item.toLowerCase().includes('account secure')) {
-    return <Lock className="h-4 w-4 text-[#662D91] shrink-0 mt-1" />;
+    return <Lock className="h-4 w-4 text-primary shrink-0 mt-1" />;
   }
   if (item.startsWith('📍') || item.toLowerCase().includes('location') || item.toLowerCase().includes('address') || item.toLowerCase().includes('meet in') || item.toLowerCase().includes('share your location')) {
     return <MapPin className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0 mt-1" />;
   }
-  return <Info className="h-4 w-4 text-[#662D91] shrink-0 mt-1" />;
+  return <Info className="h-4 w-4 text-primary shrink-0 mt-1" />;
 }
 
 // Clean item text by removing emoji markers
@@ -180,22 +176,22 @@ export function LegalSection({ heading, content, items, isImportant, index }: Le
       transition={{ duration: 0.4, delay: index * 0.03 }}
       className={`mb-8 md:mb-10 scroll-mt-20 ${
         isImportant
-          ? "bg-card border border-[#662D91]/20 rounded-xl pl-5 md:pl-6 pr-4 py-5 md:py-6"
+          ? "bg-card border border-primary/20 rounded-xl pl-5 md:pl-6 pr-4 py-5 md:py-6"
           : "pb-6 border-b border-border"
       }`}
     >
       {/* H2: Clean typography */}
-      <h2 className={`mb-4 font-bold tracking-tight ${
-        isImportant 
-          ? "text-xl md:text-2xl text-foreground" 
-          : "text-lg md:text-xl text-foreground"
+      <h2 className={`mb-4 font-bold leading-tight ${
+        isImportant
+          ? "text-fluid-5xl text-title"
+          : "text-fluid-2xl text-title"
       }`}>
         {highlightImportantTerms(heading)}
       </h2>
-      
+
       {/* Body text */}
       {content && (
-        <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-5">
+        <p className="text-fluid-base text-paragraph leading-relaxed mb-5 max-w-prose">
           {highlightImportantTerms(content)}
         </p>
       )}
@@ -209,12 +205,12 @@ export function LegalSection({ heading, content, items, isImportant, index }: Le
             return (
               <li
                 key={i}
-                className="flex items-start gap-3 text-sm md:text-base text-muted-foreground leading-relaxed group"
+                className="flex items-start gap-3 text-fluid-base text-paragraph leading-relaxed group"
               >
                 <span className="shrink-0">
                   {icon}
                 </span>
-                <span className="flex-1 group-hover:text-foreground/90 transition-colors">
+                <span className="flex-1 group-hover:text-title/90 transition-colors">
                   {highlightImportantTerms(cleanItem)}
                 </span>
               </li>

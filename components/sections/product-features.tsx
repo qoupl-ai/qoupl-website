@@ -14,59 +14,17 @@ const iconMap: Record<string, React.ComponentType<{ className?: string; strokeWi
   Check,
 };
 
-// Fallback features
-const defaultFeatures = [
-  {
-    icon: Heart,
-    title: "Smart AI Matching",
-    description:
-      "Our advanced AI algorithm analyzes compatibility factors including personality, interests, values, and lifestyle to suggest highly compatible matches tailored just for you.",
-    highlights: [
-      "Deep compatibility analysis",
-      "Personalized suggestions",
-      "Values-based matching",
-      "Learning preferences",
-    ],
-    image: getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
-    color: "bg-[#662D91]",
-  },
-  {
-    icon: Shield,
-    title: "Safe & Verified",
-    description:
-      "Multi-layered verification system with mandatory college ID verification, 24/7 AI moderation, photo verification, and encrypted messaging to keep college students safe while finding love.",
-    highlights: [
-      "College ID verification",
-      "Photo verification",
-      "24/7 AI moderation",
-      "Encrypted messaging",
-    ],
-    image: getStorageUrl("couple-photos", "qoupl_couple_02.jpg"),
-    color: "bg-[#662D91]",
-  },
-  {
-    icon: Zap,
-    title: "Instant Connections",
-    description:
-      "Connect with compatible matches instantly through our real-time matching system. Start meaningful conversations with smart conversation starters.",
-    highlights: [
-      "Real-time matching",
-      "Smart conversation starters",
-      "Meaningful connections",
-      "Instant notifications",
-    ],
-    image: getStorageUrl("couple-photos", "qoupl_couple_04.jpg"),
-    color: "bg-[#662D91]",
-  },
-];
-
 interface ProductFeaturesProps {
   data: Record<string, any>;
 }
 
 export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
-  // Process features from data or use defaults
-  const features = data?.features?.map((item: any) => {
+  // Process features from data
+  if (!data?.features || !Array.isArray(data.features) || data.features.length === 0) {
+    return null;
+  }
+
+  const features = data.features.map((item: any) => {
     const IconComponent = item.icon ? iconMap[item.icon] || Heart : Heart;
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
@@ -85,7 +43,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
       image: imageUrl || getStorageUrl("couple-photos", "qoupl_couple_01.jpg"),
       color: item.color || "bg-[#662D91]",
     };
-  }) || defaultFeatures;
+  });
   return (
     <section className="py-10 md:py-14 relative overflow-hidden">
       {/* Background Blob */}
@@ -110,7 +68,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
           transition={{ duration: 0.3 }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
+          <h2 className="text-fluid-5xl leading-tight font-bold mb-4 text-title">
             {(() => {
               const title = data?.title || "Why Choose qoupl";
               const words = title.split(' ');
@@ -128,7 +86,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
             })()}
           </h2>
           {data?.subtitle && (
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-fluid-base leading-relaxed text-paragraph max-w-prose mx-auto">
               {data.subtitle}
             </p>
           )}
@@ -211,7 +169,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
                         viewport={{ once: true, amount: 0.1 }}
                         transition={{ delay: 0.15 + index * 0.05, duration: 0.3 }}
                       >
-                        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2">
+                        <h3 className="text-fluid-2xl leading-snug font-bold text-white mb-2">
                           {feature.title}
                         </h3>
                         <div className={`h-1 w-16 bg-gradient-to-r ${feature.color} rounded-full transform group-hover:w-24 transition-all duration-500`} />
@@ -223,7 +181,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.1 }}
                         transition={{ delay: 0.2 + index * 0.05, duration: 0.3 }}
-                        className="text-white/90 leading-relaxed text-sm md:text-base"
+                        className="text-white/90 text-fluid-base leading-relaxed max-w-prose"
                       >
                         {feature.description}
                       </motion.p>
@@ -255,7 +213,7 @@ export default function ProductFeatures({ data = {} }: ProductFeaturesProps) {
                             >
                               <Check className="h-3 w-3 text-white" strokeWidth={3} />
                             </motion.div>
-                            <span className="text-white/80 text-xs md:text-sm group-hover/item:text-white transition-colors">
+                            <span className="text-white/80 text-fluid-base group-hover/item:text-white transition-colors">
                               {highlight}
                             </span>
                           </motion.li>

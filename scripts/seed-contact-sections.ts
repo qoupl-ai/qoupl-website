@@ -53,13 +53,27 @@ async function seedContactSections() {
 
   console.log(`✅ Found contact page with ID: ${contactPageId}\n`)
 
+  // Check which column names exist in the database
+  const { data: sampleSection } = await adminClient
+    .from('sections')
+    .select('*')
+    .limit(1)
+    .maybeSingle()
+
+  const hasSectionType = sampleSection && 'section_type' in sampleSection
+  const hasComponentType = sampleSection && 'component_type' in sampleSection
+
+  console.log(`📊 Database columns: section_type=${hasSectionType}, component_type=${hasComponentType}\n`)
+
   // Check if sections already exist
   const { data: existingSections } = await adminClient
     .from('sections')
-    .select('component_type')
+    .select('component_type, section_type')
     .eq('page_id', contactPageId)
 
-  const existingTypes = new Set(existingSections?.map(s => s.component_type) || [])
+  const existingTypes = new Set(
+    existingSections?.map(s => s.component_type || s.section_type) || []
+  )
   console.log(`📊 Existing sections: ${existingTypes.size > 0 ? Array.from(existingTypes).join(', ') : 'None'}\n`)
 
   const sections = [
@@ -148,12 +162,25 @@ async function seedContactSections() {
     }
 
     try {
+      // Build section data with proper column names
+      const sectionData: any = {
+        page_id: contactPageId,
+        content: section.content,
+        order_index: section.order_index,
+        published: section.published,
+      }
+
+      // Set both column names if both exist
+      if (hasSectionType) {
+        sectionData.section_type = section.component_type
+      }
+      if (hasComponentType) {
+        sectionData.component_type = section.component_type
+      }
+
       const { error } = await adminClient
         .from('sections')
-        .insert({
-          page_id: contactPageId,
-          ...section,
-        })
+        .insert(sectionData)
 
       if (error) {
         console.error(`❌ Failed to create ${section.component_type}:`, error.message)

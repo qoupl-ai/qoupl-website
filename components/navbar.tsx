@@ -14,7 +14,6 @@ export default async function Navbar() {
     links: [
       { href: '/', label: 'Home' },
       { href: '/about', label: 'About' },
-      { href: '/features', label: 'Features' },
       { href: '/safety', label: 'Safety & Security' },
       { href: '/community-guidelines', label: 'Community Guidelines' },
       { href: '/faq', label: 'FAQ' },

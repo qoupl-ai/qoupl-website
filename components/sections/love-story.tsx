@@ -5,78 +5,45 @@ import Image from "next/image";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
 import { Heart } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 
-interface LoveStoryProps {
-  data: Record<string, any>;
+interface LoveStory {
+  image: string;
+  couple: string;
+  story: string;
 }
 
-// Fallback love stories with Indian names - mix of letters from boys and girls
-const defaultLoveStories = [
-  {
-    image: getStorageUrl("love-story", "qoupl_love_story_1.jpg"),
-    couple: "Priya & Arjun",
-    story: `My Dearest Arjun,
+interface LoveStoryProps {
+  data: {
+    title?: string;
+    subtitle?: string;
+    stories?: LoveStory[];
+    content?: {
+      stories?: LoveStory[];
+    };
+  };
+}
 
-From the moment we matched on qoupl, I knew something special was happening. Your profile showed a love for books and coffee, just like me. When you sent that first message asking about my favorite author, I couldn't help but smile.
-
-Our first date at the campus library turned into hours of conversation. You made me laugh with your jokes, and I felt comfortable being myself around you. That evening, I knew I had found someone who truly understood me.
-
-Now, three months later, we're planning our future together. Thank you, qoupl, for bringing us together. Thank you, Arjun, for being you.
-
-Forever yours,
-Priya`,
-  },
-  {
-    image: getStorageUrl("love-story", "qoupl_love_story_2.jpg"),
-    couple: "Ananya & Rohan",
-    story: `My Beautiful Ananya,
-
-I still remember the day we matched on qoupl. Your smile in your photos was so genuine, and your bio about loving music and poetry caught my attention immediately. I knew I had to message you.
-
-Our first date at the music café was perfect. You were even more beautiful in person, and your laugh is something I'll never forget. We talked for hours, and I didn't want the evening to end.
-
-Now, every day with you feels like a gift. You've become my best friend, my confidant, and the person I want to share everything with. Thank you, qoupl, for bringing you into my life.
-
-With all my love,
-Rohan`,
-  },
-  {
-    image: getStorageUrl("love-story", "qoupl_love_story_3.jpg"),
-    couple: "Kavya & Vikram",
-    story: `My Dearest Kavya,
-
-When I first saw your profile on qoupl, I was immediately drawn to your warmth and intelligence. Your passion for making a difference in the world and your dedication to your studies showed me that you were someone special.
-
-Our first date at the college café was unforgettable. You were even more beautiful in person, and your smile made my heart skip a beat. The way you listened to me and shared your thoughts made me feel like I had found my perfect match.
-
-Now, months later, I can't imagine my life without you. You've become my best friend, my partner, and the person I want to build my future with. Thank you, qoupl, for bringing you into my life.
-
-Forever yours,
-Vikram`,
-  },
-];
 
 export default function LoveStory({ data = {} }: LoveStoryProps) {
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  // Use lazy initializer to avoid calling Math.random during render
+  const [heartAnimations] = useState<Array<{ duration: number; rotation: number }>>(() => {
+    return Array.from({ length: 12 }).map(() => ({
+      duration: 3 + Math.random() * 2,
+      rotation: -15 + Math.random() * 30,
+    }));
+  });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  const [mounted] = useState(() => true);
   const isDark = mounted && resolvedTheme === 'dark';
-
-  // Debug: Log received data
-  if (process.env.NODE_ENV === 'development') {
-    console.log('[LoveStory] Received data:', data)
-    console.log('[LoveStory] Stories from data:', data?.stories || data?.content?.stories)
-  }
 
   // Process stories from data or use defaults
   // Check both data.stories and data.content.stories for flexibility
   const storiesData = data?.stories || data?.content?.stories;
-  const stories = storiesData?.map((item: any) => {
+  const stories: LoveStory[] = useMemo(() => {
+    if (storiesData && Array.isArray(storiesData) && storiesData.length > 0) {
+      return storiesData.map((item: LoveStory) => {
     let imageUrl = item.image;
     if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
       if (imageUrl.includes('/')) {
@@ -91,13 +58,16 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
       couple: item.couple || "",
       story: item.story || "",
     };
-  }) || defaultLoveStories;
+      });
+    }
+    return defaultLoveStories;
+  }, [storiesData]);
 
   return (
     <section className="min-h-[calc(100vh-3.5rem)] flex items-center relative overflow-hidden py-10 md:py-14">
       {/* Decorative Hearts Background */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.08] dark:opacity-[0.05] z-0">
-        {Array.from({ length: 12 }).map((_, i) => (
+        {heartAnimations.map((anim, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, scale: 0 }}
@@ -106,7 +76,7 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
               scale: [0, 1, 0.8],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: anim.duration,
               delay: i * 0.3,
               repeat: Infinity,
               repeatType: "reverse",
@@ -115,7 +85,7 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
             style={{
               left: `${10 + (i * 7.5)}%`,
               top: `${15 + (i % 3) * 25}%`,
-              transform: `rotate(${-15 + Math.random() * 30}deg)`,
+              transform: `rotate(${anim.rotation}deg)`,
             }}
           >
             <Heart className="h-12 w-12 md:h-16 md:w-16 text-primary fill-primary" strokeWidth={0.5} />
@@ -143,21 +113,17 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
             <span className="text-sm font-medium">Real Love Stories</span>
           </motion.div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
-            Love{" "}
-            <span className="text-[#662D91] dark:text-[#9333ea]">
-              Letters
-            </span>{" "}
-            from Our Couples
+          <h2 className="text-fluid-5xl leading-tight font-bold mb-4 text-title">
+            {data?.title || "Love Letters from Our Couples"}
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Read heartfelt stories from college students who found their perfect match on qoupl
+          <p className="text-fluid-lg leading-relaxed text-paragraph max-w-2xl mx-auto">
+            {data?.subtitle || "Read heartfelt stories from college students who found their perfect match on qoupl"}
           </p>
         </motion.div>
 
         {/* Love Stories Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 max-w-7xl mx-auto">
-          {stories.map((story: any, index: number) => (
+          {stories.map((story: LoveStory, index: number) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
@@ -250,7 +216,7 @@ export default function LoveStory({ data = {} }: LoveStoryProps) {
                 >
                   {/* Letter Text with Caveat Font */}
                   <div 
-                    className="whitespace-pre-line font-caveat relative z-10"
+                    className="whitespace-pre-line relative z-10"
                     style={{ 
                       fontFamily: 'var(--font-caveat), cursive',
                       fontSize: '1.25rem',

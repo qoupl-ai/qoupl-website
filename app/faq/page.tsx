@@ -6,6 +6,9 @@
 import { getPageSections } from '@/lib/supabase/content'
 import FAQClient from './faq-client'
 
+// Enable ISR with 3-hour revalidation
+export const revalidate = 10800;
+
 // Category ID to display name mapping
 const categoryNameMap: Record<string, string> = {
   'getting-started': 'Getting Started',
@@ -26,12 +29,12 @@ export default async function FAQ() {
   const faqs = sections
     .filter(section => section.component_type === 'faq-category')
     .map(section => {
-      const categoryId = section.content.category_id || 'general'
+      const categoryId = section.content.category_id ?? 'general'
       return {
-        category: categoryNameMap[categoryId] || categoryId,
-        questions: (section.content.faqs || []).map((faq: any) => ({
-          q: faq.question || faq.q,
-          a: faq.answer || faq.a,
+        category: categoryNameMap[categoryId] ?? categoryId,
+        questions: (section.content.faqs ?? []).map((faq: { question?: string; q?: string; answer?: string; a?: string }) => ({
+          q: faq.question ?? faq.q ?? '',
+          a: faq.answer ?? faq.a ?? '',
         })),
       }
     })
@@ -39,5 +42,9 @@ export default async function FAQ() {
   // Fallback to empty array if no FAQs found
   const faqData = faqs.length > 0 ? faqs : []
 
-  return <FAQClient faqs={faqData} />
+  // Get hero/content section for page title and CTA
+  const heroSection = sections.find(s => s.component_type === 'hero' || s.component_type === 'content')
+  const pageContent = heroSection?.content || {}
+
+  return <FAQClient faqs={faqData} pageContent={pageContent} />
 }
