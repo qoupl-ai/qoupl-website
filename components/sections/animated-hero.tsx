@@ -21,10 +21,10 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect if device is mobile
+  // Detect if device is mobile/tablet
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint (1024px)
     };
 
     checkMobile();
@@ -114,7 +114,7 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
   return (
     <div
       ref={containerRef}
-      className="relative h-[400px] md:h-[500px] lg:h-[700px] w-full flex items-center justify-center"
+      className="relative h-[380px] sm:h-[430px] md:h-[480px] lg:h-[580px] xl:h-[650px] 2xl:h-[720px] w-full flex items-center justify-center"
       style={{
         perspective: "1500px",
         perspectiveOrigin: "center center",
@@ -127,10 +127,11 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
         const rotation = baseRotation + timeOffset;
 
         // Calculate position in 3D space (circular orbit)
-        const radius = isMobile ? 120 : 180; // Smaller radius on mobile
+        // Responsive radius: mobile < 640px, tablet 640-1024px, desktop > 1024px
+        const radius = isMobile ? 120 : 160; // Increased radius for larger cards
         const x = Math.cos((rotation * Math.PI) / 180) * radius;
         const z = Math.sin((rotation * Math.PI) / 180) * radius;
-        const y = isMobile ? 0 : Math.sin(index * 0.8) * 40; // No vertical wave on mobile
+        const y = isMobile ? 0 : Math.sin(index * 0.8) * 35; // Slightly increased vertical wave
 
         // Magnetic effect - cards slightly follow mouse (disabled on mobile)
         const magneticX = isMobile ? 0 : mousePosition.x * 15;
@@ -138,7 +139,7 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
 
         // Scale based on Z position (closer = larger)
         const depth = (z + radius) / (2 * radius);
-        const scale = isMobile ? 0.6 + depth * 0.2 : 0.7 + depth * 0.3; // Smaller cards on mobile
+        const scale = isMobile ? 0.7 + depth * 0.2 : 0.75 + depth * 0.3; // Increased base scales
 
         return (
           <motion.div
@@ -174,14 +175,13 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
           >
             {/* Modern Glass Card */}
             <div
-              className="relative w-[280px] h-[400px] md:w-[320px] md:h-[460px] lg:w-[360px] lg:h-[520px] rounded-3xl overflow-hidden"
+              className="relative w-[280px] h-[380px] sm:w-[300px] sm:h-[410px] md:w-[340px] md:h-[460px] lg:w-[380px] lg:h-[520px] xl:w-[400px] xl:h-[550px] 2xl:w-[420px] 2xl:h-[580px] rounded-2xl sm:rounded-3xl overflow-hidden"
               style={{
                 background: "rgba(255, 255, 255, 0.05)",
                 backdropFilter: "blur(20px) saturate(180%)",
                 WebkitBackdropFilter: "blur(20px) saturate(180%)",
                 border: "1px solid rgba(255, 255, 255, 0.18)",
                 boxShadow: `
-                  0 8px 32px 0 rgba(0, 0, 0, 0.37),
                   0 0 0 1px rgba(255, 255, 255, 0.1) inset
                 `,
               }}
@@ -192,7 +192,7 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
                 alt={`Profile ${index + 1}`}
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 280px, 360px"
+                sizes="(max-width: 640px) 280px, (max-width: 768px) 340px, (max-width: 1024px) 380px, (max-width: 1280px) 400px, 420px"
                 quality={85}
                 priority={index < 2}
                 loading={index < 2 ? undefined : "lazy"}
@@ -272,7 +272,21 @@ function ModernFloatingCards({ carouselImages }: ModernFloatingCardsProps) {
 
 
 interface AnimatedHeroProps {
-  data: Record<string, any>;
+  data?: {
+    title?: string;
+    tagline?: string;
+    subtitle?: string;
+    cta?: {
+      text?: string;
+      buttonText?: string;
+      subtext?: string;
+      badge?: string;
+    };
+    images?: {
+      women?: string[];
+      men?: string[];
+    };
+  };
 }
 
 export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
@@ -293,7 +307,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
       return getStorageUrl(bucket, rest.join('/'));
     }
     return getStorageUrl("hero-images", path);
-  }) || defaultWomenImages;
+  }) || [];
 
   const menImages = data?.images?.men?.map((path: string) => {
     if (path.includes('/')) {
@@ -301,43 +315,35 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
       return getStorageUrl(bucket, rest.join('/'));
     }
     return getStorageUrl("hero-images", path);
-  }) || defaultMenImages;
+  }) || [];
 
   // Combined array: women + men images
   const carouselImages = [...womenImages, ...menImages];
 
   return (
     <section
-      className="relative min-h-screen w-full flex flex-col overflow-hidden bg-background"
+      className="relative min-h-[600px] sm:min-h-[700px] md:min-h-[800px] lg:min-h-screen w-full flex flex-col overflow-hidden bg-background"
     >
       {/* Main Content - Split Layout with Better Alignment */}
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 relative z-10 w-full flex-1 flex items-center min-h-0">
-        <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center w-full py-6 md:py-8 lg:py-12">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 relative z-10 w-full flex-1 flex items-center min-h-0">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-16 xl:gap-20 2xl:gap-24 items-start lg:items-center w-full py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16">
           {/* Left: Brand & CTA - Energetic & Fun Design */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-5 lg:space-y-6 order-1 lg:order-1"
+            className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-5 lg:space-y-6 order-1 lg:order-1 relative z-30 lg:pr-4 xl:pr-6"
           >
-            {/* Brand Name - Bigger with 3D Effect */}
+            {/* Brand Name - Clean & Simple */}
             <motion.h1
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-              className="text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] leading-none font-black mb-6 md:mb-8 text-[#662D91] dark:text-[#9333ea]"
+              className="leading-none font-bold mb-4 sm:mb-5 md:mb-6 lg:mb-8 text-[#662D91] dark:text-[#9333ea] text-[clamp(6.5rem,7vw+1rem,7.5rem)] sm:text-[clamp(7rem,8vw+1rem,8.5rem)] md:text-[clamp(7.5rem,9vw+1rem,9rem)] lg:text-[clamp(9rem,10vw+1rem,10.5rem)] xl:text-[12rem] 2xl:text-[14rem]"
               style={{
-                fontFamily: "var(--font-poppins), system-ui, sans-serif",
-                fontWeight: 900,
+                fontFamily: "var(--font-qoupl), system-ui, sans-serif",
+                fontWeight: 700,
                 letterSpacing: "0.01em",
-                textShadow: `
-                  4px 4px 0px rgba(102, 45, 145, 0.2),
-                  8px 8px 0px rgba(102, 45, 145, 0.15),
-                  12px 12px 0px rgba(102, 45, 145, 0.1),
-                  0 0 30px rgba(102, 45, 145, 0.3)
-                `,
-                transform: "perspective(1000px) rotateX(2deg)",
-                transformStyle: "preserve-3d",
               }}
             >
               {title}
@@ -348,7 +354,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="space-y-1 mb-6 md:mb-8 pl-0 md:pl-4 lg:pl-8 xl:pl-12"
+              className="space-y-1 sm:space-y-1.5 mb-4 sm:mb-5 md:mb-6 lg:mb-8 pl-0 sm:pl-2 md:pl-4 lg:pl-6 xl:pl-8 2xl:pl-12 relative z-30"
             >
               <p
                 className="text-fluid-lg font-semibold text-title leading-relaxed"
@@ -370,7 +376,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
                 })}
               </p>
               <p
-                className="text-fluid-lg font-semibold text-paragraph leading-relaxed max-w-prose"
+                className="text-fluid-base sm:text-fluid-lg font-semibold text-paragraph leading-relaxed max-w-prose"
                 style={{
                   fontFamily: "var(--font-qoupl), system-ui, sans-serif",
                   fontWeight: 600,
@@ -385,7 +391,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="flex flex-col items-center lg:items-start space-y-2 w-full mt-8 md:mt-10 lg:mt-12 pl-0 md:pl-4 lg:pl-8 xl:pl-12"
+              className="flex flex-col items-center lg:items-start space-y-2 w-full mt-6 sm:mt-7 md:mt-8 lg:mt-10 xl:mt-12 pl-0 sm:pl-2 md:pl-4 lg:pl-6 xl:pl-8 2xl:pl-12 relative z-30"
             >
               <Button
                 size="default"
@@ -414,7 +420,7 @@ export default function AnimatedHero({ data = {} }: AnimatedHeroProps) {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex items-center justify-center lg:justify-end order-2 lg:order-2 w-full mt-4 md:mt-6 lg:mt-0 lg:-mt-16"
+            className="flex items-center justify-center lg:justify-end order-2 lg:order-2 w-full mt-6 sm:mt-8 md:mt-10 lg:mt-0 relative z-10 lg:pl-4 xl:pl-6"
           >
             <ModernFloatingCards carouselImages={carouselImages} />
           </motion.div>
