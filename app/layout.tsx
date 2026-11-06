@@ -1,33 +1,8 @@
 import type { Metadata } from "next";
-import { Poppins, DM_Sans, Source_Code_Pro, Caveat } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
-});
-
-const sourceCodePro = Source_Code_Pro({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-source-code-pro",
-});
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-caveat",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://qoupl.ai'),
@@ -195,11 +170,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} ${dmSans.variable} ${sourceCodePro.variable} ${caveat.variable} font-sans antialiased`} style={{ fontFamily: 'var(--font-google-sans-flex)' }} suppressHydrationWarning>
+      <body className="font-sans antialiased" style={{ fontFamily: 'var(--font-google-sans-flex)' }} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem={true}
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}

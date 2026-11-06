@@ -25,8 +25,8 @@ export default function AppDownload({ data = {} }: AppDownloadProps) {
   
   const isDark = mounted && resolvedTheme === 'dark';
 
-  // Launch date: March 4, 2026
-  const launchDate = new Date('2026-03-04T00:00:00').getTime();
+  // Launch date: April 1, 2027
+  const launchDate = new Date('2027-04-01T00:00:00').getTime();
 
   useEffect(() => {
     const updateCountdown = () => {
@@ -159,7 +159,7 @@ export default function AppDownload({ data = {} }: AppDownloadProps) {
                 <div className="text-center mb-6">
                   <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full ${mounted && isDark ? 'bg-[#662D91]/20' : 'bg-[#662D91]/10'} mb-4`}>
                     <Calendar className={`h-3.5 w-3.5 ${mounted && isDark ? 'text-[#9333ea]' : 'text-[#662D91]'}`} strokeWidth={1.5} />
-                    <span className={`text-xs font-semibold ${mounted && isDark ? 'text-[#9333ea]' : 'text-[#662D91]'}`}>March 4, 2026</span>
+                    <span className={`text-xs font-semibold ${mounted && isDark ? 'text-[#9333ea]' : 'text-[#662D91]'}`}>April 1, 2027</span>
                   </div>
                   <h3 className="font-bold text-xl md:text-2xl mb-2 text-foreground">Launching Soon on</h3>
                   <p className="text-sm text-muted-foreground">

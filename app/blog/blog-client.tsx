@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
+import { formatBlogPublishDate } from "@/lib/utils/blog-date";
 import { Button } from "@/components/ui/button";
 
 interface BlogPost {
@@ -43,12 +44,7 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
   // Format date
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "No date";
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
+    return formatBlogPublishDate(dateString);
   };
 
   // Get image URL

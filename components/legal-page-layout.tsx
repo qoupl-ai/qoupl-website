@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { ReactNode } from "react";
 
+const LEGAL_LAST_UPDATED = '2026-11-06';
+
 interface LegalPageLayoutProps {
   title: string;
   lastUpdated?: string;
@@ -49,7 +51,7 @@ export function LegalPageLayout({ title, lastUpdated, icon, children }: LegalPag
             </h1>
             {lastUpdated && (
               <p className="text-sm text-muted-foreground">
-                Last Updated: <span className="text-foreground/80">{lastUpdated}</span>
+                Last Updated: <span className="text-foreground/80">{LEGAL_LAST_UPDATED}</span>
               </p>
             )}
           </motion.div>

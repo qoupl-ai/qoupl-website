@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=DM+Sans:wght@400;500;700&family=Google+Sans+Flex:wght@100..900&family=Poppins:wght@300;400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -50,6 +50,10 @@
 @layer base {
   :root {
     --font-google-sans-flex: 'Google Sans Flex', system-ui, sans-serif;
+    --font-poppins: 'Poppins', system-ui, sans-serif;
+    --font-dm-sans: 'DM Sans', system-ui, sans-serif;
+    --font-source-code-pro: 'Source Code Pro', ui-monospace, monospace;
+    --font-caveat: 'Caveat', cursive;
     --background: 0 0% 99%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;

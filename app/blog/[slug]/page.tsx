@@ -2,9 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Calendar, Clock, User } from "lucide-react";
 import { notFound } from "next/navigation";
-import { format } from "date-fns";
 import { createClient } from "@/lib/supabase/server";
 import { getStorageUrl } from "@/lib/supabase/storage-url";
+import { formatBlogPublishDate } from "@/lib/utils/blog-date";
 import { parseBlogContent } from "@/lib/utils/blog-content-parser";
 
 // Force dynamic rendering for blog posts
@@ -106,7 +106,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             {post.publish_date && (
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" strokeWidth={1.5} />
-                <span>{format(new Date(post.publish_date), 'MMMM d, yyyy')}</span>
+                <span>{formatBlogPublishDate(post.publish_date)}</span>
               </div>
             )}
             {post.read_time && (
