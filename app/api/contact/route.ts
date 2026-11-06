@@ -1,4 +1,5 @@
 import { createAnonymousClient } from '@/lib/supabase/anonymous'
+import { getClientIp } from '@/lib/utils/client-ip'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
@@ -36,9 +37,7 @@ export async function POST(request: NextRequest) {
     const supabase = createAnonymousClient()
 
     // Get IP address and user agent
-    const ipAddress = request.headers.get('x-forwarded-for') || 
-                      request.headers.get('x-real-ip') || 
-                      'unknown'
+    const ipAddress = getClientIp(request.headers)
     const userAgent = request.headers.get('user-agent') || 'unknown'
 
     // Insert into database
