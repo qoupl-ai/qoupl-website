@@ -1,0 +1,42 @@
+name: Supabase keepalive
+
+# Supabase pauses a free project after 7 days without database activity;
+# site traffic that never reaches Postgres does not count.
+# https://supabase.com/docs/guides/platform/free-project-pausing
+on:
+  schedule:
+    # 06:17 and 18:43 UTC, off the hour to avoid GitHub's busiest minutes.
+    - cron: '17 6 * * *'
+    - cron: '43 18 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read one row through PostgREST
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          KEEPALIVE_TABLE: ${{ vars.KEEPALIVE_TABLE || 'blog_posts' }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_ANON_KEY}" ]; then
+            echo "::error::SUPABASE_URL and SUPABASE_ANON_KEY repository secrets must both be set."
+            exit 1
+          fi
+          # A table select with a limit executes a real query in Postgres. An empty
+          # array is still a 2xx and still a query. The key travels in headers only.
+          status=$(curl --silent --show-error --max-time 30 \
+            --output /dev/null --write-out '%{http_code}' \
+            --header "apikey: ${SUPABASE_ANON_KEY}" \
+            --header "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL%/}/rest/v1/${KEEPALIVE_TABLE}?select=id&limit=1")
+          if [ "${status}" -lt 200 ] || [ "${status}" -ge 300 ]; then
+            echo "::error::Supabase keepalive read of table '${KEEPALIVE_TABLE}' returned HTTP ${status}."
+            exit 1
+          fi
+          echo "Keepalive read of table '${KEEPALIVE_TABLE}' succeeded (HTTP ${status})."
